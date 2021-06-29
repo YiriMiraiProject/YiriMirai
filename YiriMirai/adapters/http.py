@@ -1,11 +1,9 @@
 import asyncio
 
 import httpx
-from typing import Optional
 
 from . import Adapter
 from ..exceptions import ApiError
-from ..bus import EventBus
 
 
 def _parse_response(response: httpx.Response) -> dict:
@@ -21,7 +19,6 @@ class HTTPAdapter(Adapter):
     '''
     def __init__(self,
                  verify_key: str = '',
-                 bus: Optional[EventBus] = None,
                  host: str = 'localhost',
                  port: int = 8080,
                  poll_interval: float = 1.):
@@ -32,7 +29,7 @@ class HTTPAdapter(Adapter):
         `port: int = 8080` Http Server 的端口
         `poll_interval: float = 1.` 轮询时间间隔，单位秒
         '''
-        super().__init__(verify_key=verify_key, bus=bus)
+        super().__init__(verify_key=verify_key)
 
         if host[:2] == '//':
             host = 'http:' + host
@@ -52,11 +49,13 @@ class HTTPAdapter(Adapter):
     async def _post(self, client: httpx.AsyncClient, url: str,
                     json: dict) -> dict:
         response = await client.post(url, json=json, headers=self.headers)
+        self.logger.debug(f'发送 POST 请求，地址{url}，状态 {response.status_code}。')
         return _parse_response(response)
 
     async def _get(self, client: httpx.AsyncClient, url: str,
                    params: dict) -> dict:
         response = await client.get(url, params=params, headers=self.headers)
+        self.logger.debug(f'发送 GET 请求，地址{url}，状态 {response.status_code}。')
         return _parse_response(response)
 
     async def login(self, qq: int):
@@ -69,14 +68,16 @@ class HTTPAdapter(Adapter):
                 'qq': qq,
             })
             self.headers = httpx.Headers({'sessionKey': self.session})
+            self.logger.info(f'成功登录到账号{qq}。')
 
     async def poll_event(self):
         async with httpx.AsyncClient(base_url=self.host_name) as client:
             msg_count = (await self._get(client, '/countMessage', {}))['data']
-            msg_list = (await self._get(client, '/fetchMessage',
-                                        {'count': msg_count}))['data']
-            for msg in msg_list:
-                await self._bus.emit(msg['type'], msg)
+            if msg_count > 0:
+                msg_list = (await self._get(client, '/fetchMessage',
+                                            {'count': msg_count}))['data']
+                for msg in msg_list:
+                    await self.bus.emit(msg['type'], msg)
 
     async def call_api(self, api: str, **params):
         async with httpx.AsyncClient(base_url=self.host_name) as client:
@@ -89,6 +90,8 @@ class HTTPAdapter(Adapter):
                     return await self._post(client, f'/{api}', params)
 
     async def run(self):
+        await self._before_run()
+        self.logger.info('机器人开始运行。按 Ctrl + C 停止。')
         while True:
             await self.poll_event()
             await asyncio.sleep(self.poll_interval)

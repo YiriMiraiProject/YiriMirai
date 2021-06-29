@@ -1,31 +1,40 @@
 import abc
 import functools
-from typing import Optional, Callable, Any, Union, Awaitable
+import logging
+from typing import Callable, Any, Union, Awaitable
+
 from ..bus import EventBus
 
 
-class Adapter(object):
-    '''适配器基类，与 mirai-api-http 沟通的底层实现。
-    '''
-    def __init__(self, verify_key: str = '', bus: Optional[EventBus] = None):
-        self.verify_key = verify_key
-        self._bus = bus or EventBus.get_default_bus()
-
+class Api(object):
+    '''支持从属性调用 API 的类。'''
     @abc.abstractmethod
-    async def login(self, qq: int):
-        pass
-
-    @abc.abstractmethod
-    async def call_api(self, api: str, **params) -> Union[Awaitable[Any], Any]:
+    def call_api(self, api: str, **params) -> Union[Awaitable[Any], Any]:
         pass
 
     def __getattr__(self,
                     api: str) -> Callable[..., Union[Awaitable[Any], Any]]:
         return functools.partial(self.call_api, api)
 
+
+class Adapter(Api):
+    '''适配器基类，与 mirai-api-http 沟通的底层实现。
+    '''
+    def __init__(self, verify_key: str = ''):
+        self.verify_key = verify_key
+        self.bus: EventBus = None
+        self.logger = logging.getLogger(__name__)
+
     @abc.abstractmethod
-    async def run(self):
+    async def login(self, qq: int):
         pass
+
+    async def _before_run(self):
+        if self.bus is None:
+            raise RuntimeError('事件总线未指定！')
+
+    async def run(self):
+        await self._before_run()
 
 
 from .http import HTTPAdapter
