@@ -3,7 +3,7 @@ import functools
 import logging
 from typing import Callable, Any, Union, Awaitable
 
-from ..bus import EventBus
+from YiriMirai.bus import EventBus
 
 
 class Api(object):

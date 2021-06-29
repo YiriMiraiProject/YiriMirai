@@ -2,11 +2,11 @@ __version__ = '0.1.0'
 
 import logging
 
-from .bot import Mirai
-from .adapters import Adapter, HTTPAdapter
-from .bus import EventBus
-from .colorlog import ColoredFormatter
-from .exceptions import ApiError, LoginError
+from YiriMirai.bot import Mirai
+from YiriMirai.adapters import Adapter, HTTPAdapter
+from YiriMirai.bus import EventBus
+from YiriMirai.colorlog import ColoredFormatter
+from YiriMirai.exceptions import ApiError, LoginError
 
 __all__ = [
     'Mirai', 'Adapter', 'HTTPAdapter', 'EventBus', 'ApiError', 'LoginError',

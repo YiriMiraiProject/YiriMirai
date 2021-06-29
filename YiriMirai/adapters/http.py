@@ -2,15 +2,15 @@ import asyncio
 
 import httpx
 
-from . import Adapter
-from ..exceptions import ApiError
+from YiriMirai.adapters import Adapter
+from YiriMirai import exceptions
 
 
 def _parse_response(response: httpx.Response) -> dict:
     response.raise_for_status()
     result = response.json()
     if result['code'] != 0:
-        raise ApiError(result['code'])
+        raise exceptions.ApiError(result['code'])
     return result
 
 
@@ -33,7 +33,9 @@ class HTTPAdapter(Adapter):
 
         if host[:2] == '//':
             host = 'http:' + host
-        elif host[:7] != 'http://' and host[:8] != 'https://':
+        elif host[:8] == 'https://':
+            raise exceptions.NetworkError('不支持 HTTPS！')
+        elif host[:7] != 'http://':
             host = 'http://' + host
 
         if host[-1:] == '/':
@@ -44,7 +46,7 @@ class HTTPAdapter(Adapter):
         self.poll_interval = poll_interval
 
         self.session = ''
-        self.headers = httpx.Headers()
+        self.headers = httpx.Headers() # 使用 headers 传递 session
 
     async def _post(self, client: httpx.AsyncClient, url: str,
                     json: dict) -> dict:
@@ -60,15 +62,21 @@ class HTTPAdapter(Adapter):
 
     async def login(self, qq: int):
         async with httpx.AsyncClient(base_url=self.host_name) as client:
-            self.session = (await self._post(client, '/verify', {
-                "verifyKey": self.verify_key,
-            }))['session']
-            await self._post(client, '/bind', {
-                "sessionKey": self.session,
-                'qq': qq,
-            })
-            self.headers = httpx.Headers({'sessionKey': self.session})
-            self.logger.info(f'成功登录到账号{qq}。')
+            try:
+                self.session = (await self._post(client, '/verify', {
+                    "verifyKey": self.verify_key,
+                }))['session']
+                await self._post(client, '/bind', {
+                    "sessionKey": self.session,
+                    'qq': qq,
+                })
+                self.headers = httpx.Headers({'sessionKey': self.session})
+                self.logger.info(f'成功登录到账号{qq}。')
+            except (httpx.exceptions.NetworkError, httpx.exceptions.InvalidURL) as e:
+                raise exceptions.NetworkError('无法连接到 mirai。请检查地址与端口是否正确。') from e
+            except exceptions.ApiError as e:
+                raise exceptions.LoginError(e.code) from None
+
 
     async def poll_event(self):
         async with httpx.AsyncClient(base_url=self.host_name) as client:
@@ -88,6 +96,8 @@ class HTTPAdapter(Adapter):
                 # 如果没有就尝试 POST 请求
                 if e.response.status_code == 404:
                     return await self._post(client, f'/{api}', params)
+                else:
+                    raise e
 
     async def run(self):
         await self._before_run()

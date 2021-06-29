@@ -8,6 +8,7 @@ authors = ["忘忧北萱草 <wybxc@qq.com>"]
 python = "^3.7"
 Quart = "^0.15.1"
 httpx = "^0.18.2"
+pydantic = "^1.8.2"
 
 [tool.poetry.dev-dependencies]
 

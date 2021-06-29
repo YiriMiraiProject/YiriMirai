@@ -3,8 +3,9 @@ import inspect
 import logging
 from typing import Callable
 
-from .adapters import Api, Adapter
-from .bus import EventBus
+from YiriMirai.adapters import Api, Adapter
+from YiriMirai.bus import EventBus
+
 
 class Mirai(Api):
     def __init__(self,

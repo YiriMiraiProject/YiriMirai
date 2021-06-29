@@ -1,9 +1,10 @@
 import asyncio
-from collections import defaultdict
 import inspect
-from typing import Callable, List, Any
+from collections import defaultdict
+from typing import Any, Callable, List
 
-from .utils import PriorityList
+from YiriMirai import exceptions
+from YiriMirai.utils import PriorityList
 
 
 class EventBus(object):
@@ -27,17 +28,23 @@ class EventBus(object):
 
         return decorator
 
+    async def _call(self, func: Callable, *args, **kwargs) -> Any:
+        '''调用一个函数，此函数可以是同步或异步的，同时处理调用中发生的异常。'''
+        try:
+            coro = func(*args, **kwargs)
+            if inspect.isawaitable(coro):
+                return await coro
+            else:
+                return coro
+        except Exception as e:
+            exceptions.print_exception(e) # 打印异常信息，但不打断执行流程
+
     async def emit(self, event: str, *args, **kwargs) -> List[Any]:
         results = []
         while True:
             coros = []
             for _, f in self._subscribers[event]:
-                coro = f(*args, **kwargs)
-                # 同时支持同步和异步的事件处理函数
-                if inspect.isawaitable(coro):
-                    coros.append(coro)
-                else:
-                    results.append(coro)
+                coros.append(self._call(f, *args, **kwargs))
             if coros:
                 results += await asyncio.gather(*coros)
             event, *sub_event = event.rsplit('.', maxsplit=1)  # 由下到上依次触发
