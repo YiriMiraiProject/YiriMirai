@@ -2,7 +2,7 @@ import asyncio
 
 import httpx
 from YiriMirai import exceptions
-from YiriMirai.adapters import Adapter
+from YiriMirai.adapters.base import Adapter
 
 
 def _parse_response(response: httpx.Response) -> dict:
@@ -83,8 +83,9 @@ class HTTPAdapter(Adapter):
             if msg_count > 0:
                 msg_list = (await self._get(client, '/fetchMessage',
                                             {'count': msg_count}))['data']
-                for msg in msg_list:
-                    await self.bus.emit(msg['type'], msg)
+                for bus in self.buses:
+                    for msg in msg_list:
+                        await bus.emit(msg['type'], msg)
 
     async def call_api(self, api: str, **params):
         async with httpx.AsyncClient(base_url=self.host_name) as client:

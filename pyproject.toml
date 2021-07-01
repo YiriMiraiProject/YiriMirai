@@ -1,17 +1,21 @@
 [tool.poetry]
-name = "yirimirai"
+name = "YiriMirai"
 version = "0.1.0"
 description = ""
 authors = ["忘忧北萱草 <wybxc@qq.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-Quart = "^0.15.1"
 httpx = "^0.18.2"
 pydantic = "^1.8.2"
 typing-extensions = "^3.10.0"
 
 [tool.poetry.dev-dependencies]
+
+[[tool.poetry.source]]
+name = "tuna"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
