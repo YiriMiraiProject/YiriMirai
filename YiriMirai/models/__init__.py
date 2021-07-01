@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from YiriMirai.models.bus import ModelEventBus
 from YiriMirai.models.entities import (
     Entity, Friend, Group, GroupMember, GroupMemberEx, Permission, Sender

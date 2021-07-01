@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import logging
 from collections import defaultdict
 from typing import Any, Callable, List, Type, Union

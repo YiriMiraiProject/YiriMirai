@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class PriorityList(list):
     '''优先级列表。
 

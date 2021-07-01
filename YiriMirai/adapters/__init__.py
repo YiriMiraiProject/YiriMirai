@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from .base import Api, Adapter
 from .http import HTTPAdapter
 

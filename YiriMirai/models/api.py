@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 AVAIABLE_API = {
     "verify": "verify",
     "bind": "bind",
