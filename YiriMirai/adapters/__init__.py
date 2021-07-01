@@ -1,7 +1,7 @@
 import abc
 import functools
 import logging
-from typing import Callable, Any, Union, Awaitable
+from typing import Any, Awaitable, Callable, Union
 
 from YiriMirai.bus import EventBus
 

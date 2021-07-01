@@ -1,9 +1,8 @@
 import asyncio
 
 import httpx
-
-from YiriMirai.adapters import Adapter
 from YiriMirai import exceptions
+from YiriMirai.adapters import Adapter
 
 
 def _parse_response(response: httpx.Response) -> dict:

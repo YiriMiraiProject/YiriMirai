@@ -3,14 +3,13 @@ import inspect
 import logging
 from typing import Callable
 
-from YiriMirai.adapters import Api, Adapter
+from YiriMirai.adapters import Adapter, Api
 from YiriMirai.bus import EventBus
 
 
-class Mirai(Api):
-    def __init__(self,
-                 qq: int = 0,
-                 adapter: Adapter = None):
+class SimpleMirai(Api):
+    '''基于 adapter 和 bus，处于 model 层之下的机器人对象。'''
+    def __init__(self, qq: int = 0, adapter: Adapter = None):
         if qq == 0:
             raise ValueError("请指定有效的 QQ 号！")
         self.qq = qq
@@ -42,3 +41,7 @@ class Mirai(Api):
 
     def run(self, *args, **kwargs):
         asyncio.run(self._run(*args, **kwargs))
+
+
+class Mirai(SimpleMirai):
+    pass

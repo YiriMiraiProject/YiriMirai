@@ -1,7 +1,7 @@
 import asyncio
 import inspect
-from collections import defaultdict
 import logging
+from collections import defaultdict
 from typing import Any, Callable, Iterable, List
 
 from YiriMirai import exceptions

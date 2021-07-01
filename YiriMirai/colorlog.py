@@ -1,5 +1,5 @@
-from enum import IntEnum
 import logging
+from enum import IntEnum
 
 __all__ = ['ConsoleColor', 'ColoredFormatter']
 

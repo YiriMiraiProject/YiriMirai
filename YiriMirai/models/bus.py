@@ -1,5 +1,5 @@
-from collections import defaultdict
 import logging
+from collections import defaultdict
 from typing import Any, Callable, List, Type, Union
 
 from YiriMirai.bus import EventBus, async_call
