@@ -19,7 +19,7 @@ async def async_call(func: Callable, *args, **kwargs) -> Any:
         else:
             return coro
     except Exception as e:
-        exceptions.print_exception(e)  # 打印异常信息，但不打断执行流程
+        exceptions.print_exception(e) # 打印异常信息，但不打断执行流程
 
 
 def event_chain_separator(sep: str = '.'):
@@ -29,8 +29,8 @@ def event_chain_separator(sep: str = '.'):
     def generator(event: str):
         while True:
             yield event
-            event, *sub_event = event.rsplit(sep, maxsplit=1)  # 由下到上依次触发
-            if not sub_event:  # 顶层事件触发完成
+            event, *sub_event = event.rsplit(sep, maxsplit=1) # 由下到上依次触发
+            if not sub_event: # 顶层事件触发完成
                 break
 
     return generator
@@ -48,7 +48,8 @@ class EventBus(object):
     def __init__(
         self,
         event_chain_generator: Callable[[str],
-                                        Iterable[str]] = event_chain_single):
+                                        Iterable[str]] = event_chain_single
+    ):
         '''事件总线。
         `event_chain_generator: Callable[[str], Iterable[str]]`
             一个函数，输入时间名，返回一个生成此事件所在事件链的全部事件的事件名的生成器，

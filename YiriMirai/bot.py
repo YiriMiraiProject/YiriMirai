@@ -1,7 +1,7 @@
 import asyncio
 import inspect
 import logging
-from typing import Callable, Union, Type
+from typing import Callable, Type, Union
 
 from YiriMirai.adapters.base import Adapter, Api
 from YiriMirai.bus import EventBus
@@ -72,9 +72,11 @@ class Mirai(SimpleMirai):
         self._bus = ModelEventBus()
         adapter.register_event_bus(self._bus.base_bus)
 
-    def on(self,
-           event_type: Union[Type[Event], str],
-           priority: int = 0) -> Callable:
+    def on(
+        self,
+        event_type: Union[Type[Event], str],
+        priority: int = 0
+    ) -> Callable:
         '''注册事件处理器。
 
         `event_type: Union[Type[Event], str]` 事件类或事件名

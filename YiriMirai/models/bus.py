@@ -24,8 +24,9 @@ class ModelEventBus(EventBus):
         self.base_bus = EventBus(event_chain_generator=event_chain_parents)
         self._middlewares = defaultdict(type(None))
 
-    def subscribe(self, event_type: Type[Event], func: Callable,
-                  priority: int) -> None:
+    def subscribe(
+        self, event_type: Type[Event], func: Callable, priority: int
+    ) -> None:
         async def middleware(event: dict):
             '''中间件。负责与底层 bus 沟通，将 event dict 解析为 Event 对象。
             '''
@@ -42,9 +43,11 @@ class ModelEventBus(EventBus):
         del self._middlewares[func]
         logger.debug(f'解除事件注册{event_type.__name__} at {func}。')
 
-    def on(self,
-           event_type: Union[Type[Event], str],
-           priority: int = 0) -> Callable:
+    def on(
+        self,
+        event_type: Union[Type[Event], str],
+        priority: int = 0
+    ) -> Callable:
         if isinstance(event_type, str):
             event_type = Event.get_subtype(event_type)
 

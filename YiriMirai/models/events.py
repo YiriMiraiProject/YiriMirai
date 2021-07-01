@@ -8,8 +8,9 @@ except ImportError:
     from typing_extensions import Literal
 
 from pydantic import BaseModel, Field
-from YiriMirai.models.entities import (Friend, Group, GroupMember,
-                                       GroupMemberEx, Permission, Sender)
+from YiriMirai.models.entities import (
+    Friend, Group, GroupMember, GroupMemberEx, Permission, Sender
+)
 from YiriMirai.models.message import MessageChain
 
 

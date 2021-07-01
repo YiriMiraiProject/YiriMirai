@@ -20,7 +20,6 @@ class Api(object):
 class Adapter(Api):
     '''适配器基类，与 mirai-api-http 沟通的底层实现。
     '''
-
     def __init__(self, verify_key: str = ''):
         self.verify_key = verify_key
         self.buses: Set[EventBus] = set()

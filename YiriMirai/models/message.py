@@ -70,7 +70,8 @@ class MessageChain(BaseModel):
                 result.append(msg)
             else:
                 raise TypeError(
-                    f"消息链中元素需为 dict 或 MessageComponent，当前类型：{type(msg)}")
+                    f"消息链中元素需为 dict 或 MessageComponent，当前类型：{type(msg)}"
+                )
         return result
 
     @validator('__root__', always=True, pre=True)
@@ -104,21 +105,22 @@ class MessageChain(BaseModel):
             ]
         # 索引对象为 MessageComponent 和 int 构成的 slice， 返回指定数量的 component
         elif isinstance(index, slice):
-            components = (component for component in self
-                          if type(component) == index)
+            components = (
+                component for component in self if type(component) == index
+            )
             return [
                 component
                 for component, _ in zip(components, range(index.stop))
             ]
 
     def __contains__(self, sub) -> bool:
-        if isinstance(sub, type):  # 检测消息链中是否有某种类型的对象
+        if isinstance(sub, type): # 检测消息链中是否有某种类型的对象
             for i in self:
                 if type(i) == sub:
                     return True
             else:
                 return False
-        elif isinstance(sub, str):  # 检查消息中有无指定字符串子串
+        elif isinstance(sub, str): # 检查消息中有无指定字符串子串
             return sub in deserialize(str(self))
 
     def __len__(self) -> int:
@@ -161,21 +163,25 @@ class Quote(MessageComponent):
     def origin_formater(cls, v):
         return MessageChain.parse_obj(v)
 
-    def __init__(self,
-                 id: Optional[int] = None,
-                 group_id: Optional[int] = None,
-                 sender_id: Optional[int] = None,
-                 target_id: Optional[int] = None,
-                 origin: MessageChain = None,
-                 groupId: Optional[int] = None,
-                 senderId: Optional[int] = None,
-                 targetId: Optional[int] = None,
-                 **_):
-        super().__init__(id=id,
-                         groupId=group_id or groupId,
-                         senderId=sender_id or senderId,
-                         targetId=target_id or targetId,
-                         origin=origin)
+    def __init__(
+        self,
+        id: Optional[int] = None,
+        group_id: Optional[int] = None,
+        sender_id: Optional[int] = None,
+        target_id: Optional[int] = None,
+        origin: MessageChain = None,
+        groupId: Optional[int] = None,
+        senderId: Optional[int] = None,
+        targetId: Optional[int] = None,
+        **_
+    ):
+        super().__init__(
+            id=id,
+            groupId=group_id or groupId,
+            senderId=sender_id or senderId,
+            targetId=target_id or targetId,
+            origin=origin
+        )
 
 
 class At(MessageComponent):
@@ -202,11 +208,13 @@ class Face(MessageComponent):
     face_id: int = Field(..., alias='faceId')
     name: Optional[str]
 
-    def __init__(self,
-                 face_id: Optional[int] = None,
-                 name: Optional[str] = None,
-                 faceId: Optional[int] = None,
-                 **_):
+    def __init__(
+        self,
+        face_id: Optional[int] = None,
+        name: Optional[str] = None,
+        faceId: Optional[int] = None,
+        **_
+    ):
         super().__init__(faceId=face_id or faceId, name=name)
 
     def __str__(self):
@@ -218,11 +226,13 @@ class Image(MessageComponent):
     image_id: Optional[str] = Field(alias='imageId')
     url: Optional[HttpUrl] = None
 
-    def __init__(self,
-                 image_id: Optional[str] = None,
-                 url: Optional[str] = None,
-                 imageId: Optional[str] = None,
-                 **_):
+    def __init__(
+        self,
+        image_id: Optional[str] = None,
+        url: Optional[str] = None,
+        imageId: Optional[str] = None,
+        **_
+    ):
         super().__init__(imageId=image_id or imageId, url=url)
 
     def __str__(self):
@@ -231,9 +241,9 @@ class Image(MessageComponent):
     @property
     def uuid(self):
         image_id = self.image_id
-        if image_id[0] == '{':  # 群图片
+        if image_id[0] == '{': # 群图片
             image_id = image_id[1:37]
-        elif image_id[0] == '/':  # 好友图片
+        elif image_id[0] == '/': # 好友图片
             image_id = image_id[1:]
         return image_id
 
@@ -436,8 +446,29 @@ class File(MessageComponent):
 
 
 __all__ = [
-    'App', 'At', 'AtAll', 'Dice', 'Face', 'File', 'FlashImage', 'Forward',
-    'ForwardMessageNode', 'Image', 'Json', 'List', 'MessageChain',
-    'MessageComponent', 'MusicShare', 'Plain', 'Poke', 'Quote', 'Source',
-    'Type', 'Unknown', 'Voice', 'Xml', 'serialize', 'deserialize',
+    'App',
+    'At',
+    'AtAll',
+    'Dice',
+    'Face',
+    'File',
+    'FlashImage',
+    'Forward',
+    'ForwardMessageNode',
+    'Image',
+    'Json',
+    'List',
+    'MessageChain',
+    'MessageComponent',
+    'MusicShare',
+    'Plain',
+    'Poke',
+    'Quote',
+    'Source',
+    'Type',
+    'Unknown',
+    'Voice',
+    'Xml',
+    'serialize',
+    'deserialize',
 ]

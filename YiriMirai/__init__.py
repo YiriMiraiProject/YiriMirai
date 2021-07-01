@@ -19,8 +19,9 @@ logger.setLevel(logging.INFO)
 ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
 
-formatter = ColoredFormatter('%(asctime)s - %(levelname)-8s %(message)s',
-                             datefmt='%Y-%m-%d %H:%M:%S')
+formatter = ColoredFormatter(
+    '%(asctime)s - %(levelname)-8s %(message)s', datefmt='%Y-%m-%d %H:%M:%S'
+)
 ch.setFormatter(formatter)
 
 logger.addHandler(ch)

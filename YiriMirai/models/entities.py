@@ -100,6 +100,11 @@ class Sender(Entity):
 #         return self
 
 __all__ = [
-    'Entity', 'Friend', 'Group', 'GroupMember', 'GroupMemberEx', 'Permission',
+    'Entity',
+    'Friend',
+    'Group',
+    'GroupMember',
+    'GroupMemberEx',
+    'Permission',
     'Sender',
 ]

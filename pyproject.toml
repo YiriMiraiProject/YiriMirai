@@ -11,6 +11,8 @@ pydantic = "^1.8.2"
 typing-extensions = "^3.10.0"
 
 [tool.poetry.dev-dependencies]
+yapf = "^0.31.0"
+toml = "^0.10.2"
 
 [[tool.poetry.source]]
 name = "tuna"
@@ -20,3 +22,11 @@ default = true
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.yapf]
+based_on_style = "pep8"
+allow_split_before_dict_value = false
+arithmetic_precedence_indication = true
+dedent_closing_brackets = true
+indent_dictionary_value = true
+spaces_before_comment = 1

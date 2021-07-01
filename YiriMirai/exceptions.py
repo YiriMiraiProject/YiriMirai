@@ -37,5 +37,6 @@ class LoginError(ApiError):
     '''
     pass
 
+
 def print_exception(e: Exception):
     traceback.print_exception(type(e), e, e.__traceback__)

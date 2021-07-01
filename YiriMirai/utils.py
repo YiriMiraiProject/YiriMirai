@@ -3,7 +3,6 @@ class PriorityList(list):
 
     根据应用场景优化：改动较慢，读取较快。
     '''
-
     def add(self, priority, value):
         index = 0
         for i, (prior, data) in enumerate(self):

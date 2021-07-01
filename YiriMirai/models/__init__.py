@@ -1,6 +1,7 @@
 from YiriMirai.models.bus import ModelEventBus
-from YiriMirai.models.entities import (Entity, Friend, Group, GroupMember,
-                                       GroupMemberEx, Permission, Sender)
+from YiriMirai.models.entities import (
+    Entity, Friend, Group, GroupMember, GroupMemberEx, Permission, Sender
+)
 from YiriMirai.models.events import (
     BotEvent, BotGroupPermissionChangeEvent, BotInvitedJoinGroupRequestEvent,
     BotJoinGroupEvent, BotLeaveEventActive, BotLeaveEventKick, BotMuteEvent,
@@ -16,13 +17,13 @@ from YiriMirai.models.events import (
     MemberLeaveEventKick, MemberLeaveEventQuit, MemberMuteEvent,
     MemberPermissionChangeEvent, MemberSpecialTitleChangeEvent,
     MemberUnmuteEvent, MessageEvent, NewFriendRequestEvent, OtherClientMessage,
-    RequestEvent, StrangerMessage, TempMessage)
-from YiriMirai.models.message import (App, At, AtAll, Dice, Face, File,
-                                      FlashImage, Forward, ForwardMessageNode,
-                                      Image, Json, List, MessageChain,
-                                      MessageComponent, MusicShare, Plain,
-                                      Poke, Quote, Source, Type, Unknown,
-                                      Voice, Xml, deserialize, serialize)
+    RequestEvent, StrangerMessage, TempMessage
+)
+from YiriMirai.models.message import (
+    App, At, AtAll, Dice, Face, File, FlashImage, Forward, ForwardMessageNode,
+    Image, Json, List, MessageChain, MessageComponent, MusicShare, Plain, Poke,
+    Quote, Source, Type, Unknown, Voice, Xml, deserialize, serialize
+)
 
 __all__ = [
     'Entity',
