@@ -3,7 +3,7 @@ import json
 import sys
 import logging
 import re
-from typing import List, Optional
+from typing import List, Optional, Type
 
 from pydantic import BaseModel, Field, validator, HttpUrl
 
@@ -29,17 +29,31 @@ class MessageComponent(BaseModel):
         allow_population_by_field_name = True
 
     @classmethod
+    def get_subtype(cls, name: str) -> Type['MessageComponent']:
+        '''根据类名称，获取相应的子类类型。'''
+        try:
+            type_ = getattr(sys.modules[__name__], name)
+            if not issubclass(type_, cls):
+                raise ValueError(f'`{name}`不是`{cls.__name__}`的子类！')
+            return type_
+        except AttributeError as e:
+            raise ValueError(f'`{name}`不是`{cls.__name__}`的子类！') from e
+
+    @classmethod
     def parse_obj(cls, msg: dict):
-        print(cls)
         if cls == MessageComponent:
-            logger.debug(f'parsing {msg["type"]}')
-            MessageComponentType = getattr(sys.modules[__name__], msg['type'])
+            MessageComponentType = cls.get_subtype(msg['type'])
             return MessageComponentType.parse_obj(msg)
         else:
             return super().parse_obj(msg)
 
     def __str__(self):
         return ''
+
+    class __metaclass__(type):
+        def __getattr__(cls, name):
+            if name == 'type':
+                return cls.__name__
 
 
 class MessageChain(BaseModel):
@@ -61,12 +75,17 @@ class MessageChain(BaseModel):
 
     @validator('__root__', always=True, pre=True)
     def parse_component(cls, msg_chain):
+        if not msg_chain:
+            msg_chain = []
         return cls._parse_message_chain(msg_chain)
 
     @classmethod
     def parse_obj(cls, msg_chain: list):
         result = cls._parse_message_chain(msg_chain)
         return cls(__root__=result)
+
+    def __init__(self, __root__: List[MessageComponent] = None):
+        super().__init__(__root__=__root__)
 
     def __str__(self):
         return "".join((str(component) for component in self.__root__))
@@ -414,3 +433,11 @@ class File(MessageComponent):
     id: str
     name: str
     size: int
+
+
+__all__ = [
+    'App', 'At', 'AtAll', 'Dice', 'Face', 'File', 'FlashImage', 'Forward',
+    'ForwardMessageNode', 'Image', 'Json', 'List', 'MessageChain',
+    'MessageComponent', 'MusicShare', 'Plain', 'Poke', 'Quote', 'Source',
+    'Type', 'Unknown', 'Voice', 'Xml', 'serialize', 'deserialize',
+]

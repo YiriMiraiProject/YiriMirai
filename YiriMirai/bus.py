@@ -1,56 +1,93 @@
 import asyncio
 import inspect
 from collections import defaultdict
-from typing import Any, Callable, List
+import logging
+from typing import Any, Callable, Iterable, List
 
 from YiriMirai import exceptions
 from YiriMirai.utils import PriorityList
 
+logger = logging.getLogger(__name__)
+
+
+async def async_call(func: Callable, *args, **kwargs) -> Any:
+    '''调用一个函数，此函数可以是同步或异步的，同时处理调用中发生的异常。'''
+    try:
+        coro = func(*args, **kwargs)
+        if inspect.isawaitable(coro):
+            return await coro
+        else:
+            return coro
+    except Exception as e:
+        exceptions.print_exception(e)  # 打印异常信息，但不打断执行流程
+
+
+def event_chain_separator(sep: str = '.'):
+    '''按照分隔符划分事件链，默认按点号划分。
+
+    比如：`"Event.MyEvent"` 所在事件链为 `["Event.MyEvent", "Event"]`。'''
+    def generator(event: str):
+        while True:
+            yield event
+            event, *sub_event = event.rsplit(sep, maxsplit=1)  # 由下到上依次触发
+            if not sub_event:  # 顶层事件触发完成
+                break
+
+    return generator
+
+
+def event_chain_single(event: str):
+    '''只包含单一事件的事件链。'''
+    yield event
+
 
 class EventBus(object):
-    '''事件总线。
-    '''
+    '''事件总线。'''
     _default_bus = None
 
-    def __init__(self):
+    def __init__(
+        self,
+        event_chain_generator: Callable[[str],
+                                        Iterable[str]] = event_chain_single):
+        '''事件总线。
+        `event_chain_generator: Callable[[str], Iterable[str]]`
+            一个函数，输入时间名，返回一个生成此事件所在事件链的全部事件的事件名的生成器，
+            默认行为是事件链只包含单一事件。
+        '''
         self._subscribers = defaultdict(PriorityList)
+        self.event_chain_generator = event_chain_generator
 
     def subscribe(self, event: str, func: Callable, priority: int) -> None:
+        '''注册事件处理器。'''
         self._subscribers[event].add(priority, func)
 
     def unsubscribe(self, event: str, func: Callable) -> None:
-        self._subscribers[event].remove(func)
+        '''移除事件处理器。'''
+        if not self._subscribers[event].remove(func):
+            logger.warn(f'试图移除事件`{event}`的一个不存在的事件处理器`{func}`。')
 
     def on(self, event: str, priority: int = 0) -> Callable:
+        '''注册事件处理器。'''
         def decorator(func: Callable) -> Callable:
             self.subscribe(event, func, priority)
             return func
 
         return decorator
 
-    async def _call(self, func: Callable, *args, **kwargs) -> Any:
-        '''调用一个函数，此函数可以是同步或异步的，同时处理调用中发生的异常。'''
-        try:
-            coro = func(*args, **kwargs)
-            if inspect.isawaitable(coro):
-                return await coro
-            else:
-                return coro
-        except Exception as e:
-            exceptions.print_exception(e) # 打印异常信息，但不打断执行流程
-
     async def emit(self, event: str, *args, **kwargs) -> List[Any]:
+        '''触发一个事件。
+
+        `event: str` 要触发的事件名称
+        `*args, **kwargs` 传递给事件处理器的参数
+        '''
         results = []
-        while True:
-            coros = []
-            for _, f in self._subscribers[event]:
-                coros.append(self._call(f, *args, **kwargs))
+        for m_event in self.event_chain_generator(event):
+            coros = [
+                async_call(f, *args, **kwargs)
+                for _, f in self._subscribers[m_event]
+            ]
             if coros:
                 results += await asyncio.gather(*coros)
-            event, *sub_event = event.rsplit('.', maxsplit=1)  # 由下到上依次触发
-            if not sub_event:
-                # 顶层事件触发完成
-                break
         return results
 
     @classmethod

@@ -98,3 +98,8 @@ class Sender(Entity):
 #             if i in kwargs:
 #                 setattr(self, i, kwargs[i])
 #         return self
+
+__all__ = [
+    'Entity', 'Friend', 'Group', 'GroupMember', 'GroupMemberEx', 'Permission',
+    'Sender',
+]

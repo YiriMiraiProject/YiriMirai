@@ -1,6 +1,6 @@
 import sys
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Type
 
 try:
     from typing import Literal
@@ -22,12 +22,23 @@ class Event(BaseModel):
         allow_population_by_field_name = True
 
     @classmethod
+    def get_subtype(cls, name: str) -> Type['Event']:
+        '''根据类名称，获取相应的子类类型。'''
+        try:
+            type_ = getattr(sys.modules[__name__], name)
+            if not issubclass(type_, cls):
+                raise ValueError(f'`{name}`不是`{cls.__name__}`的子类！')
+            return type_
+        except AttributeError as e:
+            raise ValueError(f'`{name}`不是`{cls.__name__}`的子类！') from e
+
+    @classmethod
     def parse_obj(cls, event: dict):
         '''通过 mirai-api-http 发回的事件，构造对应的 Event 对象。
         `event: dict` 已解析的事件 JSON
         '''
         if cls == Event:
-            EventType = getattr(sys.modules[__name__], event['type'])
+            EventType = cls.get_subtype(event['type'])
             return EventType.parse_obj(event)
         else:
             return super().parse_obj(event)
@@ -364,3 +375,55 @@ class OtherClientMessage(MessageEvent):
     '''其他客户端消息。'''
     type: str = 'OtherClientMessage'
     sender: Sender
+
+
+__all__ = [
+    'BotEvent',
+    'BotGroupPermissionChangeEvent',
+    'BotInvitedJoinGroupRequestEvent',
+    'BotJoinGroupEvent',
+    'BotLeaveEventActive',
+    'BotLeaveEventKick',
+    'BotMuteEvent',
+    'BotOfflineEventActive',
+    'BotOfflineEventDropped',
+    'BotOfflineEventForce',
+    'BotOnlineEvent',
+    'BotReloginEvent',
+    'BotUnmuteEvent',
+    'CommandEvent',
+    'CommandExecutedEvent',
+    'Event',
+    'FriendEvent',
+    'FriendInputStatusChangedEvent',
+    'FriendMessage',
+    'FriendNickChangedEvent',
+    'FriendRecallEvent',
+    'GroupAllowAnonymousChatEvent',
+    'GroupAllowConfessTalkEvent',
+    'GroupAllowMemberInviteEvent',
+    'GroupEntranceAnnouncementChangeEvent',
+    'GroupEvent',
+    'GroupMember',
+    'GroupMemberEx',
+    'GroupMessage',
+    'GroupMuteAllEvent',
+    'GroupNameChangeEvent',
+    'GroupRecallEvent',
+    'MemberCardChangeEvent',
+    'MemberHonorChangeEvent',
+    'MemberJoinEvent',
+    'MemberJoinRequestEvent',
+    'MemberLeaveEventKick',
+    'MemberLeaveEventQuit',
+    'MemberMuteEvent',
+    'MemberPermissionChangeEvent',
+    'MemberSpecialTitleChangeEvent',
+    'MemberUnmuteEvent',
+    'MessageEvent',
+    'NewFriendRequestEvent',
+    'OtherClientMessage',
+    'RequestEvent',
+    'StrangerMessage',
+    'TempMessage',
+]
