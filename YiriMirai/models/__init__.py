@@ -1,4 +1,12 @@
 # -*- coding: utf-8 -*-
+"""
+此模块提供 model 层封装。
+
+model 层架构在 bus 和 adapters 之上，将 mirai-api-http 传回的原始数据解析为 Python 对象，
+并支持用 Python 对象作为参数调用 API。
+
+model 层使用 pydantic 进行数据解析。
+"""
 from YiriMirai.models.bus import ModelEventBus
 from YiriMirai.models.entities import (
     Entity, Friend, Group, GroupMember, Permission, Sender
@@ -22,8 +30,8 @@ from YiriMirai.models.events import (
 )
 from YiriMirai.models.message import (
     App, At, AtAll, Dice, Face, File, FlashImage, Forward, ForwardMessageNode,
-    Image, Json, List, MessageChain, MessageComponent, MusicShare, Plain, Poke,
-    Quote, Source, Type, Unknown, Voice, Xml, deserialize, serialize
+    Image, Json, MessageChain, MessageComponent, MusicShare, Plain, Poke,
+    Quote, Source, Unknown, Voice, Xml, deserialize, serialize
 )
 
 __all__ = [
@@ -31,7 +39,6 @@ __all__ = [
     'Friend',
     'Group',
     'GroupMember',
-
     'Permission',
     'Sender',
     'BotEvent',
@@ -91,7 +98,6 @@ __all__ = [
     'ForwardMessageNode',
     'Image',
     'Json',
-    'List',
     'MessageChain',
     'MessageComponent',
     'MusicShare',
@@ -99,7 +105,6 @@ __all__ = [
     'Poke',
     'Quote',
     'Source',
-    'Type',
     'Unknown',
     'Voice',
     'Xml',

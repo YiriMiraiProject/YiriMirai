@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
-import json
+"""
+此模块提供消息链相关。
+"""
 import logging
 import re
 import sys
 from datetime import datetime
+from json import loads as json_loads
 from typing import List, Optional, Type
 
 from pydantic import Field, HttpUrl, validator
@@ -13,17 +16,23 @@ logger = logging.getLogger(__name__)
 
 
 def serialize(s: str) -> str:
-    '''mirai 码转义。'''
+    """mirai 码转义。
+
+    `s: str` 待转义的字符串。
+    """
     return re.sub(r'[\[\]:,\\\n\r]', lambda match: '\\' + match.group(0), s)
 
 
 def deserialize(s: str) -> str:
-    '''mirai 码去转义。'''
+    """mirai 码去转义。
+
+    `s: str` 待去转义的字符串。
+    """
     return re.sub(r'\\([\[\]:,\\nr])', lambda match: match.group(1), s)
 
 
 class MessageComponent(MiraiBaseModel):
-    '''消息组件。'''
+    """消息组件。"""
     type: str
 
     class Config:
@@ -32,7 +41,10 @@ class MessageComponent(MiraiBaseModel):
 
     @classmethod
     def get_subtype(cls, name: str) -> Type['MessageComponent']:
-        '''根据类名称，获取相应的子类类型。'''
+        """根据类名称，获取相应的子类类型。
+
+        `name: str` 类名称。
+        """
         try:
             type_ = getattr(sys.modules[__name__], name)
             if not issubclass(type_, cls):
@@ -43,6 +55,10 @@ class MessageComponent(MiraiBaseModel):
 
     @classmethod
     def parse_obj(cls, msg: dict):
+        """通过字典形式的消息链组件，构造对应的`MessageComponent`对象。
+
+        `msg: dict` 字典形式的消息链组件。
+        """
         if cls == MessageComponent:
             MessageComponentType = cls.get_subtype(msg['type'])
             return MessageComponentType.parse_obj(msg)
@@ -52,14 +68,56 @@ class MessageComponent(MiraiBaseModel):
     def __str__(self):
         return ''
 
-    class __metaclass__(type):
-        def __getattr__(cls, name):
-            if name == 'type':
-                return cls.__name__
-
 
 class MessageChain(MiraiBaseModel):
-    '''消息链。'''
+    """消息链。
+
+    一个构造消息链的例子：
+    ```py
+    message_chain = MessageChain([
+        AtAll(),
+        Plain("Hello World!"),
+    ])
+    ```
+
+    在调用 API 时，参数中需要 MessageChain 的，也可以使用`List[MessageComponent]`代替。
+    例如，以下两种写法是等价的：
+    ```py
+    await bot.send_friend_message(12345678, [
+        Plain("Hello World!")
+    ])
+    ```
+    ```py
+    await bot.send_friend_message(12345678, MessageChain([
+        Plain("Hello World!")
+    ]))
+    ```
+
+    可以使用 for 循环遍历消息链中的消息组件。
+    ```py
+    for component in message_chain:
+        print(str(component))
+    ```
+
+    可以使用`in`运算检查消息链中是否有某个类型的组件。
+    ```py
+    if AtAll in message_chain:
+        print('AtAll')
+    ```
+
+    消息链对索引操作进行了增强。以消息组件类型为索引，获取消息链中的全部该类型的消息组件。
+    ```py
+    plain_list = message_chain[Plain]
+    ```
+
+    以`类型: 数量`为索引，获取前几个该类型的消息组件。
+    ```py
+    plain_list_first_three = message_chain[Plain: 3]
+    ```
+
+    使用`str(message_chain)`获取消息链的字符串表示，字符串采用 mirai 码格式，
+    参看 mirai 的[文档](https://github.com/mamoe/mirai/blob/dev/docs/Messages.md#mirai-%E7%A0%81)。
+    """
     __root__: List[MessageComponent]
 
     @staticmethod
@@ -77,13 +135,17 @@ class MessageChain(MiraiBaseModel):
         return result
 
     @validator('__root__', always=True, pre=True)
-    def parse_component(cls, msg_chain):
+    def _parse_component(cls, msg_chain):
         if not msg_chain:
             msg_chain = []
         return cls._parse_message_chain(msg_chain)
 
     @classmethod
     def parse_obj(cls, msg_chain: list):
+        """通过列表形式的消息链，构造对应的`MessageChain`对象。
+
+        `msg_chain: list` 列表形式的消息链。
+        """
         result = cls._parse_message_chain(msg_chain)
         return cls(__root__=result)
 
@@ -130,16 +192,19 @@ class MessageChain(MiraiBaseModel):
 
     @property
     def source(self) -> 'Source':
+        """获取消息链中的`Source`对象。"""
         return self[Source:1][0]
 
 
 class Source(MessageComponent):
+    """源。包含消息的基本信息。"""
     type: str = "Source"
     id: int
     time: datetime
 
 
 class Plain(MessageComponent):
+    """纯文本。"""
     type: str = "Plain"
     text: str
 
@@ -153,6 +218,7 @@ class Plain(MessageComponent):
 
 
 class Quote(MessageComponent):
+    """引用。"""
     type: str = "Quote"
     id: Optional[int]
     group_id: Optional[int] = Field(alias='groupId')
@@ -187,6 +253,7 @@ class Quote(MessageComponent):
 
 
 class At(MessageComponent):
+    """At某人。"""
     type: str = "At"
     target: int
     display: Optional[str] = None
@@ -199,6 +266,7 @@ class At(MessageComponent):
 
 
 class AtAll(MessageComponent):
+    """At全体。"""
     type: str = "AtAll"
 
     def __str__(self):
@@ -206,6 +274,7 @@ class AtAll(MessageComponent):
 
 
 class Face(MessageComponent):
+    """表情。"""
     type: str = "Face"
     face_id: int = Field(..., alias='faceId')
     name: Optional[str]
@@ -224,6 +293,7 @@ class Face(MessageComponent):
 
 
 class Image(MessageComponent):
+    """图片。"""
     type: str = "Image"
     image_id: Optional[str] = Field(alias='imageId')
     url: Optional[HttpUrl] = None
@@ -293,6 +363,7 @@ class Image(MessageComponent):
 
 
 class Xml(MessageComponent):
+    """XML。"""
     type: str = "Xml"
     xml: str
 
@@ -301,6 +372,7 @@ class Xml(MessageComponent):
 
 
 class Json(MessageComponent):
+    """JSON。"""
     type: str = "Json"
     json_: dict = Field(..., alias='json')
 
@@ -309,6 +381,7 @@ class Json(MessageComponent):
 
 
 class App(MessageComponent):
+    """应用。"""
     type: str = "App"
     content: str
 
@@ -316,7 +389,7 @@ class App(MessageComponent):
         super().__init__(content=content)
 
     def as_json(self):
-        return json.loads(self.content)
+        return json_loads(self.content)
 
     def __str__(self):
         return f'[mirai:app:{serialize(self.content)}]'
@@ -361,6 +434,7 @@ POKE_ID = {
 
 
 class Poke(MessageComponent):
+    """戳一戳。"""
     type: str = "Poke"
     name: str
 
@@ -380,11 +454,13 @@ class Poke(MessageComponent):
 
 
 class Unknown(MessageComponent):
+    """未知。"""
     type: str = "Unknown"
     text: str
 
 
 class FlashImage(Image):
+    """闪照。"""
     type: str = "FlashImage"
 
     def __init__(self, imageId, url=None, **_):
@@ -398,6 +474,7 @@ class FlashImage(Image):
 
 
 class Voice(MessageComponent):
+    """语音。"""
     type: str = "Voice"
     voice_id: Optional[str] = Field(alias="voiceId")
     url: Optional[str]
@@ -406,6 +483,7 @@ class Voice(MessageComponent):
 
 
 class Dice(MessageComponent):
+    """骰子。"""
     type: str = "Dice"
     value: int
 
@@ -417,6 +495,7 @@ class Dice(MessageComponent):
 
 
 class MusicShare(MessageComponent):
+    """音乐分享。"""
     type: str = "MusicShare"
     kind: str
     title: str
@@ -428,6 +507,7 @@ class MusicShare(MessageComponent):
 
 
 class ForwardMessageNode(MiraiBaseModel):
+    """合并转发中的一条消息。"""
     sender_id: int = Field(..., alias='senderId')
     time: datetime
     sender_name: str = Field(..., alias='senderName')
@@ -436,11 +516,13 @@ class ForwardMessageNode(MiraiBaseModel):
 
 
 class Forward(MessageComponent):
+    """合并转发。"""
     type: str = "Forward"
     node_list: List[ForwardMessageNode] = Field(..., alias='nodeList')
 
 
 class File(MessageComponent):
+    """文件。"""
     type: str = "File"
     id: str
     name: str
@@ -459,7 +541,6 @@ __all__ = [
     'ForwardMessageNode',
     'Image',
     'Json',
-    'List',
     'MessageChain',
     'MessageComponent',
     'MusicShare',
@@ -467,7 +548,6 @@ __all__ = [
     'Poke',
     'Quote',
     'Source',
-    'Type',
     'Unknown',
     'Voice',
     'Xml',

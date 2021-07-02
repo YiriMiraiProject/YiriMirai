@@ -1,0 +1,2406 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>YiriMirai.models.message API documentation</title>
+<meta name="description" content="此模块提供消息链相关。" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>YiriMirai.models.message</code></h1>
+</header>
+<section id="section-intro">
+<p>此模块提供消息链相关。</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># -*- coding: utf-8 -*-
+&#34;&#34;&#34;
+此模块提供消息链相关。
+&#34;&#34;&#34;
+import logging
+import re
+import sys
+from datetime import datetime
+from json import loads as json_loads
+from typing import List, Optional, Type
+
+from pydantic import Field, HttpUrl, validator
+from YiriMirai.models.base import MiraiBaseModel
+
+logger = logging.getLogger(__name__)
+
+
+def serialize(s: str) -&gt; str:
+    &#34;&#34;&#34;mirai 码转义。
+
+    `s: str` 待转义的字符串。
+    &#34;&#34;&#34;
+    return re.sub(r&#39;[\[\]:,\\\n\r]&#39;, lambda match: &#39;\\&#39; + match.group(0), s)
+
+
+def deserialize(s: str) -&gt; str:
+    &#34;&#34;&#34;mirai 码去转义。
+
+    `s: str` 待去转义的字符串。
+    &#34;&#34;&#34;
+    return re.sub(r&#39;\\([\[\]:,\\nr])&#39;, lambda match: match.group(1), s)
+
+
+class MessageComponent(MiraiBaseModel):
+    &#34;&#34;&#34;消息组件。&#34;&#34;&#34;
+    type: str
+
+    class Config:
+        extra = &#39;allow&#39;
+        allow_population_by_field_name = True
+
+    @classmethod
+    def get_subtype(cls, name: str) -&gt; Type[&#39;MessageComponent&#39;]:
+        &#34;&#34;&#34;根据类名称，获取相应的子类类型。
+
+        `name: str` 类名称。
+        &#34;&#34;&#34;
+        try:
+            type_ = getattr(sys.modules[__name__], name)
+            if not issubclass(type_, cls):
+                raise ValueError(f&#39;`{name}`不是`{cls.__name__}`的子类！&#39;)
+            return type_
+        except AttributeError as e:
+            raise ValueError(f&#39;`{name}`不是`{cls.__name__}`的子类！&#39;) from e
+
+    @classmethod
+    def parse_obj(cls, msg: dict):
+        &#34;&#34;&#34;通过字典形式的消息链组件，构造对应的`MessageComponent`对象。
+
+        `msg: dict` 字典形式的消息链组件。
+        &#34;&#34;&#34;
+        if cls == MessageComponent:
+            MessageComponentType = cls.get_subtype(msg[&#39;type&#39;])
+            return MessageComponentType.parse_obj(msg)
+        else:
+            return super().parse_obj(msg)
+
+    def __str__(self):
+        return &#39;&#39;
+
+
+class MessageChain(MiraiBaseModel):
+    &#34;&#34;&#34;消息链。
+
+    一个构造消息链的例子：
+    ```py
+    message_chain = MessageChain([
+        AtAll(),
+        Plain(&#34;Hello World!&#34;),
+    ])
+    ```
+
+    在调用 API 时，参数中需要 MessageChain 的，也可以使用`List[MessageComponent]`代替。
+    例如，以下两种写法是等价的：
+    ```py
+    await bot.send_friend_message(12345678, [
+        Plain(&#34;Hello World!&#34;)
+    ])
+    ```
+    ```py
+    await bot.send_friend_message(12345678, MessageChain([
+        Plain(&#34;Hello World!&#34;)
+    ]))
+    ```
+
+    可以使用 for 循环遍历消息链中的消息组件。
+    ```py
+    for component in message_chain:
+        print(str(component))
+    ```
+
+    可以使用`in`运算检查消息链中是否有某个类型的组件。
+    ```py
+    if AtAll in message_chain:
+        print(&#39;AtAll&#39;)
+    ```
+
+    消息链对索引操作进行了增强。以消息组件类型为索引，获取消息链中的全部该类型的消息组件。
+    ```py
+    plain_list = message_chain[Plain]
+    ```
+
+    以`类型: 数量`为索引，获取前几个该类型的消息组件。
+    ```py
+    plain_list_first_three = message_chain[Plain: 3]
+    ```
+
+    使用`str(message_chain)`获取消息链的字符串表示，字符串采用 mirai 码格式，
+    参看 mirai 的[文档](https://github.com/mamoe/mirai/blob/dev/docs/Messages.md#mirai-%E7%A0%81)。
+    &#34;&#34;&#34;
+    __root__: List[MessageComponent]
+
+    @staticmethod
+    def _parse_message_chain(msg_chain: list):
+        result = []
+        for msg in msg_chain:
+            if isinstance(msg, dict):
+                result.append(MessageComponent.parse_obj(msg))
+            elif isinstance(msg, MessageComponent):
+                result.append(msg)
+            else:
+                raise TypeError(
+                    f&#34;消息链中元素需为 dict 或 MessageComponent，当前类型：{type(msg)}&#34;
+                )
+        return result
+
+    @validator(&#39;__root__&#39;, always=True, pre=True)
+    def _parse_component(cls, msg_chain):
+        if not msg_chain:
+            msg_chain = []
+        return cls._parse_message_chain(msg_chain)
+
+    @classmethod
+    def parse_obj(cls, msg_chain: list):
+        &#34;&#34;&#34;通过列表形式的消息链，构造对应的`MessageChain`对象。
+
+        `msg_chain: list` 列表形式的消息链。
+        &#34;&#34;&#34;
+        result = cls._parse_message_chain(msg_chain)
+        return cls(__root__=result)
+
+    def __init__(self, __root__: List[MessageComponent] = None):
+        super().__init__(__root__=__root__)
+
+    def __str__(self):
+        return &#34;&#34;.join((str(component) for component in self.__root__))
+
+    def __iter__(self):
+        yield from self.__root__
+
+    def __getitem__(self, index):
+        # 正常索引
+        if isinstance(index, int):
+            return self.__root__[index]
+        # 索引对象为 MessageComponent 类，返回所有对应 component
+        elif isinstance(index, type):
+            return [
+                component for component in self if type(component) == index
+            ]
+        # 索引对象为 MessageComponent 和 int 构成的 slice， 返回指定数量的 component
+        elif isinstance(index, slice):
+            components = (
+                component for component in self if type(component) == index
+            )
+            return [
+                component
+                for component, _ in zip(components, range(index.stop))
+            ]
+
+    def __contains__(self, sub) -&gt; bool:
+        if isinstance(sub, type): # 检测消息链中是否有某种类型的对象
+            for i in self:
+                if type(i) == sub:
+                    return True
+            else:
+                return False
+        elif isinstance(sub, str): # 检查消息中有无指定字符串子串
+            return sub in deserialize(str(self))
+
+    def __len__(self) -&gt; int:
+        return len(self.__root__)
+
+    @property
+    def source(self) -&gt; &#39;Source&#39;:
+        &#34;&#34;&#34;获取消息链中的`Source`对象。&#34;&#34;&#34;
+        return self[Source:1][0]
+
+
+class Source(MessageComponent):
+    &#34;&#34;&#34;源。包含消息的基本信息。&#34;&#34;&#34;
+    type: str = &#34;Source&#34;
+    id: int
+    time: datetime
+
+
+class Plain(MessageComponent):
+    &#34;&#34;&#34;纯文本。&#34;&#34;&#34;
+    type: str = &#34;Plain&#34;
+    text: str
+
+    def __init__(self, text: str = &#39;&#39;, **_):
+        if len(text) &gt; 128:
+            logger.warn(f&#34;Plain 文本过长。当前长度： {len(text)}。&#34;)
+        super().__init__(text=text)
+
+    def __str__(self):
+        return serialize(self.text)
+
+
+class Quote(MessageComponent):
+    &#34;&#34;&#34;引用。&#34;&#34;&#34;
+    type: str = &#34;Quote&#34;
+    id: Optional[int]
+    group_id: Optional[int] = Field(alias=&#39;groupId&#39;)
+    sender_id: Optional[int] = Field(alias=&#39;senderId&#39;)
+    target_id: Optional[int] = Field(alias=&#39;targetId&#39;)
+    origin: MessageChain
+
+    @validator(&#34;origin&#34;, always=True, pre=True)
+    @classmethod
+    def origin_formater(cls, v):
+        return MessageChain.parse_obj(v)
+
+    def __init__(
+        self,
+        id: Optional[int] = None,
+        group_id: Optional[int] = None,
+        sender_id: Optional[int] = None,
+        target_id: Optional[int] = None,
+        origin: MessageChain = None,
+        groupId: Optional[int] = None,
+        senderId: Optional[int] = None,
+        targetId: Optional[int] = None,
+        **_
+    ):
+        super().__init__(
+            id=id,
+            groupId=group_id or groupId,
+            senderId=sender_id or senderId,
+            targetId=target_id or targetId,
+            origin=origin
+        )
+
+
+class At(MessageComponent):
+    &#34;&#34;&#34;At某人。&#34;&#34;&#34;
+    type: str = &#34;At&#34;
+    target: int
+    display: Optional[str] = None
+
+    def __init__(self, target: int, **_):
+        super().__init__(target=target)
+
+    def __str__(self):
+        return f&#34;[mirai:at:{self.target}]&#34;
+
+
+class AtAll(MessageComponent):
+    &#34;&#34;&#34;At全体。&#34;&#34;&#34;
+    type: str = &#34;AtAll&#34;
+
+    def __str__(self):
+        return f&#34;[mirai:atall]&#34;
+
+
+class Face(MessageComponent):
+    &#34;&#34;&#34;表情。&#34;&#34;&#34;
+    type: str = &#34;Face&#34;
+    face_id: int = Field(..., alias=&#39;faceId&#39;)
+    name: Optional[str]
+
+    def __init__(
+        self,
+        face_id: Optional[int] = None,
+        name: Optional[str] = None,
+        faceId: Optional[int] = None,
+        **_
+    ):
+        super().__init__(faceId=face_id or faceId, name=name)
+
+    def __str__(self):
+        return f&#34;[mirai:face:{self.face_id}]&#34;
+
+
+class Image(MessageComponent):
+    &#34;&#34;&#34;图片。&#34;&#34;&#34;
+    type: str = &#34;Image&#34;
+    image_id: Optional[str] = Field(alias=&#39;imageId&#39;)
+    url: Optional[HttpUrl] = None
+
+    def __init__(
+        self,
+        image_id: Optional[str] = None,
+        url: Optional[str] = None,
+        imageId: Optional[str] = None,
+        **_
+    ):
+        super().__init__(imageId=image_id or imageId, url=url)
+
+    def __str__(self):
+        return f&#34;[mirai:image:{self.image_id}]&#34;
+
+    @property
+    def uuid(self):
+        image_id = self.image_id
+        if image_id[0] == &#39;{&#39;: # 群图片
+            image_id = image_id[1:37]
+        elif image_id[0] == &#39;/&#39;: # 好友图片
+            image_id = image_id[1:]
+        return image_id
+
+    def as_group_image(self) -&gt; str:
+        return f&#34;{{{self.uuid.upper()}}}.jpg&#34;
+
+    def as_friend_image(self) -&gt; str:
+        return f&#34;/{self.uuid.lower()}&#34;
+
+    def as_flash_image(self) -&gt; &#34;FlashImage&#34;:
+        return FlashImage(self.image_id, self.url)
+
+    # @staticmethod
+    # async def fromRemote(url, **extra) -&gt; BytesImage:
+    #     async with ClientSession() as session:
+    #         async with session.get(url, **extra) as response:
+    #             return BytesImage(await response.read())
+
+    # @staticmethod
+    # def fromFileSystem(path: Union[Path, str]) -&gt; LocalImage:
+    #     return LocalImage(path)
+
+    # async def toBytes(self, chunk_size=256) -&gt; BytesIO:
+    #     async with ClientSession() as session:
+    #         async with session.get(self.url) as response:
+    #             result = BytesIO()
+    #             while True:
+    #                 chunk = await response.content.read(chunk_size)
+    #                 if not chunk:
+    #                     break
+    #                 result.write(chunk)
+    #         return result
+
+    # @staticmethod
+    # def fromBytes(data) -&gt; BytesImage:
+    #     return BytesImage(data)
+
+    # @staticmethod
+    # def fromBase64(base64_str) -&gt; Base64Image:
+    #     return Base64Image(base64_str)
+
+    # @staticmethod
+    # def fromIO(IO) -&gt; IOImage:
+    #     return IOImage(IO)
+
+
+class Xml(MessageComponent):
+    &#34;&#34;&#34;XML。&#34;&#34;&#34;
+    type: str = &#34;Xml&#34;
+    xml: str
+
+    def __init__(self, xml: str, **_):
+        super().__init__(xml=xml)
+
+
+class Json(MessageComponent):
+    &#34;&#34;&#34;JSON。&#34;&#34;&#34;
+    type: str = &#34;Json&#34;
+    json_: dict = Field(..., alias=&#39;json&#39;)
+
+    def __init__(self, json: dict):
+        super().__init__(json=json)
+
+
+class App(MessageComponent):
+    &#34;&#34;&#34;应用。&#34;&#34;&#34;
+    type: str = &#34;App&#34;
+    content: str
+
+    def __init__(self, content: str, **_):
+        super().__init__(content=content)
+
+    def as_json(self):
+        return json_loads(self.content)
+
+    def __str__(self):
+        return f&#39;[mirai:app:{serialize(self.content)}]&#39;
+
+
+POKE_TYPE = {
+    &#34;ChuoYiChuo&#34;: 1,
+    &#34;BiXin&#34;: 2,
+    &#34;DianZan&#34;: 3,
+    &#34;XinSui&#34;: 4,
+    &#34;LiuLiuLiu&#34;: 5,
+    &#34;FangDaZhao&#34;: 6,
+    &#34;BaoBeiQiu&#34;: 126,
+    &#34;Rose&#34;: 126,
+    &#34;ZhaoHuanShu&#34;: 126,
+    &#34;RangNiPi&#34;: 126,
+    &#34;JeiYin&#34;: 126,
+    &#34;ShouLei&#34;: 126,
+    &#34;GouYin&#34;: 126,
+    &#34;ZhuaYiXia&#34;: 126,
+    &#34;SuiPing&#34;: 126,
+    &#34;QiaoMen&#34;: 126,
+}
+POKE_ID = {
+    &#34;ChuoYiChuo&#34;: -1,
+    &#34;BiXin&#34;: -1,
+    &#34;DianZan&#34;: -1,
+    &#34;XinSui&#34;: -1,
+    &#34;LiuLiuLiu&#34;: -1,
+    &#34;FangDaZhao&#34;: -1,
+    &#34;BaoBeiQiu&#34;: 2011,
+    &#34;Rose&#34;: 2007,
+    &#34;ZhaoHuanShu&#34;: 2006,
+    &#34;RangNiPi&#34;: 2009,
+    &#34;JeiYin&#34;: 2005,
+    &#34;ShouLei&#34;: 2004,
+    &#34;GouYin&#34;: 2003,
+    &#34;ZhuaYiXia&#34;: 2001,
+    &#34;SuiPing&#34;: 2002,
+    &#34;QiaoMen&#34;: 2002,
+}
+
+
+class Poke(MessageComponent):
+    &#34;&#34;&#34;戳一戳。&#34;&#34;&#34;
+    type: str = &#34;Poke&#34;
+    name: str
+
+    def __init__(self, name: str, **_):
+        super().__init__(name=name)
+
+    @property
+    def poke_type(self):
+        return POKE_TYPE[self.name]
+
+    @property
+    def poke_id(self):
+        return POKE_ID[self.name]
+
+    def __str__(self):
+        return f&#39;[mirai:poke:{self.name}]&#39;
+
+
+class Unknown(MessageComponent):
+    &#34;&#34;&#34;未知。&#34;&#34;&#34;
+    type: str = &#34;Unknown&#34;
+    text: str
+
+
+class FlashImage(Image):
+    &#34;&#34;&#34;闪照。&#34;&#34;&#34;
+    type: str = &#34;FlashImage&#34;
+
+    def __init__(self, imageId, url=None, **_):
+        super().__init__(imageId=imageId, url=url)
+
+    def __str__(self):
+        return f&#34;[mirai:flash:{self.image_id}]&#34;
+
+    def as_image(self) -&gt; Image:
+        return Image(self.image_id, self.url)
+
+
+class Voice(MessageComponent):
+    &#34;&#34;&#34;语音。&#34;&#34;&#34;
+    type: str = &#34;Voice&#34;
+    voice_id: Optional[str] = Field(alias=&#34;voiceId&#34;)
+    url: Optional[str]
+    path: Optional[str]
+    base64: Optional[str]
+
+
+class Dice(MessageComponent):
+    &#34;&#34;&#34;骰子。&#34;&#34;&#34;
+    type: str = &#34;Dice&#34;
+    value: int
+
+    def __init__(self, value: int, **_):
+        super().__init__(value=value)
+
+    def __str__(self):
+        return f&#39;[mirai:dice:{self.value}]&#39;
+
+
+class MusicShare(MessageComponent):
+    &#34;&#34;&#34;音乐分享。&#34;&#34;&#34;
+    type: str = &#34;MusicShare&#34;
+    kind: str
+    title: str
+    summary: str
+    jump_url: HttpUrl = Field(..., alias=&#39;jumpUrl&#39;)
+    picture_url: HttpUrl = Field(..., alias=&#39;pictureUrl&#39;)
+    music_url: HttpUrl = Field(..., alias=&#39;musicUrl&#39;)
+    brief: str
+
+
+class ForwardMessageNode(MiraiBaseModel):
+    &#34;&#34;&#34;合并转发中的一条消息。&#34;&#34;&#34;
+    sender_id: int = Field(..., alias=&#39;senderId&#39;)
+    time: datetime
+    sender_name: str = Field(..., alias=&#39;senderName&#39;)
+    source_id: Optional[int] = Field(alias=&#39;sourceId&#39;)
+    message_chain: MessageChain = Field(..., alias=&#39;messageChain&#39;)
+
+
+class Forward(MessageComponent):
+    &#34;&#34;&#34;合并转发。&#34;&#34;&#34;
+    type: str = &#34;Forward&#34;
+    node_list: List[ForwardMessageNode] = Field(..., alias=&#39;nodeList&#39;)
+
+
+class File(MessageComponent):
+    &#34;&#34;&#34;文件。&#34;&#34;&#34;
+    type: str = &#34;File&#34;
+    id: str
+    name: str
+    size: int
+
+
+__all__ = [
+    &#39;App&#39;,
+    &#39;At&#39;,
+    &#39;AtAll&#39;,
+    &#39;Dice&#39;,
+    &#39;Face&#39;,
+    &#39;File&#39;,
+    &#39;FlashImage&#39;,
+    &#39;Forward&#39;,
+    &#39;ForwardMessageNode&#39;,
+    &#39;Image&#39;,
+    &#39;Json&#39;,
+    &#39;MessageChain&#39;,
+    &#39;MessageComponent&#39;,
+    &#39;MusicShare&#39;,
+    &#39;Plain&#39;,
+    &#39;Poke&#39;,
+    &#39;Quote&#39;,
+    &#39;Source&#39;,
+    &#39;Unknown&#39;,
+    &#39;Voice&#39;,
+    &#39;Xml&#39;,
+    &#39;serialize&#39;,
+    &#39;deserialize&#39;,
+]</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="YiriMirai.models.message.deserialize"><code class="name flex">
+<span>def <span class="ident">deserialize</span></span>(<span>s: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>mirai 码去转义。</p>
+<p><code>s: str</code> 待去转义的字符串。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def deserialize(s: str) -&gt; str:
+    &#34;&#34;&#34;mirai 码去转义。
+
+    `s: str` 待去转义的字符串。
+    &#34;&#34;&#34;
+    return re.sub(r&#39;\\([\[\]:,\\nr])&#39;, lambda match: match.group(1), s)</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.models.message.serialize"><code class="name flex">
+<span>def <span class="ident">serialize</span></span>(<span>s: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>mirai 码转义。</p>
+<p><code>s: str</code> 待转义的字符串。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def serialize(s: str) -&gt; str:
+    &#34;&#34;&#34;mirai 码转义。
+
+    `s: str` 待转义的字符串。
+    &#34;&#34;&#34;
+    return re.sub(r&#39;[\[\]:,\\\n\r]&#39;, lambda match: &#39;\\&#39; + match.group(0), s)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="YiriMirai.models.message.App"><code class="flex name class">
+<span>class <span class="ident">App</span></span>
+<span>(</span><span>content: str, **_)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>应用。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class App(MessageComponent):
+    &#34;&#34;&#34;应用。&#34;&#34;&#34;
+    type: str = &#34;App&#34;
+    content: str
+
+    def __init__(self, content: str, **_):
+        super().__init__(content=content)
+
+    def as_json(self):
+        return json_loads(self.content)
+
+    def __str__(self):
+        return f&#39;[mirai:app:{serialize(self.content)}]&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.App.content"><code class="name">var <span class="ident">content</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.App.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="YiriMirai.models.message.App.as_json"><code class="name flex">
+<span>def <span class="ident">as_json</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def as_json(self):
+    return json_loads(self.content)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.message.At"><code class="flex name class">
+<span>class <span class="ident">At</span></span>
+<span>(</span><span>target: int, **_)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>At某人。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class At(MessageComponent):
+    &#34;&#34;&#34;At某人。&#34;&#34;&#34;
+    type: str = &#34;At&#34;
+    target: int
+    display: Optional[str] = None
+
+    def __init__(self, target: int, **_):
+        super().__init__(target=target)
+
+    def __str__(self):
+        return f&#34;[mirai:at:{self.target}]&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.At.display"><code class="name">var <span class="ident">display</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.At.target"><code class="name">var <span class="ident">target</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.At.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.message.AtAll"><code class="flex name class">
+<span>class <span class="ident">AtAll</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>At全体。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AtAll(MessageComponent):
+    &#34;&#34;&#34;At全体。&#34;&#34;&#34;
+    type: str = &#34;AtAll&#34;
+
+    def __str__(self):
+        return f&#34;[mirai:atall]&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.AtAll.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.message.Dice"><code class="flex name class">
+<span>class <span class="ident">Dice</span></span>
+<span>(</span><span>value: int, **_)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>骰子。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Dice(MessageComponent):
+    &#34;&#34;&#34;骰子。&#34;&#34;&#34;
+    type: str = &#34;Dice&#34;
+    value: int
+
+    def __init__(self, value: int, **_):
+        super().__init__(value=value)
+
+    def __str__(self):
+        return f&#39;[mirai:dice:{self.value}]&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.Dice.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Dice.value"><code class="name">var <span class="ident">value</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.message.Face"><code class="flex name class">
+<span>class <span class="ident">Face</span></span>
+<span>(</span><span>face_id: Union[int, NoneType] = None, name: Union[str, NoneType] = None, faceId: Union[int, NoneType] = None, **_)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>表情。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Face(MessageComponent):
+    &#34;&#34;&#34;表情。&#34;&#34;&#34;
+    type: str = &#34;Face&#34;
+    face_id: int = Field(..., alias=&#39;faceId&#39;)
+    name: Optional[str]
+
+    def __init__(
+        self,
+        face_id: Optional[int] = None,
+        name: Optional[str] = None,
+        faceId: Optional[int] = None,
+        **_
+    ):
+        super().__init__(faceId=face_id or faceId, name=name)
+
+    def __str__(self):
+        return f&#34;[mirai:face:{self.face_id}]&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.Face.face_id"><code class="name">var <span class="ident">face_id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Face.name"><code class="name">var <span class="ident">name</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Face.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.message.File"><code class="flex name class">
+<span>class <span class="ident">File</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>文件。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class File(MessageComponent):
+    &#34;&#34;&#34;文件。&#34;&#34;&#34;
+    type: str = &#34;File&#34;
+    id: str
+    name: str
+    size: int</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.File.id"><code class="name">var <span class="ident">id</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.File.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.File.size"><code class="name">var <span class="ident">size</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.File.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.message.FlashImage"><code class="flex name class">
+<span>class <span class="ident">FlashImage</span></span>
+<span>(</span><span>imageId, url=None, **_)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>闪照。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FlashImage(Image):
+    &#34;&#34;&#34;闪照。&#34;&#34;&#34;
+    type: str = &#34;FlashImage&#34;
+
+    def __init__(self, imageId, url=None, **_):
+        super().__init__(imageId=imageId, url=url)
+
+    def __str__(self):
+        return f&#34;[mirai:flash:{self.image_id}]&#34;
+
+    def as_image(self) -&gt; Image:
+        return Image(self.image_id, self.url)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.Image" href="#YiriMirai.models.message.Image">Image</a></li>
+<li><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.FlashImage.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="YiriMirai.models.message.FlashImage.as_image"><code class="name flex">
+<span>def <span class="ident">as_image</span></span>(<span>self) ‑> <a title="YiriMirai.models.message.Image" href="#YiriMirai.models.message.Image">Image</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def as_image(self) -&gt; Image:
+    return Image(self.image_id, self.url)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.Image" href="#YiriMirai.models.message.Image">Image</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.Image.get_subtype" href="#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.Image.parse_obj" href="#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.message.Forward"><code class="flex name class">
+<span>class <span class="ident">Forward</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>合并转发。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Forward(MessageComponent):
+    &#34;&#34;&#34;合并转发。&#34;&#34;&#34;
+    type: str = &#34;Forward&#34;
+    node_list: List[ForwardMessageNode] = Field(..., alias=&#39;nodeList&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.Forward.node_list"><code class="name">var <span class="ident">node_list</span> : List[<a title="YiriMirai.models.message.ForwardMessageNode" href="#YiriMirai.models.message.ForwardMessageNode">ForwardMessageNode</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Forward.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.message.ForwardMessageNode"><code class="flex name class">
+<span>class <span class="ident">ForwardMessageNode</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>合并转发中的一条消息。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ForwardMessageNode(MiraiBaseModel):
+    &#34;&#34;&#34;合并转发中的一条消息。&#34;&#34;&#34;
+    sender_id: int = Field(..., alias=&#39;senderId&#39;)
+    time: datetime
+    sender_name: str = Field(..., alias=&#39;senderName&#39;)
+    source_id: Optional[int] = Field(alias=&#39;sourceId&#39;)
+    message_chain: MessageChain = Field(..., alias=&#39;messageChain&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.ForwardMessageNode.message_chain"><code class="name">var <span class="ident">message_chain</span> : <a title="YiriMirai.models.message.MessageChain" href="#YiriMirai.models.message.MessageChain">MessageChain</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.ForwardMessageNode.sender_id"><code class="name">var <span class="ident">sender_id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.ForwardMessageNode.sender_name"><code class="name">var <span class="ident">sender_name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.ForwardMessageNode.source_id"><code class="name">var <span class="ident">source_id</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.ForwardMessageNode.time"><code class="name">var <span class="ident">time</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.models.message.Image"><code class="flex name class">
+<span>class <span class="ident">Image</span></span>
+<span>(</span><span>image_id: Union[str, NoneType] = None, url: Union[str, NoneType] = None, imageId: Union[str, NoneType] = None, **_)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>图片。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Image(MessageComponent):
+    &#34;&#34;&#34;图片。&#34;&#34;&#34;
+    type: str = &#34;Image&#34;
+    image_id: Optional[str] = Field(alias=&#39;imageId&#39;)
+    url: Optional[HttpUrl] = None
+
+    def __init__(
+        self,
+        image_id: Optional[str] = None,
+        url: Optional[str] = None,
+        imageId: Optional[str] = None,
+        **_
+    ):
+        super().__init__(imageId=image_id or imageId, url=url)
+
+    def __str__(self):
+        return f&#34;[mirai:image:{self.image_id}]&#34;
+
+    @property
+    def uuid(self):
+        image_id = self.image_id
+        if image_id[0] == &#39;{&#39;: # 群图片
+            image_id = image_id[1:37]
+        elif image_id[0] == &#39;/&#39;: # 好友图片
+            image_id = image_id[1:]
+        return image_id
+
+    def as_group_image(self) -&gt; str:
+        return f&#34;{{{self.uuid.upper()}}}.jpg&#34;
+
+    def as_friend_image(self) -&gt; str:
+        return f&#34;/{self.uuid.lower()}&#34;
+
+    def as_flash_image(self) -&gt; &#34;FlashImage&#34;:
+        return FlashImage(self.image_id, self.url)
+
+    # @staticmethod
+    # async def fromRemote(url, **extra) -&gt; BytesImage:
+    #     async with ClientSession() as session:
+    #         async with session.get(url, **extra) as response:
+    #             return BytesImage(await response.read())
+
+    # @staticmethod
+    # def fromFileSystem(path: Union[Path, str]) -&gt; LocalImage:
+    #     return LocalImage(path)
+
+    # async def toBytes(self, chunk_size=256) -&gt; BytesIO:
+    #     async with ClientSession() as session:
+    #         async with session.get(self.url) as response:
+    #             result = BytesIO()
+    #             while True:
+    #                 chunk = await response.content.read(chunk_size)
+    #                 if not chunk:
+    #                     break
+    #                 result.write(chunk)
+    #         return result
+
+    # @staticmethod
+    # def fromBytes(data) -&gt; BytesImage:
+    #     return BytesImage(data)
+
+    # @staticmethod
+    # def fromBase64(base64_str) -&gt; Base64Image:
+    #     return Base64Image(base64_str)
+
+    # @staticmethod
+    # def fromIO(IO) -&gt; IOImage:
+    #     return IOImage(IO)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.FlashImage" href="#YiriMirai.models.message.FlashImage">FlashImage</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.Image.image_id"><code class="name">var <span class="ident">image_id</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Image.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Image.url"><code class="name">var <span class="ident">url</span> : Union[pydantic.networks.HttpUrl, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.Image.uuid"><code class="name">var <span class="ident">uuid</span></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def uuid(self):
+    image_id = self.image_id
+    if image_id[0] == &#39;{&#39;: # 群图片
+        image_id = image_id[1:37]
+    elif image_id[0] == &#39;/&#39;: # 好友图片
+        image_id = image_id[1:]
+    return image_id</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="YiriMirai.models.message.Image.as_flash_image"><code class="name flex">
+<span>def <span class="ident">as_flash_image</span></span>(<span>self) ‑> <a title="YiriMirai.models.message.FlashImage" href="#YiriMirai.models.message.FlashImage">FlashImage</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def as_flash_image(self) -&gt; &#34;FlashImage&#34;:
+    return FlashImage(self.image_id, self.url)</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.models.message.Image.as_friend_image"><code class="name flex">
+<span>def <span class="ident">as_friend_image</span></span>(<span>self) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def as_friend_image(self) -&gt; str:
+    return f&#34;/{self.uuid.lower()}&#34;</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.models.message.Image.as_group_image"><code class="name flex">
+<span>def <span class="ident">as_group_image</span></span>(<span>self) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def as_group_image(self) -&gt; str:
+    return f&#34;{{{self.uuid.upper()}}}.jpg&#34;</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.message.Json"><code class="flex name class">
+<span>class <span class="ident">Json</span></span>
+<span>(</span><span>json: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>JSON。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Json(MessageComponent):
+    &#34;&#34;&#34;JSON。&#34;&#34;&#34;
+    type: str = &#34;Json&#34;
+    json_: dict = Field(..., alias=&#39;json&#39;)
+
+    def __init__(self, json: dict):
+        super().__init__(json=json)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.Json.json_"><code class="name">var <span class="ident">json_</span> : dict</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Json.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.message.MessageChain"><code class="flex name class">
+<span>class <span class="ident">MessageChain</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>消息链。</p>
+<p>一个构造消息链的例子：</p>
+<pre><code class="language-py">message_chain = MessageChain([
+    AtAll(),
+    Plain(&quot;Hello World!&quot;),
+])
+</code></pre>
+<p>在调用 API 时，参数中需要 MessageChain 的，也可以使用<code>List[<a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a>]</code>代替。
+例如，以下两种写法是等价的：</p>
+<pre><code class="language-py">await bot.send_friend_message(12345678, [
+    Plain(&quot;Hello World!&quot;)
+])
+</code></pre>
+<pre><code class="language-py">await bot.send_friend_message(12345678, MessageChain([
+    Plain(&quot;Hello World!&quot;)
+]))
+</code></pre>
+<p>可以使用 for 循环遍历消息链中的消息组件。</p>
+<pre><code class="language-py">for component in message_chain:
+    print(str(component))
+</code></pre>
+<p>可以使用<code>in</code>运算检查消息链中是否有某个类型的组件。</p>
+<pre><code class="language-py">if AtAll in message_chain:
+    print('AtAll')
+</code></pre>
+<p>消息链对索引操作进行了增强。以消息组件类型为索引，获取消息链中的全部该类型的消息组件。</p>
+<pre><code class="language-py">plain_list = message_chain[Plain]
+</code></pre>
+<p>以<code>类型: 数量</code>为索引，获取前几个该类型的消息组件。</p>
+<pre><code class="language-py">plain_list_first_three = message_chain[Plain: 3]
+</code></pre>
+<p>使用<code>str(message_chain)</code>获取消息链的字符串表示，字符串采用 mirai 码格式，
+参看 mirai 的<a href="https://github.com/mamoe/mirai/blob/dev/docs/Messages.md#mirai-%E7%A0%81">文档</a>。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MessageChain(MiraiBaseModel):
+    &#34;&#34;&#34;消息链。
+
+    一个构造消息链的例子：
+    ```py
+    message_chain = MessageChain([
+        AtAll(),
+        Plain(&#34;Hello World!&#34;),
+    ])
+    ```
+
+    在调用 API 时，参数中需要 MessageChain 的，也可以使用`List[MessageComponent]`代替。
+    例如，以下两种写法是等价的：
+    ```py
+    await bot.send_friend_message(12345678, [
+        Plain(&#34;Hello World!&#34;)
+    ])
+    ```
+    ```py
+    await bot.send_friend_message(12345678, MessageChain([
+        Plain(&#34;Hello World!&#34;)
+    ]))
+    ```
+
+    可以使用 for 循环遍历消息链中的消息组件。
+    ```py
+    for component in message_chain:
+        print(str(component))
+    ```
+
+    可以使用`in`运算检查消息链中是否有某个类型的组件。
+    ```py
+    if AtAll in message_chain:
+        print(&#39;AtAll&#39;)
+    ```
+
+    消息链对索引操作进行了增强。以消息组件类型为索引，获取消息链中的全部该类型的消息组件。
+    ```py
+    plain_list = message_chain[Plain]
+    ```
+
+    以`类型: 数量`为索引，获取前几个该类型的消息组件。
+    ```py
+    plain_list_first_three = message_chain[Plain: 3]
+    ```
+
+    使用`str(message_chain)`获取消息链的字符串表示，字符串采用 mirai 码格式，
+    参看 mirai 的[文档](https://github.com/mamoe/mirai/blob/dev/docs/Messages.md#mirai-%E7%A0%81)。
+    &#34;&#34;&#34;
+    __root__: List[MessageComponent]
+
+    @staticmethod
+    def _parse_message_chain(msg_chain: list):
+        result = []
+        for msg in msg_chain:
+            if isinstance(msg, dict):
+                result.append(MessageComponent.parse_obj(msg))
+            elif isinstance(msg, MessageComponent):
+                result.append(msg)
+            else:
+                raise TypeError(
+                    f&#34;消息链中元素需为 dict 或 MessageComponent，当前类型：{type(msg)}&#34;
+                )
+        return result
+
+    @validator(&#39;__root__&#39;, always=True, pre=True)
+    def _parse_component(cls, msg_chain):
+        if not msg_chain:
+            msg_chain = []
+        return cls._parse_message_chain(msg_chain)
+
+    @classmethod
+    def parse_obj(cls, msg_chain: list):
+        &#34;&#34;&#34;通过列表形式的消息链，构造对应的`MessageChain`对象。
+
+        `msg_chain: list` 列表形式的消息链。
+        &#34;&#34;&#34;
+        result = cls._parse_message_chain(msg_chain)
+        return cls(__root__=result)
+
+    def __init__(self, __root__: List[MessageComponent] = None):
+        super().__init__(__root__=__root__)
+
+    def __str__(self):
+        return &#34;&#34;.join((str(component) for component in self.__root__))
+
+    def __iter__(self):
+        yield from self.__root__
+
+    def __getitem__(self, index):
+        # 正常索引
+        if isinstance(index, int):
+            return self.__root__[index]
+        # 索引对象为 MessageComponent 类，返回所有对应 component
+        elif isinstance(index, type):
+            return [
+                component for component in self if type(component) == index
+            ]
+        # 索引对象为 MessageComponent 和 int 构成的 slice， 返回指定数量的 component
+        elif isinstance(index, slice):
+            components = (
+                component for component in self if type(component) == index
+            )
+            return [
+                component
+                for component, _ in zip(components, range(index.stop))
+            ]
+
+    def __contains__(self, sub) -&gt; bool:
+        if isinstance(sub, type): # 检测消息链中是否有某种类型的对象
+            for i in self:
+                if type(i) == sub:
+                    return True
+            else:
+                return False
+        elif isinstance(sub, str): # 检查消息中有无指定字符串子串
+            return sub in deserialize(str(self))
+
+    def __len__(self) -&gt; int:
+        return len(self.__root__)
+
+    @property
+    def source(self) -&gt; &#39;Source&#39;:
+        &#34;&#34;&#34;获取消息链中的`Source`对象。&#34;&#34;&#34;
+        return self[Source:1][0]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="YiriMirai.models.message.MessageChain.parse_obj"><code class="name flex">
+<span>def <span class="ident">parse_obj</span></span>(<span>msg_chain: list)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>通过列表形式的消息链，构造对应的<code><a title="YiriMirai.models.message.MessageChain" href="#YiriMirai.models.message.MessageChain">MessageChain</a></code>对象。</p>
+<p><code>msg_chain: list</code> 列表形式的消息链。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def parse_obj(cls, msg_chain: list):
+    &#34;&#34;&#34;通过列表形式的消息链，构造对应的`MessageChain`对象。
+
+    `msg_chain: list` 列表形式的消息链。
+    &#34;&#34;&#34;
+    result = cls._parse_message_chain(msg_chain)
+    return cls(__root__=result)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.MessageChain.source"><code class="name">var <span class="ident">source</span> : <a title="YiriMirai.models.message.Source" href="#YiriMirai.models.message.Source">Source</a></code></dt>
+<dd>
+<div class="desc"><p>获取消息链中的<code><a title="YiriMirai.models.message.Source" href="#YiriMirai.models.message.Source">Source</a></code>对象。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def source(self) -&gt; &#39;Source&#39;:
+    &#34;&#34;&#34;获取消息链中的`Source`对象。&#34;&#34;&#34;
+    return self[Source:1][0]</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.models.message.MessageComponent"><code class="flex name class">
+<span>class <span class="ident">MessageComponent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>消息组件。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MessageComponent(MiraiBaseModel):
+    &#34;&#34;&#34;消息组件。&#34;&#34;&#34;
+    type: str
+
+    class Config:
+        extra = &#39;allow&#39;
+        allow_population_by_field_name = True
+
+    @classmethod
+    def get_subtype(cls, name: str) -&gt; Type[&#39;MessageComponent&#39;]:
+        &#34;&#34;&#34;根据类名称，获取相应的子类类型。
+
+        `name: str` 类名称。
+        &#34;&#34;&#34;
+        try:
+            type_ = getattr(sys.modules[__name__], name)
+            if not issubclass(type_, cls):
+                raise ValueError(f&#39;`{name}`不是`{cls.__name__}`的子类！&#39;)
+            return type_
+        except AttributeError as e:
+            raise ValueError(f&#39;`{name}`不是`{cls.__name__}`的子类！&#39;) from e
+
+    @classmethod
+    def parse_obj(cls, msg: dict):
+        &#34;&#34;&#34;通过字典形式的消息链组件，构造对应的`MessageComponent`对象。
+
+        `msg: dict` 字典形式的消息链组件。
+        &#34;&#34;&#34;
+        if cls == MessageComponent:
+            MessageComponentType = cls.get_subtype(msg[&#39;type&#39;])
+            return MessageComponentType.parse_obj(msg)
+        else:
+            return super().parse_obj(msg)
+
+    def __str__(self):
+        return &#39;&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.App" href="#YiriMirai.models.message.App">App</a></li>
+<li><a title="YiriMirai.models.message.At" href="#YiriMirai.models.message.At">At</a></li>
+<li><a title="YiriMirai.models.message.AtAll" href="#YiriMirai.models.message.AtAll">AtAll</a></li>
+<li><a title="YiriMirai.models.message.Dice" href="#YiriMirai.models.message.Dice">Dice</a></li>
+<li><a title="YiriMirai.models.message.Face" href="#YiriMirai.models.message.Face">Face</a></li>
+<li><a title="YiriMirai.models.message.File" href="#YiriMirai.models.message.File">File</a></li>
+<li><a title="YiriMirai.models.message.Forward" href="#YiriMirai.models.message.Forward">Forward</a></li>
+<li><a title="YiriMirai.models.message.Image" href="#YiriMirai.models.message.Image">Image</a></li>
+<li><a title="YiriMirai.models.message.Json" href="#YiriMirai.models.message.Json">Json</a></li>
+<li><a title="YiriMirai.models.message.MusicShare" href="#YiriMirai.models.message.MusicShare">MusicShare</a></li>
+<li><a title="YiriMirai.models.message.Plain" href="#YiriMirai.models.message.Plain">Plain</a></li>
+<li><a title="YiriMirai.models.message.Poke" href="#YiriMirai.models.message.Poke">Poke</a></li>
+<li><a title="YiriMirai.models.message.Quote" href="#YiriMirai.models.message.Quote">Quote</a></li>
+<li><a title="YiriMirai.models.message.Source" href="#YiriMirai.models.message.Source">Source</a></li>
+<li><a title="YiriMirai.models.message.Unknown" href="#YiriMirai.models.message.Unknown">Unknown</a></li>
+<li><a title="YiriMirai.models.message.Voice" href="#YiriMirai.models.message.Voice">Voice</a></li>
+<li><a title="YiriMirai.models.message.Xml" href="#YiriMirai.models.message.Xml">Xml</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.MessageComponent.Config"><code class="name">var <span class="ident">Config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.MessageComponent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="YiriMirai.models.message.MessageComponent.get_subtype"><code class="name flex">
+<span>def <span class="ident">get_subtype</span></span>(<span>name: str) ‑> Type[<a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>根据类名称，获取相应的子类类型。</p>
+<p><code>name: str</code> 类名称。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def get_subtype(cls, name: str) -&gt; Type[&#39;MessageComponent&#39;]:
+    &#34;&#34;&#34;根据类名称，获取相应的子类类型。
+
+    `name: str` 类名称。
+    &#34;&#34;&#34;
+    try:
+        type_ = getattr(sys.modules[__name__], name)
+        if not issubclass(type_, cls):
+            raise ValueError(f&#39;`{name}`不是`{cls.__name__}`的子类！&#39;)
+        return type_
+    except AttributeError as e:
+        raise ValueError(f&#39;`{name}`不是`{cls.__name__}`的子类！&#39;) from e</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.models.message.MessageComponent.parse_obj"><code class="name flex">
+<span>def <span class="ident">parse_obj</span></span>(<span>msg: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>通过字典形式的消息链组件，构造对应的<code><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></code>对象。</p>
+<p><code>msg: dict</code> 字典形式的消息链组件。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def parse_obj(cls, msg: dict):
+    &#34;&#34;&#34;通过字典形式的消息链组件，构造对应的`MessageComponent`对象。
+
+    `msg: dict` 字典形式的消息链组件。
+    &#34;&#34;&#34;
+    if cls == MessageComponent:
+        MessageComponentType = cls.get_subtype(msg[&#39;type&#39;])
+        return MessageComponentType.parse_obj(msg)
+    else:
+        return super().parse_obj(msg)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.models.message.MusicShare"><code class="flex name class">
+<span>class <span class="ident">MusicShare</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>音乐分享。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MusicShare(MessageComponent):
+    &#34;&#34;&#34;音乐分享。&#34;&#34;&#34;
+    type: str = &#34;MusicShare&#34;
+    kind: str
+    title: str
+    summary: str
+    jump_url: HttpUrl = Field(..., alias=&#39;jumpUrl&#39;)
+    picture_url: HttpUrl = Field(..., alias=&#39;pictureUrl&#39;)
+    music_url: HttpUrl = Field(..., alias=&#39;musicUrl&#39;)
+    brief: str</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.MusicShare.brief"><code class="name">var <span class="ident">brief</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.MusicShare.jump_url"><code class="name">var <span class="ident">jump_url</span> : pydantic.networks.HttpUrl</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.MusicShare.kind"><code class="name">var <span class="ident">kind</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.MusicShare.music_url"><code class="name">var <span class="ident">music_url</span> : pydantic.networks.HttpUrl</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.MusicShare.picture_url"><code class="name">var <span class="ident">picture_url</span> : pydantic.networks.HttpUrl</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.MusicShare.summary"><code class="name">var <span class="ident">summary</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.MusicShare.title"><code class="name">var <span class="ident">title</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.MusicShare.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.message.Plain"><code class="flex name class">
+<span>class <span class="ident">Plain</span></span>
+<span>(</span><span>text: str = '', **_)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>纯文本。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Plain(MessageComponent):
+    &#34;&#34;&#34;纯文本。&#34;&#34;&#34;
+    type: str = &#34;Plain&#34;
+    text: str
+
+    def __init__(self, text: str = &#39;&#39;, **_):
+        if len(text) &gt; 128:
+            logger.warn(f&#34;Plain 文本过长。当前长度： {len(text)}。&#34;)
+        super().__init__(text=text)
+
+    def __str__(self):
+        return serialize(self.text)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.Plain.text"><code class="name">var <span class="ident">text</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Plain.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.message.Poke"><code class="flex name class">
+<span>class <span class="ident">Poke</span></span>
+<span>(</span><span>name: str, **_)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>戳一戳。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Poke(MessageComponent):
+    &#34;&#34;&#34;戳一戳。&#34;&#34;&#34;
+    type: str = &#34;Poke&#34;
+    name: str
+
+    def __init__(self, name: str, **_):
+        super().__init__(name=name)
+
+    @property
+    def poke_type(self):
+        return POKE_TYPE[self.name]
+
+    @property
+    def poke_id(self):
+        return POKE_ID[self.name]
+
+    def __str__(self):
+        return f&#39;[mirai:poke:{self.name}]&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.Poke.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Poke.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.Poke.poke_id"><code class="name">var <span class="ident">poke_id</span></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def poke_id(self):
+    return POKE_ID[self.name]</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.models.message.Poke.poke_type"><code class="name">var <span class="ident">poke_type</span></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def poke_type(self):
+    return POKE_TYPE[self.name]</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.message.Quote"><code class="flex name class">
+<span>class <span class="ident">Quote</span></span>
+<span>(</span><span>id: Union[int, NoneType] = None, group_id: Union[int, NoneType] = None, sender_id: Union[int, NoneType] = None, target_id: Union[int, NoneType] = None, origin: <a title="YiriMirai.models.message.MessageChain" href="#YiriMirai.models.message.MessageChain">MessageChain</a> = None, groupId: Union[int, NoneType] = None, senderId: Union[int, NoneType] = None, targetId: Union[int, NoneType] = None, **_)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>引用。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Quote(MessageComponent):
+    &#34;&#34;&#34;引用。&#34;&#34;&#34;
+    type: str = &#34;Quote&#34;
+    id: Optional[int]
+    group_id: Optional[int] = Field(alias=&#39;groupId&#39;)
+    sender_id: Optional[int] = Field(alias=&#39;senderId&#39;)
+    target_id: Optional[int] = Field(alias=&#39;targetId&#39;)
+    origin: MessageChain
+
+    @validator(&#34;origin&#34;, always=True, pre=True)
+    @classmethod
+    def origin_formater(cls, v):
+        return MessageChain.parse_obj(v)
+
+    def __init__(
+        self,
+        id: Optional[int] = None,
+        group_id: Optional[int] = None,
+        sender_id: Optional[int] = None,
+        target_id: Optional[int] = None,
+        origin: MessageChain = None,
+        groupId: Optional[int] = None,
+        senderId: Optional[int] = None,
+        targetId: Optional[int] = None,
+        **_
+    ):
+        super().__init__(
+            id=id,
+            groupId=group_id or groupId,
+            senderId=sender_id or senderId,
+            targetId=target_id or targetId,
+            origin=origin
+        )</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.Quote.group_id"><code class="name">var <span class="ident">group_id</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Quote.id"><code class="name">var <span class="ident">id</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Quote.origin"><code class="name">var <span class="ident">origin</span> : <a title="YiriMirai.models.message.MessageChain" href="#YiriMirai.models.message.MessageChain">MessageChain</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Quote.sender_id"><code class="name">var <span class="ident">sender_id</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Quote.target_id"><code class="name">var <span class="ident">target_id</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Quote.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="YiriMirai.models.message.Quote.origin_formater"><code class="name flex">
+<span>def <span class="ident">origin_formater</span></span>(<span>v)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@validator(&#34;origin&#34;, always=True, pre=True)
+@classmethod
+def origin_formater(cls, v):
+    return MessageChain.parse_obj(v)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.message.Source"><code class="flex name class">
+<span>class <span class="ident">Source</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>源。包含消息的基本信息。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Source(MessageComponent):
+    &#34;&#34;&#34;源。包含消息的基本信息。&#34;&#34;&#34;
+    type: str = &#34;Source&#34;
+    id: int
+    time: datetime</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.Source.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Source.time"><code class="name">var <span class="ident">time</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Source.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.message.Unknown"><code class="flex name class">
+<span>class <span class="ident">Unknown</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>未知。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Unknown(MessageComponent):
+    &#34;&#34;&#34;未知。&#34;&#34;&#34;
+    type: str = &#34;Unknown&#34;
+    text: str</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.Unknown.text"><code class="name">var <span class="ident">text</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Unknown.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.message.Voice"><code class="flex name class">
+<span>class <span class="ident">Voice</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>语音。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Voice(MessageComponent):
+    &#34;&#34;&#34;语音。&#34;&#34;&#34;
+    type: str = &#34;Voice&#34;
+    voice_id: Optional[str] = Field(alias=&#34;voiceId&#34;)
+    url: Optional[str]
+    path: Optional[str]
+    base64: Optional[str]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.Voice.base64"><code class="name">var <span class="ident">base64</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Voice.path"><code class="name">var <span class="ident">path</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Voice.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Voice.url"><code class="name">var <span class="ident">url</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Voice.voice_id"><code class="name">var <span class="ident">voice_id</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.message.Xml"><code class="flex name class">
+<span>class <span class="ident">Xml</span></span>
+<span>(</span><span>xml: str, **_)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>XML。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Xml(MessageComponent):
+    &#34;&#34;&#34;XML。&#34;&#34;&#34;
+    type: str = &#34;Xml&#34;
+    xml: str
+
+    def __init__(self, xml: str, **_):
+        super().__init__(xml=xml)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.message.Xml.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.message.Xml.xml"><code class="name">var <span class="ident">xml</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="YiriMirai.models" href="index.html">YiriMirai.models</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="YiriMirai.models.message.deserialize" href="#YiriMirai.models.message.deserialize">deserialize</a></code></li>
+<li><code><a title="YiriMirai.models.message.serialize" href="#YiriMirai.models.message.serialize">serialize</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="YiriMirai.models.message.App" href="#YiriMirai.models.message.App">App</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.message.App.as_json" href="#YiriMirai.models.message.App.as_json">as_json</a></code></li>
+<li><code><a title="YiriMirai.models.message.App.content" href="#YiriMirai.models.message.App.content">content</a></code></li>
+<li><code><a title="YiriMirai.models.message.App.type" href="#YiriMirai.models.message.App.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.message.At" href="#YiriMirai.models.message.At">At</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.message.At.display" href="#YiriMirai.models.message.At.display">display</a></code></li>
+<li><code><a title="YiriMirai.models.message.At.target" href="#YiriMirai.models.message.At.target">target</a></code></li>
+<li><code><a title="YiriMirai.models.message.At.type" href="#YiriMirai.models.message.At.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.message.AtAll" href="#YiriMirai.models.message.AtAll">AtAll</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.message.AtAll.type" href="#YiriMirai.models.message.AtAll.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.message.Dice" href="#YiriMirai.models.message.Dice">Dice</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.message.Dice.type" href="#YiriMirai.models.message.Dice.type">type</a></code></li>
+<li><code><a title="YiriMirai.models.message.Dice.value" href="#YiriMirai.models.message.Dice.value">value</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.message.Face" href="#YiriMirai.models.message.Face">Face</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.message.Face.face_id" href="#YiriMirai.models.message.Face.face_id">face_id</a></code></li>
+<li><code><a title="YiriMirai.models.message.Face.name" href="#YiriMirai.models.message.Face.name">name</a></code></li>
+<li><code><a title="YiriMirai.models.message.Face.type" href="#YiriMirai.models.message.Face.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.message.File" href="#YiriMirai.models.message.File">File</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.message.File.id" href="#YiriMirai.models.message.File.id">id</a></code></li>
+<li><code><a title="YiriMirai.models.message.File.name" href="#YiriMirai.models.message.File.name">name</a></code></li>
+<li><code><a title="YiriMirai.models.message.File.size" href="#YiriMirai.models.message.File.size">size</a></code></li>
+<li><code><a title="YiriMirai.models.message.File.type" href="#YiriMirai.models.message.File.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.message.FlashImage" href="#YiriMirai.models.message.FlashImage">FlashImage</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.message.FlashImage.as_image" href="#YiriMirai.models.message.FlashImage.as_image">as_image</a></code></li>
+<li><code><a title="YiriMirai.models.message.FlashImage.type" href="#YiriMirai.models.message.FlashImage.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.message.Forward" href="#YiriMirai.models.message.Forward">Forward</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.message.Forward.node_list" href="#YiriMirai.models.message.Forward.node_list">node_list</a></code></li>
+<li><code><a title="YiriMirai.models.message.Forward.type" href="#YiriMirai.models.message.Forward.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.message.ForwardMessageNode" href="#YiriMirai.models.message.ForwardMessageNode">ForwardMessageNode</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.message.ForwardMessageNode.message_chain" href="#YiriMirai.models.message.ForwardMessageNode.message_chain">message_chain</a></code></li>
+<li><code><a title="YiriMirai.models.message.ForwardMessageNode.sender_id" href="#YiriMirai.models.message.ForwardMessageNode.sender_id">sender_id</a></code></li>
+<li><code><a title="YiriMirai.models.message.ForwardMessageNode.sender_name" href="#YiriMirai.models.message.ForwardMessageNode.sender_name">sender_name</a></code></li>
+<li><code><a title="YiriMirai.models.message.ForwardMessageNode.source_id" href="#YiriMirai.models.message.ForwardMessageNode.source_id">source_id</a></code></li>
+<li><code><a title="YiriMirai.models.message.ForwardMessageNode.time" href="#YiriMirai.models.message.ForwardMessageNode.time">time</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.message.Image" href="#YiriMirai.models.message.Image">Image</a></code></h4>
+<ul class="two-column">
+<li><code><a title="YiriMirai.models.message.Image.as_flash_image" href="#YiriMirai.models.message.Image.as_flash_image">as_flash_image</a></code></li>
+<li><code><a title="YiriMirai.models.message.Image.as_friend_image" href="#YiriMirai.models.message.Image.as_friend_image">as_friend_image</a></code></li>
+<li><code><a title="YiriMirai.models.message.Image.as_group_image" href="#YiriMirai.models.message.Image.as_group_image">as_group_image</a></code></li>
+<li><code><a title="YiriMirai.models.message.Image.image_id" href="#YiriMirai.models.message.Image.image_id">image_id</a></code></li>
+<li><code><a title="YiriMirai.models.message.Image.type" href="#YiriMirai.models.message.Image.type">type</a></code></li>
+<li><code><a title="YiriMirai.models.message.Image.url" href="#YiriMirai.models.message.Image.url">url</a></code></li>
+<li><code><a title="YiriMirai.models.message.Image.uuid" href="#YiriMirai.models.message.Image.uuid">uuid</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.message.Json" href="#YiriMirai.models.message.Json">Json</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.message.Json.json_" href="#YiriMirai.models.message.Json.json_">json_</a></code></li>
+<li><code><a title="YiriMirai.models.message.Json.type" href="#YiriMirai.models.message.Json.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.message.MessageChain" href="#YiriMirai.models.message.MessageChain">MessageChain</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.message.MessageChain.parse_obj" href="#YiriMirai.models.message.MessageChain.parse_obj">parse_obj</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageChain.source" href="#YiriMirai.models.message.MessageChain.source">source</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.message.MessageComponent" href="#YiriMirai.models.message.MessageComponent">MessageComponent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.message.MessageComponent.Config" href="#YiriMirai.models.message.MessageComponent.Config">Config</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.type" href="#YiriMirai.models.message.MessageComponent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.message.MusicShare" href="#YiriMirai.models.message.MusicShare">MusicShare</a></code></h4>
+<ul class="two-column">
+<li><code><a title="YiriMirai.models.message.MusicShare.brief" href="#YiriMirai.models.message.MusicShare.brief">brief</a></code></li>
+<li><code><a title="YiriMirai.models.message.MusicShare.jump_url" href="#YiriMirai.models.message.MusicShare.jump_url">jump_url</a></code></li>
+<li><code><a title="YiriMirai.models.message.MusicShare.kind" href="#YiriMirai.models.message.MusicShare.kind">kind</a></code></li>
+<li><code><a title="YiriMirai.models.message.MusicShare.music_url" href="#YiriMirai.models.message.MusicShare.music_url">music_url</a></code></li>
+<li><code><a title="YiriMirai.models.message.MusicShare.picture_url" href="#YiriMirai.models.message.MusicShare.picture_url">picture_url</a></code></li>
+<li><code><a title="YiriMirai.models.message.MusicShare.summary" href="#YiriMirai.models.message.MusicShare.summary">summary</a></code></li>
+<li><code><a title="YiriMirai.models.message.MusicShare.title" href="#YiriMirai.models.message.MusicShare.title">title</a></code></li>
+<li><code><a title="YiriMirai.models.message.MusicShare.type" href="#YiriMirai.models.message.MusicShare.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.message.Plain" href="#YiriMirai.models.message.Plain">Plain</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.message.Plain.text" href="#YiriMirai.models.message.Plain.text">text</a></code></li>
+<li><code><a title="YiriMirai.models.message.Plain.type" href="#YiriMirai.models.message.Plain.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.message.Poke" href="#YiriMirai.models.message.Poke">Poke</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.message.Poke.name" href="#YiriMirai.models.message.Poke.name">name</a></code></li>
+<li><code><a title="YiriMirai.models.message.Poke.poke_id" href="#YiriMirai.models.message.Poke.poke_id">poke_id</a></code></li>
+<li><code><a title="YiriMirai.models.message.Poke.poke_type" href="#YiriMirai.models.message.Poke.poke_type">poke_type</a></code></li>
+<li><code><a title="YiriMirai.models.message.Poke.type" href="#YiriMirai.models.message.Poke.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.message.Quote" href="#YiriMirai.models.message.Quote">Quote</a></code></h4>
+<ul class="two-column">
+<li><code><a title="YiriMirai.models.message.Quote.group_id" href="#YiriMirai.models.message.Quote.group_id">group_id</a></code></li>
+<li><code><a title="YiriMirai.models.message.Quote.id" href="#YiriMirai.models.message.Quote.id">id</a></code></li>
+<li><code><a title="YiriMirai.models.message.Quote.origin" href="#YiriMirai.models.message.Quote.origin">origin</a></code></li>
+<li><code><a title="YiriMirai.models.message.Quote.origin_formater" href="#YiriMirai.models.message.Quote.origin_formater">origin_formater</a></code></li>
+<li><code><a title="YiriMirai.models.message.Quote.sender_id" href="#YiriMirai.models.message.Quote.sender_id">sender_id</a></code></li>
+<li><code><a title="YiriMirai.models.message.Quote.target_id" href="#YiriMirai.models.message.Quote.target_id">target_id</a></code></li>
+<li><code><a title="YiriMirai.models.message.Quote.type" href="#YiriMirai.models.message.Quote.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.message.Source" href="#YiriMirai.models.message.Source">Source</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.message.Source.id" href="#YiriMirai.models.message.Source.id">id</a></code></li>
+<li><code><a title="YiriMirai.models.message.Source.time" href="#YiriMirai.models.message.Source.time">time</a></code></li>
+<li><code><a title="YiriMirai.models.message.Source.type" href="#YiriMirai.models.message.Source.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.message.Unknown" href="#YiriMirai.models.message.Unknown">Unknown</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.message.Unknown.text" href="#YiriMirai.models.message.Unknown.text">text</a></code></li>
+<li><code><a title="YiriMirai.models.message.Unknown.type" href="#YiriMirai.models.message.Unknown.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.message.Voice" href="#YiriMirai.models.message.Voice">Voice</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.message.Voice.base64" href="#YiriMirai.models.message.Voice.base64">base64</a></code></li>
+<li><code><a title="YiriMirai.models.message.Voice.path" href="#YiriMirai.models.message.Voice.path">path</a></code></li>
+<li><code><a title="YiriMirai.models.message.Voice.type" href="#YiriMirai.models.message.Voice.type">type</a></code></li>
+<li><code><a title="YiriMirai.models.message.Voice.url" href="#YiriMirai.models.message.Voice.url">url</a></code></li>
+<li><code><a title="YiriMirai.models.message.Voice.voice_id" href="#YiriMirai.models.message.Voice.voice_id">voice_id</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.message.Xml" href="#YiriMirai.models.message.Xml">Xml</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.message.Xml.type" href="#YiriMirai.models.message.Xml.type">type</a></code></li>
+<li><code><a title="YiriMirai.models.message.Xml.xml" href="#YiriMirai.models.message.Xml.xml">xml</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>

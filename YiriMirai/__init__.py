@@ -1,17 +1,28 @@
 # -*- coding: utf-8 -*-
+"""
+# YiriMirai
+一个轻量级、低耦合度的基于 mirai-api-http 的 QQ 机器人开发框架。
+"""
 __version__ = '0.1.0'
+__author__ = '忘忧北萱草'
 
 import logging
 
-from YiriMirai.adapters import Adapter, Method, HTTPAdapter
+from YiriMirai.adapters import Adapter, HTTPAdapter, Method
 from YiriMirai.bot import Mirai, SimpleMirai
 from YiriMirai.bus import EventBus
 from YiriMirai.colorlog import ColoredFormatter
-from YiriMirai.exceptions import ApiError, LoginError
+from YiriMirai.models import (
+    At, AtAll, Dice, Event, Face, FriendMessage, GroupMessage, MessageChain,
+    MessageEvent, Plain, Poke, StrangerMessage, TempMessage, deserialize,
+    serialize
+)
 
 __all__ = [
     'Mirai', 'SimpleMirai', 'Adapter', 'Method', 'HTTPAdapter', 'EventBus',
-    'ApiError', 'LoginError', 'get_logger'
+    'get_logger', 'Event', 'MessageEvent', 'FriendMessage', 'GroupMessage',
+    'TempMessage', 'StrangerMessage', 'MessageChain', 'Plain', 'At', 'AtAll',
+    'Dice', 'Face', 'Poke', 'serialize', 'deserialize'
 ]
 
 logger = logging.getLogger(__name__)
@@ -29,4 +40,8 @@ logger.addHandler(ch)
 
 
 def get_logger() -> logging.Logger:
+    """获取 YiriMirai 的模块 Logger。
+
+    所有的模块的 Logger 都是此 Logger 的子 Logger，修改此 Logger 的属性以应用到 YiriMirai 全局。
+    """
     return logger

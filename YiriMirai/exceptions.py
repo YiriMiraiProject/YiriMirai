@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
+"""
+此模块提供异常相关。
+"""
 import traceback
 
 
 class NetworkError(RuntimeError):
-    '''网络连接出错。
-    '''
+    """网络连接出错。
+    """
     pass
 
 
@@ -24,20 +27,24 @@ API_ERROR_FMT = {
 
 
 class ApiError(RuntimeError):
-    '''调用 API 出错。
+    """调用 API 出错。
 
-    `code: int` mirai-api-http 的 API 状态码
-    '''
+    `code: int` mirai-api-http 的 API 状态码。
+    """
     def __init__(self, code: int):
         self.code = code
         self.args = (code, f'[ERROR {code}]' + API_ERROR_FMT[code])
 
 
 class LoginError(ApiError):
-    '''登陆出错。
-    '''
+    """登陆出错。
+    """
     pass
 
 
 def print_exception(e: Exception):
+    """打印异常信息。
+    """
     traceback.print_exception(type(e), e, e.__traceback__)
+
+__all__ = ['NetworkError', 'ApiError', 'LoginError', 'print_exception']

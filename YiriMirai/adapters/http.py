@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""
+此模块提供 HTTP 轮询适配器，适用于 mirai-api-http 的 http adapter。
+"""
 import asyncio
 from datetime import datetime
 from json import dumps as json_dumps
@@ -8,6 +11,7 @@ from YiriMirai.adapters.base import Adapter, Method
 
 
 def _parse_response(response: httpx.Response) -> dict:
+    """根据 API 返回结果解析错误信息。"""
     response.raise_for_status()
     result = response.json()
     if result.get('code', 0) != 0:
@@ -15,14 +19,14 @@ def _parse_response(response: httpx.Response) -> dict:
     return result
 
 
-def _json_default(obj):
+def _json_default(obj): # 支持 datetime
     if isinstance(obj, datetime):
         return int(obj.timestamp())
 
 
 class HTTPAdapter(Adapter):
-    '''HTTP 轮询适配器。使用 HTTP 轮询的方式与 mirai-api-http 沟通。
-    '''
+    """HTTP 轮询适配器。使用 HTTP 轮询的方式与 mirai-api-http 沟通。
+    """
     def __init__(
         self,
         verify_key: str = '',
@@ -30,13 +34,15 @@ class HTTPAdapter(Adapter):
         port: int = 8080,
         poll_interval: float = 1.
     ):
-        '''HTTP 轮询适配器。
-        `verify_key: str` 创建Mirai-Http-Server时生成的key
-        `bus: Optional[EventBus]` 事件总线，留空使用默认总线
-        `host: str = 'localhost'` Http Server 的地址
-        `port: int = 8080` Http Server 的端口
-        `poll_interval: float = 1.` 轮询时间间隔，单位秒
-        '''
+        """
+        `verify_key: str = ''` mirai-api-http 配置的认证 key。
+
+        `host: str = 'localhost'` HTTP Server 的地址。
+
+        `port: int = 8080` HTTP Server 的端口。
+
+        `poll_interval: float = 1.` 轮询时间间隔，单位秒。
+        """
         super().__init__(verify_key=verify_key)
 
         if host[:2] == '//':
@@ -59,7 +65,7 @@ class HTTPAdapter(Adapter):
     async def _post(
         self, client: httpx.AsyncClient, url: str, json: dict
     ) -> dict:
-        '''调用 POST 方法。'''
+        """调用 POST 方法。"""
         # 使用自定义的 json.dumps
         content = json_dumps(json, default=_json_default).encode('utf-8')
         response = await client.post(
@@ -71,7 +77,7 @@ class HTTPAdapter(Adapter):
     async def _get(
         self, client: httpx.AsyncClient, url: str, params: dict
     ) -> dict:
-        '''调用 GET 方法。'''
+        """调用 GET 方法。"""
         response = await client.get(url, params=params)
         self.logger.debug(f'发送 GET 请求，地址{url}，状态 {response.status_code}。')
         return _parse_response(response)
@@ -106,6 +112,7 @@ class HTTPAdapter(Adapter):
                 raise exceptions.LoginError(e.code) from None
 
     async def poll_event(self):
+        """进行一次轮询，获取并处理事件。"""
         async with httpx.AsyncClient(
             base_url=self.host_name, headers=self.headers
         ) as client:
@@ -120,6 +127,14 @@ class HTTPAdapter(Adapter):
                         await bus.emit(msg['type'], msg)
 
     async def call_api(self, api: str, method: Method = Method.GET, **params):
+        """调用 API。
+
+        `api`: API 名称，需与 mirai-api-http 中的定义一致。
+
+        `method`: 调用方法。默认为 GET。
+
+        `params`: 参数。
+        """
         async with httpx.AsyncClient(
             base_url=self.host_name, headers=self.headers
         ) as client:
@@ -129,6 +144,7 @@ class HTTPAdapter(Adapter):
                 return await self._post(client, f'/{api}', params)
 
     async def run(self):
+        """开始轮询。"""
         await self._before_run()
         self.logger.info('机器人开始运行。按 Ctrl + C 停止。')
         while True:

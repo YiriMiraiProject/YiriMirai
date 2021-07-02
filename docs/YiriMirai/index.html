@@ -1,0 +1,2258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>YiriMirai API documentation</title>
+<meta name="description" content="YiriMirai
+一个轻量级、低耦合度的基于 mirai-api-http 的 QQ 机器人开发框架。" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Package <code>YiriMirai</code></h1>
+</header>
+<section id="section-intro">
+<h1 id="yirimirai">YiriMirai</h1>
+<p>一个轻量级、低耦合度的基于 mirai-api-http 的 QQ 机器人开发框架。</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># -*- coding: utf-8 -*-
+&#34;&#34;&#34;
+# YiriMirai
+一个轻量级、低耦合度的基于 mirai-api-http 的 QQ 机器人开发框架。
+&#34;&#34;&#34;
+__version__ = &#39;0.1.0&#39;
+__author__ = &#39;忘忧北萱草&#39;
+
+import logging
+
+from YiriMirai.adapters import Adapter, HTTPAdapter, Method
+from YiriMirai.bot import Mirai, SimpleMirai
+from YiriMirai.bus import EventBus
+from YiriMirai.colorlog import ColoredFormatter
+from YiriMirai.models import (
+    At, AtAll, Dice, Event, Face, FriendMessage, GroupMessage, MessageChain,
+    MessageEvent, Plain, Poke, StrangerMessage, TempMessage, deserialize,
+    serialize
+)
+
+__all__ = [
+    &#39;Mirai&#39;, &#39;SimpleMirai&#39;, &#39;Adapter&#39;, &#39;Method&#39;, &#39;HTTPAdapter&#39;, &#39;EventBus&#39;,
+    &#39;get_logger&#39;, &#39;Event&#39;, &#39;MessageEvent&#39;, &#39;FriendMessage&#39;, &#39;GroupMessage&#39;,
+    &#39;TempMessage&#39;, &#39;StrangerMessage&#39;, &#39;MessageChain&#39;, &#39;Plain&#39;, &#39;At&#39;, &#39;AtAll&#39;,
+    &#39;Dice&#39;, &#39;Face&#39;, &#39;Poke&#39;, &#39;serialize&#39;, &#39;deserialize&#39;
+]
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+
+formatter = ColoredFormatter(
+    &#39;%(asctime)s - %(levelname)-8s %(message)s&#39;, datefmt=&#39;%Y-%m-%d %H:%M:%S&#39;
+)
+ch.setFormatter(formatter)
+
+logger.addHandler(ch)
+
+
+def get_logger() -&gt; logging.Logger:
+    &#34;&#34;&#34;获取 YiriMirai 的模块 Logger。
+
+    所有的模块的 Logger 都是此 Logger 的子 Logger，修改此 Logger 的属性以应用到 YiriMirai 全局。
+    &#34;&#34;&#34;
+    return logger</code></pre>
+</details>
+</section>
+<section>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+<dl>
+<dt><code class="name"><a title="YiriMirai.adapters" href="adapters/index.html">YiriMirai.adapters</a></code></dt>
+<dd>
+<div class="desc"><p>此模块提供网络适配器相关。 …</p></div>
+</dd>
+<dt><code class="name"><a title="YiriMirai.bot" href="bot.html">YiriMirai.bot</a></code></dt>
+<dd>
+<div class="desc"><p>此模块定义机器人类，包含处于 model 层之下的<code><a title="YiriMirai.SimpleMirai" href="#YiriMirai.SimpleMirai">SimpleMirai</a></code>和建立在 model 层上的<code><a title="YiriMirai.Mirai" href="#YiriMirai.Mirai">Mirai</a></code>。</p></div>
+</dd>
+<dt><code class="name"><a title="YiriMirai.bus" href="bus.html">YiriMirai.bus</a></code></dt>
+<dd>
+<div class="desc"><p>此模块提供基础事件总线相关。 …</p></div>
+</dd>
+<dt><code class="name"><a title="YiriMirai.colorlog" href="colorlog.html">YiriMirai.colorlog</a></code></dt>
+<dd>
+<div class="desc"><p>此模块提供带颜色的格式化日志输出的功能。 …</p></div>
+</dd>
+<dt><code class="name"><a title="YiriMirai.exceptions" href="exceptions.html">YiriMirai.exceptions</a></code></dt>
+<dd>
+<div class="desc"><p>此模块提供异常相关。</p></div>
+</dd>
+<dt><code class="name"><a title="YiriMirai.models" href="models/index.html">YiriMirai.models</a></code></dt>
+<dd>
+<div class="desc"><p>此模块提供 model 层封装。 …</p></div>
+</dd>
+<dt><code class="name"><a title="YiriMirai.utils" href="utils.html">YiriMirai.utils</a></code></dt>
+<dd>
+<div class="desc"><p>此模块提供一些实用的辅助方法。</p></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="YiriMirai.deserialize"><code class="name flex">
+<span>def <span class="ident">deserialize</span></span>(<span>s: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>mirai 码去转义。</p>
+<p><code>s: str</code> 待去转义的字符串。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def deserialize(s: str) -&gt; str:
+    &#34;&#34;&#34;mirai 码去转义。
+
+    `s: str` 待去转义的字符串。
+    &#34;&#34;&#34;
+    return re.sub(r&#39;\\([\[\]:,\\nr])&#39;, lambda match: match.group(1), s)</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.get_logger"><code class="name flex">
+<span>def <span class="ident">get_logger</span></span>(<span>) ‑> logging.Logger</span>
+</code></dt>
+<dd>
+<div class="desc"><p>获取 YiriMirai 的模块 Logger。</p>
+<p>所有的模块的 Logger 都是此 Logger 的子 Logger，修改此 Logger 的属性以应用到 YiriMirai 全局。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_logger() -&gt; logging.Logger:
+    &#34;&#34;&#34;获取 YiriMirai 的模块 Logger。
+
+    所有的模块的 Logger 都是此 Logger 的子 Logger，修改此 Logger 的属性以应用到 YiriMirai 全局。
+    &#34;&#34;&#34;
+    return logger</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.serialize"><code class="name flex">
+<span>def <span class="ident">serialize</span></span>(<span>s: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>mirai 码转义。</p>
+<p><code>s: str</code> 待转义的字符串。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def serialize(s: str) -&gt; str:
+    &#34;&#34;&#34;mirai 码转义。
+
+    `s: str` 待转义的字符串。
+    &#34;&#34;&#34;
+    return re.sub(r&#39;[\[\]:,\\\n\r]&#39;, lambda match: &#39;\\&#39; + match.group(0), s)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="YiriMirai.Adapter"><code class="flex name class">
+<span>class <span class="ident">Adapter</span></span>
+<span>(</span><span>verify_key: str = '')</span>
+</code></dt>
+<dd>
+<div class="desc"><p>适配器基类，与 mirai-api-http 沟通的底层实现。</p>
+<p>属性<code>buses</code>为适配器注册的事件总线集合。适配器被绑定到 bot 时，bot 会自动将自身的事件总线注册到适配器。</p>
+<p><code>verify_key: str = ''</code> mirai-api-http 配置的认证 key。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Adapter(Api):
+    &#34;&#34;&#34;适配器基类，与 mirai-api-http 沟通的底层实现。
+
+    属性`buses`为适配器注册的事件总线集合。适配器被绑定到 bot 时，bot 会自动将自身的事件总线注册到适配器。
+    &#34;&#34;&#34;
+    def __init__(self, verify_key: str = &#39;&#39;):
+        &#34;&#34;&#34;
+        `verify_key: str = &#39;&#39;` mirai-api-http 配置的认证 key。
+        &#34;&#34;&#34;
+        self.verify_key = verify_key
+        self.buses: Set[EventBus] = set()
+        self.logger = logging.getLogger(__name__)
+
+    def register_event_bus(self, *buses: List[EventBus]):
+        &#34;&#34;&#34;注册事件总线。
+
+        `*buses: List[EventBus]` 一个或多个事件总线。
+        &#34;&#34;&#34;
+        self.buses |= set(buses)
+
+    def unregister_event_bus(self, *buses: List[EventBus]):
+        &#34;&#34;&#34;解除注册事件总线。
+
+        `*buses: List[EventBus]` 一个或多个事件总线。
+        &#34;&#34;&#34;
+        self.buses -= set(buses)
+
+    @abc.abstractmethod
+    async def login(self, qq: int):
+        &#34;&#34;&#34;登录到 mirai-api-http。此处为抽象方法，具体实现由子类决定。&#34;&#34;&#34;
+
+    async def _before_run(self):
+        if not self.buses:
+            raise RuntimeError(&#39;事件总线未指定！&#39;)
+
+    async def run(self):
+        &#34;&#34;&#34;运行。
+
+        具体实现由子类决定。一般的行为是进入事件循环。
+        &#34;&#34;&#34;
+        await self._before_run()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.adapters.base.Api" href="adapters/base.html#YiriMirai.adapters.base.Api">Api</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.adapters.http.HTTPAdapter" href="adapters/http.html#YiriMirai.adapters.http.HTTPAdapter">HTTPAdapter</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="YiriMirai.Adapter.login"><code class="name flex">
+<span>async def <span class="ident">login</span></span>(<span>self, qq: int)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>登录到 mirai-api-http。此处为抽象方法，具体实现由子类决定。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abc.abstractmethod
+async def login(self, qq: int):
+    &#34;&#34;&#34;登录到 mirai-api-http。此处为抽象方法，具体实现由子类决定。&#34;&#34;&#34;</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.Adapter.register_event_bus"><code class="name flex">
+<span>def <span class="ident">register_event_bus</span></span>(<span>self, *buses: List[<a title="YiriMirai.bus.EventBus" href="bus.html#YiriMirai.bus.EventBus">EventBus</a>])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>注册事件总线。</p>
+<p><code>*buses: List[EventBus]</code> 一个或多个事件总线。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def register_event_bus(self, *buses: List[EventBus]):
+    &#34;&#34;&#34;注册事件总线。
+
+    `*buses: List[EventBus]` 一个或多个事件总线。
+    &#34;&#34;&#34;
+    self.buses |= set(buses)</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.Adapter.run"><code class="name flex">
+<span>async def <span class="ident">run</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>运行。</p>
+<p>具体实现由子类决定。一般的行为是进入事件循环。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def run(self):
+    &#34;&#34;&#34;运行。
+
+    具体实现由子类决定。一般的行为是进入事件循环。
+    &#34;&#34;&#34;
+    await self._before_run()</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.Adapter.unregister_event_bus"><code class="name flex">
+<span>def <span class="ident">unregister_event_bus</span></span>(<span>self, *buses: List[<a title="YiriMirai.bus.EventBus" href="bus.html#YiriMirai.bus.EventBus">EventBus</a>])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>解除注册事件总线。</p>
+<p><code>*buses: List[EventBus]</code> 一个或多个事件总线。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def unregister_event_bus(self, *buses: List[EventBus]):
+    &#34;&#34;&#34;解除注册事件总线。
+
+    `*buses: List[EventBus]` 一个或多个事件总线。
+    &#34;&#34;&#34;
+    self.buses -= set(buses)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.adapters.base.Api" href="adapters/base.html#YiriMirai.adapters.base.Api">Api</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.adapters.base.Api.call_api" href="adapters/base.html#YiriMirai.adapters.base.Api.call_api">call_api</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.At"><code class="flex name class">
+<span>class <span class="ident">At</span></span>
+<span>(</span><span>target: int, **_)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>At某人。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class At(MessageComponent):
+    &#34;&#34;&#34;At某人。&#34;&#34;&#34;
+    type: str = &#34;At&#34;
+    target: int
+    display: Optional[str] = None
+
+    def __init__(self, target: int, **_):
+        super().__init__(target=target)
+
+    def __str__(self):
+        return f&#34;[mirai:at:{self.target}]&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="models/message.html#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="models/base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.At.display"><code class="name">var <span class="ident">display</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.At.target"><code class="name">var <span class="ident">target</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.At.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="models/message.html#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="models/message.html#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="models/message.html#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.AtAll"><code class="flex name class">
+<span>class <span class="ident">AtAll</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>At全体。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AtAll(MessageComponent):
+    &#34;&#34;&#34;At全体。&#34;&#34;&#34;
+    type: str = &#34;AtAll&#34;
+
+    def __str__(self):
+        return f&#34;[mirai:atall]&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="models/message.html#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="models/base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.AtAll.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="models/message.html#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="models/message.html#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="models/message.html#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.Dice"><code class="flex name class">
+<span>class <span class="ident">Dice</span></span>
+<span>(</span><span>value: int, **_)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>骰子。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Dice(MessageComponent):
+    &#34;&#34;&#34;骰子。&#34;&#34;&#34;
+    type: str = &#34;Dice&#34;
+    value: int
+
+    def __init__(self, value: int, **_):
+        super().__init__(value=value)
+
+    def __str__(self):
+        return f&#39;[mirai:dice:{self.value}]&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="models/message.html#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="models/base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.Dice.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.Dice.value"><code class="name">var <span class="ident">value</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="models/message.html#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="models/message.html#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="models/message.html#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.Event"><code class="flex name class">
+<span>class <span class="ident">Event</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>事件基类。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Event(MiraiBaseModel):
+    &#34;&#34;&#34;事件基类。&#34;&#34;&#34;
+    type: str
+
+    @classmethod
+    def get_subtype(cls, name: str) -&gt; Type[&#39;Event&#39;]:
+        &#34;&#34;&#34;根据类名称，获取相应的子类类型。
+
+        `name` 类名称。
+        &#34;&#34;&#34;
+        try:
+            type_ = getattr(sys.modules[__name__], name)
+            if not issubclass(type_, cls):
+                raise ValueError(f&#39;`{name}`不是`{cls.__name__}`的子类！&#39;)
+            return type_
+        except AttributeError as e:
+            raise ValueError(f&#39;`{name}`不是`{cls.__name__}`的子类！&#39;) from e
+
+    @classmethod
+    def parse_obj(cls, event: dict):
+        &#34;&#34;&#34;通过 mirai-api-http 发回的事件，构造对应的`Event`对象。
+
+        `event: dict` 已解析的事件 JSON。
+        &#34;&#34;&#34;
+        if cls == Event:
+            EventType = cls.get_subtype(event[&#39;type&#39;])
+            return EventType.parse_obj(event)
+        else:
+            return super().parse_obj(event)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="models/base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.BotEvent" href="models/events.html#YiriMirai.models.events.BotEvent">BotEvent</a></li>
+<li><a title="YiriMirai.models.events.CommandEvent" href="models/events.html#YiriMirai.models.events.CommandEvent">CommandEvent</a></li>
+<li><a title="YiriMirai.models.events.FriendEvent" href="models/events.html#YiriMirai.models.events.FriendEvent">FriendEvent</a></li>
+<li><a title="YiriMirai.models.events.FriendRecallEvent" href="models/events.html#YiriMirai.models.events.FriendRecallEvent">FriendRecallEvent</a></li>
+<li><a title="YiriMirai.models.events.GroupEvent" href="models/events.html#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.MessageEvent" href="models/events.html#YiriMirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="YiriMirai.models.events.RequestEvent" href="models/events.html#YiriMirai.models.events.RequestEvent">RequestEvent</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.Event.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="YiriMirai.Event.get_subtype"><code class="name flex">
+<span>def <span class="ident">get_subtype</span></span>(<span>name: str) ‑> Type[<a title="YiriMirai.models.events.Event" href="models/events.html#YiriMirai.models.events.Event">Event</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>根据类名称，获取相应的子类类型。</p>
+<p><code>name</code> 类名称。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def get_subtype(cls, name: str) -&gt; Type[&#39;Event&#39;]:
+    &#34;&#34;&#34;根据类名称，获取相应的子类类型。
+
+    `name` 类名称。
+    &#34;&#34;&#34;
+    try:
+        type_ = getattr(sys.modules[__name__], name)
+        if not issubclass(type_, cls):
+            raise ValueError(f&#39;`{name}`不是`{cls.__name__}`的子类！&#39;)
+        return type_
+    except AttributeError as e:
+        raise ValueError(f&#39;`{name}`不是`{cls.__name__}`的子类！&#39;) from e</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.Event.parse_obj"><code class="name flex">
+<span>def <span class="ident">parse_obj</span></span>(<span>event: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>通过 mirai-api-http 发回的事件，构造对应的<code><a title="YiriMirai.Event" href="#YiriMirai.Event">Event</a></code>对象。</p>
+<p><code>event: dict</code> 已解析的事件 JSON。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def parse_obj(cls, event: dict):
+    &#34;&#34;&#34;通过 mirai-api-http 发回的事件，构造对应的`Event`对象。
+
+    `event: dict` 已解析的事件 JSON。
+    &#34;&#34;&#34;
+    if cls == Event:
+        EventType = cls.get_subtype(event[&#39;type&#39;])
+        return EventType.parse_obj(event)
+    else:
+        return super().parse_obj(event)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.EventBus"><code class="flex name class">
+<span>class <span class="ident">EventBus</span></span>
+<span>(</span><span>event_chain_generator: Callable[[str], Iterable[str]] = &lt;function event_chain_single&gt;)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>事件总线。</p>
+<p>事件总线提供了一个简单的方法，用于分发事件。事件处理器可以通过<code>subscribe</code>或<code>on</code>注册事件，
+并通过<code>emit</code>来触发事件。</p>
+<p>事件链（Event Chain）是一种特殊的事件处理机制。事件链包含一系列事件，其中底层事件触发时，上层事件也会响应。</p>
+<p>事件总线的构造函数中的<code>event_chain_generator</code>参数规定了生成事件链的方式。
+此模块中的<code>event_chain_single</code>和<code>event_chain_separator</code>可应用于此参数，分别生成单一事件的事件链和按照分隔符划分的事件链。</p>
+<p><code>event_chain_generator: Callable[[str], Iterable[str]]</code>
+一个函数，输入事件名，返回一个生成此事件所在事件链的全部事件的事件名的生成器，
+默认行为是事件链只包含单一事件。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EventBus(object):
+    &#34;&#34;&#34;事件总线。
+
+    事件总线提供了一个简单的方法，用于分发事件。事件处理器可以通过`subscribe`或`on`注册事件，
+    并通过`emit`来触发事件。
+
+    事件链（Event Chain）是一种特殊的事件处理机制。事件链包含一系列事件，其中底层事件触发时，上层事件也会响应。
+
+    事件总线的构造函数中的`event_chain_generator`参数规定了生成事件链的方式。
+    此模块中的`event_chain_single`和`event_chain_separator`可应用于此参数，分别生成单一事件的事件链和按照分隔符划分的事件链。
+    &#34;&#34;&#34;
+    _default_bus = None
+
+    def __init__(
+        self,
+        event_chain_generator: Callable[[str],
+                                        Iterable[str]] = event_chain_single
+    ):
+        &#34;&#34;&#34;
+        `event_chain_generator: Callable[[str], Iterable[str]]`
+            一个函数，输入事件名，返回一个生成此事件所在事件链的全部事件的事件名的生成器，
+            默认行为是事件链只包含单一事件。
+        &#34;&#34;&#34;
+        self._subscribers = defaultdict(PriorityList)
+        self.event_chain_generator = event_chain_generator
+
+    def subscribe(self, event: str, func: Callable, priority: int) -&gt; None:
+        &#34;&#34;&#34;注册事件处理器。
+
+        `event: str` 事件名。
+
+        `func: Callable` 事件处理器。
+
+        `priority: int` 事件处理器的优先级，小者优先。
+        &#34;&#34;&#34;
+        self._subscribers[event].add(priority, func)
+
+    def unsubscribe(self, event: str, func: Callable) -&gt; None:
+        &#34;&#34;&#34;移除事件处理器。
+
+        `event: str` 事件名。
+
+        `func: Callable` 事件处理器。
+        &#34;&#34;&#34;
+        if not self._subscribers[event].remove(func):
+            logger.warn(f&#39;试图移除事件`{event}`的一个不存在的事件处理器`{func}`。&#39;)
+
+    def on(self, event: str, priority: int = 0) -&gt; Callable:
+        &#34;&#34;&#34;以装饰器的方式注册事件处理器。
+
+        `event: str` 事件名。
+
+        `priority: int` 事件处理器的优先级，小者优先。
+
+        例如：
+        ```py
+        @bus.on(&#39;Event.MyEvent&#39;)
+        def my_event_handler(event):
+            print(event)
+        ```
+        &#34;&#34;&#34;
+        def decorator(func: Callable) -&gt; Callable:
+            self.subscribe(event, func, priority)
+            return func
+
+        return decorator
+
+    async def emit(self, event: str, *args, **kwargs) -&gt; List[Any]:
+        &#34;&#34;&#34;触发一个事件。
+
+        `event: str` 要触发的事件名称。
+
+        `*args, **kwargs` 传递给事件处理器的参数。
+        &#34;&#34;&#34;
+        results = []
+        for m_event in self.event_chain_generator(event):
+            coros = [
+                async_call_with_exception(f, *args, **kwargs)
+                for _, f in self._subscribers[m_event]
+            ]
+            if coros:
+                results += await asyncio.gather(*coros)
+        return results
+
+    @classmethod
+    def get_default_bus(cls):
+        &#34;&#34;&#34;获取默认事件总线。&#34;&#34;&#34;
+        if not cls._default_bus:
+            cls._default_bus = cls()
+        return cls._default_bus</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.bus.ModelEventBus" href="models/bus.html#YiriMirai.models.bus.ModelEventBus">ModelEventBus</a></li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="YiriMirai.EventBus.get_default_bus"><code class="name flex">
+<span>def <span class="ident">get_default_bus</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>获取默认事件总线。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def get_default_bus(cls):
+    &#34;&#34;&#34;获取默认事件总线。&#34;&#34;&#34;
+    if not cls._default_bus:
+        cls._default_bus = cls()
+    return cls._default_bus</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="YiriMirai.EventBus.emit"><code class="name flex">
+<span>async def <span class="ident">emit</span></span>(<span>self, event: str, *args, **kwargs) ‑> List[Any]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>触发一个事件。</p>
+<p><code>event: str</code> 要触发的事件名称。</p>
+<p><code>*args, **kwargs</code> 传递给事件处理器的参数。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def emit(self, event: str, *args, **kwargs) -&gt; List[Any]:
+    &#34;&#34;&#34;触发一个事件。
+
+    `event: str` 要触发的事件名称。
+
+    `*args, **kwargs` 传递给事件处理器的参数。
+    &#34;&#34;&#34;
+    results = []
+    for m_event in self.event_chain_generator(event):
+        coros = [
+            async_call_with_exception(f, *args, **kwargs)
+            for _, f in self._subscribers[m_event]
+        ]
+        if coros:
+            results += await asyncio.gather(*coros)
+    return results</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.EventBus.on"><code class="name flex">
+<span>def <span class="ident">on</span></span>(<span>self, event: str, priority: int = 0) ‑> Callable</span>
+</code></dt>
+<dd>
+<div class="desc"><p>以装饰器的方式注册事件处理器。</p>
+<p><code>event: str</code> 事件名。</p>
+<p><code>priority: int</code> 事件处理器的优先级，小者优先。</p>
+<p>例如：</p>
+<pre><code class="language-py">@bus.on('Event.MyEvent')
+def my_event_handler(event):
+    print(event)
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def on(self, event: str, priority: int = 0) -&gt; Callable:
+    &#34;&#34;&#34;以装饰器的方式注册事件处理器。
+
+    `event: str` 事件名。
+
+    `priority: int` 事件处理器的优先级，小者优先。
+
+    例如：
+    ```py
+    @bus.on(&#39;Event.MyEvent&#39;)
+    def my_event_handler(event):
+        print(event)
+    ```
+    &#34;&#34;&#34;
+    def decorator(func: Callable) -&gt; Callable:
+        self.subscribe(event, func, priority)
+        return func
+
+    return decorator</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.EventBus.subscribe"><code class="name flex">
+<span>def <span class="ident">subscribe</span></span>(<span>self, event: str, func: Callable, priority: int) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>注册事件处理器。</p>
+<p><code>event: str</code> 事件名。</p>
+<p><code>func: Callable</code> 事件处理器。</p>
+<p><code>priority: int</code> 事件处理器的优先级，小者优先。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def subscribe(self, event: str, func: Callable, priority: int) -&gt; None:
+    &#34;&#34;&#34;注册事件处理器。
+
+    `event: str` 事件名。
+
+    `func: Callable` 事件处理器。
+
+    `priority: int` 事件处理器的优先级，小者优先。
+    &#34;&#34;&#34;
+    self._subscribers[event].add(priority, func)</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.EventBus.unsubscribe"><code class="name flex">
+<span>def <span class="ident">unsubscribe</span></span>(<span>self, event: str, func: Callable) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>移除事件处理器。</p>
+<p><code>event: str</code> 事件名。</p>
+<p><code>func: Callable</code> 事件处理器。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def unsubscribe(self, event: str, func: Callable) -&gt; None:
+    &#34;&#34;&#34;移除事件处理器。
+
+    `event: str` 事件名。
+
+    `func: Callable` 事件处理器。
+    &#34;&#34;&#34;
+    if not self._subscribers[event].remove(func):
+        logger.warn(f&#39;试图移除事件`{event}`的一个不存在的事件处理器`{func}`。&#39;)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.Face"><code class="flex name class">
+<span>class <span class="ident">Face</span></span>
+<span>(</span><span>face_id: Union[int, NoneType] = None, name: Union[str, NoneType] = None, faceId: Union[int, NoneType] = None, **_)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>表情。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Face(MessageComponent):
+    &#34;&#34;&#34;表情。&#34;&#34;&#34;
+    type: str = &#34;Face&#34;
+    face_id: int = Field(..., alias=&#39;faceId&#39;)
+    name: Optional[str]
+
+    def __init__(
+        self,
+        face_id: Optional[int] = None,
+        name: Optional[str] = None,
+        faceId: Optional[int] = None,
+        **_
+    ):
+        super().__init__(faceId=face_id or faceId, name=name)
+
+    def __str__(self):
+        return f&#34;[mirai:face:{self.face_id}]&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="models/message.html#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="models/base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.Face.face_id"><code class="name">var <span class="ident">face_id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.Face.name"><code class="name">var <span class="ident">name</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.Face.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="models/message.html#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="models/message.html#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="models/message.html#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.FriendMessage"><code class="flex name class">
+<span>class <span class="ident">FriendMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>好友消息</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FriendMessage(MessageEvent):
+    &#34;&#34;&#34;好友消息&#34;&#34;&#34;
+    type: str = &#39;FriendMessage&#39;
+    sender: Friend</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.MessageEvent" href="models/events.html#YiriMirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="models/events.html#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="models/base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.FriendMessage.sender"><code class="name">var <span class="ident">sender</span> : <a title="YiriMirai.models.entities.Friend" href="models/entities.html#YiriMirai.models.entities.Friend">Friend</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.FriendMessage.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.MessageEvent" href="models/events.html#YiriMirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.MessageEvent.get_subtype" href="models/events.html#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.MessageEvent.parse_obj" href="models/events.html#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.GroupMessage"><code class="flex name class">
+<span>class <span class="ident">GroupMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群消息。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupMessage(MessageEvent):
+    &#34;&#34;&#34;群消息。&#34;&#34;&#34;
+    type: str = &#39;GroupMessage&#39;
+    sender: GroupMember</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.MessageEvent" href="models/events.html#YiriMirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="models/events.html#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="models/base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.GroupMessage.sender"><code class="name">var <span class="ident">sender</span> : <a title="YiriMirai.models.entities.GroupMember" href="models/entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.GroupMessage.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.MessageEvent" href="models/events.html#YiriMirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.MessageEvent.get_subtype" href="models/events.html#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.MessageEvent.parse_obj" href="models/events.html#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.HTTPAdapter"><code class="flex name class">
+<span>class <span class="ident">HTTPAdapter</span></span>
+<span>(</span><span>verify_key: str = '', host: str = 'localhost', port: int = 8080, poll_interval: float = 1.0)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>HTTP 轮询适配器。使用 HTTP 轮询的方式与 mirai-api-http 沟通。</p>
+<p><code>verify_key: str = ''</code> mirai-api-http 配置的认证 key。</p>
+<p><code>host: str = 'localhost'</code> HTTP Server 的地址。</p>
+<p><code>port: int = 8080</code> HTTP Server 的端口。</p>
+<p><code>poll_interval: float = 1.</code> 轮询时间间隔，单位秒。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class HTTPAdapter(Adapter):
+    &#34;&#34;&#34;HTTP 轮询适配器。使用 HTTP 轮询的方式与 mirai-api-http 沟通。
+    &#34;&#34;&#34;
+    def __init__(
+        self,
+        verify_key: str = &#39;&#39;,
+        host: str = &#39;localhost&#39;,
+        port: int = 8080,
+        poll_interval: float = 1.
+    ):
+        &#34;&#34;&#34;
+        `verify_key: str = &#39;&#39;` mirai-api-http 配置的认证 key。
+
+        `host: str = &#39;localhost&#39;` HTTP Server 的地址。
+
+        `port: int = 8080` HTTP Server 的端口。
+
+        `poll_interval: float = 1.` 轮询时间间隔，单位秒。
+        &#34;&#34;&#34;
+        super().__init__(verify_key=verify_key)
+
+        if host[:2] == &#39;//&#39;:
+            host = &#39;http:&#39; + host
+        elif host[:8] == &#39;https://&#39;:
+            raise exceptions.NetworkError(&#39;不支持 HTTPS！&#39;)
+        elif host[:7] != &#39;http://&#39;:
+            host = &#39;http://&#39; + host
+
+        if host[-1:] == &#39;/&#39;:
+            host = host[:-1]
+
+        self.host_name = f&#39;{host}:{port}&#39;
+
+        self.poll_interval = poll_interval
+
+        self.session = &#39;&#39;
+        self.headers = httpx.Headers() # 使用 headers 传递 session
+
+    async def _post(
+        self, client: httpx.AsyncClient, url: str, json: dict
+    ) -&gt; dict:
+        &#34;&#34;&#34;调用 POST 方法。&#34;&#34;&#34;
+        # 使用自定义的 json.dumps
+        content = json_dumps(json, default=_json_default).encode(&#39;utf-8&#39;)
+        response = await client.post(
+            url, content=content, headers={&#39;Content-Type&#39;: &#39;application/json&#39;}
+        )
+        self.logger.debug(f&#39;发送 POST 请求，地址{url}，状态 {response.status_code}。&#39;)
+        return _parse_response(response)
+
+    async def _get(
+        self, client: httpx.AsyncClient, url: str, params: dict
+    ) -&gt; dict:
+        &#34;&#34;&#34;调用 GET 方法。&#34;&#34;&#34;
+        response = await client.get(url, params=params)
+        self.logger.debug(f&#39;发送 GET 请求，地址{url}，状态 {response.status_code}。&#39;)
+        return _parse_response(response)
+
+    async def login(self, qq: int):
+        async with httpx.AsyncClient(
+            base_url=self.host_name, headers=self.headers
+        ) as client:
+            try:
+                self.session = (
+                    await self._post(
+                        client, &#39;/verify&#39;, {
+                            &#34;verifyKey&#34;: self.verify_key,
+                        }
+                    )
+                )[&#39;session&#39;]
+                await self._post(
+                    client, &#39;/bind&#39;, {
+                        &#34;sessionKey&#34;: self.session,
+                        &#39;qq&#39;: qq,
+                    }
+                )
+                self.headers = httpx.Headers({&#39;sessionKey&#39;: self.session})
+                self.logger.info(f&#39;成功登录到账号{qq}。&#39;)
+            except (
+                httpx.exceptions.NetworkError, httpx.exceptions.InvalidURL
+            ) as e:
+                raise exceptions.NetworkError(
+                    &#39;无法连接到 mirai。请检查地址与端口是否正确。&#39;
+                ) from e
+            except exceptions.ApiError as e:
+                raise exceptions.LoginError(e.code) from None
+
+    async def poll_event(self):
+        &#34;&#34;&#34;进行一次轮询，获取并处理事件。&#34;&#34;&#34;
+        async with httpx.AsyncClient(
+            base_url=self.host_name, headers=self.headers
+        ) as client:
+            msg_count = (await self._get(client, &#39;/countMessage&#39;, {}))[&#39;data&#39;]
+            if msg_count &gt; 0:
+                msg_list = (
+                    await
+                    self._get(client, &#39;/fetchMessage&#39;, {&#39;count&#39;: msg_count})
+                )[&#39;data&#39;]
+                for bus in self.buses:
+                    for msg in msg_list:
+                        await bus.emit(msg[&#39;type&#39;], msg)
+
+    async def call_api(self, api: str, method: Method = Method.GET, **params):
+        &#34;&#34;&#34;调用 API。
+
+        `api`: API 名称，需与 mirai-api-http 中的定义一致。
+
+        `method`: 调用方法。默认为 GET。
+
+        `params`: 参数。
+        &#34;&#34;&#34;
+        async with httpx.AsyncClient(
+            base_url=self.host_name, headers=self.headers
+        ) as client:
+            if method == Method.GET:
+                return await self._get(client, f&#39;/{api}&#39;, params)
+            elif method == Method.POST or method == Method.REST:
+                return await self._post(client, f&#39;/{api}&#39;, params)
+
+    async def run(self):
+        &#34;&#34;&#34;开始轮询。&#34;&#34;&#34;
+        await self._before_run()
+        self.logger.info(&#39;机器人开始运行。按 Ctrl + C 停止。&#39;)
+        while True:
+            await self.poll_event()
+            await asyncio.sleep(self.poll_interval)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.adapters.base.Adapter" href="adapters/base.html#YiriMirai.adapters.base.Adapter">Adapter</a></li>
+<li><a title="YiriMirai.adapters.base.Api" href="adapters/base.html#YiriMirai.adapters.base.Api">Api</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="YiriMirai.HTTPAdapter.call_api"><code class="name flex">
+<span>async def <span class="ident">call_api</span></span>(<span>self, api: str, method: <a title="YiriMirai.adapters.base.Method" href="adapters/base.html#YiriMirai.adapters.base.Method">Method</a> = Method.GET, **params)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>调用 API。</p>
+<p><code>api</code>: API 名称，需与 mirai-api-http 中的定义一致。</p>
+<p><code>method</code>: 调用方法。默认为 GET。</p>
+<p><code>params</code>: 参数。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def call_api(self, api: str, method: Method = Method.GET, **params):
+    &#34;&#34;&#34;调用 API。
+
+    `api`: API 名称，需与 mirai-api-http 中的定义一致。
+
+    `method`: 调用方法。默认为 GET。
+
+    `params`: 参数。
+    &#34;&#34;&#34;
+    async with httpx.AsyncClient(
+        base_url=self.host_name, headers=self.headers
+    ) as client:
+        if method == Method.GET:
+            return await self._get(client, f&#39;/{api}&#39;, params)
+        elif method == Method.POST or method == Method.REST:
+            return await self._post(client, f&#39;/{api}&#39;, params)</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.HTTPAdapter.poll_event"><code class="name flex">
+<span>async def <span class="ident">poll_event</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>进行一次轮询，获取并处理事件。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def poll_event(self):
+    &#34;&#34;&#34;进行一次轮询，获取并处理事件。&#34;&#34;&#34;
+    async with httpx.AsyncClient(
+        base_url=self.host_name, headers=self.headers
+    ) as client:
+        msg_count = (await self._get(client, &#39;/countMessage&#39;, {}))[&#39;data&#39;]
+        if msg_count &gt; 0:
+            msg_list = (
+                await
+                self._get(client, &#39;/fetchMessage&#39;, {&#39;count&#39;: msg_count})
+            )[&#39;data&#39;]
+            for bus in self.buses:
+                for msg in msg_list:
+                    await bus.emit(msg[&#39;type&#39;], msg)</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.HTTPAdapter.run"><code class="name flex">
+<span>async def <span class="ident">run</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>开始轮询。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def run(self):
+    &#34;&#34;&#34;开始轮询。&#34;&#34;&#34;
+    await self._before_run()
+    self.logger.info(&#39;机器人开始运行。按 Ctrl + C 停止。&#39;)
+    while True:
+        await self.poll_event()
+        await asyncio.sleep(self.poll_interval)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.adapters.base.Adapter" href="adapters/base.html#YiriMirai.adapters.base.Adapter">Adapter</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.adapters.base.Adapter.login" href="adapters/base.html#YiriMirai.adapters.base.Adapter.login">login</a></code></li>
+<li><code><a title="YiriMirai.adapters.base.Adapter.register_event_bus" href="adapters/base.html#YiriMirai.adapters.base.Adapter.register_event_bus">register_event_bus</a></code></li>
+<li><code><a title="YiriMirai.adapters.base.Adapter.unregister_event_bus" href="adapters/base.html#YiriMirai.adapters.base.Adapter.unregister_event_bus">unregister_event_bus</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.MessageChain"><code class="flex name class">
+<span>class <span class="ident">MessageChain</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>消息链。</p>
+<p>一个构造消息链的例子：</p>
+<pre><code class="language-py">message_chain = MessageChain([
+    AtAll(),
+    Plain(&quot;Hello World!&quot;),
+])
+</code></pre>
+<p>在调用 API 时，参数中需要 MessageChain 的，也可以使用<code>List[MessageComponent]</code>代替。
+例如，以下两种写法是等价的：</p>
+<pre><code class="language-py">await bot.send_friend_message(12345678, [
+    Plain(&quot;Hello World!&quot;)
+])
+</code></pre>
+<pre><code class="language-py">await bot.send_friend_message(12345678, MessageChain([
+    Plain(&quot;Hello World!&quot;)
+]))
+</code></pre>
+<p>可以使用 for 循环遍历消息链中的消息组件。</p>
+<pre><code class="language-py">for component in message_chain:
+    print(str(component))
+</code></pre>
+<p>可以使用<code>in</code>运算检查消息链中是否有某个类型的组件。</p>
+<pre><code class="language-py">if AtAll in message_chain:
+    print('AtAll')
+</code></pre>
+<p>消息链对索引操作进行了增强。以消息组件类型为索引，获取消息链中的全部该类型的消息组件。</p>
+<pre><code class="language-py">plain_list = message_chain[Plain]
+</code></pre>
+<p>以<code>类型: 数量</code>为索引，获取前几个该类型的消息组件。</p>
+<pre><code class="language-py">plain_list_first_three = message_chain[Plain: 3]
+</code></pre>
+<p>使用<code>str(message_chain)</code>获取消息链的字符串表示，字符串采用 mirai 码格式，
+参看 mirai 的<a href="https://github.com/mamoe/mirai/blob/dev/docs/Messages.md#mirai-%E7%A0%81">文档</a>。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MessageChain(MiraiBaseModel):
+    &#34;&#34;&#34;消息链。
+
+    一个构造消息链的例子：
+    ```py
+    message_chain = MessageChain([
+        AtAll(),
+        Plain(&#34;Hello World!&#34;),
+    ])
+    ```
+
+    在调用 API 时，参数中需要 MessageChain 的，也可以使用`List[MessageComponent]`代替。
+    例如，以下两种写法是等价的：
+    ```py
+    await bot.send_friend_message(12345678, [
+        Plain(&#34;Hello World!&#34;)
+    ])
+    ```
+    ```py
+    await bot.send_friend_message(12345678, MessageChain([
+        Plain(&#34;Hello World!&#34;)
+    ]))
+    ```
+
+    可以使用 for 循环遍历消息链中的消息组件。
+    ```py
+    for component in message_chain:
+        print(str(component))
+    ```
+
+    可以使用`in`运算检查消息链中是否有某个类型的组件。
+    ```py
+    if AtAll in message_chain:
+        print(&#39;AtAll&#39;)
+    ```
+
+    消息链对索引操作进行了增强。以消息组件类型为索引，获取消息链中的全部该类型的消息组件。
+    ```py
+    plain_list = message_chain[Plain]
+    ```
+
+    以`类型: 数量`为索引，获取前几个该类型的消息组件。
+    ```py
+    plain_list_first_three = message_chain[Plain: 3]
+    ```
+
+    使用`str(message_chain)`获取消息链的字符串表示，字符串采用 mirai 码格式，
+    参看 mirai 的[文档](https://github.com/mamoe/mirai/blob/dev/docs/Messages.md#mirai-%E7%A0%81)。
+    &#34;&#34;&#34;
+    __root__: List[MessageComponent]
+
+    @staticmethod
+    def _parse_message_chain(msg_chain: list):
+        result = []
+        for msg in msg_chain:
+            if isinstance(msg, dict):
+                result.append(MessageComponent.parse_obj(msg))
+            elif isinstance(msg, MessageComponent):
+                result.append(msg)
+            else:
+                raise TypeError(
+                    f&#34;消息链中元素需为 dict 或 MessageComponent，当前类型：{type(msg)}&#34;
+                )
+        return result
+
+    @validator(&#39;__root__&#39;, always=True, pre=True)
+    def _parse_component(cls, msg_chain):
+        if not msg_chain:
+            msg_chain = []
+        return cls._parse_message_chain(msg_chain)
+
+    @classmethod
+    def parse_obj(cls, msg_chain: list):
+        &#34;&#34;&#34;通过列表形式的消息链，构造对应的`MessageChain`对象。
+
+        `msg_chain: list` 列表形式的消息链。
+        &#34;&#34;&#34;
+        result = cls._parse_message_chain(msg_chain)
+        return cls(__root__=result)
+
+    def __init__(self, __root__: List[MessageComponent] = None):
+        super().__init__(__root__=__root__)
+
+    def __str__(self):
+        return &#34;&#34;.join((str(component) for component in self.__root__))
+
+    def __iter__(self):
+        yield from self.__root__
+
+    def __getitem__(self, index):
+        # 正常索引
+        if isinstance(index, int):
+            return self.__root__[index]
+        # 索引对象为 MessageComponent 类，返回所有对应 component
+        elif isinstance(index, type):
+            return [
+                component for component in self if type(component) == index
+            ]
+        # 索引对象为 MessageComponent 和 int 构成的 slice， 返回指定数量的 component
+        elif isinstance(index, slice):
+            components = (
+                component for component in self if type(component) == index
+            )
+            return [
+                component
+                for component, _ in zip(components, range(index.stop))
+            ]
+
+    def __contains__(self, sub) -&gt; bool:
+        if isinstance(sub, type): # 检测消息链中是否有某种类型的对象
+            for i in self:
+                if type(i) == sub:
+                    return True
+            else:
+                return False
+        elif isinstance(sub, str): # 检查消息中有无指定字符串子串
+            return sub in deserialize(str(self))
+
+    def __len__(self) -&gt; int:
+        return len(self.__root__)
+
+    @property
+    def source(self) -&gt; &#39;Source&#39;:
+        &#34;&#34;&#34;获取消息链中的`Source`对象。&#34;&#34;&#34;
+        return self[Source:1][0]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="models/base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="YiriMirai.MessageChain.parse_obj"><code class="name flex">
+<span>def <span class="ident">parse_obj</span></span>(<span>msg_chain: list)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>通过列表形式的消息链，构造对应的<code><a title="YiriMirai.MessageChain" href="#YiriMirai.MessageChain">MessageChain</a></code>对象。</p>
+<p><code>msg_chain: list</code> 列表形式的消息链。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def parse_obj(cls, msg_chain: list):
+    &#34;&#34;&#34;通过列表形式的消息链，构造对应的`MessageChain`对象。
+
+    `msg_chain: list` 列表形式的消息链。
+    &#34;&#34;&#34;
+    result = cls._parse_message_chain(msg_chain)
+    return cls(__root__=result)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="YiriMirai.MessageChain.source"><code class="name">var <span class="ident">source</span> : <a title="YiriMirai.models.message.Source" href="models/message.html#YiriMirai.models.message.Source">Source</a></code></dt>
+<dd>
+<div class="desc"><p>获取消息链中的<code>Source</code>对象。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def source(self) -&gt; &#39;Source&#39;:
+    &#34;&#34;&#34;获取消息链中的`Source`对象。&#34;&#34;&#34;
+    return self[Source:1][0]</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.MessageEvent"><code class="flex name class">
+<span>class <span class="ident">MessageEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>消息事件。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MessageEvent(Event):
+    &#34;&#34;&#34;消息事件。&#34;&#34;&#34;
+    message_chain: MessageChain = Field(..., alias=&#39;messageChain&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.Event" href="models/events.html#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="models/base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.FriendMessage" href="models/events.html#YiriMirai.models.events.FriendMessage">FriendMessage</a></li>
+<li><a title="YiriMirai.models.events.GroupMessage" href="models/events.html#YiriMirai.models.events.GroupMessage">GroupMessage</a></li>
+<li><a title="YiriMirai.models.events.OtherClientMessage" href="models/events.html#YiriMirai.models.events.OtherClientMessage">OtherClientMessage</a></li>
+<li><a title="YiriMirai.models.events.StrangerMessage" href="models/events.html#YiriMirai.models.events.StrangerMessage">StrangerMessage</a></li>
+<li><a title="YiriMirai.models.events.TempMessage" href="models/events.html#YiriMirai.models.events.TempMessage">TempMessage</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.MessageEvent.message_chain"><code class="name">var <span class="ident">message_chain</span> : <a title="YiriMirai.models.message.MessageChain" href="models/message.html#YiriMirai.models.message.MessageChain">MessageChain</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.Event" href="models/events.html#YiriMirai.models.events.Event">Event</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.Event.get_subtype" href="models/events.html#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.Event.parse_obj" href="models/events.html#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.Method"><code class="flex name class">
+<span>class <span class="ident">Method</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>API 接口的调用方法。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Method(str, Enum):
+    &#34;&#34;&#34;API 接口的调用方法。&#34;&#34;&#34;
+    GET = &#34;GET&#34;
+    &#34;&#34;&#34;使用 GET 方法调用。&#34;&#34;&#34;
+    POST = &#34;POST&#34;
+    &#34;&#34;&#34;使用 POST 方法调用。&#34;&#34;&#34;
+    REST = &#34;REST&#34;
+    &#34;&#34;&#34;表明这是一个 RESTful 的 POST。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.str</li>
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.Method.GET"><code class="name">var <span class="ident">GET</span></code></dt>
+<dd>
+<div class="desc"><p>使用 GET 方法调用。</p></div>
+</dd>
+<dt id="YiriMirai.Method.POST"><code class="name">var <span class="ident">POST</span></code></dt>
+<dd>
+<div class="desc"><p>使用 POST 方法调用。</p></div>
+</dd>
+<dt id="YiriMirai.Method.REST"><code class="name">var <span class="ident">REST</span></code></dt>
+<dd>
+<div class="desc"><p>表明这是一个 RESTful 的 POST。</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.Mirai"><code class="flex name class">
+<span>class <span class="ident">Mirai</span></span>
+<span>(</span><span>qq: int, adapter: <a title="YiriMirai.adapters.base.Adapter" href="adapters/base.html#YiriMirai.adapters.base.Adapter">Adapter</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>机器人主类。</p>
+<p>使用了<code>__getattr__</code>魔术方法，可以直接在对象上调用 API。</p>
+<p><code><a title="YiriMirai.Mirai" href="#YiriMirai.Mirai">Mirai</a></code> 类包含 model 层封装，API 名称经过转写以符合命名规范，所有的 API 全部使用小写字母及下划线命名。
+（API 名称也可使用原名。）
+API 参数可以使用具名参数，也可以使用位置参数，关于 API 参数的更多信息请参见模块<code><a title="YiriMirai.models.api" href="models/api.html">YiriMirai.models.api</a></code>。</p>
+<p>例如：</p>
+<pre><code class="language-py">await bot.send_friend_message(12345678, [
+    Plain(&quot;Hello World!&quot;)
+])
+</code></pre>
+<p>也可以使用<code>call_api</code>方法，须注意此方法直接继承自<code><a title="YiriMirai.SimpleMirai" href="#YiriMirai.SimpleMirai">SimpleMirai</a></code>，因此未经 model 层封装，
+需要遵循<code><a title="YiriMirai.SimpleMirai" href="#YiriMirai.SimpleMirai">SimpleMirai</a></code>的规定。</p>
+<p><code>qq: int</code> QQ 号。</p>
+<p><code>adapter: Adapter</code> 适配器，负责与 mirai-api-http 沟通，详见模块<code><a title="YiriMirai.adapters" href="adapters/index.html">YiriMirai.adapters</a></code>。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Mirai(SimpleMirai):
+    &#34;&#34;&#34;
+    机器人主类。
+
+    使用了`__getattr__`魔术方法，可以直接在对象上调用 API。
+
+    `Mirai` 类包含 model 层封装，API 名称经过转写以符合命名规范，所有的 API 全部使用小写字母及下划线命名。
+    （API 名称也可使用原名。）
+    API 参数可以使用具名参数，也可以使用位置参数，关于 API 参数的更多信息请参见模块`YiriMirai.models.api`。
+
+    例如：
+    ```py
+    await bot.send_friend_message(12345678, [
+        Plain(&#34;Hello World!&#34;)
+    ])
+    ```
+
+    也可以使用`call_api`方法，须注意此方法直接继承自`SimpleMirai`，因此未经 model 层封装，
+    需要遵循`SimpleMirai`的规定。
+    &#34;&#34;&#34;
+    def __init__(self, qq: int, adapter: Adapter):
+        super().__init__(qq=qq, adapter=adapter)
+        # 将 bus 更换为 ModelEventBus
+        adapter.unregister_event_bus(self._bus)
+        self._bus = ModelEventBus()
+        adapter.register_event_bus(self._bus.base_bus)
+
+    def on(
+        self,
+        event_type: Union[Type[Event], str],
+        priority: int = 0
+    ) -&gt; Callable:
+        &#34;&#34;&#34;注册事件处理器。
+
+        `event_type: Union[Type[Event], str]` 事件类或事件名。
+
+        `priority: int = 0` 优先级，较小者优先。
+
+        用法举例：
+        ```python
+        @bot.on(FriendMessage)
+        async def on_friend_message(event: FriendMessage):
+            print(f&#34;收到来自{event.sender.nickname]}的消息。&#34;)
+        ```
+        &#34;&#34;&#34;
+        return self._bus.on(event_type=event_type, priority=priority)
+
+    def api(self, api: str) -&gt; ApiProxy:
+        &#34;&#34;&#34;获取 API Proxy 对象。
+
+        API Proxy 提供更加简便的调用 API 的写法，详见`YiriMirai.models.api`。
+
+        `Mirai`的`__getattr__`与此方法完全相同，可支持直接在对象上调用 API。
+
+        `api: str` API 名称。
+        &#34;&#34;&#34;
+        return ApiProxy.analyze(api, self)
+
+    def __getattr__(self, api: str) -&gt; ApiProxy:
+        return self.api(api)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.bot.SimpleMirai" href="bot.html#YiriMirai.bot.SimpleMirai">SimpleMirai</a></li>
+<li><a title="YiriMirai.adapters.base.Api" href="adapters/base.html#YiriMirai.adapters.base.Api">Api</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="YiriMirai.Mirai.api"><code class="name flex">
+<span>def <span class="ident">api</span></span>(<span>self, api: str) ‑> <a title="YiriMirai.models.api.ApiProxy" href="models/api.html#YiriMirai.models.api.ApiProxy">ApiProxy</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>获取 API Proxy 对象。</p>
+<p>API Proxy 提供更加简便的调用 API 的写法，详见<code><a title="YiriMirai.models.api" href="models/api.html">YiriMirai.models.api</a></code>。</p>
+<p><code><a title="YiriMirai.Mirai" href="#YiriMirai.Mirai">Mirai</a></code>的<code>__getattr__</code>与此方法完全相同，可支持直接在对象上调用 API。</p>
+<p><code>api: str</code> API 名称。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def api(self, api: str) -&gt; ApiProxy:
+    &#34;&#34;&#34;获取 API Proxy 对象。
+
+    API Proxy 提供更加简便的调用 API 的写法，详见`YiriMirai.models.api`。
+
+    `Mirai`的`__getattr__`与此方法完全相同，可支持直接在对象上调用 API。
+
+    `api: str` API 名称。
+    &#34;&#34;&#34;
+    return ApiProxy.analyze(api, self)</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.Mirai.on"><code class="name flex">
+<span>def <span class="ident">on</span></span>(<span>self, event_type: Union[Type[<a title="YiriMirai.models.events.Event" href="models/events.html#YiriMirai.models.events.Event">Event</a>], str], priority: int = 0) ‑> Callable</span>
+</code></dt>
+<dd>
+<div class="desc"><p>注册事件处理器。</p>
+<p><code>event_type: Union[Type[Event], str]</code> 事件类或事件名。</p>
+<p><code>priority: int = 0</code> 优先级，较小者优先。</p>
+<p>用法举例：</p>
+<pre><code class="language-python">@bot.on(FriendMessage)
+async def on_friend_message(event: FriendMessage):
+    print(f&quot;收到来自{event.sender.nickname]}的消息。&quot;)
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def on(
+    self,
+    event_type: Union[Type[Event], str],
+    priority: int = 0
+) -&gt; Callable:
+    &#34;&#34;&#34;注册事件处理器。
+
+    `event_type: Union[Type[Event], str]` 事件类或事件名。
+
+    `priority: int = 0` 优先级，较小者优先。
+
+    用法举例：
+    ```python
+    @bot.on(FriendMessage)
+    async def on_friend_message(event: FriendMessage):
+        print(f&#34;收到来自{event.sender.nickname]}的消息。&#34;)
+    ```
+    &#34;&#34;&#34;
+    return self._bus.on(event_type=event_type, priority=priority)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.bot.SimpleMirai" href="bot.html#YiriMirai.bot.SimpleMirai">SimpleMirai</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.bot.SimpleMirai.call_api" href="bot.html#YiriMirai.bot.SimpleMirai.call_api">call_api</a></code></li>
+<li><code><a title="YiriMirai.bot.SimpleMirai.run" href="bot.html#YiriMirai.bot.SimpleMirai.run">run</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.Plain"><code class="flex name class">
+<span>class <span class="ident">Plain</span></span>
+<span>(</span><span>text: str = '', **_)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>纯文本。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Plain(MessageComponent):
+    &#34;&#34;&#34;纯文本。&#34;&#34;&#34;
+    type: str = &#34;Plain&#34;
+    text: str
+
+    def __init__(self, text: str = &#39;&#39;, **_):
+        if len(text) &gt; 128:
+            logger.warn(f&#34;Plain 文本过长。当前长度： {len(text)}。&#34;)
+        super().__init__(text=text)
+
+    def __str__(self):
+        return serialize(self.text)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="models/message.html#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="models/base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.Plain.text"><code class="name">var <span class="ident">text</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.Plain.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="models/message.html#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="models/message.html#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="models/message.html#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.Poke"><code class="flex name class">
+<span>class <span class="ident">Poke</span></span>
+<span>(</span><span>name: str, **_)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>戳一戳。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Poke(MessageComponent):
+    &#34;&#34;&#34;戳一戳。&#34;&#34;&#34;
+    type: str = &#34;Poke&#34;
+    name: str
+
+    def __init__(self, name: str, **_):
+        super().__init__(name=name)
+
+    @property
+    def poke_type(self):
+        return POKE_TYPE[self.name]
+
+    @property
+    def poke_id(self):
+        return POKE_ID[self.name]
+
+    def __str__(self):
+        return f&#39;[mirai:poke:{self.name}]&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.message.MessageComponent" href="models/message.html#YiriMirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="models/base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.Poke.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.Poke.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="YiriMirai.Poke.poke_id"><code class="name">var <span class="ident">poke_id</span></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def poke_id(self):
+    return POKE_ID[self.name]</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.Poke.poke_type"><code class="name">var <span class="ident">poke_type</span></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def poke_type(self):
+    return POKE_TYPE[self.name]</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.message.MessageComponent" href="models/message.html#YiriMirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.message.MessageComponent.get_subtype" href="models/message.html#YiriMirai.models.message.MessageComponent.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.message.MessageComponent.parse_obj" href="models/message.html#YiriMirai.models.message.MessageComponent.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.SimpleMirai"><code class="flex name class">
+<span>class <span class="ident">SimpleMirai</span></span>
+<span>(</span><span>qq: int, adapter: <a title="YiriMirai.adapters.base.Adapter" href="adapters/base.html#YiriMirai.adapters.base.Adapter">Adapter</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>基于 adapter 和 bus，处于 model 层之下的机器人类。</p>
+<p>使用了<code>__getattr__</code>魔术方法，可以直接在对象上调用 API。</p>
+<p>通过<code><a title="YiriMirai.SimpleMirai" href="#YiriMirai.SimpleMirai">SimpleMirai</a></code>调用 API 时，需注意此类不含 model 层封装，因此 API 名称与参数名称需与 mirai-api-http 中的定义相同，
+参数需要全部以具名参数的形式给出，并且需要指明使用的方法（GET/POST）。</p>
+<p>例如：</p>
+<pre><code class="language-py">await bot.sendFriendMessage(target=12345678, messageChain=[
+    {&quot;type&quot;:&quot;Plain&quot;, &quot;text&quot;:&quot;Hello World!&quot;}
+], method=&quot;POST&quot;)
+</code></pre>
+<p>也可以使用<code>call_api</code>方法。</p>
+<p>对于名称的路由含有二级目录的 API，由于名称中含有斜杠，必须使用<code>call_api</code>调用，例如：</p>
+<pre><code class="language-py">file_list = await bot.call_api(&quot;file/list&quot;, id=&quot;&quot;, target=12345678, method=&quot;GET&quot;)
+</code></pre>
+<p><code>qq: int</code> QQ 号。</p>
+<p><code>adapter: Adapter</code> 适配器，负责与 mirai-api-http 沟通，详见模块<code><a title="YiriMirai.adapters" href="adapters/index.html">YiriMirai.adapters</a></code>。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SimpleMirai(Api):
+    &#34;&#34;&#34;
+    基于 adapter 和 bus，处于 model 层之下的机器人类。
+
+    使用了`__getattr__`魔术方法，可以直接在对象上调用 API。
+
+    通过`SimpleMirai`调用 API 时，需注意此类不含 model 层封装，因此 API 名称与参数名称需与 mirai-api-http 中的定义相同，
+    参数需要全部以具名参数的形式给出，并且需要指明使用的方法（GET/POST）。
+
+    例如：
+    ```py
+    await bot.sendFriendMessage(target=12345678, messageChain=[
+        {&#34;type&#34;:&#34;Plain&#34;, &#34;text&#34;:&#34;Hello World!&#34;}
+    ], method=&#34;POST&#34;)
+    ```
+
+    也可以使用`call_api`方法。
+
+    对于名称的路由含有二级目录的 API，由于名称中含有斜杠，必须使用`call_api`调用，例如：
+    ```py
+    file_list = await bot.call_api(&#34;file/list&#34;, id=&#34;&#34;, target=12345678, method=&#34;GET&#34;)
+    ```
+    &#34;&#34;&#34;
+    def __init__(self, qq: int, adapter: Adapter):
+        &#34;&#34;&#34;
+        `qq: int` QQ 号。
+
+        `adapter: Adapter` 适配器，负责与 mirai-api-http 沟通，详见模块`YiriMirai.adapters`。
+        &#34;&#34;&#34;
+        self.qq = qq
+        self._adapter = adapter
+        self._bus = EventBus()
+        self._adapter.register_event_bus(self._bus)
+
+        self.logger = logging.getLogger(__name__)
+
+    async def call_api(self, api: str, **params):
+        &#34;&#34;&#34;调用 API。
+
+        `api: str` API 名称。
+
+        `**params` 参数。
+        &#34;&#34;&#34;
+        return await async_(self._adapter.call_api(api, **params))
+
+    def on(self, event: str, priority: int = 0) -&gt; Callable:
+        &#34;&#34;&#34;注册事件处理器。
+
+        `event: str` 事件名。
+
+        `priority: int = 0` 优先级，较小者优先。
+
+        用法举例：
+        ```py
+        @bot.on(&#39;FriendMessage&#39;)
+        async def on_friend_message(event: dict):
+            print(f&#34;收到来自{event[&#39;sender&#39;][&#39;nickname&#39;]}的消息。&#34;)
+        ```
+        &#34;&#34;&#34;
+        return self._bus.on(event, priority=priority)
+
+    async def _run(self, *args, **kwargs):
+        await self._adapter.login(self.qq)
+        await self._adapter.run(*args, **kwargs)
+
+    def run(self, *args, **kwargs):
+        &#34;&#34;&#34;开始运行机器人。
+
+        一般情况下，此函数会进入主循环，不再返回。
+        &#34;&#34;&#34;
+        asyncio.run(self._run(*args, **kwargs))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.adapters.base.Api" href="adapters/base.html#YiriMirai.adapters.base.Api">Api</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.bot.Mirai" href="bot.html#YiriMirai.bot.Mirai">Mirai</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="YiriMirai.SimpleMirai.call_api"><code class="name flex">
+<span>async def <span class="ident">call_api</span></span>(<span>self, api: str, **params)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>调用 API。</p>
+<p><code>api: str</code> API 名称。</p>
+<p><code>**params</code> 参数。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def call_api(self, api: str, **params):
+    &#34;&#34;&#34;调用 API。
+
+    `api: str` API 名称。
+
+    `**params` 参数。
+    &#34;&#34;&#34;
+    return await async_(self._adapter.call_api(api, **params))</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.SimpleMirai.on"><code class="name flex">
+<span>def <span class="ident">on</span></span>(<span>self, event: str, priority: int = 0) ‑> Callable</span>
+</code></dt>
+<dd>
+<div class="desc"><p>注册事件处理器。</p>
+<p><code>event: str</code> 事件名。</p>
+<p><code>priority: int = 0</code> 优先级，较小者优先。</p>
+<p>用法举例：</p>
+<pre><code class="language-py">@bot.on('FriendMessage')
+async def on_friend_message(event: dict):
+    print(f&quot;收到来自{event['sender']['nickname']}的消息。&quot;)
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def on(self, event: str, priority: int = 0) -&gt; Callable:
+    &#34;&#34;&#34;注册事件处理器。
+
+    `event: str` 事件名。
+
+    `priority: int = 0` 优先级，较小者优先。
+
+    用法举例：
+    ```py
+    @bot.on(&#39;FriendMessage&#39;)
+    async def on_friend_message(event: dict):
+        print(f&#34;收到来自{event[&#39;sender&#39;][&#39;nickname&#39;]}的消息。&#34;)
+    ```
+    &#34;&#34;&#34;
+    return self._bus.on(event, priority=priority)</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.SimpleMirai.run"><code class="name flex">
+<span>def <span class="ident">run</span></span>(<span>self, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>开始运行机器人。</p>
+<p>一般情况下，此函数会进入主循环，不再返回。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def run(self, *args, **kwargs):
+    &#34;&#34;&#34;开始运行机器人。
+
+    一般情况下，此函数会进入主循环，不再返回。
+    &#34;&#34;&#34;
+    asyncio.run(self._run(*args, **kwargs))</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.StrangerMessage"><code class="flex name class">
+<span>class <span class="ident">StrangerMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>陌生人消息。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class StrangerMessage(MessageEvent):
+    &#34;&#34;&#34;陌生人消息。&#34;&#34;&#34;
+    type: str = &#39;StrangerMessage&#39;
+    sender: Friend</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.MessageEvent" href="models/events.html#YiriMirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="models/events.html#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="models/base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.StrangerMessage.sender"><code class="name">var <span class="ident">sender</span> : <a title="YiriMirai.models.entities.Friend" href="models/entities.html#YiriMirai.models.entities.Friend">Friend</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.StrangerMessage.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.MessageEvent" href="models/events.html#YiriMirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.MessageEvent.get_subtype" href="models/events.html#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.MessageEvent.parse_obj" href="models/events.html#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.TempMessage"><code class="flex name class">
+<span>class <span class="ident">TempMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群临时消息。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TempMessage(MessageEvent):
+    &#34;&#34;&#34;群临时消息。&#34;&#34;&#34;
+    type: str = &#39;TempMessage&#39;
+    sender: GroupMember</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.MessageEvent" href="models/events.html#YiriMirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="models/events.html#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="models/base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.TempMessage.sender"><code class="name">var <span class="ident">sender</span> : <a title="YiriMirai.models.entities.GroupMember" href="models/entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.TempMessage.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.MessageEvent" href="models/events.html#YiriMirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.MessageEvent.get_subtype" href="models/events.html#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.MessageEvent.parse_obj" href="models/events.html#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul>
+<li><a href="#yirimirai">YiriMirai</a></li>
+</ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="YiriMirai.adapters" href="adapters/index.html">YiriMirai.adapters</a></code></li>
+<li><code><a title="YiriMirai.bot" href="bot.html">YiriMirai.bot</a></code></li>
+<li><code><a title="YiriMirai.bus" href="bus.html">YiriMirai.bus</a></code></li>
+<li><code><a title="YiriMirai.colorlog" href="colorlog.html">YiriMirai.colorlog</a></code></li>
+<li><code><a title="YiriMirai.exceptions" href="exceptions.html">YiriMirai.exceptions</a></code></li>
+<li><code><a title="YiriMirai.models" href="models/index.html">YiriMirai.models</a></code></li>
+<li><code><a title="YiriMirai.utils" href="utils.html">YiriMirai.utils</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="YiriMirai.deserialize" href="#YiriMirai.deserialize">deserialize</a></code></li>
+<li><code><a title="YiriMirai.get_logger" href="#YiriMirai.get_logger">get_logger</a></code></li>
+<li><code><a title="YiriMirai.serialize" href="#YiriMirai.serialize">serialize</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="YiriMirai.Adapter" href="#YiriMirai.Adapter">Adapter</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.Adapter.login" href="#YiriMirai.Adapter.login">login</a></code></li>
+<li><code><a title="YiriMirai.Adapter.register_event_bus" href="#YiriMirai.Adapter.register_event_bus">register_event_bus</a></code></li>
+<li><code><a title="YiriMirai.Adapter.run" href="#YiriMirai.Adapter.run">run</a></code></li>
+<li><code><a title="YiriMirai.Adapter.unregister_event_bus" href="#YiriMirai.Adapter.unregister_event_bus">unregister_event_bus</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.At" href="#YiriMirai.At">At</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.At.display" href="#YiriMirai.At.display">display</a></code></li>
+<li><code><a title="YiriMirai.At.target" href="#YiriMirai.At.target">target</a></code></li>
+<li><code><a title="YiriMirai.At.type" href="#YiriMirai.At.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.AtAll" href="#YiriMirai.AtAll">AtAll</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.AtAll.type" href="#YiriMirai.AtAll.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.Dice" href="#YiriMirai.Dice">Dice</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.Dice.type" href="#YiriMirai.Dice.type">type</a></code></li>
+<li><code><a title="YiriMirai.Dice.value" href="#YiriMirai.Dice.value">value</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.Event" href="#YiriMirai.Event">Event</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.Event.get_subtype" href="#YiriMirai.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.Event.parse_obj" href="#YiriMirai.Event.parse_obj">parse_obj</a></code></li>
+<li><code><a title="YiriMirai.Event.type" href="#YiriMirai.Event.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.EventBus" href="#YiriMirai.EventBus">EventBus</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.EventBus.emit" href="#YiriMirai.EventBus.emit">emit</a></code></li>
+<li><code><a title="YiriMirai.EventBus.get_default_bus" href="#YiriMirai.EventBus.get_default_bus">get_default_bus</a></code></li>
+<li><code><a title="YiriMirai.EventBus.on" href="#YiriMirai.EventBus.on">on</a></code></li>
+<li><code><a title="YiriMirai.EventBus.subscribe" href="#YiriMirai.EventBus.subscribe">subscribe</a></code></li>
+<li><code><a title="YiriMirai.EventBus.unsubscribe" href="#YiriMirai.EventBus.unsubscribe">unsubscribe</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.Face" href="#YiriMirai.Face">Face</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.Face.face_id" href="#YiriMirai.Face.face_id">face_id</a></code></li>
+<li><code><a title="YiriMirai.Face.name" href="#YiriMirai.Face.name">name</a></code></li>
+<li><code><a title="YiriMirai.Face.type" href="#YiriMirai.Face.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.FriendMessage" href="#YiriMirai.FriendMessage">FriendMessage</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.FriendMessage.sender" href="#YiriMirai.FriendMessage.sender">sender</a></code></li>
+<li><code><a title="YiriMirai.FriendMessage.type" href="#YiriMirai.FriendMessage.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.GroupMessage" href="#YiriMirai.GroupMessage">GroupMessage</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.GroupMessage.sender" href="#YiriMirai.GroupMessage.sender">sender</a></code></li>
+<li><code><a title="YiriMirai.GroupMessage.type" href="#YiriMirai.GroupMessage.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.HTTPAdapter" href="#YiriMirai.HTTPAdapter">HTTPAdapter</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.HTTPAdapter.call_api" href="#YiriMirai.HTTPAdapter.call_api">call_api</a></code></li>
+<li><code><a title="YiriMirai.HTTPAdapter.poll_event" href="#YiriMirai.HTTPAdapter.poll_event">poll_event</a></code></li>
+<li><code><a title="YiriMirai.HTTPAdapter.run" href="#YiriMirai.HTTPAdapter.run">run</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.MessageChain" href="#YiriMirai.MessageChain">MessageChain</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.MessageChain.parse_obj" href="#YiriMirai.MessageChain.parse_obj">parse_obj</a></code></li>
+<li><code><a title="YiriMirai.MessageChain.source" href="#YiriMirai.MessageChain.source">source</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.MessageEvent" href="#YiriMirai.MessageEvent">MessageEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.MessageEvent.message_chain" href="#YiriMirai.MessageEvent.message_chain">message_chain</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.Method" href="#YiriMirai.Method">Method</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.Method.GET" href="#YiriMirai.Method.GET">GET</a></code></li>
+<li><code><a title="YiriMirai.Method.POST" href="#YiriMirai.Method.POST">POST</a></code></li>
+<li><code><a title="YiriMirai.Method.REST" href="#YiriMirai.Method.REST">REST</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.Mirai" href="#YiriMirai.Mirai">Mirai</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.Mirai.api" href="#YiriMirai.Mirai.api">api</a></code></li>
+<li><code><a title="YiriMirai.Mirai.on" href="#YiriMirai.Mirai.on">on</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.Plain" href="#YiriMirai.Plain">Plain</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.Plain.text" href="#YiriMirai.Plain.text">text</a></code></li>
+<li><code><a title="YiriMirai.Plain.type" href="#YiriMirai.Plain.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.Poke" href="#YiriMirai.Poke">Poke</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.Poke.name" href="#YiriMirai.Poke.name">name</a></code></li>
+<li><code><a title="YiriMirai.Poke.poke_id" href="#YiriMirai.Poke.poke_id">poke_id</a></code></li>
+<li><code><a title="YiriMirai.Poke.poke_type" href="#YiriMirai.Poke.poke_type">poke_type</a></code></li>
+<li><code><a title="YiriMirai.Poke.type" href="#YiriMirai.Poke.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.SimpleMirai" href="#YiriMirai.SimpleMirai">SimpleMirai</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.SimpleMirai.call_api" href="#YiriMirai.SimpleMirai.call_api">call_api</a></code></li>
+<li><code><a title="YiriMirai.SimpleMirai.on" href="#YiriMirai.SimpleMirai.on">on</a></code></li>
+<li><code><a title="YiriMirai.SimpleMirai.run" href="#YiriMirai.SimpleMirai.run">run</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.StrangerMessage" href="#YiriMirai.StrangerMessage">StrangerMessage</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.StrangerMessage.sender" href="#YiriMirai.StrangerMessage.sender">sender</a></code></li>
+<li><code><a title="YiriMirai.StrangerMessage.type" href="#YiriMirai.StrangerMessage.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.TempMessage" href="#YiriMirai.TempMessage">TempMessage</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.TempMessage.sender" href="#YiriMirai.TempMessage.sender">sender</a></code></li>
+<li><code><a title="YiriMirai.TempMessage.type" href="#YiriMirai.TempMessage.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>

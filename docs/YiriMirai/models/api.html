@@ -1,0 +1,1535 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>YiriMirai.models.api API documentation</title>
+<meta name="description" content="此模块提供 API 调用与返回数据解析相关。" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>YiriMirai.models.api</code></h1>
+</header>
+<section id="section-intro">
+<p>此模块提供 API 调用与返回数据解析相关。</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># -*- coding: utf-8 -*-
+&#34;&#34;&#34;
+此模块提供 API 调用与返回数据解析相关。
+&#34;&#34;&#34;
+from enum import Enum
+from typing import List, Optional, Union
+
+from pydantic import BaseModel, Field
+from YiriMirai.adapters.base import Api, Method
+from YiriMirai.models.base import MiraiBaseModel
+from YiriMirai.models.entities import Friend, Group, GroupMember, GroupConfig, MemberInfo
+from YiriMirai.models.events import MessageEvent
+from YiriMirai.models.message import Image, Voice
+from YiriMirai.utils import async_
+
+
+class Response(MiraiBaseModel):
+    &#34;&#34;&#34;响应对象。&#34;&#34;&#34;
+    code: int
+    msg: str
+
+
+class About(Response):
+    &#34;&#34;&#34;插件信息。&#34;&#34;&#34;
+    data: dict
+
+
+class MessageFromId(Response):
+    &#39;&#39;&#39;通过 message_id 获取的消息。&#39;&#39;&#39;
+    data: MessageEvent
+
+
+class FriendList(Response):
+    &#34;&#34;&#34;好友列表。&#34;&#34;&#34;
+    data: List[Friend]
+
+    def __iter__(self):
+        yield from self.data
+
+
+class GroupList(Response):
+    &#34;&#34;&#34;群组列表。&#34;&#34;&#34;
+    data: List[Group]
+
+    def __iter__(self):
+        yield from self.data
+
+
+class MemberList(Response):
+    &#34;&#34;&#34;群成员列表。&#34;&#34;&#34;
+    data: List[GroupMember]
+
+    def __iter__(self):
+        yield from self.data
+
+
+class Sex(str, Enum):
+    &#34;&#34;&#34;性别。&#34;&#34;&#34;
+    Unknown = &#39;UNKNOWN&#39;
+    Male = &#39;MALE&#39;
+    Female = &#39;FEMALE&#39;
+
+
+class Profile(MiraiBaseModel):
+    &#34;&#34;&#34;好友资料。&#34;&#34;&#34;
+    nickname: str
+    email: str
+    age: int
+    level: int
+    sign: str
+    sex: Sex
+
+
+class MessageResponse(Response):
+    &#34;&#34;&#34;发送消息的响应。&#34;&#34;&#34;
+    message_id: int = Field(..., alias=&#39;messageId&#39;)
+
+
+class File(MiraiBaseModel):
+    &#34;&#34;&#34;文件对象。&#34;&#34;&#34;
+    name: str
+    id: Optional[str]
+    path: str
+    parent: Optional[&#39;File&#39;] = None
+    contact: Union[Group, Friend]
+    is_file: bool = Field(..., alias=&#39;isFile&#39;)
+    is_dictionary: bool = Field(..., alias=&#39;isDictionary&#39;)
+
+
+File.update_forward_refs() # 支持 model 引用自己的类型
+
+
+class FileList(Response):
+    &#34;&#34;&#34;文件列表。&#34;&#34;&#34;
+    data: List[File]
+
+    def __iter__(self):
+        yield from self.data
+
+
+class FileInfo(Response):
+    &#34;&#34;&#34;文件信息。&#34;&#34;&#34;
+    data: File
+
+
+class FileMkdir(Response):
+    &#34;&#34;&#34;创建文件夹的响应。&#34;&#34;&#34;
+    data: File
+
+
+AVAIABLE_API = {
+    &#34;about&#34;: (&#34;about&#34;, Method.GET, [], About),
+    &#34;message_from_id&#34;: (&#34;messageFromId&#34;, Method.GET, [], MessageFromId),
+    &#34;friend_list&#34;: (&#34;friendList&#34;, Method.GET, [], FriendList),
+    &#34;group_list&#34;: (&#34;groupList&#34;, Method.GET, [], GroupList),
+    &#34;member_list&#34;: (&#34;memberList&#34;, Method.GET, [&#39;target&#39;], MemberList),
+    &#34;bot_profile&#34;: (&#34;botProfile&#34;, Method.GET, [], Profile),
+    &#34;friend_profile&#34;: (&#34;friendProfile&#34;, Method.GET, [&#39;target&#39;], Profile),
+    &#34;member_profile&#34;:
+        (&#34;memberProfile&#34;, Method.GET, [&#39;target&#39;, &#39;memberId&#39;], Profile),
+    &#34;send_friend_message&#34;:
+        (
+            &#34;sendFriendMessage&#34;, Method.POST, [&#39;target&#39;,
+                                               &#39;messageChain&#39;], MessageResponse
+        ),
+    &#34;send_group_message&#34;:
+        (
+            &#34;sendGroupMessage&#34;, Method.POST, [&#39;target&#39;,
+                                              &#39;messageChain&#39;], MessageResponse
+        ),
+    &#34;send_temp_message&#34;:
+        (
+            &#34;sendTempMessage&#34;, Method.POST, [&#39;qq&#39;, &#39;group&#39;,
+                                             &#39;messageChain&#39;], MessageResponse
+        ),
+    &#34;send_nudge&#34;:
+        (&#34;sendNudge&#34;, Method.POST, [&#39;target&#39;, &#39;subject&#39;, &#39;kind&#39;], Response),
+    &#34;recall&#34;: (&#34;recall&#34;, Method.POST, [&#39;target&#39;], Response),
+    &#34;file_list&#34;:
+        (&#34;file/list&#34;, Method.GET, [&#39;id&#39;, &#39;target&#39;, &#39;group&#39;, &#39;qq&#39;], FileList),
+    &#34;file_info&#34;:
+        (&#34;file/info&#34;, Method.GET, [&#39;id&#39;, &#39;target&#39;, &#39;group&#39;, &#39;qq&#39;], FileInfo),
+    &#34;file_mkdir&#34;:
+        (
+            &#34;file/mkdir&#34;, Method.POST,
+            [&#39;id&#39;, &#39;target&#39;, &#39;group&#39;, &#39;qq&#39;, &#39;dictionaryName&#39;], FileMkdir
+        ),
+    &#34;file_delete&#34;:
+        (
+            &#34;file/delete&#34;, Method.POST, [&#39;id&#39;, &#39;target&#39;, &#39;group&#39;,
+                                         &#39;qq&#39;], Response
+        ),
+    &#34;file_move&#34;:
+        (
+            &#34;file/move&#34;, Method.POST,
+            [&#39;id&#39;, &#39;target&#39;, &#39;group&#39;, &#39;qq&#39;, &#39;moveTo&#39;], Response
+        ),
+    &#34;file_rename&#34;:
+        (
+            &#34;file/rename&#34;, Method.POST,
+            [&#39;id&#39;, &#39;target&#39;, &#39;group&#39;, &#39;qq&#39;, &#39;renameTo&#39;], Response
+        ),
+    &#34;upload_image&#34;: (&#34;uploadImage&#34;, Method.GET, [], Image),
+    &#34;upload_voice&#34;: (&#34;uploadVoice&#34;, Method.GET, [], Voice),
+    &#34;delete_friend&#34;: (&#34;deleteFriend&#34;, Method.POST, [&#39;target&#39;], Response),
+    &#34;mute&#34;: (&#34;mute&#34;, Method.POST, [&#39;target&#39;, &#39;memderId&#39;, &#39;time&#39;], Response),
+    &#34;unmute&#34;: (&#34;unmute&#34;, Method.POST, [&#39;target&#39;, &#39;memderId&#39;], Response),
+    &#34;kick&#34;: (&#34;kick&#34;, Method.POST, [&#39;target&#39;, &#39;memderId&#39;, &#39;msg&#39;], Response),
+    &#34;quit&#34;: (&#34;quit&#34;, Method.POST, [&#39;target&#39;], Response),
+    &#34;mute_all&#34;: (&#34;muteAll&#34;, Method.POST, [&#39;target&#39;], Response),
+    &#34;unmute_all&#34;: (&#34;unmuteAll&#34;, Method.POST, [&#39;target&#39;], Response),
+    &#34;set_essence&#34;: (&#34;setEssence&#34;, Method.POST, [&#39;target&#39;], Response),
+    &#34;group_config&#34;:
+        (&#34;groupConfig&#34;, Method.REST, [&#39;target&#39;, &#39;config&#39;], GroupConfig),
+    &#34;member_info&#34;:
+        (
+            &#34;memberInfo&#34;, Method.REST, [&#39;target&#39;, &#39;memberId&#39;,
+                                        &#39;info&#39;], MemberInfo
+        ),
+    &#34;resp_new_friend_request_event&#34;:
+        (
+            &#34;resp/newFriendRequestEvent&#34;, Method.POST,
+            [&#39;eventId&#39;, &#39;fromId&#39;, &#39;groupId&#39;, &#39;operate&#39;,
+             &#39;message&#39;], MiraiBaseModel
+        ),
+    &#34;resp_member_join_request_event&#34;:
+        (
+            &#34;resp/memberJoinRequestEvent&#34;, Method.POST,
+            [&#39;eventId&#39;, &#39;fromId&#39;, &#39;groupId&#39;, &#39;operate&#39;,
+             &#39;message&#39;], MiraiBaseModel
+        ),
+    &#34;resp_bot_invited_join_group_request_event&#34;:
+        (
+            &#34;resp/botInvitedJoinGroupRequestEvent&#34;, Method.POST,
+            [&#39;eventId&#39;, &#39;fromId&#39;, &#39;groupId&#39;, &#39;operate&#39;,
+             &#39;message&#39;], MiraiBaseModel
+        ),
+    &#34;cmd_execute&#34;: (&#34;cmd/execute&#34;, Method.POST, [&#39;command&#39;], Response),
+    &#34;cmd_register&#34;:
+        (
+            &#34;cmd/register&#34;, Method.POST,
+            [&#39;name&#39;, &#39;alias&#39;, &#39;usage&#39;, &#39;description&#39;], Response
+        )
+}
+
+AVAIABLE_API_ALIAS = {value[0]: key for key, value in AVAIABLE_API.items()}
+
+
+def encode_model(model) -&gt; dict:
+    &#34;&#34;&#34;将含有`BaseModel`的对象编码为`dict`。
+
+    `model` 待编码的对象。
+    &#34;&#34;&#34;
+    if isinstance(model, BaseModel):
+        return model.dict()
+    elif isinstance(model, list):
+        return [encode_model(node) for node in model]
+    else:
+        return model
+
+
+class ApiProxy(object):
+    &#34;&#34;&#34;API 代理类。由 API 构造，提供对适配器的访问。
+
+    `ApiProxy`提供更加简便的调用 API 的写法。`ApiProxy`对象一般由`Mirai.__getattr__`获得，
+    这个方法由`ApiProxy.analyze`实现，支持按照命名规范转写的 API，所有的 API 全部使用小写字母及下划线命名
+
+    对于 GET 方法的 API，可以使用`get`方法：
+    ```py
+    profile = await bot.friend_profile.get(12345678)
+    ```
+
+    或者直接调用：
+    ```py
+    profile = await bot.friend_profile(12345678)
+    ```
+
+    对于 POST 方法的 API，推荐直接调用：
+    ```
+    await bot.send_friend_message(12345678, [Plain(&#39;Hello World!&#39;)])
+    ```
+
+    `set` 方法也可用，但由于语义不准确，不推荐使用。
+
+    对于 RESTful 的 API，首先应直接调用，传入基本参数，然后使用`get`或`set`：
+    ```py
+    config = await bot.group_config(12345678).get()
+    await bot.group_config(12345678).set(config.modify(announcement=&#39;测试&#39;))
+    ```
+
+    `ApiProxy`同时提供位置参数支持。比如上面的例子中，没有使用具名参数，而是使用位置参数，
+    这可以让 API 调用更简洁。参数的顺序可参照 mirai-api-http 的[文档](https://project-mirai.github.io/mirai-api-http/api/API.html)。
+    除去`sessionKey`由适配器自动指定外，其余参数可按顺序传入。具名参数仍然可用，适当地使用具名参数可增强代码的可读性。
+    &#34;&#34;&#34;
+    def __init__(self, command: str, api_provider: Api):
+        &#34;&#34;&#34;
+        构造函数不应被使用，改为`ApiProxy.analyze`以获取正确的子类。
+
+        `command: str` API 名称。
+
+        `api_provider: Api` 提供实际访问的接口。
+        &#34;&#34;&#34;
+        self.command = command
+        self.host, _, self.parameter_names, self.model = AVAIABLE_API[command]
+        self.api_provider = api_provider
+
+    async def _call_api(
+        self, model: MiraiBaseModel = None, **kwargs
+    ) -&gt; MiraiBaseModel:
+        &#34;&#34;&#34;调用 API。
+
+        将结果解析为 Model。
+        &#34;&#34;&#34;
+        raw_response = await async_(
+            self.api_provider.call_api(api=self.host, **kwargs)
+        )
+        model = model or self.model
+        return model.parse_obj(raw_response)
+
+    async def get(self, *args, **kwargs) -&gt; MiraiBaseModel:
+        &#34;&#34;&#34;获取。对于 GET 方法的 API，调用此方法。&#34;&#34;&#34;
+        kwargs = self.parameters_to_dict(*args, **kwargs)
+        return await self._call_api(method=Method.GET, **kwargs)
+
+    async def set(self, *args, **kwargs) -&gt; MiraiBaseModel:
+        &#34;&#34;&#34;设置。对于 POST 方法的 API，可调用此方法。&#34;&#34;&#34;
+        kwargs = self.parameters_to_dict(*args, **kwargs)
+        return await self._call_api(method=Method.POST, **kwargs)
+
+    async def __call__(self, *args, **kwargs) -&gt; MiraiBaseModel:
+        return await self.get(*args, **kwargs)
+
+    def parameters_to_dict(self, *args, **kwargs) -&gt; dict:
+        &#34;&#34;&#34;解析参数列表，提供将位置参数转化为具名参数的支持。&#34;&#34;&#34;
+        if len(args) &gt; len(self.parameter_names):
+            raise TypeError(
+                f&#39;`{self.command}`需要{len(self.parameter_names)}个参数，但传入了{len(args)}个。&#39;
+            )
+        for name, value in zip(self.parameter_names, args):
+            if kwargs.get(name):
+                raise TypeError(f&#39;在`{self.command}`中，具名参数`{name}`与位置参数重复。&#39;)
+            else:
+                kwargs[name] = value
+
+        return {name: encode_model(value) for name, value in kwargs.items()}
+
+    @staticmethod
+    def analyze(api: str, api_provider: Api) -&gt; &#39;ApiProxy&#39;:
+        &#34;&#34;&#34;由 API 名称获取对应的代理对象。&#34;&#34;&#34;
+        api = AVAIABLE_API_ALIAS.get(api) or api
+        try:
+            method = AVAIABLE_API[api][1]
+            return PROXIES[method](api, api_provider)
+        except KeyError as e:
+            raise ValueError(f&#39;`{api}`不是可用的 API。&#39;) from e
+
+
+class ApiProxyGet(ApiProxy):
+    &#34;&#34;&#34;GET 方法的 API 代理对象。&#34;&#34;&#34;
+    async def set(self, *args, **kwargs):
+        &#34;&#34;&#34;GET 方法的 API 不具有`set`。
+
+        调用此方法会报错`TypeError`。
+        &#34;&#34;&#34;
+        raise TypeError(f&#39;`{self.command}`不支持`set`方法。&#39;)
+
+
+class ApiProxyPost(ApiProxy):
+    &#34;&#34;&#34;POST 方法的 API 代理对象。&#34;&#34;&#34;
+    async def get(self, *args, **kwargs):
+        &#34;&#34;&#34;POST 方法的 API 不具有`get`。
+
+        调用此方法会报错`TypeError`。
+        &#34;&#34;&#34;
+        raise TypeError(f&#39;`{self.command}`不支持`get`方法。&#39;)
+
+    async def __call__(self, *args, **kwargs):
+        return await self.set(*args, **kwargs)
+
+
+class ApiProxyRestPartial(ApiProxy):
+    &#34;&#34;&#34;RESTful 的 API 代理对象（已传入公共参数）。&#34;&#34;&#34;
+    def __init__(
+        self, command: str, api_provider: Api, partial_args: list,
+        partial_kwargs: dict
+    ):
+        super().__init__(command=command, api_provider=api_provider)
+        self.partial_args = partial_args
+        self.partial_kwargs = partial_kwargs
+
+    async def get(self, *args, **kwargs) -&gt; MiraiBaseModel:
+        &#34;&#34;&#34;获取。&#34;&#34;&#34;
+        return await super().get(
+            *self.partial_args, *args, **self.partial_kwargs, **kwargs
+        )
+
+    async def set(self, *args, **kwargs) -&gt; MiraiBaseModel:
+        &#34;&#34;&#34;设置。&#34;&#34;&#34;
+        kwargs = self.parameters_to_dict(
+            *self.partial_args, *args, **self.partial_kwargs, **kwargs
+        )
+        return await self._call_api(
+            method=Method.POST, model=Response, **kwargs
+        )
+
+
+class ApiProxyRest(ApiProxy):
+    &#34;&#34;&#34;RESTful 的 API 代理对象。
+
+    直接调用时，传入 GET 和 POST 的公共参数，返回一个`ApiProxyRestPartial`对象，
+    由此对象提供实际调用支持。
+    &#34;&#34;&#34;
+    def __call__(self, *args, **kwargs) -&gt; ApiProxyRestPartial:
+        return ApiProxyRestPartial(
+            self.command, self.api_provider, args, kwargs
+        )
+
+
+PROXIES = {
+    &#39;GET&#39;: ApiProxyGet,
+    &#39;POST&#39;: ApiProxyPost,
+    &#39;REST&#39;: ApiProxyRest,
+}</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="YiriMirai.models.api.encode_model"><code class="name flex">
+<span>def <span class="ident">encode_model</span></span>(<span>model) ‑> dict</span>
+</code></dt>
+<dd>
+<div class="desc"><p>将含有<code>BaseModel</code>的对象编码为<code>dict</code>。</p>
+<p><code>model</code> 待编码的对象。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def encode_model(model) -&gt; dict:
+    &#34;&#34;&#34;将含有`BaseModel`的对象编码为`dict`。
+
+    `model` 待编码的对象。
+    &#34;&#34;&#34;
+    if isinstance(model, BaseModel):
+        return model.dict()
+    elif isinstance(model, list):
+        return [encode_model(node) for node in model]
+    else:
+        return model</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="YiriMirai.models.api.About"><code class="flex name class">
+<span>class <span class="ident">About</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>插件信息。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class About(Response):
+    &#34;&#34;&#34;插件信息。&#34;&#34;&#34;
+    data: dict</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.api.Response" href="#YiriMirai.models.api.Response">Response</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.api.About.data"><code class="name">var <span class="ident">data</span> : dict</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.models.api.ApiProxy"><code class="flex name class">
+<span>class <span class="ident">ApiProxy</span></span>
+<span>(</span><span>command: str, api_provider: <a title="YiriMirai.adapters.base.Api" href="../adapters/base.html#YiriMirai.adapters.base.Api">Api</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>API 代理类。由 API 构造，提供对适配器的访问。</p>
+<p><code><a title="YiriMirai.models.api.ApiProxy" href="#YiriMirai.models.api.ApiProxy">ApiProxy</a></code>提供更加简便的调用 API 的写法。<code><a title="YiriMirai.models.api.ApiProxy" href="#YiriMirai.models.api.ApiProxy">ApiProxy</a></code>对象一般由<code>Mirai.__getattr__</code>获得，
+这个方法由<code><a title="YiriMirai.models.api.ApiProxy.analyze" href="#YiriMirai.models.api.ApiProxy.analyze">ApiProxy.analyze()</a></code>实现，支持按照命名规范转写的 API，所有的 API 全部使用小写字母及下划线命名</p>
+<p>对于 GET 方法的 API，可以使用<code>get</code>方法：</p>
+<pre><code class="language-py">profile = await bot.friend_profile.get(12345678)
+</code></pre>
+<p>或者直接调用：</p>
+<pre><code class="language-py">profile = await bot.friend_profile(12345678)
+</code></pre>
+<p>对于 POST 方法的 API，推荐直接调用：</p>
+<pre><code>await bot.send_friend_message(12345678, [Plain('Hello World!')])
+</code></pre>
+<p><code>set</code> 方法也可用，但由于语义不准确，不推荐使用。</p>
+<p>对于 RESTful 的 API，首先应直接调用，传入基本参数，然后使用<code>get</code>或<code>set</code>：</p>
+<pre><code class="language-py">config = await bot.group_config(12345678).get()
+await bot.group_config(12345678).set(config.modify(announcement='测试'))
+</code></pre>
+<p><code><a title="YiriMirai.models.api.ApiProxy" href="#YiriMirai.models.api.ApiProxy">ApiProxy</a></code>同时提供位置参数支持。比如上面的例子中，没有使用具名参数，而是使用位置参数，
+这可以让 API 调用更简洁。参数的顺序可参照 mirai-api-http 的<a href="https://project-mirai.github.io/mirai-api-http/api/API.html">文档</a>。
+除去<code>sessionKey</code>由适配器自动指定外，其余参数可按顺序传入。具名参数仍然可用，适当地使用具名参数可增强代码的可读性。</p>
+<p>构造函数不应被使用，改为<code><a title="YiriMirai.models.api.ApiProxy.analyze" href="#YiriMirai.models.api.ApiProxy.analyze">ApiProxy.analyze()</a></code>以获取正确的子类。</p>
+<p><code>command: str</code> API 名称。</p>
+<p><code>api_provider: Api</code> 提供实际访问的接口。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ApiProxy(object):
+    &#34;&#34;&#34;API 代理类。由 API 构造，提供对适配器的访问。
+
+    `ApiProxy`提供更加简便的调用 API 的写法。`ApiProxy`对象一般由`Mirai.__getattr__`获得，
+    这个方法由`ApiProxy.analyze`实现，支持按照命名规范转写的 API，所有的 API 全部使用小写字母及下划线命名
+
+    对于 GET 方法的 API，可以使用`get`方法：
+    ```py
+    profile = await bot.friend_profile.get(12345678)
+    ```
+
+    或者直接调用：
+    ```py
+    profile = await bot.friend_profile(12345678)
+    ```
+
+    对于 POST 方法的 API，推荐直接调用：
+    ```
+    await bot.send_friend_message(12345678, [Plain(&#39;Hello World!&#39;)])
+    ```
+
+    `set` 方法也可用，但由于语义不准确，不推荐使用。
+
+    对于 RESTful 的 API，首先应直接调用，传入基本参数，然后使用`get`或`set`：
+    ```py
+    config = await bot.group_config(12345678).get()
+    await bot.group_config(12345678).set(config.modify(announcement=&#39;测试&#39;))
+    ```
+
+    `ApiProxy`同时提供位置参数支持。比如上面的例子中，没有使用具名参数，而是使用位置参数，
+    这可以让 API 调用更简洁。参数的顺序可参照 mirai-api-http 的[文档](https://project-mirai.github.io/mirai-api-http/api/API.html)。
+    除去`sessionKey`由适配器自动指定外，其余参数可按顺序传入。具名参数仍然可用，适当地使用具名参数可增强代码的可读性。
+    &#34;&#34;&#34;
+    def __init__(self, command: str, api_provider: Api):
+        &#34;&#34;&#34;
+        构造函数不应被使用，改为`ApiProxy.analyze`以获取正确的子类。
+
+        `command: str` API 名称。
+
+        `api_provider: Api` 提供实际访问的接口。
+        &#34;&#34;&#34;
+        self.command = command
+        self.host, _, self.parameter_names, self.model = AVAIABLE_API[command]
+        self.api_provider = api_provider
+
+    async def _call_api(
+        self, model: MiraiBaseModel = None, **kwargs
+    ) -&gt; MiraiBaseModel:
+        &#34;&#34;&#34;调用 API。
+
+        将结果解析为 Model。
+        &#34;&#34;&#34;
+        raw_response = await async_(
+            self.api_provider.call_api(api=self.host, **kwargs)
+        )
+        model = model or self.model
+        return model.parse_obj(raw_response)
+
+    async def get(self, *args, **kwargs) -&gt; MiraiBaseModel:
+        &#34;&#34;&#34;获取。对于 GET 方法的 API，调用此方法。&#34;&#34;&#34;
+        kwargs = self.parameters_to_dict(*args, **kwargs)
+        return await self._call_api(method=Method.GET, **kwargs)
+
+    async def set(self, *args, **kwargs) -&gt; MiraiBaseModel:
+        &#34;&#34;&#34;设置。对于 POST 方法的 API，可调用此方法。&#34;&#34;&#34;
+        kwargs = self.parameters_to_dict(*args, **kwargs)
+        return await self._call_api(method=Method.POST, **kwargs)
+
+    async def __call__(self, *args, **kwargs) -&gt; MiraiBaseModel:
+        return await self.get(*args, **kwargs)
+
+    def parameters_to_dict(self, *args, **kwargs) -&gt; dict:
+        &#34;&#34;&#34;解析参数列表，提供将位置参数转化为具名参数的支持。&#34;&#34;&#34;
+        if len(args) &gt; len(self.parameter_names):
+            raise TypeError(
+                f&#39;`{self.command}`需要{len(self.parameter_names)}个参数，但传入了{len(args)}个。&#39;
+            )
+        for name, value in zip(self.parameter_names, args):
+            if kwargs.get(name):
+                raise TypeError(f&#39;在`{self.command}`中，具名参数`{name}`与位置参数重复。&#39;)
+            else:
+                kwargs[name] = value
+
+        return {name: encode_model(value) for name, value in kwargs.items()}
+
+    @staticmethod
+    def analyze(api: str, api_provider: Api) -&gt; &#39;ApiProxy&#39;:
+        &#34;&#34;&#34;由 API 名称获取对应的代理对象。&#34;&#34;&#34;
+        api = AVAIABLE_API_ALIAS.get(api) or api
+        try:
+            method = AVAIABLE_API[api][1]
+            return PROXIES[method](api, api_provider)
+        except KeyError as e:
+            raise ValueError(f&#39;`{api}`不是可用的 API。&#39;) from e</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.api.ApiProxyGet" href="#YiriMirai.models.api.ApiProxyGet">ApiProxyGet</a></li>
+<li><a title="YiriMirai.models.api.ApiProxyPost" href="#YiriMirai.models.api.ApiProxyPost">ApiProxyPost</a></li>
+<li><a title="YiriMirai.models.api.ApiProxyRest" href="#YiriMirai.models.api.ApiProxyRest">ApiProxyRest</a></li>
+<li><a title="YiriMirai.models.api.ApiProxyRestPartial" href="#YiriMirai.models.api.ApiProxyRestPartial">ApiProxyRestPartial</a></li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="YiriMirai.models.api.ApiProxy.analyze"><code class="name flex">
+<span>def <span class="ident">analyze</span></span>(<span>api: str, api_provider: <a title="YiriMirai.adapters.base.Api" href="../adapters/base.html#YiriMirai.adapters.base.Api">Api</a>) ‑> <a title="YiriMirai.models.api.ApiProxy" href="#YiriMirai.models.api.ApiProxy">ApiProxy</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>由 API 名称获取对应的代理对象。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def analyze(api: str, api_provider: Api) -&gt; &#39;ApiProxy&#39;:
+    &#34;&#34;&#34;由 API 名称获取对应的代理对象。&#34;&#34;&#34;
+    api = AVAIABLE_API_ALIAS.get(api) or api
+    try:
+        method = AVAIABLE_API[api][1]
+        return PROXIES[method](api, api_provider)
+    except KeyError as e:
+        raise ValueError(f&#39;`{api}`不是可用的 API。&#39;) from e</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="YiriMirai.models.api.ApiProxy.get"><code class="name flex">
+<span>async def <span class="ident">get</span></span>(<span>self, *args, **kwargs) ‑> <a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>获取。对于 GET 方法的 API，调用此方法。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def get(self, *args, **kwargs) -&gt; MiraiBaseModel:
+    &#34;&#34;&#34;获取。对于 GET 方法的 API，调用此方法。&#34;&#34;&#34;
+    kwargs = self.parameters_to_dict(*args, **kwargs)
+    return await self._call_api(method=Method.GET, **kwargs)</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.models.api.ApiProxy.parameters_to_dict"><code class="name flex">
+<span>def <span class="ident">parameters_to_dict</span></span>(<span>self, *args, **kwargs) ‑> dict</span>
+</code></dt>
+<dd>
+<div class="desc"><p>解析参数列表，提供将位置参数转化为具名参数的支持。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def parameters_to_dict(self, *args, **kwargs) -&gt; dict:
+    &#34;&#34;&#34;解析参数列表，提供将位置参数转化为具名参数的支持。&#34;&#34;&#34;
+    if len(args) &gt; len(self.parameter_names):
+        raise TypeError(
+            f&#39;`{self.command}`需要{len(self.parameter_names)}个参数，但传入了{len(args)}个。&#39;
+        )
+    for name, value in zip(self.parameter_names, args):
+        if kwargs.get(name):
+            raise TypeError(f&#39;在`{self.command}`中，具名参数`{name}`与位置参数重复。&#39;)
+        else:
+            kwargs[name] = value
+
+    return {name: encode_model(value) for name, value in kwargs.items()}</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.models.api.ApiProxy.set"><code class="name flex">
+<span>async def <span class="ident">set</span></span>(<span>self, *args, **kwargs) ‑> <a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>设置。对于 POST 方法的 API，可调用此方法。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def set(self, *args, **kwargs) -&gt; MiraiBaseModel:
+    &#34;&#34;&#34;设置。对于 POST 方法的 API，可调用此方法。&#34;&#34;&#34;
+    kwargs = self.parameters_to_dict(*args, **kwargs)
+    return await self._call_api(method=Method.POST, **kwargs)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.models.api.ApiProxyGet"><code class="flex name class">
+<span>class <span class="ident">ApiProxyGet</span></span>
+<span>(</span><span>command: str, api_provider: <a title="YiriMirai.adapters.base.Api" href="../adapters/base.html#YiriMirai.adapters.base.Api">Api</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>GET 方法的 API 代理对象。</p>
+<p>构造函数不应被使用，改为<code><a title="YiriMirai.models.api.ApiProxy.analyze" href="#YiriMirai.models.api.ApiProxy.analyze">ApiProxy.analyze()</a></code>以获取正确的子类。</p>
+<p><code>command: str</code> API 名称。</p>
+<p><code>api_provider: Api</code> 提供实际访问的接口。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ApiProxyGet(ApiProxy):
+    &#34;&#34;&#34;GET 方法的 API 代理对象。&#34;&#34;&#34;
+    async def set(self, *args, **kwargs):
+        &#34;&#34;&#34;GET 方法的 API 不具有`set`。
+
+        调用此方法会报错`TypeError`。
+        &#34;&#34;&#34;
+        raise TypeError(f&#39;`{self.command}`不支持`set`方法。&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.api.ApiProxy" href="#YiriMirai.models.api.ApiProxy">ApiProxy</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="YiriMirai.models.api.ApiProxyGet.set"><code class="name flex">
+<span>async def <span class="ident">set</span></span>(<span>self, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>GET 方法的 API 不具有<code>set</code>。</p>
+<p>调用此方法会报错<code>TypeError</code>。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def set(self, *args, **kwargs):
+    &#34;&#34;&#34;GET 方法的 API 不具有`set`。
+
+    调用此方法会报错`TypeError`。
+    &#34;&#34;&#34;
+    raise TypeError(f&#39;`{self.command}`不支持`set`方法。&#39;)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.api.ApiProxy" href="#YiriMirai.models.api.ApiProxy">ApiProxy</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.api.ApiProxy.analyze" href="#YiriMirai.models.api.ApiProxy.analyze">analyze</a></code></li>
+<li><code><a title="YiriMirai.models.api.ApiProxy.get" href="#YiriMirai.models.api.ApiProxy.get">get</a></code></li>
+<li><code><a title="YiriMirai.models.api.ApiProxy.parameters_to_dict" href="#YiriMirai.models.api.ApiProxy.parameters_to_dict">parameters_to_dict</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.api.ApiProxyPost"><code class="flex name class">
+<span>class <span class="ident">ApiProxyPost</span></span>
+<span>(</span><span>command: str, api_provider: <a title="YiriMirai.adapters.base.Api" href="../adapters/base.html#YiriMirai.adapters.base.Api">Api</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>POST 方法的 API 代理对象。</p>
+<p>构造函数不应被使用，改为<code><a title="YiriMirai.models.api.ApiProxy.analyze" href="#YiriMirai.models.api.ApiProxy.analyze">ApiProxy.analyze()</a></code>以获取正确的子类。</p>
+<p><code>command: str</code> API 名称。</p>
+<p><code>api_provider: Api</code> 提供实际访问的接口。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ApiProxyPost(ApiProxy):
+    &#34;&#34;&#34;POST 方法的 API 代理对象。&#34;&#34;&#34;
+    async def get(self, *args, **kwargs):
+        &#34;&#34;&#34;POST 方法的 API 不具有`get`。
+
+        调用此方法会报错`TypeError`。
+        &#34;&#34;&#34;
+        raise TypeError(f&#39;`{self.command}`不支持`get`方法。&#39;)
+
+    async def __call__(self, *args, **kwargs):
+        return await self.set(*args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.api.ApiProxy" href="#YiriMirai.models.api.ApiProxy">ApiProxy</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="YiriMirai.models.api.ApiProxyPost.get"><code class="name flex">
+<span>async def <span class="ident">get</span></span>(<span>self, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>POST 方法的 API 不具有<code>get</code>。</p>
+<p>调用此方法会报错<code>TypeError</code>。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def get(self, *args, **kwargs):
+    &#34;&#34;&#34;POST 方法的 API 不具有`get`。
+
+    调用此方法会报错`TypeError`。
+    &#34;&#34;&#34;
+    raise TypeError(f&#39;`{self.command}`不支持`get`方法。&#39;)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.api.ApiProxy" href="#YiriMirai.models.api.ApiProxy">ApiProxy</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.api.ApiProxy.analyze" href="#YiriMirai.models.api.ApiProxy.analyze">analyze</a></code></li>
+<li><code><a title="YiriMirai.models.api.ApiProxy.parameters_to_dict" href="#YiriMirai.models.api.ApiProxy.parameters_to_dict">parameters_to_dict</a></code></li>
+<li><code><a title="YiriMirai.models.api.ApiProxy.set" href="#YiriMirai.models.api.ApiProxy.set">set</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.api.ApiProxyRest"><code class="flex name class">
+<span>class <span class="ident">ApiProxyRest</span></span>
+<span>(</span><span>command: str, api_provider: <a title="YiriMirai.adapters.base.Api" href="../adapters/base.html#YiriMirai.adapters.base.Api">Api</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>RESTful 的 API 代理对象。</p>
+<p>直接调用时，传入 GET 和 POST 的公共参数，返回一个<code><a title="YiriMirai.models.api.ApiProxyRestPartial" href="#YiriMirai.models.api.ApiProxyRestPartial">ApiProxyRestPartial</a></code>对象，
+由此对象提供实际调用支持。</p>
+<p>构造函数不应被使用，改为<code><a title="YiriMirai.models.api.ApiProxy.analyze" href="#YiriMirai.models.api.ApiProxy.analyze">ApiProxy.analyze()</a></code>以获取正确的子类。</p>
+<p><code>command: str</code> API 名称。</p>
+<p><code>api_provider: Api</code> 提供实际访问的接口。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ApiProxyRest(ApiProxy):
+    &#34;&#34;&#34;RESTful 的 API 代理对象。
+
+    直接调用时，传入 GET 和 POST 的公共参数，返回一个`ApiProxyRestPartial`对象，
+    由此对象提供实际调用支持。
+    &#34;&#34;&#34;
+    def __call__(self, *args, **kwargs) -&gt; ApiProxyRestPartial:
+        return ApiProxyRestPartial(
+            self.command, self.api_provider, args, kwargs
+        )</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.api.ApiProxy" href="#YiriMirai.models.api.ApiProxy">ApiProxy</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.api.ApiProxy" href="#YiriMirai.models.api.ApiProxy">ApiProxy</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.api.ApiProxy.analyze" href="#YiriMirai.models.api.ApiProxy.analyze">analyze</a></code></li>
+<li><code><a title="YiriMirai.models.api.ApiProxy.get" href="#YiriMirai.models.api.ApiProxy.get">get</a></code></li>
+<li><code><a title="YiriMirai.models.api.ApiProxy.parameters_to_dict" href="#YiriMirai.models.api.ApiProxy.parameters_to_dict">parameters_to_dict</a></code></li>
+<li><code><a title="YiriMirai.models.api.ApiProxy.set" href="#YiriMirai.models.api.ApiProxy.set">set</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.api.ApiProxyRestPartial"><code class="flex name class">
+<span>class <span class="ident">ApiProxyRestPartial</span></span>
+<span>(</span><span>command: str, api_provider: <a title="YiriMirai.adapters.base.Api" href="../adapters/base.html#YiriMirai.adapters.base.Api">Api</a>, partial_args: list, partial_kwargs: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>RESTful 的 API 代理对象（已传入公共参数）。</p>
+<p>构造函数不应被使用，改为<code><a title="YiriMirai.models.api.ApiProxy.analyze" href="#YiriMirai.models.api.ApiProxy.analyze">ApiProxy.analyze()</a></code>以获取正确的子类。</p>
+<p><code>command: str</code> API 名称。</p>
+<p><code>api_provider: Api</code> 提供实际访问的接口。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ApiProxyRestPartial(ApiProxy):
+    &#34;&#34;&#34;RESTful 的 API 代理对象（已传入公共参数）。&#34;&#34;&#34;
+    def __init__(
+        self, command: str, api_provider: Api, partial_args: list,
+        partial_kwargs: dict
+    ):
+        super().__init__(command=command, api_provider=api_provider)
+        self.partial_args = partial_args
+        self.partial_kwargs = partial_kwargs
+
+    async def get(self, *args, **kwargs) -&gt; MiraiBaseModel:
+        &#34;&#34;&#34;获取。&#34;&#34;&#34;
+        return await super().get(
+            *self.partial_args, *args, **self.partial_kwargs, **kwargs
+        )
+
+    async def set(self, *args, **kwargs) -&gt; MiraiBaseModel:
+        &#34;&#34;&#34;设置。&#34;&#34;&#34;
+        kwargs = self.parameters_to_dict(
+            *self.partial_args, *args, **self.partial_kwargs, **kwargs
+        )
+        return await self._call_api(
+            method=Method.POST, model=Response, **kwargs
+        )</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.api.ApiProxy" href="#YiriMirai.models.api.ApiProxy">ApiProxy</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="YiriMirai.models.api.ApiProxyRestPartial.get"><code class="name flex">
+<span>async def <span class="ident">get</span></span>(<span>self, *args, **kwargs) ‑> <a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>获取。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def get(self, *args, **kwargs) -&gt; MiraiBaseModel:
+    &#34;&#34;&#34;获取。&#34;&#34;&#34;
+    return await super().get(
+        *self.partial_args, *args, **self.partial_kwargs, **kwargs
+    )</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.models.api.ApiProxyRestPartial.set"><code class="name flex">
+<span>async def <span class="ident">set</span></span>(<span>self, *args, **kwargs) ‑> <a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>设置。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def set(self, *args, **kwargs) -&gt; MiraiBaseModel:
+    &#34;&#34;&#34;设置。&#34;&#34;&#34;
+    kwargs = self.parameters_to_dict(
+        *self.partial_args, *args, **self.partial_kwargs, **kwargs
+    )
+    return await self._call_api(
+        method=Method.POST, model=Response, **kwargs
+    )</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.api.ApiProxy" href="#YiriMirai.models.api.ApiProxy">ApiProxy</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.api.ApiProxy.analyze" href="#YiriMirai.models.api.ApiProxy.analyze">analyze</a></code></li>
+<li><code><a title="YiriMirai.models.api.ApiProxy.parameters_to_dict" href="#YiriMirai.models.api.ApiProxy.parameters_to_dict">parameters_to_dict</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.api.File"><code class="flex name class">
+<span>class <span class="ident">File</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>文件对象。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class File(MiraiBaseModel):
+    &#34;&#34;&#34;文件对象。&#34;&#34;&#34;
+    name: str
+    id: Optional[str]
+    path: str
+    parent: Optional[&#39;File&#39;] = None
+    contact: Union[Group, Friend]
+    is_file: bool = Field(..., alias=&#39;isFile&#39;)
+    is_dictionary: bool = Field(..., alias=&#39;isDictionary&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.api.File.contact"><code class="name">var <span class="ident">contact</span> : Union[<a title="YiriMirai.models.entities.Group" href="entities.html#YiriMirai.models.entities.Group">Group</a>, <a title="YiriMirai.models.entities.Friend" href="entities.html#YiriMirai.models.entities.Friend">Friend</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.api.File.id"><code class="name">var <span class="ident">id</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.api.File.is_dictionary"><code class="name">var <span class="ident">is_dictionary</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.api.File.is_file"><code class="name">var <span class="ident">is_file</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.api.File.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.api.File.parent"><code class="name">var <span class="ident">parent</span> : Union[<a title="YiriMirai.models.api.File" href="#YiriMirai.models.api.File">File</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.api.File.path"><code class="name">var <span class="ident">path</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.models.api.FileInfo"><code class="flex name class">
+<span>class <span class="ident">FileInfo</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>文件信息。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FileInfo(Response):
+    &#34;&#34;&#34;文件信息。&#34;&#34;&#34;
+    data: File</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.api.Response" href="#YiriMirai.models.api.Response">Response</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.api.FileInfo.data"><code class="name">var <span class="ident">data</span> : <a title="YiriMirai.models.api.File" href="#YiriMirai.models.api.File">File</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.models.api.FileList"><code class="flex name class">
+<span>class <span class="ident">FileList</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>文件列表。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FileList(Response):
+    &#34;&#34;&#34;文件列表。&#34;&#34;&#34;
+    data: List[File]
+
+    def __iter__(self):
+        yield from self.data</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.api.Response" href="#YiriMirai.models.api.Response">Response</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.api.FileList.data"><code class="name">var <span class="ident">data</span> : List[<a title="YiriMirai.models.api.File" href="#YiriMirai.models.api.File">File</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.models.api.FileMkdir"><code class="flex name class">
+<span>class <span class="ident">FileMkdir</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>创建文件夹的响应。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FileMkdir(Response):
+    &#34;&#34;&#34;创建文件夹的响应。&#34;&#34;&#34;
+    data: File</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.api.Response" href="#YiriMirai.models.api.Response">Response</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.api.FileMkdir.data"><code class="name">var <span class="ident">data</span> : <a title="YiriMirai.models.api.File" href="#YiriMirai.models.api.File">File</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.models.api.FriendList"><code class="flex name class">
+<span>class <span class="ident">FriendList</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>好友列表。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FriendList(Response):
+    &#34;&#34;&#34;好友列表。&#34;&#34;&#34;
+    data: List[Friend]
+
+    def __iter__(self):
+        yield from self.data</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.api.Response" href="#YiriMirai.models.api.Response">Response</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.api.FriendList.data"><code class="name">var <span class="ident">data</span> : List[<a title="YiriMirai.models.entities.Friend" href="entities.html#YiriMirai.models.entities.Friend">Friend</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.models.api.GroupList"><code class="flex name class">
+<span>class <span class="ident">GroupList</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群组列表。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupList(Response):
+    &#34;&#34;&#34;群组列表。&#34;&#34;&#34;
+    data: List[Group]
+
+    def __iter__(self):
+        yield from self.data</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.api.Response" href="#YiriMirai.models.api.Response">Response</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.api.GroupList.data"><code class="name">var <span class="ident">data</span> : List[<a title="YiriMirai.models.entities.Group" href="entities.html#YiriMirai.models.entities.Group">Group</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.models.api.MemberList"><code class="flex name class">
+<span>class <span class="ident">MemberList</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群成员列表。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberList(Response):
+    &#34;&#34;&#34;群成员列表。&#34;&#34;&#34;
+    data: List[GroupMember]
+
+    def __iter__(self):
+        yield from self.data</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.api.Response" href="#YiriMirai.models.api.Response">Response</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.api.MemberList.data"><code class="name">var <span class="ident">data</span> : List[<a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.models.api.MessageFromId"><code class="flex name class">
+<span>class <span class="ident">MessageFromId</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>通过 message_id 获取的消息。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MessageFromId(Response):
+    &#39;&#39;&#39;通过 message_id 获取的消息。&#39;&#39;&#39;
+    data: MessageEvent</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.api.Response" href="#YiriMirai.models.api.Response">Response</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.api.MessageFromId.data"><code class="name">var <span class="ident">data</span> : <a title="YiriMirai.models.events.MessageEvent" href="events.html#YiriMirai.models.events.MessageEvent">MessageEvent</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.models.api.MessageResponse"><code class="flex name class">
+<span>class <span class="ident">MessageResponse</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>发送消息的响应。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MessageResponse(Response):
+    &#34;&#34;&#34;发送消息的响应。&#34;&#34;&#34;
+    message_id: int = Field(..., alias=&#39;messageId&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.api.Response" href="#YiriMirai.models.api.Response">Response</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.api.MessageResponse.message_id"><code class="name">var <span class="ident">message_id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.models.api.Profile"><code class="flex name class">
+<span>class <span class="ident">Profile</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>好友资料。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Profile(MiraiBaseModel):
+    &#34;&#34;&#34;好友资料。&#34;&#34;&#34;
+    nickname: str
+    email: str
+    age: int
+    level: int
+    sign: str
+    sex: Sex</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.api.Profile.age"><code class="name">var <span class="ident">age</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.api.Profile.email"><code class="name">var <span class="ident">email</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.api.Profile.level"><code class="name">var <span class="ident">level</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.api.Profile.nickname"><code class="name">var <span class="ident">nickname</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.api.Profile.sex"><code class="name">var <span class="ident">sex</span> : <a title="YiriMirai.models.api.Sex" href="#YiriMirai.models.api.Sex">Sex</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.api.Profile.sign"><code class="name">var <span class="ident">sign</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.models.api.Response"><code class="flex name class">
+<span>class <span class="ident">Response</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>响应对象。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Response(MiraiBaseModel):
+    &#34;&#34;&#34;响应对象。&#34;&#34;&#34;
+    code: int
+    msg: str</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.api.About" href="#YiriMirai.models.api.About">About</a></li>
+<li><a title="YiriMirai.models.api.FileInfo" href="#YiriMirai.models.api.FileInfo">FileInfo</a></li>
+<li><a title="YiriMirai.models.api.FileList" href="#YiriMirai.models.api.FileList">FileList</a></li>
+<li><a title="YiriMirai.models.api.FileMkdir" href="#YiriMirai.models.api.FileMkdir">FileMkdir</a></li>
+<li><a title="YiriMirai.models.api.FriendList" href="#YiriMirai.models.api.FriendList">FriendList</a></li>
+<li><a title="YiriMirai.models.api.GroupList" href="#YiriMirai.models.api.GroupList">GroupList</a></li>
+<li><a title="YiriMirai.models.api.MemberList" href="#YiriMirai.models.api.MemberList">MemberList</a></li>
+<li><a title="YiriMirai.models.api.MessageFromId" href="#YiriMirai.models.api.MessageFromId">MessageFromId</a></li>
+<li><a title="YiriMirai.models.api.MessageResponse" href="#YiriMirai.models.api.MessageResponse">MessageResponse</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.api.Response.code"><code class="name">var <span class="ident">code</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.api.Response.msg"><code class="name">var <span class="ident">msg</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.models.api.Sex"><code class="flex name class">
+<span>class <span class="ident">Sex</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>性别。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Sex(str, Enum):
+    &#34;&#34;&#34;性别。&#34;&#34;&#34;
+    Unknown = &#39;UNKNOWN&#39;
+    Male = &#39;MALE&#39;
+    Female = &#39;FEMALE&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.str</li>
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.api.Sex.Female"><code class="name">var <span class="ident">Female</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.api.Sex.Male"><code class="name">var <span class="ident">Male</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.api.Sex.Unknown"><code class="name">var <span class="ident">Unknown</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="YiriMirai.models" href="index.html">YiriMirai.models</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="YiriMirai.models.api.encode_model" href="#YiriMirai.models.api.encode_model">encode_model</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="YiriMirai.models.api.About" href="#YiriMirai.models.api.About">About</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.api.About.data" href="#YiriMirai.models.api.About.data">data</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.api.ApiProxy" href="#YiriMirai.models.api.ApiProxy">ApiProxy</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.api.ApiProxy.analyze" href="#YiriMirai.models.api.ApiProxy.analyze">analyze</a></code></li>
+<li><code><a title="YiriMirai.models.api.ApiProxy.get" href="#YiriMirai.models.api.ApiProxy.get">get</a></code></li>
+<li><code><a title="YiriMirai.models.api.ApiProxy.parameters_to_dict" href="#YiriMirai.models.api.ApiProxy.parameters_to_dict">parameters_to_dict</a></code></li>
+<li><code><a title="YiriMirai.models.api.ApiProxy.set" href="#YiriMirai.models.api.ApiProxy.set">set</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.api.ApiProxyGet" href="#YiriMirai.models.api.ApiProxyGet">ApiProxyGet</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.api.ApiProxyGet.set" href="#YiriMirai.models.api.ApiProxyGet.set">set</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.api.ApiProxyPost" href="#YiriMirai.models.api.ApiProxyPost">ApiProxyPost</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.api.ApiProxyPost.get" href="#YiriMirai.models.api.ApiProxyPost.get">get</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.api.ApiProxyRest" href="#YiriMirai.models.api.ApiProxyRest">ApiProxyRest</a></code></h4>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.api.ApiProxyRestPartial" href="#YiriMirai.models.api.ApiProxyRestPartial">ApiProxyRestPartial</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.api.ApiProxyRestPartial.get" href="#YiriMirai.models.api.ApiProxyRestPartial.get">get</a></code></li>
+<li><code><a title="YiriMirai.models.api.ApiProxyRestPartial.set" href="#YiriMirai.models.api.ApiProxyRestPartial.set">set</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.api.File" href="#YiriMirai.models.api.File">File</a></code></h4>
+<ul class="two-column">
+<li><code><a title="YiriMirai.models.api.File.contact" href="#YiriMirai.models.api.File.contact">contact</a></code></li>
+<li><code><a title="YiriMirai.models.api.File.id" href="#YiriMirai.models.api.File.id">id</a></code></li>
+<li><code><a title="YiriMirai.models.api.File.is_dictionary" href="#YiriMirai.models.api.File.is_dictionary">is_dictionary</a></code></li>
+<li><code><a title="YiriMirai.models.api.File.is_file" href="#YiriMirai.models.api.File.is_file">is_file</a></code></li>
+<li><code><a title="YiriMirai.models.api.File.name" href="#YiriMirai.models.api.File.name">name</a></code></li>
+<li><code><a title="YiriMirai.models.api.File.parent" href="#YiriMirai.models.api.File.parent">parent</a></code></li>
+<li><code><a title="YiriMirai.models.api.File.path" href="#YiriMirai.models.api.File.path">path</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.api.FileInfo" href="#YiriMirai.models.api.FileInfo">FileInfo</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.api.FileInfo.data" href="#YiriMirai.models.api.FileInfo.data">data</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.api.FileList" href="#YiriMirai.models.api.FileList">FileList</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.api.FileList.data" href="#YiriMirai.models.api.FileList.data">data</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.api.FileMkdir" href="#YiriMirai.models.api.FileMkdir">FileMkdir</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.api.FileMkdir.data" href="#YiriMirai.models.api.FileMkdir.data">data</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.api.FriendList" href="#YiriMirai.models.api.FriendList">FriendList</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.api.FriendList.data" href="#YiriMirai.models.api.FriendList.data">data</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.api.GroupList" href="#YiriMirai.models.api.GroupList">GroupList</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.api.GroupList.data" href="#YiriMirai.models.api.GroupList.data">data</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.api.MemberList" href="#YiriMirai.models.api.MemberList">MemberList</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.api.MemberList.data" href="#YiriMirai.models.api.MemberList.data">data</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.api.MessageFromId" href="#YiriMirai.models.api.MessageFromId">MessageFromId</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.api.MessageFromId.data" href="#YiriMirai.models.api.MessageFromId.data">data</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.api.MessageResponse" href="#YiriMirai.models.api.MessageResponse">MessageResponse</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.api.MessageResponse.message_id" href="#YiriMirai.models.api.MessageResponse.message_id">message_id</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.api.Profile" href="#YiriMirai.models.api.Profile">Profile</a></code></h4>
+<ul class="two-column">
+<li><code><a title="YiriMirai.models.api.Profile.age" href="#YiriMirai.models.api.Profile.age">age</a></code></li>
+<li><code><a title="YiriMirai.models.api.Profile.email" href="#YiriMirai.models.api.Profile.email">email</a></code></li>
+<li><code><a title="YiriMirai.models.api.Profile.level" href="#YiriMirai.models.api.Profile.level">level</a></code></li>
+<li><code><a title="YiriMirai.models.api.Profile.nickname" href="#YiriMirai.models.api.Profile.nickname">nickname</a></code></li>
+<li><code><a title="YiriMirai.models.api.Profile.sex" href="#YiriMirai.models.api.Profile.sex">sex</a></code></li>
+<li><code><a title="YiriMirai.models.api.Profile.sign" href="#YiriMirai.models.api.Profile.sign">sign</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.api.Response" href="#YiriMirai.models.api.Response">Response</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.api.Response.code" href="#YiriMirai.models.api.Response.code">code</a></code></li>
+<li><code><a title="YiriMirai.models.api.Response.msg" href="#YiriMirai.models.api.Response.msg">msg</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.api.Sex" href="#YiriMirai.models.api.Sex">Sex</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.api.Sex.Female" href="#YiriMirai.models.api.Sex.Female">Female</a></code></li>
+<li><code><a title="YiriMirai.models.api.Sex.Male" href="#YiriMirai.models.api.Sex.Male">Male</a></code></li>
+<li><code><a title="YiriMirai.models.api.Sex.Unknown" href="#YiriMirai.models.api.Sex.Unknown">Unknown</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>

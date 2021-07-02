@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""
+此模块提供实体和配置项模型。
+"""
 import abc
 from datetime import datetime
 from enum import Enum
@@ -9,17 +12,18 @@ from YiriMirai.models.base import MiraiBaseModel
 
 
 class Entity(MiraiBaseModel):
-    '''实体，表示一个用户或群。'''
+    """实体，表示一个用户或群。"""
     def __repr__(self):
         return f'<{self.__class__.__name__} {str(self)}>'
 
     @abc.abstractmethod
     def get_avatar_url(self) -> str:
+        """获取头像图片链接。"""
         pass
 
 
 class Friend(Entity):
-    '''好友。'''
+    """好友。"""
     id: int
     nickname: Optional[str]
     remark: Optional[str]
@@ -29,14 +33,14 @@ class Friend(Entity):
 
 
 class Permission(str, Enum):
-    '''群成员身份权限。'''
+    """群成员身份权限。"""
     Member = "MEMBER"
     Administrator = "ADMINISTRATOR"
     Owner = "OWNER"
 
 
 class Group(Entity):
-    '''群。'''
+    """群。"""
     id: int
     name: str
     permission: Permission
@@ -46,7 +50,7 @@ class Group(Entity):
 
 
 class GroupMember(Entity):
-    '''群成员。'''
+    """群成员。"""
     id: int
     member_name: str = Field(..., alias='memberName')
     permission: Permission
@@ -64,7 +68,7 @@ class GroupMember(Entity):
 
 
 class Sender(Entity):
-    '''来自其他客户端的用户。'''
+    """来自其他客户端的用户。"""
     id: int
     platform: str
 
@@ -73,9 +77,9 @@ class Sender(Entity):
 
 
 class Config(MiraiBaseModel):
-    '''配置项类型。'''
+    """配置项类型。"""
     def modify(self, **kwargs) -> 'Config':
-        '''修改部分设置。'''
+        """修改部分设置。"""
         for k, v in kwargs.items():
             if k in self.__fields__:
                 setattr(self, k, v)
@@ -85,7 +89,7 @@ class Config(MiraiBaseModel):
 
 
 class GroupConfig(Config):
-    '''群配置。'''
+    """群配置。"""
     name: str
     announcement: str
     confess_talk: bool = Field(..., alias='confessTalk')
@@ -95,7 +99,7 @@ class GroupConfig(Config):
 
 
 class MemberInfo(Config, GroupMember):
-    '''群成员信息。'''
+    """群成员信息。"""
 
 
 __all__ = [
@@ -105,4 +109,7 @@ __all__ = [
     'GroupMember',
     'Permission',
     'Sender',
+    'Config',
+    'GroupConfig',
+    'MemberInfo',
 ]

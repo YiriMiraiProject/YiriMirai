@@ -1,0 +1,3221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>YiriMirai.models.events API documentation</title>
+<meta name="description" content="此模块提供事件模型。" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>YiriMirai.models.events</code></h1>
+</header>
+<section id="section-intro">
+<p>此模块提供事件模型。</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># -*- coding: utf-8 -*-
+&#34;&#34;&#34;
+此模块提供事件模型。
+&#34;&#34;&#34;
+import sys
+from datetime import datetime
+from typing import Optional, Type
+
+try:
+    from typing import Literal
+except ImportError:
+    from typing_extensions import Literal
+
+from pydantic import Field
+from YiriMirai.models.base import MiraiBaseModel
+from YiriMirai.models.entities import (
+    Friend, Group, GroupMember, Permission, Sender
+)
+from YiriMirai.models.message import MessageChain
+
+
+class Event(MiraiBaseModel):
+    &#34;&#34;&#34;事件基类。&#34;&#34;&#34;
+    type: str
+
+    @classmethod
+    def get_subtype(cls, name: str) -&gt; Type[&#39;Event&#39;]:
+        &#34;&#34;&#34;根据类名称，获取相应的子类类型。
+
+        `name` 类名称。
+        &#34;&#34;&#34;
+        try:
+            type_ = getattr(sys.modules[__name__], name)
+            if not issubclass(type_, cls):
+                raise ValueError(f&#39;`{name}`不是`{cls.__name__}`的子类！&#39;)
+            return type_
+        except AttributeError as e:
+            raise ValueError(f&#39;`{name}`不是`{cls.__name__}`的子类！&#39;) from e
+
+    @classmethod
+    def parse_obj(cls, event: dict):
+        &#34;&#34;&#34;通过 mirai-api-http 发回的事件，构造对应的`Event`对象。
+
+        `event: dict` 已解析的事件 JSON。
+        &#34;&#34;&#34;
+        if cls == Event:
+            EventType = cls.get_subtype(event[&#39;type&#39;])
+            return EventType.parse_obj(event)
+        else:
+            return super().parse_obj(event)
+
+
+###############################
+# Bot Event
+class BotEvent(Event):
+    &#34;&#34;&#34;Bot 自身事件。&#34;&#34;&#34;
+    qq: int
+
+
+class BotOnlineEvent(BotEvent):
+    &#34;&#34;&#34;Bot 登陆成功。&#34;&#34;&#34;
+    type: str = &#39;BotOnlineEvent&#39;
+
+
+class BotOfflineEventActive(BotEvent):
+    &#34;&#34;&#34;Bot 主动离线。&#34;&#34;&#34;
+    type: str = &#39;BotOfflineEventActive&#39;
+
+
+class BotOfflineEventForce(BotEvent):
+    &#34;&#34;&#34;Bot被挤下线。&#34;&#34;&#34;
+    type: str = &#39;BotOfflineEventForce&#39;
+
+
+class BotOfflineEventDropped(BotEvent):
+    &#34;&#34;&#34;Bot 被服务器断开或因网络问题而掉线。&#34;&#34;&#34;
+    type: str = &#39;BotOfflineEventDropped&#39;
+
+
+class BotReloginEvent(BotEvent):
+    &#34;&#34;&#34;Bot 主动重新登录。&#34;&#34;&#34;
+    type: str = &#39;BotReloginEvent&#39;
+
+
+###############################
+# Friend Event
+
+
+class FriendEvent(Event):
+    &#34;&#34;&#34;好友事件。&#34;&#34;&#34;
+    friend: Friend
+
+
+class FriendInputStatusChangedEvent(FriendEvent):
+    &#34;&#34;&#34;好友输入状态改变。&#34;&#34;&#34;
+    type: str = &#39;FriendInputStatusChangedEvent&#39;
+    inputting: bool
+
+
+class FriendNickChangedEvent(FriendEvent):
+    &#34;&#34;&#34;好友昵称改变。&#34;&#34;&#34;
+    type: str = &#39;FriendNickChangedEvent&#39;
+    from_: str = Field(..., alias=&#34;from&#34;)
+    to: str
+
+
+###############################
+# Group Event
+
+
+class GroupEvent(Event):
+    &#34;&#34;&#34;群事件。&#34;&#34;&#34;
+    # group: Group
+    # 一个奇怪的现象：群事件不一定有 group，它可能藏在 opeartor.group 里
+
+
+class BotGroupPermissionChangeEvent(GroupEvent):
+    &#34;&#34;&#34; Bot在群里的权限被改变。&#34;&#34;&#34;
+    type: str = &#39;BotGroupPermissionChangeEvent&#39;
+    origin: Permission
+    current: Permission
+    group: Group
+
+
+class BotMuteEvent(GroupEvent):
+    &#34;&#34;&#34;Bot 被禁言。&#34;&#34;&#34;
+    type: str = &#39;BotMuteEvent&#39;
+    durationSeconds: int
+    operator: Optional[GroupMember]
+
+
+class BotUnmuteEvent(GroupEvent):
+    &#34;&#34;&#34;Bot 被取消禁言。&#34;&#34;&#34;
+    type: str = &#39;BotUnmuteEvent&#39;
+    operator: Optional[GroupMember]
+
+
+class BotJoinGroupEvent(GroupEvent):
+    &#34;&#34;&#34;Bot 加入了一个新群。&#34;&#34;&#34;
+    type: str = &#39;BotJoinGroupEvent&#39;
+    group: Group
+
+
+class BotLeaveEventActive(GroupEvent):
+    &#34;&#34;&#34;Bot 主动退出一个群。&#34;&#34;&#34;
+    type: str = &#39;BotLeaveEventActive&#39;
+    group: Group
+
+
+class BotLeaveEventKick(GroupEvent):
+    &#34;&#34;&#34;Bot 被踢出一个群。&#34;&#34;&#34;
+    type: str = &#39;BotLeaveEventKick&#39;
+    group: Group
+
+
+class GroupRecallEvent(GroupEvent):
+    &#34;&#34;&#34;群消息撤回。&#34;&#34;&#34;
+    type: str = &#39;GroupRecallEvent&#39;
+    authorId: int
+    messageId: int
+    time: datetime
+    group: Group
+    operator: Optional[GroupMember]
+
+
+class FriendRecallEvent(Event):
+    &#34;&#34;&#34;好友消息撤回。&#34;&#34;&#34;
+    type: str = &#39;FriendRecallEvent&#39;
+    # 按照文档顺序，这个事件确实应该在这个位置。
+    # 而且它不符合 FriendEvent 的形式，就放在这里吧。
+    authorId: int
+    messageId: int
+    time: int
+    operator: int
+
+
+class GroupNameChangeEvent(GroupEvent):
+    &#34;&#34;&#34;某个群名改变。&#34;&#34;&#34;
+    type: str = &#39;GroupNameChangeEvent&#39;
+    origin: str
+    current: str
+    group: Group
+    operator: Optional[GroupMember]
+
+
+class GroupEntranceAnnouncementChangeEvent(GroupEvent):
+    &#34;&#34;&#34;某群入群公告改变。&#34;&#34;&#34;
+    type: str = &#39;GroupEntranceAnnouncementChangeEvent&#39;
+    origin: str
+    current: str
+    group: Group
+    operator: Optional[GroupMember]
+
+
+class GroupMuteAllEvent(GroupEvent):
+    &#34;&#34;&#34;全员禁言。&#34;&#34;&#34;
+    type: str = &#39;GroupMuteAllEvent&#39;
+    origin: bool
+    current: bool
+    group: Group
+    operator: Optional[GroupMember]
+
+
+class GroupAllowAnonymousChatEvent(GroupEvent):
+    &#34;&#34;&#34;匿名聊天。&#34;&#34;&#34;
+    type: str = &#39;GroupAllowAnonymousChatEvent&#39;
+    origin: bool
+    current: bool
+    group: Group
+    operator: Optional[GroupMember]
+
+
+class GroupAllowConfessTalkEvent(GroupEvent):
+    &#34;&#34;&#34;坦白说。&#34;&#34;&#34;
+    type: str = &#39;GroupAllowConfessTalkEvent&#39;
+    origin: bool
+    current: bool
+    group: Group
+    isByBot: bool
+
+
+class GroupAllowMemberInviteEvent(GroupEvent):
+    &#34;&#34;&#34;允许群员邀请好友加群。&#34;&#34;&#34;
+    type: str = &#39;GroupAllowMemberInviteEvent&#39;
+    origin: bool
+    current: bool
+    group: Group
+    operator: Optional[GroupMember]
+
+
+class MemberJoinEvent(GroupEvent):
+    &#34;&#34;&#34;新人入群。&#34;&#34;&#34;
+    type: str = &#39;MemberJoinEvent&#39;
+    member: GroupMember
+
+
+class MemberLeaveEventKick(GroupEvent):
+    &#34;&#34;&#34;成员被踢出群（该成员不是Bot）。&#34;&#34;&#34;
+    type: str = &#39;MemberLeaveEventKick&#39;
+    member: GroupMember
+    operator: Optional[GroupMember]
+
+
+class MemberLeaveEventQuit(GroupEvent):
+    &#34;&#34;&#34;成员主动离群（该成员不是Bot）。&#34;&#34;&#34;
+    type: str = &#39;MemberLeaveEventQuit&#39;
+    member: GroupMember
+
+
+class MemberCardChangeEvent(GroupEvent):
+    &#34;&#34;&#34;群名片改动。&#34;&#34;&#34;
+    type: str = &#39;MemberCardChangeEvent&#39;
+    origin: str
+    current: str
+    member: GroupMember
+
+
+class MemberSpecialTitleChangeEvent(GroupEvent):
+    &#34;&#34;&#34;群头衔改动（只有群主有操作权限）。&#34;&#34;&#34;
+    type: str = &#39;MemberSpecialTitleChangeEvent&#39;
+    origin: str
+    current: str
+    member: GroupMember
+
+
+class MemberPermissionChangeEvent(GroupEvent):
+    &#34;&#34;&#34;成员权限改变（该成员不是Bot）。&#34;&#34;&#34;
+    type: str = &#39;MemberPermissionChangeEvent&#39;
+    origin: str
+    current: str
+    member: GroupMember
+
+
+class MemberMuteEvent(GroupEvent):
+    &#34;&#34;&#34;群成员被禁言（该成员不是Bot）。&#34;&#34;&#34;
+    type: str = &#39;MemberMuteEvent&#39;
+    durationSeconds: int
+
+
+class MemberUnmuteEvent(GroupEvent):
+    &#34;&#34;&#34;群成员被取消禁言（该成员不是Bot）。&#34;&#34;&#34;
+    type: str = &#39;MemberUnmuteEvent&#39;
+    member: GroupMember
+    operator: Optional[GroupMember]
+
+
+class MemberHonorChangeEvent(GroupEvent):
+    &#34;&#34;&#34;群员称号改变。&#34;&#34;&#34;
+    type: str = &#39;MemberHonorChangeEvent&#39;
+    member: GroupMember
+    action: Literal[&#39;achieve&#39;, &#39;lose&#39;]
+    honor: str
+
+
+###############################
+# Request Event
+
+
+class RequestEvent(Event):
+    &#34;&#34;&#34;申请事件。&#34;&#34;&#34;
+    event_id: int = Field(..., alias=&#39;eventId&#39;)
+
+
+class NewFriendRequestEvent(RequestEvent):
+    &#34;&#34;&#34;添加好友申请。&#34;&#34;&#34;
+    type: str = &#39;NewFriendRequestEvent&#39;
+    from_id: int = Field(..., alias=&#39;fromId&#39;)
+    group_id: int = Field(..., alias=&#39;groupId&#39;)
+    nick: str
+    message: str
+
+
+class MemberJoinRequestEvent(RequestEvent):
+    &#34;&#34;&#34;用户入群申请（Bot需要有管理员权限）。&#34;&#34;&#34;
+    type: str = &#39;MemberJoinRequestEvent&#39;
+    from_id: int = Field(..., alias=&#39;fromId&#39;)
+    group_id: int = Field(..., alias=&#39;groupId&#39;)
+    group_name: str = Field(..., alias=&#39;groupName&#39;)
+    nick: str
+    message: str
+
+
+class BotInvitedJoinGroupRequestEvent(RequestEvent):
+    &#34;&#34;&#34;Bot 被邀请入群申请。&#34;&#34;&#34;
+    type: str = &#39;BotInvitedJoinGroupRequestEvent&#39;
+    from_id: int = Field(..., alias=&#39;fromId&#39;)
+    group_id: int = Field(..., alias=&#39;groupId&#39;)
+    group_name: str = Field(..., alias=&#39;groupName&#39;)
+    nick: str
+    message: str
+
+
+###############################
+# Command Event
+
+
+class CommandEvent(Event):
+    &#34;&#34;&#34;命令事件。&#34;&#34;&#34;
+
+
+class CommandExecutedEvent(CommandEvent):
+    &#34;&#34;&#34;命令被执行。&#34;&#34;&#34;
+    type: str = &#39;CommandExecutedEvent&#39;
+    name: str
+    friend: Optional[Friend]
+    member: Optional[GroupMember]
+    args: MessageChain
+
+
+###############################
+# Message Event
+class MessageEvent(Event):
+    &#34;&#34;&#34;消息事件。&#34;&#34;&#34;
+    message_chain: MessageChain = Field(..., alias=&#39;messageChain&#39;)
+
+
+class FriendMessage(MessageEvent):
+    &#34;&#34;&#34;好友消息&#34;&#34;&#34;
+    type: str = &#39;FriendMessage&#39;
+    sender: Friend
+
+
+class GroupMessage(MessageEvent):
+    &#34;&#34;&#34;群消息。&#34;&#34;&#34;
+    type: str = &#39;GroupMessage&#39;
+    sender: GroupMember
+
+
+class TempMessage(MessageEvent):
+    &#34;&#34;&#34;群临时消息。&#34;&#34;&#34;
+    type: str = &#39;TempMessage&#39;
+    sender: GroupMember
+
+
+class StrangerMessage(MessageEvent):
+    &#34;&#34;&#34;陌生人消息。&#34;&#34;&#34;
+    type: str = &#39;StrangerMessage&#39;
+    sender: Friend
+
+
+class OtherClientMessage(MessageEvent):
+    &#34;&#34;&#34;其他客户端消息。&#34;&#34;&#34;
+    type: str = &#39;OtherClientMessage&#39;
+    sender: Sender
+
+
+__all__ = [
+    &#39;BotEvent&#39;,
+    &#39;BotGroupPermissionChangeEvent&#39;,
+    &#39;BotInvitedJoinGroupRequestEvent&#39;,
+    &#39;BotJoinGroupEvent&#39;,
+    &#39;BotLeaveEventActive&#39;,
+    &#39;BotLeaveEventKick&#39;,
+    &#39;BotMuteEvent&#39;,
+    &#39;BotOfflineEventActive&#39;,
+    &#39;BotOfflineEventDropped&#39;,
+    &#39;BotOfflineEventForce&#39;,
+    &#39;BotOnlineEvent&#39;,
+    &#39;BotReloginEvent&#39;,
+    &#39;BotUnmuteEvent&#39;,
+    &#39;CommandEvent&#39;,
+    &#39;CommandExecutedEvent&#39;,
+    &#39;Event&#39;,
+    &#39;FriendEvent&#39;,
+    &#39;FriendInputStatusChangedEvent&#39;,
+    &#39;FriendMessage&#39;,
+    &#39;FriendNickChangedEvent&#39;,
+    &#39;FriendRecallEvent&#39;,
+    &#39;GroupAllowAnonymousChatEvent&#39;,
+    &#39;GroupAllowConfessTalkEvent&#39;,
+    &#39;GroupAllowMemberInviteEvent&#39;,
+    &#39;GroupEntranceAnnouncementChangeEvent&#39;,
+    &#39;GroupEvent&#39;,
+    &#39;GroupMessage&#39;,
+    &#39;GroupMuteAllEvent&#39;,
+    &#39;GroupNameChangeEvent&#39;,
+    &#39;GroupRecallEvent&#39;,
+    &#39;MemberCardChangeEvent&#39;,
+    &#39;MemberHonorChangeEvent&#39;,
+    &#39;MemberJoinEvent&#39;,
+    &#39;MemberJoinRequestEvent&#39;,
+    &#39;MemberLeaveEventKick&#39;,
+    &#39;MemberLeaveEventQuit&#39;,
+    &#39;MemberMuteEvent&#39;,
+    &#39;MemberPermissionChangeEvent&#39;,
+    &#39;MemberSpecialTitleChangeEvent&#39;,
+    &#39;MemberUnmuteEvent&#39;,
+    &#39;MessageEvent&#39;,
+    &#39;NewFriendRequestEvent&#39;,
+    &#39;OtherClientMessage&#39;,
+    &#39;RequestEvent&#39;,
+    &#39;StrangerMessage&#39;,
+    &#39;TempMessage&#39;,
+]</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="YiriMirai.models.events.BotEvent"><code class="flex name class">
+<span>class <span class="ident">BotEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 自身事件。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotEvent(Event):
+    &#34;&#34;&#34;Bot 自身事件。&#34;&#34;&#34;
+    qq: int</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.BotOfflineEventActive" href="#YiriMirai.models.events.BotOfflineEventActive">BotOfflineEventActive</a></li>
+<li><a title="YiriMirai.models.events.BotOfflineEventDropped" href="#YiriMirai.models.events.BotOfflineEventDropped">BotOfflineEventDropped</a></li>
+<li><a title="YiriMirai.models.events.BotOfflineEventForce" href="#YiriMirai.models.events.BotOfflineEventForce">BotOfflineEventForce</a></li>
+<li><a title="YiriMirai.models.events.BotOnlineEvent" href="#YiriMirai.models.events.BotOnlineEvent">BotOnlineEvent</a></li>
+<li><a title="YiriMirai.models.events.BotReloginEvent" href="#YiriMirai.models.events.BotReloginEvent">BotReloginEvent</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.BotEvent.qq"><code class="name">var <span class="ident">qq</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.Event.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.Event.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.BotGroupPermissionChangeEvent"><code class="flex name class">
+<span>class <span class="ident">BotGroupPermissionChangeEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot在群里的权限被改变。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotGroupPermissionChangeEvent(GroupEvent):
+    &#34;&#34;&#34; Bot在群里的权限被改变。&#34;&#34;&#34;
+    type: str = &#39;BotGroupPermissionChangeEvent&#39;
+    origin: Permission
+    current: Permission
+    group: Group</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.BotGroupPermissionChangeEvent.current"><code class="name">var <span class="ident">current</span> : <a title="YiriMirai.models.entities.Permission" href="entities.html#YiriMirai.models.entities.Permission">Permission</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.BotGroupPermissionChangeEvent.group"><code class="name">var <span class="ident">group</span> : <a title="YiriMirai.models.entities.Group" href="entities.html#YiriMirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.BotGroupPermissionChangeEvent.origin"><code class="name">var <span class="ident">origin</span> : <a title="YiriMirai.models.entities.Permission" href="entities.html#YiriMirai.models.entities.Permission">Permission</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.BotGroupPermissionChangeEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.BotInvitedJoinGroupRequestEvent"><code class="flex name class">
+<span>class <span class="ident">BotInvitedJoinGroupRequestEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 被邀请入群申请。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotInvitedJoinGroupRequestEvent(RequestEvent):
+    &#34;&#34;&#34;Bot 被邀请入群申请。&#34;&#34;&#34;
+    type: str = &#39;BotInvitedJoinGroupRequestEvent&#39;
+    from_id: int = Field(..., alias=&#39;fromId&#39;)
+    group_id: int = Field(..., alias=&#39;groupId&#39;)
+    group_name: str = Field(..., alias=&#39;groupName&#39;)
+    nick: str
+    message: str</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.RequestEvent" href="#YiriMirai.models.events.RequestEvent">RequestEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.BotInvitedJoinGroupRequestEvent.from_id"><code class="name">var <span class="ident">from_id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.BotInvitedJoinGroupRequestEvent.group_id"><code class="name">var <span class="ident">group_id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.BotInvitedJoinGroupRequestEvent.group_name"><code class="name">var <span class="ident">group_name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.BotInvitedJoinGroupRequestEvent.message"><code class="name">var <span class="ident">message</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.BotInvitedJoinGroupRequestEvent.nick"><code class="name">var <span class="ident">nick</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.BotInvitedJoinGroupRequestEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.RequestEvent" href="#YiriMirai.models.events.RequestEvent">RequestEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.RequestEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.RequestEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.BotJoinGroupEvent"><code class="flex name class">
+<span>class <span class="ident">BotJoinGroupEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 加入了一个新群。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotJoinGroupEvent(GroupEvent):
+    &#34;&#34;&#34;Bot 加入了一个新群。&#34;&#34;&#34;
+    type: str = &#39;BotJoinGroupEvent&#39;
+    group: Group</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.BotJoinGroupEvent.group"><code class="name">var <span class="ident">group</span> : <a title="YiriMirai.models.entities.Group" href="entities.html#YiriMirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.BotJoinGroupEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.BotLeaveEventActive"><code class="flex name class">
+<span>class <span class="ident">BotLeaveEventActive</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 主动退出一个群。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotLeaveEventActive(GroupEvent):
+    &#34;&#34;&#34;Bot 主动退出一个群。&#34;&#34;&#34;
+    type: str = &#39;BotLeaveEventActive&#39;
+    group: Group</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.BotLeaveEventActive.group"><code class="name">var <span class="ident">group</span> : <a title="YiriMirai.models.entities.Group" href="entities.html#YiriMirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.BotLeaveEventActive.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.BotLeaveEventKick"><code class="flex name class">
+<span>class <span class="ident">BotLeaveEventKick</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 被踢出一个群。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotLeaveEventKick(GroupEvent):
+    &#34;&#34;&#34;Bot 被踢出一个群。&#34;&#34;&#34;
+    type: str = &#39;BotLeaveEventKick&#39;
+    group: Group</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.BotLeaveEventKick.group"><code class="name">var <span class="ident">group</span> : <a title="YiriMirai.models.entities.Group" href="entities.html#YiriMirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.BotLeaveEventKick.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.BotMuteEvent"><code class="flex name class">
+<span>class <span class="ident">BotMuteEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 被禁言。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotMuteEvent(GroupEvent):
+    &#34;&#34;&#34;Bot 被禁言。&#34;&#34;&#34;
+    type: str = &#39;BotMuteEvent&#39;
+    durationSeconds: int
+    operator: Optional[GroupMember]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.BotMuteEvent.durationSeconds"><code class="name">var <span class="ident">durationSeconds</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.BotMuteEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.BotMuteEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.BotOfflineEventActive"><code class="flex name class">
+<span>class <span class="ident">BotOfflineEventActive</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 主动离线。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotOfflineEventActive(BotEvent):
+    &#34;&#34;&#34;Bot 主动离线。&#34;&#34;&#34;
+    type: str = &#39;BotOfflineEventActive&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.BotEvent" href="#YiriMirai.models.events.BotEvent">BotEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.BotOfflineEventActive.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.BotEvent" href="#YiriMirai.models.events.BotEvent">BotEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.BotEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.BotEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.BotOfflineEventDropped"><code class="flex name class">
+<span>class <span class="ident">BotOfflineEventDropped</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 被服务器断开或因网络问题而掉线。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotOfflineEventDropped(BotEvent):
+    &#34;&#34;&#34;Bot 被服务器断开或因网络问题而掉线。&#34;&#34;&#34;
+    type: str = &#39;BotOfflineEventDropped&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.BotEvent" href="#YiriMirai.models.events.BotEvent">BotEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.BotOfflineEventDropped.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.BotEvent" href="#YiriMirai.models.events.BotEvent">BotEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.BotEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.BotEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.BotOfflineEventForce"><code class="flex name class">
+<span>class <span class="ident">BotOfflineEventForce</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot被挤下线。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotOfflineEventForce(BotEvent):
+    &#34;&#34;&#34;Bot被挤下线。&#34;&#34;&#34;
+    type: str = &#39;BotOfflineEventForce&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.BotEvent" href="#YiriMirai.models.events.BotEvent">BotEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.BotOfflineEventForce.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.BotEvent" href="#YiriMirai.models.events.BotEvent">BotEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.BotEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.BotEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.BotOnlineEvent"><code class="flex name class">
+<span>class <span class="ident">BotOnlineEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 登陆成功。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotOnlineEvent(BotEvent):
+    &#34;&#34;&#34;Bot 登陆成功。&#34;&#34;&#34;
+    type: str = &#39;BotOnlineEvent&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.BotEvent" href="#YiriMirai.models.events.BotEvent">BotEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.BotOnlineEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.BotEvent" href="#YiriMirai.models.events.BotEvent">BotEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.BotEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.BotEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.BotReloginEvent"><code class="flex name class">
+<span>class <span class="ident">BotReloginEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 主动重新登录。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotReloginEvent(BotEvent):
+    &#34;&#34;&#34;Bot 主动重新登录。&#34;&#34;&#34;
+    type: str = &#39;BotReloginEvent&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.BotEvent" href="#YiriMirai.models.events.BotEvent">BotEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.BotReloginEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.BotEvent" href="#YiriMirai.models.events.BotEvent">BotEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.BotEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.BotEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.BotUnmuteEvent"><code class="flex name class">
+<span>class <span class="ident">BotUnmuteEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 被取消禁言。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotUnmuteEvent(GroupEvent):
+    &#34;&#34;&#34;Bot 被取消禁言。&#34;&#34;&#34;
+    type: str = &#39;BotUnmuteEvent&#39;
+    operator: Optional[GroupMember]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.BotUnmuteEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.BotUnmuteEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.CommandEvent"><code class="flex name class">
+<span>class <span class="ident">CommandEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>命令事件。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CommandEvent(Event):
+    &#34;&#34;&#34;命令事件。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.CommandExecutedEvent" href="#YiriMirai.models.events.CommandExecutedEvent">CommandExecutedEvent</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.CommandEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.Event.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.Event.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.CommandExecutedEvent"><code class="flex name class">
+<span>class <span class="ident">CommandExecutedEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>命令被执行。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CommandExecutedEvent(CommandEvent):
+    &#34;&#34;&#34;命令被执行。&#34;&#34;&#34;
+    type: str = &#39;CommandExecutedEvent&#39;
+    name: str
+    friend: Optional[Friend]
+    member: Optional[GroupMember]
+    args: MessageChain</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.CommandEvent" href="#YiriMirai.models.events.CommandEvent">CommandEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.CommandExecutedEvent.args"><code class="name">var <span class="ident">args</span> : <a title="YiriMirai.models.message.MessageChain" href="message.html#YiriMirai.models.message.MessageChain">MessageChain</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.CommandExecutedEvent.friend"><code class="name">var <span class="ident">friend</span> : Union[<a title="YiriMirai.models.entities.Friend" href="entities.html#YiriMirai.models.entities.Friend">Friend</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.CommandExecutedEvent.member"><code class="name">var <span class="ident">member</span> : Union[<a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.CommandExecutedEvent.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.CommandExecutedEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.CommandEvent" href="#YiriMirai.models.events.CommandEvent">CommandEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.CommandEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.CommandEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.Event"><code class="flex name class">
+<span>class <span class="ident">Event</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>事件基类。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Event(MiraiBaseModel):
+    &#34;&#34;&#34;事件基类。&#34;&#34;&#34;
+    type: str
+
+    @classmethod
+    def get_subtype(cls, name: str) -&gt; Type[&#39;Event&#39;]:
+        &#34;&#34;&#34;根据类名称，获取相应的子类类型。
+
+        `name` 类名称。
+        &#34;&#34;&#34;
+        try:
+            type_ = getattr(sys.modules[__name__], name)
+            if not issubclass(type_, cls):
+                raise ValueError(f&#39;`{name}`不是`{cls.__name__}`的子类！&#39;)
+            return type_
+        except AttributeError as e:
+            raise ValueError(f&#39;`{name}`不是`{cls.__name__}`的子类！&#39;) from e
+
+    @classmethod
+    def parse_obj(cls, event: dict):
+        &#34;&#34;&#34;通过 mirai-api-http 发回的事件，构造对应的`Event`对象。
+
+        `event: dict` 已解析的事件 JSON。
+        &#34;&#34;&#34;
+        if cls == Event:
+            EventType = cls.get_subtype(event[&#39;type&#39;])
+            return EventType.parse_obj(event)
+        else:
+            return super().parse_obj(event)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.BotEvent" href="#YiriMirai.models.events.BotEvent">BotEvent</a></li>
+<li><a title="YiriMirai.models.events.CommandEvent" href="#YiriMirai.models.events.CommandEvent">CommandEvent</a></li>
+<li><a title="YiriMirai.models.events.FriendEvent" href="#YiriMirai.models.events.FriendEvent">FriendEvent</a></li>
+<li><a title="YiriMirai.models.events.FriendRecallEvent" href="#YiriMirai.models.events.FriendRecallEvent">FriendRecallEvent</a></li>
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.MessageEvent" href="#YiriMirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="YiriMirai.models.events.RequestEvent" href="#YiriMirai.models.events.RequestEvent">RequestEvent</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.Event.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="YiriMirai.models.events.Event.get_subtype"><code class="name flex">
+<span>def <span class="ident">get_subtype</span></span>(<span>name: str) ‑> Type[<a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>根据类名称，获取相应的子类类型。</p>
+<p><code>name</code> 类名称。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def get_subtype(cls, name: str) -&gt; Type[&#39;Event&#39;]:
+    &#34;&#34;&#34;根据类名称，获取相应的子类类型。
+
+    `name` 类名称。
+    &#34;&#34;&#34;
+    try:
+        type_ = getattr(sys.modules[__name__], name)
+        if not issubclass(type_, cls):
+            raise ValueError(f&#39;`{name}`不是`{cls.__name__}`的子类！&#39;)
+        return type_
+    except AttributeError as e:
+        raise ValueError(f&#39;`{name}`不是`{cls.__name__}`的子类！&#39;) from e</code></pre>
+</details>
+</dd>
+<dt id="YiriMirai.models.events.Event.parse_obj"><code class="name flex">
+<span>def <span class="ident">parse_obj</span></span>(<span>event: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>通过 mirai-api-http 发回的事件，构造对应的<code><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></code>对象。</p>
+<p><code>event: dict</code> 已解析的事件 JSON。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def parse_obj(cls, event: dict):
+    &#34;&#34;&#34;通过 mirai-api-http 发回的事件，构造对应的`Event`对象。
+
+    `event: dict` 已解析的事件 JSON。
+    &#34;&#34;&#34;
+    if cls == Event:
+        EventType = cls.get_subtype(event[&#39;type&#39;])
+        return EventType.parse_obj(event)
+    else:
+        return super().parse_obj(event)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="YiriMirai.models.events.FriendEvent"><code class="flex name class">
+<span>class <span class="ident">FriendEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>好友事件。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FriendEvent(Event):
+    &#34;&#34;&#34;好友事件。&#34;&#34;&#34;
+    friend: Friend</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.FriendInputStatusChangedEvent" href="#YiriMirai.models.events.FriendInputStatusChangedEvent">FriendInputStatusChangedEvent</a></li>
+<li><a title="YiriMirai.models.events.FriendNickChangedEvent" href="#YiriMirai.models.events.FriendNickChangedEvent">FriendNickChangedEvent</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.FriendEvent.friend"><code class="name">var <span class="ident">friend</span> : <a title="YiriMirai.models.entities.Friend" href="entities.html#YiriMirai.models.entities.Friend">Friend</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.Event.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.Event.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.FriendInputStatusChangedEvent"><code class="flex name class">
+<span>class <span class="ident">FriendInputStatusChangedEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>好友输入状态改变。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FriendInputStatusChangedEvent(FriendEvent):
+    &#34;&#34;&#34;好友输入状态改变。&#34;&#34;&#34;
+    type: str = &#39;FriendInputStatusChangedEvent&#39;
+    inputting: bool</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.FriendEvent" href="#YiriMirai.models.events.FriendEvent">FriendEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.FriendInputStatusChangedEvent.inputting"><code class="name">var <span class="ident">inputting</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.FriendInputStatusChangedEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.FriendEvent" href="#YiriMirai.models.events.FriendEvent">FriendEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.FriendEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.FriendEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.FriendMessage"><code class="flex name class">
+<span>class <span class="ident">FriendMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>好友消息</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FriendMessage(MessageEvent):
+    &#34;&#34;&#34;好友消息&#34;&#34;&#34;
+    type: str = &#39;FriendMessage&#39;
+    sender: Friend</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.MessageEvent" href="#YiriMirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.FriendMessage.sender"><code class="name">var <span class="ident">sender</span> : <a title="YiriMirai.models.entities.Friend" href="entities.html#YiriMirai.models.entities.Friend">Friend</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.FriendMessage.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.MessageEvent" href="#YiriMirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.MessageEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.MessageEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.FriendNickChangedEvent"><code class="flex name class">
+<span>class <span class="ident">FriendNickChangedEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>好友昵称改变。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FriendNickChangedEvent(FriendEvent):
+    &#34;&#34;&#34;好友昵称改变。&#34;&#34;&#34;
+    type: str = &#39;FriendNickChangedEvent&#39;
+    from_: str = Field(..., alias=&#34;from&#34;)
+    to: str</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.FriendEvent" href="#YiriMirai.models.events.FriendEvent">FriendEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.FriendNickChangedEvent.from_"><code class="name">var <span class="ident">from_</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.FriendNickChangedEvent.to"><code class="name">var <span class="ident">to</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.FriendNickChangedEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.FriendEvent" href="#YiriMirai.models.events.FriendEvent">FriendEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.FriendEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.FriendEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.FriendRecallEvent"><code class="flex name class">
+<span>class <span class="ident">FriendRecallEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>好友消息撤回。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FriendRecallEvent(Event):
+    &#34;&#34;&#34;好友消息撤回。&#34;&#34;&#34;
+    type: str = &#39;FriendRecallEvent&#39;
+    # 按照文档顺序，这个事件确实应该在这个位置。
+    # 而且它不符合 FriendEvent 的形式，就放在这里吧。
+    authorId: int
+    messageId: int
+    time: int
+    operator: int</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.FriendRecallEvent.authorId"><code class="name">var <span class="ident">authorId</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.FriendRecallEvent.messageId"><code class="name">var <span class="ident">messageId</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.FriendRecallEvent.operator"><code class="name">var <span class="ident">operator</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.FriendRecallEvent.time"><code class="name">var <span class="ident">time</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.FriendRecallEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.Event.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.Event.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.GroupAllowAnonymousChatEvent"><code class="flex name class">
+<span>class <span class="ident">GroupAllowAnonymousChatEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>匿名聊天。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupAllowAnonymousChatEvent(GroupEvent):
+    &#34;&#34;&#34;匿名聊天。&#34;&#34;&#34;
+    type: str = &#39;GroupAllowAnonymousChatEvent&#39;
+    origin: bool
+    current: bool
+    group: Group
+    operator: Optional[GroupMember]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.GroupAllowAnonymousChatEvent.current"><code class="name">var <span class="ident">current</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupAllowAnonymousChatEvent.group"><code class="name">var <span class="ident">group</span> : <a title="YiriMirai.models.entities.Group" href="entities.html#YiriMirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupAllowAnonymousChatEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupAllowAnonymousChatEvent.origin"><code class="name">var <span class="ident">origin</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupAllowAnonymousChatEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.GroupAllowConfessTalkEvent"><code class="flex name class">
+<span>class <span class="ident">GroupAllowConfessTalkEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>坦白说。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupAllowConfessTalkEvent(GroupEvent):
+    &#34;&#34;&#34;坦白说。&#34;&#34;&#34;
+    type: str = &#39;GroupAllowConfessTalkEvent&#39;
+    origin: bool
+    current: bool
+    group: Group
+    isByBot: bool</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.GroupAllowConfessTalkEvent.current"><code class="name">var <span class="ident">current</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupAllowConfessTalkEvent.group"><code class="name">var <span class="ident">group</span> : <a title="YiriMirai.models.entities.Group" href="entities.html#YiriMirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupAllowConfessTalkEvent.isByBot"><code class="name">var <span class="ident">isByBot</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupAllowConfessTalkEvent.origin"><code class="name">var <span class="ident">origin</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupAllowConfessTalkEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.GroupAllowMemberInviteEvent"><code class="flex name class">
+<span>class <span class="ident">GroupAllowMemberInviteEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>允许群员邀请好友加群。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupAllowMemberInviteEvent(GroupEvent):
+    &#34;&#34;&#34;允许群员邀请好友加群。&#34;&#34;&#34;
+    type: str = &#39;GroupAllowMemberInviteEvent&#39;
+    origin: bool
+    current: bool
+    group: Group
+    operator: Optional[GroupMember]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.GroupAllowMemberInviteEvent.current"><code class="name">var <span class="ident">current</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupAllowMemberInviteEvent.group"><code class="name">var <span class="ident">group</span> : <a title="YiriMirai.models.entities.Group" href="entities.html#YiriMirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupAllowMemberInviteEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupAllowMemberInviteEvent.origin"><code class="name">var <span class="ident">origin</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupAllowMemberInviteEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.GroupEntranceAnnouncementChangeEvent"><code class="flex name class">
+<span>class <span class="ident">GroupEntranceAnnouncementChangeEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>某群入群公告改变。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupEntranceAnnouncementChangeEvent(GroupEvent):
+    &#34;&#34;&#34;某群入群公告改变。&#34;&#34;&#34;
+    type: str = &#39;GroupEntranceAnnouncementChangeEvent&#39;
+    origin: str
+    current: str
+    group: Group
+    operator: Optional[GroupMember]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.GroupEntranceAnnouncementChangeEvent.current"><code class="name">var <span class="ident">current</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupEntranceAnnouncementChangeEvent.group"><code class="name">var <span class="ident">group</span> : <a title="YiriMirai.models.entities.Group" href="entities.html#YiriMirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupEntranceAnnouncementChangeEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupEntranceAnnouncementChangeEvent.origin"><code class="name">var <span class="ident">origin</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupEntranceAnnouncementChangeEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.GroupEvent"><code class="flex name class">
+<span>class <span class="ident">GroupEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群事件。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupEvent(Event):
+    &#34;&#34;&#34;群事件。&#34;&#34;&#34;
+    # group: Group
+    # 一个奇怪的现象：群事件不一定有 group，它可能藏在 opeartor.group 里</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.BotGroupPermissionChangeEvent" href="#YiriMirai.models.events.BotGroupPermissionChangeEvent">BotGroupPermissionChangeEvent</a></li>
+<li><a title="YiriMirai.models.events.BotJoinGroupEvent" href="#YiriMirai.models.events.BotJoinGroupEvent">BotJoinGroupEvent</a></li>
+<li><a title="YiriMirai.models.events.BotLeaveEventActive" href="#YiriMirai.models.events.BotLeaveEventActive">BotLeaveEventActive</a></li>
+<li><a title="YiriMirai.models.events.BotLeaveEventKick" href="#YiriMirai.models.events.BotLeaveEventKick">BotLeaveEventKick</a></li>
+<li><a title="YiriMirai.models.events.BotMuteEvent" href="#YiriMirai.models.events.BotMuteEvent">BotMuteEvent</a></li>
+<li><a title="YiriMirai.models.events.BotUnmuteEvent" href="#YiriMirai.models.events.BotUnmuteEvent">BotUnmuteEvent</a></li>
+<li><a title="YiriMirai.models.events.GroupAllowAnonymousChatEvent" href="#YiriMirai.models.events.GroupAllowAnonymousChatEvent">GroupAllowAnonymousChatEvent</a></li>
+<li><a title="YiriMirai.models.events.GroupAllowConfessTalkEvent" href="#YiriMirai.models.events.GroupAllowConfessTalkEvent">GroupAllowConfessTalkEvent</a></li>
+<li><a title="YiriMirai.models.events.GroupAllowMemberInviteEvent" href="#YiriMirai.models.events.GroupAllowMemberInviteEvent">GroupAllowMemberInviteEvent</a></li>
+<li><a title="YiriMirai.models.events.GroupEntranceAnnouncementChangeEvent" href="#YiriMirai.models.events.GroupEntranceAnnouncementChangeEvent">GroupEntranceAnnouncementChangeEvent</a></li>
+<li><a title="YiriMirai.models.events.GroupMuteAllEvent" href="#YiriMirai.models.events.GroupMuteAllEvent">GroupMuteAllEvent</a></li>
+<li><a title="YiriMirai.models.events.GroupNameChangeEvent" href="#YiriMirai.models.events.GroupNameChangeEvent">GroupNameChangeEvent</a></li>
+<li><a title="YiriMirai.models.events.GroupRecallEvent" href="#YiriMirai.models.events.GroupRecallEvent">GroupRecallEvent</a></li>
+<li><a title="YiriMirai.models.events.MemberCardChangeEvent" href="#YiriMirai.models.events.MemberCardChangeEvent">MemberCardChangeEvent</a></li>
+<li><a title="YiriMirai.models.events.MemberHonorChangeEvent" href="#YiriMirai.models.events.MemberHonorChangeEvent">MemberHonorChangeEvent</a></li>
+<li><a title="YiriMirai.models.events.MemberJoinEvent" href="#YiriMirai.models.events.MemberJoinEvent">MemberJoinEvent</a></li>
+<li><a title="YiriMirai.models.events.MemberLeaveEventKick" href="#YiriMirai.models.events.MemberLeaveEventKick">MemberLeaveEventKick</a></li>
+<li><a title="YiriMirai.models.events.MemberLeaveEventQuit" href="#YiriMirai.models.events.MemberLeaveEventQuit">MemberLeaveEventQuit</a></li>
+<li><a title="YiriMirai.models.events.MemberMuteEvent" href="#YiriMirai.models.events.MemberMuteEvent">MemberMuteEvent</a></li>
+<li><a title="YiriMirai.models.events.MemberPermissionChangeEvent" href="#YiriMirai.models.events.MemberPermissionChangeEvent">MemberPermissionChangeEvent</a></li>
+<li><a title="YiriMirai.models.events.MemberSpecialTitleChangeEvent" href="#YiriMirai.models.events.MemberSpecialTitleChangeEvent">MemberSpecialTitleChangeEvent</a></li>
+<li><a title="YiriMirai.models.events.MemberUnmuteEvent" href="#YiriMirai.models.events.MemberUnmuteEvent">MemberUnmuteEvent</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.GroupEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.Event.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.Event.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.GroupMessage"><code class="flex name class">
+<span>class <span class="ident">GroupMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群消息。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupMessage(MessageEvent):
+    &#34;&#34;&#34;群消息。&#34;&#34;&#34;
+    type: str = &#39;GroupMessage&#39;
+    sender: GroupMember</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.MessageEvent" href="#YiriMirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.GroupMessage.sender"><code class="name">var <span class="ident">sender</span> : <a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupMessage.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.MessageEvent" href="#YiriMirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.MessageEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.MessageEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.GroupMuteAllEvent"><code class="flex name class">
+<span>class <span class="ident">GroupMuteAllEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>全员禁言。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupMuteAllEvent(GroupEvent):
+    &#34;&#34;&#34;全员禁言。&#34;&#34;&#34;
+    type: str = &#39;GroupMuteAllEvent&#39;
+    origin: bool
+    current: bool
+    group: Group
+    operator: Optional[GroupMember]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.GroupMuteAllEvent.current"><code class="name">var <span class="ident">current</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupMuteAllEvent.group"><code class="name">var <span class="ident">group</span> : <a title="YiriMirai.models.entities.Group" href="entities.html#YiriMirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupMuteAllEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupMuteAllEvent.origin"><code class="name">var <span class="ident">origin</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupMuteAllEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.GroupNameChangeEvent"><code class="flex name class">
+<span>class <span class="ident">GroupNameChangeEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>某个群名改变。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupNameChangeEvent(GroupEvent):
+    &#34;&#34;&#34;某个群名改变。&#34;&#34;&#34;
+    type: str = &#39;GroupNameChangeEvent&#39;
+    origin: str
+    current: str
+    group: Group
+    operator: Optional[GroupMember]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.GroupNameChangeEvent.current"><code class="name">var <span class="ident">current</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupNameChangeEvent.group"><code class="name">var <span class="ident">group</span> : <a title="YiriMirai.models.entities.Group" href="entities.html#YiriMirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupNameChangeEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupNameChangeEvent.origin"><code class="name">var <span class="ident">origin</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupNameChangeEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.GroupRecallEvent"><code class="flex name class">
+<span>class <span class="ident">GroupRecallEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群消息撤回。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupRecallEvent(GroupEvent):
+    &#34;&#34;&#34;群消息撤回。&#34;&#34;&#34;
+    type: str = &#39;GroupRecallEvent&#39;
+    authorId: int
+    messageId: int
+    time: datetime
+    group: Group
+    operator: Optional[GroupMember]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.GroupRecallEvent.authorId"><code class="name">var <span class="ident">authorId</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupRecallEvent.group"><code class="name">var <span class="ident">group</span> : <a title="YiriMirai.models.entities.Group" href="entities.html#YiriMirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupRecallEvent.messageId"><code class="name">var <span class="ident">messageId</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupRecallEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupRecallEvent.time"><code class="name">var <span class="ident">time</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.GroupRecallEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.MemberCardChangeEvent"><code class="flex name class">
+<span>class <span class="ident">MemberCardChangeEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群名片改动。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberCardChangeEvent(GroupEvent):
+    &#34;&#34;&#34;群名片改动。&#34;&#34;&#34;
+    type: str = &#39;MemberCardChangeEvent&#39;
+    origin: str
+    current: str
+    member: GroupMember</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.MemberCardChangeEvent.current"><code class="name">var <span class="ident">current</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberCardChangeEvent.member"><code class="name">var <span class="ident">member</span> : <a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberCardChangeEvent.origin"><code class="name">var <span class="ident">origin</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberCardChangeEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.MemberHonorChangeEvent"><code class="flex name class">
+<span>class <span class="ident">MemberHonorChangeEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群员称号改变。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberHonorChangeEvent(GroupEvent):
+    &#34;&#34;&#34;群员称号改变。&#34;&#34;&#34;
+    type: str = &#39;MemberHonorChangeEvent&#39;
+    member: GroupMember
+    action: Literal[&#39;achieve&#39;, &#39;lose&#39;]
+    honor: str</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.MemberHonorChangeEvent.action"><code class="name">var <span class="ident">action</span> : Literal['achieve', 'lose']</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberHonorChangeEvent.honor"><code class="name">var <span class="ident">honor</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberHonorChangeEvent.member"><code class="name">var <span class="ident">member</span> : <a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberHonorChangeEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.MemberJoinEvent"><code class="flex name class">
+<span>class <span class="ident">MemberJoinEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>新人入群。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberJoinEvent(GroupEvent):
+    &#34;&#34;&#34;新人入群。&#34;&#34;&#34;
+    type: str = &#39;MemberJoinEvent&#39;
+    member: GroupMember</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.MemberJoinEvent.member"><code class="name">var <span class="ident">member</span> : <a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberJoinEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.MemberJoinRequestEvent"><code class="flex name class">
+<span>class <span class="ident">MemberJoinRequestEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>用户入群申请（Bot需要有管理员权限）。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberJoinRequestEvent(RequestEvent):
+    &#34;&#34;&#34;用户入群申请（Bot需要有管理员权限）。&#34;&#34;&#34;
+    type: str = &#39;MemberJoinRequestEvent&#39;
+    from_id: int = Field(..., alias=&#39;fromId&#39;)
+    group_id: int = Field(..., alias=&#39;groupId&#39;)
+    group_name: str = Field(..., alias=&#39;groupName&#39;)
+    nick: str
+    message: str</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.RequestEvent" href="#YiriMirai.models.events.RequestEvent">RequestEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.MemberJoinRequestEvent.from_id"><code class="name">var <span class="ident">from_id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberJoinRequestEvent.group_id"><code class="name">var <span class="ident">group_id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberJoinRequestEvent.group_name"><code class="name">var <span class="ident">group_name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberJoinRequestEvent.message"><code class="name">var <span class="ident">message</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberJoinRequestEvent.nick"><code class="name">var <span class="ident">nick</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberJoinRequestEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.RequestEvent" href="#YiriMirai.models.events.RequestEvent">RequestEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.RequestEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.RequestEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.MemberLeaveEventKick"><code class="flex name class">
+<span>class <span class="ident">MemberLeaveEventKick</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>成员被踢出群（该成员不是Bot）。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberLeaveEventKick(GroupEvent):
+    &#34;&#34;&#34;成员被踢出群（该成员不是Bot）。&#34;&#34;&#34;
+    type: str = &#39;MemberLeaveEventKick&#39;
+    member: GroupMember
+    operator: Optional[GroupMember]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.MemberLeaveEventKick.member"><code class="name">var <span class="ident">member</span> : <a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberLeaveEventKick.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberLeaveEventKick.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.MemberLeaveEventQuit"><code class="flex name class">
+<span>class <span class="ident">MemberLeaveEventQuit</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>成员主动离群（该成员不是Bot）。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberLeaveEventQuit(GroupEvent):
+    &#34;&#34;&#34;成员主动离群（该成员不是Bot）。&#34;&#34;&#34;
+    type: str = &#39;MemberLeaveEventQuit&#39;
+    member: GroupMember</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.MemberLeaveEventQuit.member"><code class="name">var <span class="ident">member</span> : <a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberLeaveEventQuit.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.MemberMuteEvent"><code class="flex name class">
+<span>class <span class="ident">MemberMuteEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群成员被禁言（该成员不是Bot）。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberMuteEvent(GroupEvent):
+    &#34;&#34;&#34;群成员被禁言（该成员不是Bot）。&#34;&#34;&#34;
+    type: str = &#39;MemberMuteEvent&#39;
+    durationSeconds: int</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.MemberMuteEvent.durationSeconds"><code class="name">var <span class="ident">durationSeconds</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberMuteEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.MemberPermissionChangeEvent"><code class="flex name class">
+<span>class <span class="ident">MemberPermissionChangeEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>成员权限改变（该成员不是Bot）。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberPermissionChangeEvent(GroupEvent):
+    &#34;&#34;&#34;成员权限改变（该成员不是Bot）。&#34;&#34;&#34;
+    type: str = &#39;MemberPermissionChangeEvent&#39;
+    origin: str
+    current: str
+    member: GroupMember</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.MemberPermissionChangeEvent.current"><code class="name">var <span class="ident">current</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberPermissionChangeEvent.member"><code class="name">var <span class="ident">member</span> : <a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberPermissionChangeEvent.origin"><code class="name">var <span class="ident">origin</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberPermissionChangeEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.MemberSpecialTitleChangeEvent"><code class="flex name class">
+<span>class <span class="ident">MemberSpecialTitleChangeEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群头衔改动（只有群主有操作权限）。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberSpecialTitleChangeEvent(GroupEvent):
+    &#34;&#34;&#34;群头衔改动（只有群主有操作权限）。&#34;&#34;&#34;
+    type: str = &#39;MemberSpecialTitleChangeEvent&#39;
+    origin: str
+    current: str
+    member: GroupMember</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.MemberSpecialTitleChangeEvent.current"><code class="name">var <span class="ident">current</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberSpecialTitleChangeEvent.member"><code class="name">var <span class="ident">member</span> : <a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberSpecialTitleChangeEvent.origin"><code class="name">var <span class="ident">origin</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberSpecialTitleChangeEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.MemberUnmuteEvent"><code class="flex name class">
+<span>class <span class="ident">MemberUnmuteEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群成员被取消禁言（该成员不是Bot）。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberUnmuteEvent(GroupEvent):
+    &#34;&#34;&#34;群成员被取消禁言（该成员不是Bot）。&#34;&#34;&#34;
+    type: str = &#39;MemberUnmuteEvent&#39;
+    member: GroupMember
+    operator: Optional[GroupMember]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.MemberUnmuteEvent.member"><code class="name">var <span class="ident">member</span> : <a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberUnmuteEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.MemberUnmuteEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.GroupEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.MessageEvent"><code class="flex name class">
+<span>class <span class="ident">MessageEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>消息事件。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MessageEvent(Event):
+    &#34;&#34;&#34;消息事件。&#34;&#34;&#34;
+    message_chain: MessageChain = Field(..., alias=&#39;messageChain&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.FriendMessage" href="#YiriMirai.models.events.FriendMessage">FriendMessage</a></li>
+<li><a title="YiriMirai.models.events.GroupMessage" href="#YiriMirai.models.events.GroupMessage">GroupMessage</a></li>
+<li><a title="YiriMirai.models.events.OtherClientMessage" href="#YiriMirai.models.events.OtherClientMessage">OtherClientMessage</a></li>
+<li><a title="YiriMirai.models.events.StrangerMessage" href="#YiriMirai.models.events.StrangerMessage">StrangerMessage</a></li>
+<li><a title="YiriMirai.models.events.TempMessage" href="#YiriMirai.models.events.TempMessage">TempMessage</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.MessageEvent.message_chain"><code class="name">var <span class="ident">message_chain</span> : <a title="YiriMirai.models.message.MessageChain" href="message.html#YiriMirai.models.message.MessageChain">MessageChain</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.Event.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.Event.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.NewFriendRequestEvent"><code class="flex name class">
+<span>class <span class="ident">NewFriendRequestEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>添加好友申请。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class NewFriendRequestEvent(RequestEvent):
+    &#34;&#34;&#34;添加好友申请。&#34;&#34;&#34;
+    type: str = &#39;NewFriendRequestEvent&#39;
+    from_id: int = Field(..., alias=&#39;fromId&#39;)
+    group_id: int = Field(..., alias=&#39;groupId&#39;)
+    nick: str
+    message: str</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.RequestEvent" href="#YiriMirai.models.events.RequestEvent">RequestEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.NewFriendRequestEvent.from_id"><code class="name">var <span class="ident">from_id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.NewFriendRequestEvent.group_id"><code class="name">var <span class="ident">group_id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.NewFriendRequestEvent.message"><code class="name">var <span class="ident">message</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.NewFriendRequestEvent.nick"><code class="name">var <span class="ident">nick</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.NewFriendRequestEvent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.RequestEvent" href="#YiriMirai.models.events.RequestEvent">RequestEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.RequestEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.RequestEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.OtherClientMessage"><code class="flex name class">
+<span>class <span class="ident">OtherClientMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>其他客户端消息。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class OtherClientMessage(MessageEvent):
+    &#34;&#34;&#34;其他客户端消息。&#34;&#34;&#34;
+    type: str = &#39;OtherClientMessage&#39;
+    sender: Sender</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.MessageEvent" href="#YiriMirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.OtherClientMessage.sender"><code class="name">var <span class="ident">sender</span> : <a title="YiriMirai.models.entities.Sender" href="entities.html#YiriMirai.models.entities.Sender">Sender</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.OtherClientMessage.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.MessageEvent" href="#YiriMirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.MessageEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.MessageEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.RequestEvent"><code class="flex name class">
+<span>class <span class="ident">RequestEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>申请事件。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RequestEvent(Event):
+    &#34;&#34;&#34;申请事件。&#34;&#34;&#34;
+    event_id: int = Field(..., alias=&#39;eventId&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.BotInvitedJoinGroupRequestEvent" href="#YiriMirai.models.events.BotInvitedJoinGroupRequestEvent">BotInvitedJoinGroupRequestEvent</a></li>
+<li><a title="YiriMirai.models.events.MemberJoinRequestEvent" href="#YiriMirai.models.events.MemberJoinRequestEvent">MemberJoinRequestEvent</a></li>
+<li><a title="YiriMirai.models.events.NewFriendRequestEvent" href="#YiriMirai.models.events.NewFriendRequestEvent">NewFriendRequestEvent</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.RequestEvent.event_id"><code class="name">var <span class="ident">event_id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.Event.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.Event.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.StrangerMessage"><code class="flex name class">
+<span>class <span class="ident">StrangerMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>陌生人消息。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class StrangerMessage(MessageEvent):
+    &#34;&#34;&#34;陌生人消息。&#34;&#34;&#34;
+    type: str = &#39;StrangerMessage&#39;
+    sender: Friend</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.MessageEvent" href="#YiriMirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.StrangerMessage.sender"><code class="name">var <span class="ident">sender</span> : <a title="YiriMirai.models.entities.Friend" href="entities.html#YiriMirai.models.entities.Friend">Friend</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.StrangerMessage.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.MessageEvent" href="#YiriMirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.MessageEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.MessageEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="YiriMirai.models.events.TempMessage"><code class="flex name class">
+<span>class <span class="ident">TempMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群临时消息。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TempMessage(MessageEvent):
+    &#34;&#34;&#34;群临时消息。&#34;&#34;&#34;
+    type: str = &#39;TempMessage&#39;
+    sender: GroupMember</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="YiriMirai.models.events.MessageEvent" href="#YiriMirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></li>
+<li><a title="YiriMirai.models.base.MiraiBaseModel" href="base.html#YiriMirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="YiriMirai.models.events.TempMessage.sender"><code class="name">var <span class="ident">sender</span> : <a title="YiriMirai.models.entities.GroupMember" href="entities.html#YiriMirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="YiriMirai.models.events.TempMessage.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="YiriMirai.models.events.MessageEvent" href="#YiriMirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="YiriMirai.models.events.MessageEvent.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.MessageEvent.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="YiriMirai.models" href="index.html">YiriMirai.models</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="YiriMirai.models.events.BotEvent" href="#YiriMirai.models.events.BotEvent">BotEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.BotEvent.qq" href="#YiriMirai.models.events.BotEvent.qq">qq</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.BotGroupPermissionChangeEvent" href="#YiriMirai.models.events.BotGroupPermissionChangeEvent">BotGroupPermissionChangeEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.BotGroupPermissionChangeEvent.current" href="#YiriMirai.models.events.BotGroupPermissionChangeEvent.current">current</a></code></li>
+<li><code><a title="YiriMirai.models.events.BotGroupPermissionChangeEvent.group" href="#YiriMirai.models.events.BotGroupPermissionChangeEvent.group">group</a></code></li>
+<li><code><a title="YiriMirai.models.events.BotGroupPermissionChangeEvent.origin" href="#YiriMirai.models.events.BotGroupPermissionChangeEvent.origin">origin</a></code></li>
+<li><code><a title="YiriMirai.models.events.BotGroupPermissionChangeEvent.type" href="#YiriMirai.models.events.BotGroupPermissionChangeEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.BotInvitedJoinGroupRequestEvent" href="#YiriMirai.models.events.BotInvitedJoinGroupRequestEvent">BotInvitedJoinGroupRequestEvent</a></code></h4>
+<ul class="two-column">
+<li><code><a title="YiriMirai.models.events.BotInvitedJoinGroupRequestEvent.from_id" href="#YiriMirai.models.events.BotInvitedJoinGroupRequestEvent.from_id">from_id</a></code></li>
+<li><code><a title="YiriMirai.models.events.BotInvitedJoinGroupRequestEvent.group_id" href="#YiriMirai.models.events.BotInvitedJoinGroupRequestEvent.group_id">group_id</a></code></li>
+<li><code><a title="YiriMirai.models.events.BotInvitedJoinGroupRequestEvent.group_name" href="#YiriMirai.models.events.BotInvitedJoinGroupRequestEvent.group_name">group_name</a></code></li>
+<li><code><a title="YiriMirai.models.events.BotInvitedJoinGroupRequestEvent.message" href="#YiriMirai.models.events.BotInvitedJoinGroupRequestEvent.message">message</a></code></li>
+<li><code><a title="YiriMirai.models.events.BotInvitedJoinGroupRequestEvent.nick" href="#YiriMirai.models.events.BotInvitedJoinGroupRequestEvent.nick">nick</a></code></li>
+<li><code><a title="YiriMirai.models.events.BotInvitedJoinGroupRequestEvent.type" href="#YiriMirai.models.events.BotInvitedJoinGroupRequestEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.BotJoinGroupEvent" href="#YiriMirai.models.events.BotJoinGroupEvent">BotJoinGroupEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.BotJoinGroupEvent.group" href="#YiriMirai.models.events.BotJoinGroupEvent.group">group</a></code></li>
+<li><code><a title="YiriMirai.models.events.BotJoinGroupEvent.type" href="#YiriMirai.models.events.BotJoinGroupEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.BotLeaveEventActive" href="#YiriMirai.models.events.BotLeaveEventActive">BotLeaveEventActive</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.BotLeaveEventActive.group" href="#YiriMirai.models.events.BotLeaveEventActive.group">group</a></code></li>
+<li><code><a title="YiriMirai.models.events.BotLeaveEventActive.type" href="#YiriMirai.models.events.BotLeaveEventActive.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.BotLeaveEventKick" href="#YiriMirai.models.events.BotLeaveEventKick">BotLeaveEventKick</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.BotLeaveEventKick.group" href="#YiriMirai.models.events.BotLeaveEventKick.group">group</a></code></li>
+<li><code><a title="YiriMirai.models.events.BotLeaveEventKick.type" href="#YiriMirai.models.events.BotLeaveEventKick.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.BotMuteEvent" href="#YiriMirai.models.events.BotMuteEvent">BotMuteEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.BotMuteEvent.durationSeconds" href="#YiriMirai.models.events.BotMuteEvent.durationSeconds">durationSeconds</a></code></li>
+<li><code><a title="YiriMirai.models.events.BotMuteEvent.operator" href="#YiriMirai.models.events.BotMuteEvent.operator">operator</a></code></li>
+<li><code><a title="YiriMirai.models.events.BotMuteEvent.type" href="#YiriMirai.models.events.BotMuteEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.BotOfflineEventActive" href="#YiriMirai.models.events.BotOfflineEventActive">BotOfflineEventActive</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.BotOfflineEventActive.type" href="#YiriMirai.models.events.BotOfflineEventActive.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.BotOfflineEventDropped" href="#YiriMirai.models.events.BotOfflineEventDropped">BotOfflineEventDropped</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.BotOfflineEventDropped.type" href="#YiriMirai.models.events.BotOfflineEventDropped.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.BotOfflineEventForce" href="#YiriMirai.models.events.BotOfflineEventForce">BotOfflineEventForce</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.BotOfflineEventForce.type" href="#YiriMirai.models.events.BotOfflineEventForce.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.BotOnlineEvent" href="#YiriMirai.models.events.BotOnlineEvent">BotOnlineEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.BotOnlineEvent.type" href="#YiriMirai.models.events.BotOnlineEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.BotReloginEvent" href="#YiriMirai.models.events.BotReloginEvent">BotReloginEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.BotReloginEvent.type" href="#YiriMirai.models.events.BotReloginEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.BotUnmuteEvent" href="#YiriMirai.models.events.BotUnmuteEvent">BotUnmuteEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.BotUnmuteEvent.operator" href="#YiriMirai.models.events.BotUnmuteEvent.operator">operator</a></code></li>
+<li><code><a title="YiriMirai.models.events.BotUnmuteEvent.type" href="#YiriMirai.models.events.BotUnmuteEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.CommandEvent" href="#YiriMirai.models.events.CommandEvent">CommandEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.CommandEvent.type" href="#YiriMirai.models.events.CommandEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.CommandExecutedEvent" href="#YiriMirai.models.events.CommandExecutedEvent">CommandExecutedEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.CommandExecutedEvent.args" href="#YiriMirai.models.events.CommandExecutedEvent.args">args</a></code></li>
+<li><code><a title="YiriMirai.models.events.CommandExecutedEvent.friend" href="#YiriMirai.models.events.CommandExecutedEvent.friend">friend</a></code></li>
+<li><code><a title="YiriMirai.models.events.CommandExecutedEvent.member" href="#YiriMirai.models.events.CommandExecutedEvent.member">member</a></code></li>
+<li><code><a title="YiriMirai.models.events.CommandExecutedEvent.name" href="#YiriMirai.models.events.CommandExecutedEvent.name">name</a></code></li>
+<li><code><a title="YiriMirai.models.events.CommandExecutedEvent.type" href="#YiriMirai.models.events.CommandExecutedEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.Event" href="#YiriMirai.models.events.Event">Event</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.Event.get_subtype" href="#YiriMirai.models.events.Event.get_subtype">get_subtype</a></code></li>
+<li><code><a title="YiriMirai.models.events.Event.parse_obj" href="#YiriMirai.models.events.Event.parse_obj">parse_obj</a></code></li>
+<li><code><a title="YiriMirai.models.events.Event.type" href="#YiriMirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.FriendEvent" href="#YiriMirai.models.events.FriendEvent">FriendEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.FriendEvent.friend" href="#YiriMirai.models.events.FriendEvent.friend">friend</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.FriendInputStatusChangedEvent" href="#YiriMirai.models.events.FriendInputStatusChangedEvent">FriendInputStatusChangedEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.FriendInputStatusChangedEvent.inputting" href="#YiriMirai.models.events.FriendInputStatusChangedEvent.inputting">inputting</a></code></li>
+<li><code><a title="YiriMirai.models.events.FriendInputStatusChangedEvent.type" href="#YiriMirai.models.events.FriendInputStatusChangedEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.FriendMessage" href="#YiriMirai.models.events.FriendMessage">FriendMessage</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.FriendMessage.sender" href="#YiriMirai.models.events.FriendMessage.sender">sender</a></code></li>
+<li><code><a title="YiriMirai.models.events.FriendMessage.type" href="#YiriMirai.models.events.FriendMessage.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.FriendNickChangedEvent" href="#YiriMirai.models.events.FriendNickChangedEvent">FriendNickChangedEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.FriendNickChangedEvent.from_" href="#YiriMirai.models.events.FriendNickChangedEvent.from_">from_</a></code></li>
+<li><code><a title="YiriMirai.models.events.FriendNickChangedEvent.to" href="#YiriMirai.models.events.FriendNickChangedEvent.to">to</a></code></li>
+<li><code><a title="YiriMirai.models.events.FriendNickChangedEvent.type" href="#YiriMirai.models.events.FriendNickChangedEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.FriendRecallEvent" href="#YiriMirai.models.events.FriendRecallEvent">FriendRecallEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.FriendRecallEvent.authorId" href="#YiriMirai.models.events.FriendRecallEvent.authorId">authorId</a></code></li>
+<li><code><a title="YiriMirai.models.events.FriendRecallEvent.messageId" href="#YiriMirai.models.events.FriendRecallEvent.messageId">messageId</a></code></li>
+<li><code><a title="YiriMirai.models.events.FriendRecallEvent.operator" href="#YiriMirai.models.events.FriendRecallEvent.operator">operator</a></code></li>
+<li><code><a title="YiriMirai.models.events.FriendRecallEvent.time" href="#YiriMirai.models.events.FriendRecallEvent.time">time</a></code></li>
+<li><code><a title="YiriMirai.models.events.FriendRecallEvent.type" href="#YiriMirai.models.events.FriendRecallEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.GroupAllowAnonymousChatEvent" href="#YiriMirai.models.events.GroupAllowAnonymousChatEvent">GroupAllowAnonymousChatEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.GroupAllowAnonymousChatEvent.current" href="#YiriMirai.models.events.GroupAllowAnonymousChatEvent.current">current</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupAllowAnonymousChatEvent.group" href="#YiriMirai.models.events.GroupAllowAnonymousChatEvent.group">group</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupAllowAnonymousChatEvent.operator" href="#YiriMirai.models.events.GroupAllowAnonymousChatEvent.operator">operator</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupAllowAnonymousChatEvent.origin" href="#YiriMirai.models.events.GroupAllowAnonymousChatEvent.origin">origin</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupAllowAnonymousChatEvent.type" href="#YiriMirai.models.events.GroupAllowAnonymousChatEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.GroupAllowConfessTalkEvent" href="#YiriMirai.models.events.GroupAllowConfessTalkEvent">GroupAllowConfessTalkEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.GroupAllowConfessTalkEvent.current" href="#YiriMirai.models.events.GroupAllowConfessTalkEvent.current">current</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupAllowConfessTalkEvent.group" href="#YiriMirai.models.events.GroupAllowConfessTalkEvent.group">group</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupAllowConfessTalkEvent.isByBot" href="#YiriMirai.models.events.GroupAllowConfessTalkEvent.isByBot">isByBot</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupAllowConfessTalkEvent.origin" href="#YiriMirai.models.events.GroupAllowConfessTalkEvent.origin">origin</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupAllowConfessTalkEvent.type" href="#YiriMirai.models.events.GroupAllowConfessTalkEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.GroupAllowMemberInviteEvent" href="#YiriMirai.models.events.GroupAllowMemberInviteEvent">GroupAllowMemberInviteEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.GroupAllowMemberInviteEvent.current" href="#YiriMirai.models.events.GroupAllowMemberInviteEvent.current">current</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupAllowMemberInviteEvent.group" href="#YiriMirai.models.events.GroupAllowMemberInviteEvent.group">group</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupAllowMemberInviteEvent.operator" href="#YiriMirai.models.events.GroupAllowMemberInviteEvent.operator">operator</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupAllowMemberInviteEvent.origin" href="#YiriMirai.models.events.GroupAllowMemberInviteEvent.origin">origin</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupAllowMemberInviteEvent.type" href="#YiriMirai.models.events.GroupAllowMemberInviteEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.GroupEntranceAnnouncementChangeEvent" href="#YiriMirai.models.events.GroupEntranceAnnouncementChangeEvent">GroupEntranceAnnouncementChangeEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.GroupEntranceAnnouncementChangeEvent.current" href="#YiriMirai.models.events.GroupEntranceAnnouncementChangeEvent.current">current</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEntranceAnnouncementChangeEvent.group" href="#YiriMirai.models.events.GroupEntranceAnnouncementChangeEvent.group">group</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEntranceAnnouncementChangeEvent.operator" href="#YiriMirai.models.events.GroupEntranceAnnouncementChangeEvent.operator">operator</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEntranceAnnouncementChangeEvent.origin" href="#YiriMirai.models.events.GroupEntranceAnnouncementChangeEvent.origin">origin</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupEntranceAnnouncementChangeEvent.type" href="#YiriMirai.models.events.GroupEntranceAnnouncementChangeEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.GroupEvent" href="#YiriMirai.models.events.GroupEvent">GroupEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.GroupEvent.type" href="#YiriMirai.models.events.GroupEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.GroupMessage" href="#YiriMirai.models.events.GroupMessage">GroupMessage</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.GroupMessage.sender" href="#YiriMirai.models.events.GroupMessage.sender">sender</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupMessage.type" href="#YiriMirai.models.events.GroupMessage.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.GroupMuteAllEvent" href="#YiriMirai.models.events.GroupMuteAllEvent">GroupMuteAllEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.GroupMuteAllEvent.current" href="#YiriMirai.models.events.GroupMuteAllEvent.current">current</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupMuteAllEvent.group" href="#YiriMirai.models.events.GroupMuteAllEvent.group">group</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupMuteAllEvent.operator" href="#YiriMirai.models.events.GroupMuteAllEvent.operator">operator</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupMuteAllEvent.origin" href="#YiriMirai.models.events.GroupMuteAllEvent.origin">origin</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupMuteAllEvent.type" href="#YiriMirai.models.events.GroupMuteAllEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.GroupNameChangeEvent" href="#YiriMirai.models.events.GroupNameChangeEvent">GroupNameChangeEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.GroupNameChangeEvent.current" href="#YiriMirai.models.events.GroupNameChangeEvent.current">current</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupNameChangeEvent.group" href="#YiriMirai.models.events.GroupNameChangeEvent.group">group</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupNameChangeEvent.operator" href="#YiriMirai.models.events.GroupNameChangeEvent.operator">operator</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupNameChangeEvent.origin" href="#YiriMirai.models.events.GroupNameChangeEvent.origin">origin</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupNameChangeEvent.type" href="#YiriMirai.models.events.GroupNameChangeEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.GroupRecallEvent" href="#YiriMirai.models.events.GroupRecallEvent">GroupRecallEvent</a></code></h4>
+<ul class="two-column">
+<li><code><a title="YiriMirai.models.events.GroupRecallEvent.authorId" href="#YiriMirai.models.events.GroupRecallEvent.authorId">authorId</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupRecallEvent.group" href="#YiriMirai.models.events.GroupRecallEvent.group">group</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupRecallEvent.messageId" href="#YiriMirai.models.events.GroupRecallEvent.messageId">messageId</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupRecallEvent.operator" href="#YiriMirai.models.events.GroupRecallEvent.operator">operator</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupRecallEvent.time" href="#YiriMirai.models.events.GroupRecallEvent.time">time</a></code></li>
+<li><code><a title="YiriMirai.models.events.GroupRecallEvent.type" href="#YiriMirai.models.events.GroupRecallEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.MemberCardChangeEvent" href="#YiriMirai.models.events.MemberCardChangeEvent">MemberCardChangeEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.MemberCardChangeEvent.current" href="#YiriMirai.models.events.MemberCardChangeEvent.current">current</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberCardChangeEvent.member" href="#YiriMirai.models.events.MemberCardChangeEvent.member">member</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberCardChangeEvent.origin" href="#YiriMirai.models.events.MemberCardChangeEvent.origin">origin</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberCardChangeEvent.type" href="#YiriMirai.models.events.MemberCardChangeEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.MemberHonorChangeEvent" href="#YiriMirai.models.events.MemberHonorChangeEvent">MemberHonorChangeEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.MemberHonorChangeEvent.action" href="#YiriMirai.models.events.MemberHonorChangeEvent.action">action</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberHonorChangeEvent.honor" href="#YiriMirai.models.events.MemberHonorChangeEvent.honor">honor</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberHonorChangeEvent.member" href="#YiriMirai.models.events.MemberHonorChangeEvent.member">member</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberHonorChangeEvent.type" href="#YiriMirai.models.events.MemberHonorChangeEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.MemberJoinEvent" href="#YiriMirai.models.events.MemberJoinEvent">MemberJoinEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.MemberJoinEvent.member" href="#YiriMirai.models.events.MemberJoinEvent.member">member</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberJoinEvent.type" href="#YiriMirai.models.events.MemberJoinEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.MemberJoinRequestEvent" href="#YiriMirai.models.events.MemberJoinRequestEvent">MemberJoinRequestEvent</a></code></h4>
+<ul class="two-column">
+<li><code><a title="YiriMirai.models.events.MemberJoinRequestEvent.from_id" href="#YiriMirai.models.events.MemberJoinRequestEvent.from_id">from_id</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberJoinRequestEvent.group_id" href="#YiriMirai.models.events.MemberJoinRequestEvent.group_id">group_id</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberJoinRequestEvent.group_name" href="#YiriMirai.models.events.MemberJoinRequestEvent.group_name">group_name</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberJoinRequestEvent.message" href="#YiriMirai.models.events.MemberJoinRequestEvent.message">message</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberJoinRequestEvent.nick" href="#YiriMirai.models.events.MemberJoinRequestEvent.nick">nick</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberJoinRequestEvent.type" href="#YiriMirai.models.events.MemberJoinRequestEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.MemberLeaveEventKick" href="#YiriMirai.models.events.MemberLeaveEventKick">MemberLeaveEventKick</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.MemberLeaveEventKick.member" href="#YiriMirai.models.events.MemberLeaveEventKick.member">member</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberLeaveEventKick.operator" href="#YiriMirai.models.events.MemberLeaveEventKick.operator">operator</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberLeaveEventKick.type" href="#YiriMirai.models.events.MemberLeaveEventKick.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.MemberLeaveEventQuit" href="#YiriMirai.models.events.MemberLeaveEventQuit">MemberLeaveEventQuit</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.MemberLeaveEventQuit.member" href="#YiriMirai.models.events.MemberLeaveEventQuit.member">member</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberLeaveEventQuit.type" href="#YiriMirai.models.events.MemberLeaveEventQuit.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.MemberMuteEvent" href="#YiriMirai.models.events.MemberMuteEvent">MemberMuteEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.MemberMuteEvent.durationSeconds" href="#YiriMirai.models.events.MemberMuteEvent.durationSeconds">durationSeconds</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberMuteEvent.type" href="#YiriMirai.models.events.MemberMuteEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.MemberPermissionChangeEvent" href="#YiriMirai.models.events.MemberPermissionChangeEvent">MemberPermissionChangeEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.MemberPermissionChangeEvent.current" href="#YiriMirai.models.events.MemberPermissionChangeEvent.current">current</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberPermissionChangeEvent.member" href="#YiriMirai.models.events.MemberPermissionChangeEvent.member">member</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberPermissionChangeEvent.origin" href="#YiriMirai.models.events.MemberPermissionChangeEvent.origin">origin</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberPermissionChangeEvent.type" href="#YiriMirai.models.events.MemberPermissionChangeEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.MemberSpecialTitleChangeEvent" href="#YiriMirai.models.events.MemberSpecialTitleChangeEvent">MemberSpecialTitleChangeEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.MemberSpecialTitleChangeEvent.current" href="#YiriMirai.models.events.MemberSpecialTitleChangeEvent.current">current</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberSpecialTitleChangeEvent.member" href="#YiriMirai.models.events.MemberSpecialTitleChangeEvent.member">member</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberSpecialTitleChangeEvent.origin" href="#YiriMirai.models.events.MemberSpecialTitleChangeEvent.origin">origin</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberSpecialTitleChangeEvent.type" href="#YiriMirai.models.events.MemberSpecialTitleChangeEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.MemberUnmuteEvent" href="#YiriMirai.models.events.MemberUnmuteEvent">MemberUnmuteEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.MemberUnmuteEvent.member" href="#YiriMirai.models.events.MemberUnmuteEvent.member">member</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberUnmuteEvent.operator" href="#YiriMirai.models.events.MemberUnmuteEvent.operator">operator</a></code></li>
+<li><code><a title="YiriMirai.models.events.MemberUnmuteEvent.type" href="#YiriMirai.models.events.MemberUnmuteEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.MessageEvent" href="#YiriMirai.models.events.MessageEvent">MessageEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.MessageEvent.message_chain" href="#YiriMirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.NewFriendRequestEvent" href="#YiriMirai.models.events.NewFriendRequestEvent">NewFriendRequestEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.NewFriendRequestEvent.from_id" href="#YiriMirai.models.events.NewFriendRequestEvent.from_id">from_id</a></code></li>
+<li><code><a title="YiriMirai.models.events.NewFriendRequestEvent.group_id" href="#YiriMirai.models.events.NewFriendRequestEvent.group_id">group_id</a></code></li>
+<li><code><a title="YiriMirai.models.events.NewFriendRequestEvent.message" href="#YiriMirai.models.events.NewFriendRequestEvent.message">message</a></code></li>
+<li><code><a title="YiriMirai.models.events.NewFriendRequestEvent.nick" href="#YiriMirai.models.events.NewFriendRequestEvent.nick">nick</a></code></li>
+<li><code><a title="YiriMirai.models.events.NewFriendRequestEvent.type" href="#YiriMirai.models.events.NewFriendRequestEvent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.OtherClientMessage" href="#YiriMirai.models.events.OtherClientMessage">OtherClientMessage</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.OtherClientMessage.sender" href="#YiriMirai.models.events.OtherClientMessage.sender">sender</a></code></li>
+<li><code><a title="YiriMirai.models.events.OtherClientMessage.type" href="#YiriMirai.models.events.OtherClientMessage.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.RequestEvent" href="#YiriMirai.models.events.RequestEvent">RequestEvent</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.RequestEvent.event_id" href="#YiriMirai.models.events.RequestEvent.event_id">event_id</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.StrangerMessage" href="#YiriMirai.models.events.StrangerMessage">StrangerMessage</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.StrangerMessage.sender" href="#YiriMirai.models.events.StrangerMessage.sender">sender</a></code></li>
+<li><code><a title="YiriMirai.models.events.StrangerMessage.type" href="#YiriMirai.models.events.StrangerMessage.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="YiriMirai.models.events.TempMessage" href="#YiriMirai.models.events.TempMessage">TempMessage</a></code></h4>
+<ul class="">
+<li><code><a title="YiriMirai.models.events.TempMessage.sender" href="#YiriMirai.models.events.TempMessage.sender">sender</a></code></li>
+<li><code><a title="YiriMirai.models.events.TempMessage.type" href="#YiriMirai.models.events.TempMessage.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>
