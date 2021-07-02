@@ -27,7 +27,7 @@ if __name__ == '__main__':
             await bot.send_friend_message(event.sender.id, [Plain('Hello World!')]
 ```
 
-更多信息参看[API文档](https://yiri-mirai.vercel.app/YiriMirai)
+更多信息参看[API文档](https://yiri-mirai.vercel.app/)。
 
 ## 开源协议
 
