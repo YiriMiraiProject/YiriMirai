@@ -1,26 +1,13 @@
 # -*- coding: utf-8 -*-
 import asyncio
-import inspect
+
 import logging
 from collections import defaultdict
 from typing import Any, Callable, Iterable, List
 
-from YiriMirai import exceptions
-from YiriMirai.utils import PriorityList
+from YiriMirai.utils import PriorityList, async_call_with_exception
 
 logger = logging.getLogger(__name__)
-
-
-async def async_call(func: Callable, *args, **kwargs) -> Any:
-    '''调用一个函数，此函数可以是同步或异步的，同时处理调用中发生的异常。'''
-    try:
-        coro = func(*args, **kwargs)
-        if inspect.isawaitable(coro):
-            return await coro
-        else:
-            return coro
-    except Exception as e:
-        exceptions.print_exception(e) # 打印异常信息，但不打断执行流程
 
 
 def event_chain_separator(sep: str = '.'):
@@ -85,7 +72,7 @@ class EventBus(object):
         results = []
         for m_event in self.event_chain_generator(event):
             coros = [
-                async_call(f, *args, **kwargs)
+                async_call_with_exception(f, *args, **kwargs)
                 for _, f in self._subscribers[m_event]
             ]
             if coros:

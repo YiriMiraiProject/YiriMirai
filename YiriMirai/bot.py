@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 import asyncio
-import inspect
 import logging
 from typing import Callable, Type, Union
 
 from YiriMirai.adapters.base import Adapter, Api
 from YiriMirai.bus import EventBus
+from YiriMirai.models.api import ApiProxy
 from YiriMirai.models.bus import ModelEventBus
 from YiriMirai.models.events import Event
+from YiriMirai.utils import async_
 
 
 class SimpleMirai(Api):
@@ -26,11 +27,7 @@ class SimpleMirai(Api):
         self.logger = logging.getLogger(__name__)
 
     async def call_api(self, api: str, **params):
-        coro = self._adapter.call_api(api, **params)
-        if inspect.isawaitable(coro):
-            return await coro
-        else:
-            return coro
+        return await async_(self._adapter.call_api(api, **params))
 
     def on(self, event: str, priority: int = 0) -> Callable:
         '''注册事件处理器。
@@ -91,3 +88,10 @@ class Mirai(SimpleMirai):
         ```
         '''
         return self._bus.on(event_type=event_type, priority=priority)
+
+    def api(self, api: str) -> ApiProxy:
+        '''获取 API Proxy 对象。'''
+        return ApiProxy.analyze(api, self)
+
+    def __getattr__(self, api: str) -> ApiProxy:
+        return self.api(api)

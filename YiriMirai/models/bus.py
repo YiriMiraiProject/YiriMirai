@@ -3,8 +3,9 @@ import logging
 from collections import defaultdict
 from typing import Any, Callable, List, Type, Union
 
-from YiriMirai.bus import EventBus, async_call
+from YiriMirai.bus import EventBus
 from YiriMirai.models.events import Event
+from YiriMirai.utils import async_call_with_exception
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +34,7 @@ class ModelEventBus(EventBus):
             '''
             event = Event.parse_obj(event)
             logger.debug(f'收到事件{event.type}。')
-            return await async_call(func, event)
+            return await async_call_with_exception(func, event)
 
         self._middlewares[func] = middleware
         self.base_bus.subscribe(event_type.__name__, middleware, priority)

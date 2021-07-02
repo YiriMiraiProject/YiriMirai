@@ -2,15 +2,33 @@
 import abc
 import functools
 import logging
+from enum import Enum
 from typing import Any, Awaitable, Callable, List, Set, Union
 
 from YiriMirai.bus import EventBus
 
 
+class Method(str, Enum):
+    '''API 接口的调用方法。
+
+    `GET` 使用 GET 方法调用。
+
+    `POST` 使用 POST 方法调用。
+
+    `REST` 表明这是一个 RESTful 的 POST。
+    '''
+    GET = "GET"
+    POST = "POST"
+    REST = "REST"
+
+
 class Api(object):
     '''支持从属性调用 API 的类。'''
     @abc.abstractmethod
-    def call_api(self, api: str, **params) -> Union[Awaitable[Any], Any]:
+    def call_api(self,
+                 api: str,
+                 method: Method = Method.GET,
+                 **params) -> Union[Awaitable[Any], Any]:
         pass
 
     def __getattr__(self,

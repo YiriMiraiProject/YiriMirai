@@ -3,15 +3,15 @@ __version__ = '0.1.0'
 
 import logging
 
-from YiriMirai.adapters import Adapter, HTTPAdapter
-from YiriMirai.bot import Mirai
+from YiriMirai.adapters import Adapter, Method, HTTPAdapter
+from YiriMirai.bot import Mirai, SimpleMirai
 from YiriMirai.bus import EventBus
 from YiriMirai.colorlog import ColoredFormatter
 from YiriMirai.exceptions import ApiError, LoginError
 
 __all__ = [
-    'Mirai', 'Adapter', 'HTTPAdapter', 'EventBus', 'ApiError', 'LoginError',
-    'get_logger'
+    'Mirai', 'SimpleMirai', 'Adapter', 'Method', 'HTTPAdapter', 'EventBus',
+    'ApiError', 'LoginError', 'get_logger'
 ]
 
 logger = logging.getLogger(__name__)

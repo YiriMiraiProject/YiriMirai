@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from YiriMirai.models.bus import ModelEventBus
 from YiriMirai.models.entities import (
-    Entity, Friend, Group, GroupMember, GroupMemberEx, Permission, Sender
+    Entity, Friend, Group, GroupMember, Permission, Sender
 )
 from YiriMirai.models.events import (
     BotEvent, BotGroupPermissionChangeEvent, BotInvitedJoinGroupRequestEvent,
@@ -12,7 +12,7 @@ from YiriMirai.models.events import (
     FriendMessage, FriendNickChangedEvent, FriendRecallEvent,
     GroupAllowAnonymousChatEvent, GroupAllowConfessTalkEvent,
     GroupAllowMemberInviteEvent, GroupEntranceAnnouncementChangeEvent,
-    GroupEvent, GroupMember, GroupMemberEx, GroupMessage, GroupMuteAllEvent,
+    GroupEvent, GroupMember, GroupMessage, GroupMuteAllEvent,
     GroupNameChangeEvent, GroupRecallEvent, MemberCardChangeEvent,
     MemberHonorChangeEvent, MemberJoinEvent, MemberJoinRequestEvent,
     MemberLeaveEventKick, MemberLeaveEventQuit, MemberMuteEvent,
@@ -31,7 +31,7 @@ __all__ = [
     'Friend',
     'Group',
     'GroupMember',
-    'GroupMemberEx',
+
     'Permission',
     'Sender',
     'BotEvent',
@@ -60,8 +60,6 @@ __all__ = [
     'GroupAllowMemberInviteEvent',
     'GroupEntranceAnnouncementChangeEvent',
     'GroupEvent',
-    'GroupMember',
-    'GroupMemberEx',
     'GroupMessage',
     'GroupMuteAllEvent',
     'GroupNameChangeEvent',

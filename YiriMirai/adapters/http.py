@@ -1,17 +1,23 @@
 # -*- coding: utf-8 -*-
 import asyncio
-
+from datetime import datetime
+from json import dumps as json_dumps
 import httpx
 from YiriMirai import exceptions
-from YiriMirai.adapters.base import Adapter
+from YiriMirai.adapters.base import Adapter, Method
 
 
 def _parse_response(response: httpx.Response) -> dict:
     response.raise_for_status()
     result = response.json()
-    if result['code'] != 0:
+    if result.get('code', 0) != 0:
         raise exceptions.ApiError(result['code'])
     return result
+
+
+def _json_default(obj):
+    if isinstance(obj, datetime):
+        return int(obj.timestamp())
 
 
 class HTTPAdapter(Adapter):
@@ -53,19 +59,27 @@ class HTTPAdapter(Adapter):
     async def _post(
         self, client: httpx.AsyncClient, url: str, json: dict
     ) -> dict:
-        response = await client.post(url, json=json, headers=self.headers)
+        '''调用 POST 方法。'''
+        # 使用自定义的 json.dumps
+        content = json_dumps(json, default=_json_default).encode('utf-8')
+        response = await client.post(
+            url, content=content, headers={'Content-Type': 'application/json'}
+        )
         self.logger.debug(f'发送 POST 请求，地址{url}，状态 {response.status_code}。')
         return _parse_response(response)
 
     async def _get(
         self, client: httpx.AsyncClient, url: str, params: dict
     ) -> dict:
-        response = await client.get(url, params=params, headers=self.headers)
+        '''调用 GET 方法。'''
+        response = await client.get(url, params=params)
         self.logger.debug(f'发送 GET 请求，地址{url}，状态 {response.status_code}。')
         return _parse_response(response)
 
     async def login(self, qq: int):
-        async with httpx.AsyncClient(base_url=self.host_name) as client:
+        async with httpx.AsyncClient(
+            base_url=self.host_name, headers=self.headers
+        ) as client:
             try:
                 self.session = (
                     await self._post(
@@ -92,7 +106,9 @@ class HTTPAdapter(Adapter):
                 raise exceptions.LoginError(e.code) from None
 
     async def poll_event(self):
-        async with httpx.AsyncClient(base_url=self.host_name) as client:
+        async with httpx.AsyncClient(
+            base_url=self.host_name, headers=self.headers
+        ) as client:
             msg_count = (await self._get(client, '/countMessage', {}))['data']
             if msg_count > 0:
                 msg_list = (
@@ -103,17 +119,14 @@ class HTTPAdapter(Adapter):
                     for msg in msg_list:
                         await bus.emit(msg['type'], msg)
 
-    async def call_api(self, api: str, **params):
-        async with httpx.AsyncClient(base_url=self.host_name) as client:
-            try:
-                # 首先尝试使用 GET 请求
+    async def call_api(self, api: str, method: Method = Method.GET, **params):
+        async with httpx.AsyncClient(
+            base_url=self.host_name, headers=self.headers
+        ) as client:
+            if method == Method.GET:
                 return await self._get(client, f'/{api}', params)
-            except httpx.HTTPError as e:
-                # 如果没有就尝试 POST 请求
-                if e.response.status_code == 404:
-                    return await self._post(client, f'/{api}', params)
-                else:
-                    raise e
+            elif method == Method.POST or method == Method.REST:
+                return await self._post(client, f'/{api}', params)
 
     async def run(self):
         await self._before_run()

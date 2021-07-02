@@ -8,20 +8,17 @@ try:
 except ImportError:
     from typing_extensions import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import Field
+from YiriMirai.models.base import MiraiBaseModel
 from YiriMirai.models.entities import (
-    Friend, Group, GroupMember, GroupMemberEx, Permission, Sender
+    Friend, Group, GroupMember, Permission, Sender
 )
 from YiriMirai.models.message import MessageChain
 
 
-class Event(BaseModel):
+class Event(MiraiBaseModel):
     '''事件基类。'''
     type: str
-
-    class Config:
-        extra = 'allow'
-        allow_population_by_field_name = True
 
     @classmethod
     def get_subtype(cls, name: str) -> Type['Event']:
@@ -122,13 +119,13 @@ class BotMuteEvent(GroupEvent):
     '''Bot 被禁言。'''
     type: str = 'BotMuteEvent'
     durationSeconds: int
-    operator: Optional[GroupMemberEx]
+    operator: Optional[GroupMember]
 
 
 class BotUnmuteEvent(GroupEvent):
     '''Bot 被取消禁言。'''
     type: str = 'BotUnmuteEvent'
-    operator: Optional[GroupMemberEx]
+    operator: Optional[GroupMember]
 
 
 class BotJoinGroupEvent(GroupEvent):
@@ -156,7 +153,7 @@ class GroupRecallEvent(GroupEvent):
     messageId: int
     time: datetime
     group: Group
-    operator: Optional[GroupMemberEx]
+    operator: Optional[GroupMember]
 
 
 class FriendRecallEvent(Event):
@@ -176,7 +173,7 @@ class GroupNameChangeEvent(GroupEvent):
     origin: str
     current: str
     group: Group
-    operator: Optional[GroupMemberEx]
+    operator: Optional[GroupMember]
 
 
 class GroupEntranceAnnouncementChangeEvent(GroupEvent):
@@ -185,7 +182,7 @@ class GroupEntranceAnnouncementChangeEvent(GroupEvent):
     origin: str
     current: str
     group: Group
-    operator: Optional[GroupMemberEx]
+    operator: Optional[GroupMember]
 
 
 class GroupMuteAllEvent(GroupEvent):
@@ -194,7 +191,7 @@ class GroupMuteAllEvent(GroupEvent):
     origin: bool
     current: bool
     group: Group
-    operator: Optional[GroupMemberEx]
+    operator: Optional[GroupMember]
 
 
 class GroupAllowAnonymousChatEvent(GroupEvent):
@@ -221,20 +218,20 @@ class GroupAllowMemberInviteEvent(GroupEvent):
     origin: bool
     current: bool
     group: Group
-    operator: Optional[GroupMemberEx]
+    operator: Optional[GroupMember]
 
 
 class MemberJoinEvent(GroupEvent):
     '''新人入群。'''
     type: str = 'MemberJoinEvent'
-    member: GroupMemberEx
+    member: GroupMember
 
 
 class MemberLeaveEventKick(GroupEvent):
     '''成员被踢出群（该成员不是Bot）。'''
     type: str = 'MemberLeaveEventKick'
-    member: GroupMemberEx
-    operator: Optional[GroupMemberEx]
+    member: GroupMember
+    operator: Optional[GroupMember]
 
 
 class MemberLeaveEventQuit(GroupEvent):
@@ -248,7 +245,7 @@ class MemberCardChangeEvent(GroupEvent):
     type: str = 'MemberCardChangeEvent'
     origin: str
     current: str
-    member: GroupMemberEx
+    member: GroupMember
 
 
 class MemberSpecialTitleChangeEvent(GroupEvent):
@@ -277,13 +274,13 @@ class MemberUnmuteEvent(GroupEvent):
     '''群成员被取消禁言（该成员不是Bot）。'''
     type: str = 'MemberUnmuteEvent'
     member: GroupMember
-    operator: Optional[GroupMemberEx]
+    operator: Optional[GroupMember]
 
 
 class MemberHonorChangeEvent(GroupEvent):
     '''群员称号改变。'''
     type: str = 'MemberHonorChangeEvent'
-    member: GroupMemberEx
+    member: GroupMember
     action: Literal['achieve', 'lose']
     honor: str
 
@@ -358,13 +355,13 @@ class FriendMessage(MessageEvent):
 class GroupMessage(MessageEvent):
     '''群消息。'''
     type: str = 'GroupMessage'
-    sender: GroupMemberEx
+    sender: GroupMember
 
 
 class TempMessage(MessageEvent):
     '''群临时消息。'''
     type: str = 'TempMessage'
-    sender: GroupMemberEx
+    sender: GroupMember
 
 
 class StrangerMessage(MessageEvent):
@@ -406,8 +403,6 @@ __all__ = [
     'GroupAllowMemberInviteEvent',
     'GroupEntranceAnnouncementChangeEvent',
     'GroupEvent',
-    'GroupMember',
-    'GroupMemberEx',
     'GroupMessage',
     'GroupMuteAllEvent',
     'GroupNameChangeEvent',

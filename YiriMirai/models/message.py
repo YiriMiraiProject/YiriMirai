@@ -6,7 +6,8 @@ import sys
 from datetime import datetime
 from typing import List, Optional, Type
 
-from pydantic import BaseModel, Field, HttpUrl, validator
+from pydantic import Field, HttpUrl, validator
+from YiriMirai.models.base import MiraiBaseModel
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +22,7 @@ def deserialize(s: str) -> str:
     return re.sub(r'\\([\[\]:,\\nr])', lambda match: match.group(1), s)
 
 
-class MessageComponent(BaseModel):
+class MessageComponent(MiraiBaseModel):
     '''消息组件。'''
     type: str
 
@@ -57,7 +58,7 @@ class MessageComponent(BaseModel):
                 return cls.__name__
 
 
-class MessageChain(BaseModel):
+class MessageChain(MiraiBaseModel):
     '''消息链。'''
     __root__: List[MessageComponent]
 
@@ -426,7 +427,7 @@ class MusicShare(MessageComponent):
     brief: str
 
 
-class ForwardMessageNode(BaseModel):
+class ForwardMessageNode(MiraiBaseModel):
     sender_id: int = Field(..., alias='senderId')
     time: datetime
     sender_name: str = Field(..., alias='senderName')
