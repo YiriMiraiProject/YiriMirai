@@ -11,6 +11,7 @@ from typing import List, Optional, Type
 
 from pydantic import Field, HttpUrl, validator
 from YiriMirai.models.base import MiraiBaseModel
+from YiriMirai.utils import KMP
 
 logger = logging.getLogger(__name__)
 
@@ -93,30 +94,71 @@ class MessageChain(MiraiBaseModel):
     ]))
     ```
 
+    使用`str(message_chain)`获取消息链的字符串表示，字符串采用 mirai 码格式，
+    并自动按照 mirai 码的规定转义。
+    参看 mirai 的[文档](https://github.com/mamoe/mirai/blob/dev/docs/Messages.md#mirai-%E7%A0%81)。
+    获取未转义的消息链字符串，可以使用`deserialize(str(message_chain))`。
+
     可以使用 for 循环遍历消息链中的消息组件。
     ```py
     for component in message_chain:
-        print(str(component))
+        print(repr(component))
     ```
 
-    可以使用`in`运算检查消息链中是否有某个类型的组件。
+    可以使用`==`运算符比较两个消息链是否相同。
+    ```py
+    another_msg_chain = MessageChain([
+        {
+            "type": "AtAll"
+        }, {
+            "type": "Plain",
+            "text": "Hello World!"
+        },
+    ])
+    print(message_chain == another_msg_chain)
+    'True'
+    ```
+
+    可以使用`in`运算检查消息链中：
+    1. 是否有某个消息组件。
+    2. 是否有某个类型的消息组件。
+    3. 是否有某个子消息链。
+    4. 对应的 mirai 码中是否有某子字符串。
+
     ```py
     if AtAll in message_chain:
         print('AtAll')
+
+    if At(bot.qq) in message_chain:
+        print('At Me')
+
+    if MessageChain([At(bot.qq), Plain('Hello!')]) in message_chain:
+        print('Hello!')
+
+    if 'Hello' in message_chain:
+        print('Hi!')
     ```
+
+    也可以使用`>=`和`<=`运算符：
+    ```py
+    if MessageChain([At(bot.qq), Plain('Hello!')]) <= message_chain:
+        print('Hello!')
+    ```
+
+    需注意，此处的子消息链匹配会把 Plain 看成一个整体，而不是匹配其文本的一部分。
+    如需对文本进行部分匹配，请采用 mirai 码字符串匹配的方式。
 
     消息链对索引操作进行了增强。以消息组件类型为索引，获取消息链中的全部该类型的消息组件。
     ```py
     plain_list = message_chain[Plain]
+    '[Plain("Hello World!")]'
     ```
 
-    以`类型: 数量`为索引，获取前几个该类型的消息组件。
+    以`类型: 数量`为索引，获取前至多多少个该类型的消息组件。
     ```py
-    plain_list_first_three = message_chain[Plain: 3]
+    plain_list_first = message_chain[Plain: 1]
+    '[Plain("Hello World!")]'
     ```
-
-    使用`str(message_chain)`获取消息链的字符串表示，字符串采用 mirai 码格式，
-    参看 mirai 的[文档](https://github.com/mamoe/mirai/blob/dev/docs/Messages.md#mirai-%E7%A0%81)。
     """
     __root__: List[MessageComponent]
 
@@ -170,7 +212,8 @@ class MessageChain(MiraiBaseModel):
         # 索引对象为 MessageComponent 和 int 构成的 slice， 返回指定数量的 component
         elif isinstance(index, slice):
             components = (
-                component for component in self if type(component) == index
+                component for component in self
+                if type(component) == index.start
             )
             return [
                 component
@@ -184,8 +227,19 @@ class MessageChain(MiraiBaseModel):
                     return True
             else:
                 return False
+        elif isinstance(sub, MessageComponent): # 检查消息链中是否有某个组件
+            for i in self:
+                if i == sub:
+                    return True
+            else:
+                return False
+        elif isinstance(sub, MessageChain): # 检查消息链中是否有某个子消息链
+            return bool(KMP(self, sub))
         elif isinstance(sub, str): # 检查消息中有无指定字符串子串
             return sub in deserialize(str(self))
+
+    def __ge__(self, other):
+        return other in self
 
     def __len__(self) -> int:
         return len(self.__root__)
@@ -261,6 +315,9 @@ class At(MessageComponent):
     def __init__(self, target: int, **_):
         super().__init__(target=target)
 
+    def __eq__(self, other):
+        return isinstance(other, At) and self.target == other.target
+
     def __str__(self):
         return f"[mirai:at:{self.target}]"
 
@@ -288,6 +345,9 @@ class Face(MessageComponent):
     ):
         super().__init__(faceId=face_id or faceId, name=name)
 
+    def __eq__(self, other):
+        return isinstance(other, Face) and self.face_id == other.face_id
+
     def __str__(self):
         return f"[mirai:face:{self.face_id}]"
 
@@ -306,6 +366,11 @@ class Image(MessageComponent):
         **_
     ):
         super().__init__(imageId=image_id or imageId, url=url)
+
+    def __eq__(self, other):
+        return isinstance(
+            other, Image
+        ) and self.type == other.type and self.uuid == other.uuid
 
     def __str__(self):
         return f"[mirai:image:{self.image_id}]"
@@ -450,7 +515,7 @@ class Poke(MessageComponent):
         return POKE_ID[self.name]
 
     def __str__(self):
-        return f'[mirai:poke:{self.name}]'
+        return f'[mirai:poke:{self.name},{self.poke_type},{self.poke_id}]'
 
 
 class Unknown(MessageComponent):

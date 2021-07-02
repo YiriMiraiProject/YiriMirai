@@ -19,7 +19,7 @@ poetry install
 from YiriMirai import Mirai, HTTPAdapter, FriendMessage, Plain
 
 if __name__ == '__main__':
-    bot = Mirai(qq=12345678, adapter=HTTPAdapter(verify_key='verify', host='localhost', port=8080))
+    bot = Mirai(qq=12345678, adapter=HTTPAdapter(verify_key='your_verify_key', host='localhost', port=8080))
 
     @bot.on(FriendMessage)
     async def onFriendMessage(event: FriendMessage):
@@ -27,7 +27,7 @@ if __name__ == '__main__':
             await bot.send_friend_message(event.sender.id, [Plain('Hello World!')]
 ```
 
-更多信息参看[API文档](https://yiri-mirai.vercel.app/)。
+更多信息参看[API文档](https://yiri-mirai-api.vercel.app/)。
 
 ## 开源协议
 

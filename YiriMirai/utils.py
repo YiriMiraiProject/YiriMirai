@@ -3,8 +3,9 @@
 此模块提供一些实用的辅助方法。
 """
 import inspect
+from typing import Callable, List
+
 from YiriMirai import exceptions
-from typing import Callable
 
 
 async def async_(coro):
@@ -61,3 +62,42 @@ class PriorityList(list):
                 return True
         else:
             return False
+
+
+def KMP(string, pattern, count: int = 1) -> List[int]:
+    """KMP算法。
+
+    `string` 待匹配字符串。
+
+    `pattern` 模式字符串。
+
+    `count` 至多匹配的次数。
+    """
+    if len(string) < len(pattern) or count < 1:
+        return []
+
+    # 生成下一个匹配子串的next数组。
+    next_array = [0] * len(pattern)
+    next_array[0] = 0
+    j = 0
+    for i in range(1, len(pattern)):
+        while j > 0 and pattern[j] != pattern[i]:
+            j = next_array[j - 1]
+        if pattern[j] == pattern[i]:
+            j += 1
+        next_array[i] = j
+
+    # 开始匹配。
+    matches = []
+    j = 0
+    for i in range(0, len(string)):
+        while j > 0 and pattern[j] != string[i]:
+            j = next_array[j - 1]
+        if pattern[j] == string[i]:
+            j += 1
+        if j == len(pattern):
+            matches.append(i - j + 1)
+            j = next_array[j - 1]
+        if len(matches) == count:
+            break
+    return matches
