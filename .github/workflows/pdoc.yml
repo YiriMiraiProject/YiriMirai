@@ -25,6 +25,7 @@ jobs:
         run: |
           pip install poetry
           poetry install -n
+          source`poetry env info --path`/bin/activate
 
       - name: run pdoc
         run: |
