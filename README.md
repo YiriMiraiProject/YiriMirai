@@ -1,6 +1,6 @@
 # YiriMirai
 
-一个轻量级、低耦合度的基于 mirai-api-http 的 QQ 机器人开发框架。
+一个轻量级、低耦合度的基于 mirai-api-http 的 Python SDK。
 
 目前仍处于开发阶段，各种内容可能会有较大的变化。
 
@@ -22,12 +22,12 @@ if __name__ == '__main__':
     bot = Mirai(qq=12345678, adapter=HTTPAdapter(verify_key='your_verify_key', host='localhost', port=8080))
 
     @bot.on(FriendMessage)
-    async def onFriendMessage(event: FriendMessage):
+    async def on_friend_message(event: FriendMessage):
         if str(event.message_chain) == '你好':
             await bot.send_friend_message(event.sender.id, [Plain('Hello World!')]
 ```
 
-更多信息参看[API文档](https://yiri-mirai-api.vercel.app/)。
+更多信息参看[文档](https://yiri-mirai.vercel.app/)。
 
 ## 开源协议
 
