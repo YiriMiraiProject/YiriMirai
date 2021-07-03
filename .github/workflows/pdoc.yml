@@ -1,0 +1,42 @@
+# deploy on vercel
+name: pdoc
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: install pdoc
+        run: pip3 install pdoc3
+
+      - name: run pdoc
+        run: |
+          pdoc --version
+          pdoc --html -o ./docs YiriMirai
+        
+      - name: prepare vercel project
+        run: |
+          mv ./docs/YiriMirai ./docs/yiri-mirai-api
+          
+      - uses: actions/setup-node@v1
+        with:
+         node-version: '14.x'
+      
+      - name: install vercel cli
+        run: npm i vercel
+          
+      - name: deploy
+        run: |
+          vercel link "$PWD/docs/yiri-mirai-api" --confirm --token=${{ secrets.VERCEL_TOKEN }}
+          vercel deploy "$PWD/docs/yiri-mirai-api" --prod --token=${{ secrets.VERCEL_TOKEN }}
