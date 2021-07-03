@@ -24,7 +24,8 @@ if __name__ == '__main__':
     @bot.on(FriendMessage)
     async def on_friend_message(event: FriendMessage):
         if str(event.message_chain) == '你好':
-            await bot.send_friend_message(event.sender.id, [Plain('Hello World!')]
+            await bot.send_friend_message(event.sender.id, [Plain('Hello World!')])
+    bot.run()
 ```
 
 更多信息参看[文档](https://yiri-mirai.vercel.app/)。
