@@ -24,8 +24,8 @@ jobs:
       - name: poetry install
         run: |
           pip install poetry
+          export POETRY_VIRTUALENVS_CREATE=false
           poetry install -n
-          poetry shell
 
       - name: run pdoc
         run: |
