@@ -2,15 +2,15 @@
 """
 此模块提供模型事件总线相关。
 
-关于一般的事件总线，参看模块`YiriMirai.bus`。
+关于一般的事件总线，参看模块`mirai.bus`。
 """
 import logging
 from collections import defaultdict
 from typing import Any, Callable, List, Type, Union
 
-from YiriMirai.bus import EventBus
-from YiriMirai.models.events import Event
-from YiriMirai.utils import async_call_with_exception
+from mirai.bus import EventBus
+from mirai.models.events import Event
+from mirai.utils import async_call_with_exception
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +30,7 @@ class ModelEventBus(EventBus):
     """模型事件总线，实现底层事件总线上的事件再分发，以将事件解析到 Event 对象。
 
     `ModelEventBus`在注册事件处理器时，可使用`Event`类或事件名。关于可用的`Event`类，
-    参见模块`YiriMirai.models.events`。
+    参见模块`mirai.models.events`。
 
     模型事件总线支持的事件处理器接受唯一的参数`event`，该参数是一个`Event`对象，包含触发的事件的信息。
 

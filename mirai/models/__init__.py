@@ -7,11 +7,11 @@ model 层架构在 bus 和 adapters 之上，将 mirai-api-http 传回的原始�
 
 model 层使用 pydantic 进行数据解析。
 """
-from YiriMirai.models.bus import ModelEventBus
-from YiriMirai.models.entities import (
+from mirai.models.bus import ModelEventBus
+from mirai.models.entities import (
     Entity, Friend, Group, GroupMember, Permission, Sender
 )
-from YiriMirai.models.events import (
+from mirai.models.events import (
     BotEvent, BotGroupPermissionChangeEvent, BotInvitedJoinGroupRequestEvent,
     BotJoinGroupEvent, BotLeaveEventActive, BotLeaveEventKick, BotMuteEvent,
     BotOfflineEventActive, BotOfflineEventDropped, BotOfflineEventForce,
@@ -28,7 +28,7 @@ from YiriMirai.models.events import (
     MemberUnmuteEvent, MessageEvent, NewFriendRequestEvent, OtherClientMessage,
     RequestEvent, StrangerMessage, TempMessage
 )
-from YiriMirai.models.message import (
+from mirai.models.message import (
     App, At, AtAll, Dice, Face, File, FlashImage, Forward, ForwardMessageNode,
     Image, Json, MessageChain, MessageComponent, MusicShare, Plain, Poke,
     Quote, Source, Unknown, Voice, Xml, deserialize, serialize

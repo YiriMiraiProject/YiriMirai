@@ -6,12 +6,12 @@ import asyncio
 import logging
 from typing import Callable, Type, Union
 
-from YiriMirai.adapters.base import Adapter, Api
-from YiriMirai.bus import EventBus
-from YiriMirai.models.api import ApiProxy
-from YiriMirai.models.bus import ModelEventBus
-from YiriMirai.models.events import Event
-from YiriMirai.utils import async_
+from mirai.adapters.base import Adapter, Api
+from mirai.bus import EventBus
+from mirai.models.api import ApiProxy
+from mirai.models.bus import ModelEventBus
+from mirai.models.events import Event
+from mirai.utils import async_
 
 
 class SimpleMirai(Api):
@@ -41,7 +41,7 @@ class SimpleMirai(Api):
         """
         `qq: int` QQ 号。
 
-        `adapter: Adapter` 适配器，负责与 mirai-api-http 沟通，详见模块`YiriMirai.adapters`。
+        `adapter: Adapter` 适配器，负责与 mirai-api-http 沟通，详见模块`mirai.adapters`。
         """
         self.qq = qq
         self._adapter = adapter
@@ -95,7 +95,7 @@ class Mirai(SimpleMirai):
 
     `Mirai` 类包含 model 层封装，API 名称经过转写以符合命名规范，所有的 API 全部使用小写字母及下划线命名。
     （API 名称也可使用原名。）
-    API 参数可以使用具名参数，也可以使用位置参数，关于 API 参数的更多信息请参见模块`YiriMirai.models.api`。
+    API 参数可以使用具名参数，也可以使用位置参数，关于 API 参数的更多信息请参见模块`mirai.models.api`。
 
     例如：
     ```py
@@ -137,7 +137,7 @@ class Mirai(SimpleMirai):
     def api(self, api: str) -> ApiProxy:
         """获取 API Proxy 对象。
 
-        API Proxy 提供更加简便的调用 API 的写法，详见`YiriMirai.models.api`。
+        API Proxy 提供更加简便的调用 API 的写法，详见`mirai.models.api`。
 
         `Mirai`的`__getattr__`与此方法完全相同，可支持直接在对象上调用 API。
 

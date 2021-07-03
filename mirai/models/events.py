@@ -12,11 +12,11 @@ except ImportError:
     from typing_extensions import Literal
 
 from pydantic import Field
-from YiriMirai.models.base import MiraiBaseModel
-from YiriMirai.models.entities import (
+from mirai.models.base import MiraiBaseModel
+from mirai.models.entities import (
     Friend, Group, GroupMember, Permission, Sender
 )
-from YiriMirai.models.message import MessageChain
+from mirai.models.message import MessageChain
 
 
 class Event(MiraiBaseModel):

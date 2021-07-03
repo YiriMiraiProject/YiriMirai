@@ -6,12 +6,12 @@ from enum import Enum
 from typing import List, Optional, Union
 
 from pydantic import BaseModel, Field
-from YiriMirai.adapters.base import Api, Method
-from YiriMirai.models.base import MiraiBaseModel
-from YiriMirai.models.entities import Friend, Group, GroupMember, GroupConfig, MemberInfo
-from YiriMirai.models.events import MessageEvent
-from YiriMirai.models.message import Image, Voice
-from YiriMirai.utils import async_
+from mirai.adapters.base import Api, Method
+from mirai.models.base import MiraiBaseModel
+from mirai.models.entities import Friend, Group, GroupMember, GroupConfig, MemberInfo
+from mirai.models.events import MessageEvent
+from mirai.models.message import Image, Voice
+from mirai.utils import async_
 
 
 class Response(MiraiBaseModel):

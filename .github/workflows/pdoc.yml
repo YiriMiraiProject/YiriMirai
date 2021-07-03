@@ -30,11 +30,11 @@ jobs:
       - name: run pdoc
         run: |
           pdoc --version
-          pdoc --html -o ./docs YiriMirai
+          pdoc --html -o ./docs mirai
         
       - name: prepare vercel project
         run: |
-          mv ./docs/YiriMirai ./docs/yiri-mirai-api
+          mv ./docs/mirai ./docs/yiri-mirai-api
           
       - uses: actions/setup-node@v1
         with:

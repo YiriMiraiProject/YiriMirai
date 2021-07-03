@@ -5,7 +5,7 @@
 import inspect
 from typing import Callable, List
 
-from YiriMirai import exceptions
+from mirai import exceptions
 
 
 async def async_(coro):

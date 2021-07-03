@@ -10,8 +10,8 @@ from json import loads as json_loads
 from typing import List, Optional, Type
 
 from pydantic import Field, HttpUrl, validator
-from YiriMirai.models.base import MiraiBaseModel
-from YiriMirai.utils import KMP
+from mirai.models.base import MiraiBaseModel
+from mirai.utils import KMP
 
 logger = logging.getLogger(__name__)
 

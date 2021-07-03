@@ -6,8 +6,8 @@ import asyncio
 from datetime import datetime
 from json import dumps as json_dumps
 import httpx
-from YiriMirai import exceptions
-from YiriMirai.adapters.base import Adapter, Method
+from mirai import exceptions
+from mirai.adapters.base import Adapter, Method
 
 
 def _parse_response(response: httpx.Response) -> dict:

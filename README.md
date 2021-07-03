@@ -9,14 +9,14 @@
 克隆这个仓库到本地，然后使用`poetry`安装：
 ```shell
 git clone git@github.com:Wybxc/YiriMirai.git
-cd YiriMirai
+cd mirai
 poetry install
 ```
 
 ## 使用
 
 ```python
-from YiriMirai import Mirai, HTTPAdapter, FriendMessage, Plain
+from mirai import Mirai, HTTPAdapter, FriendMessage, Plain
 
 if __name__ == '__main__':
     bot = Mirai(qq=12345678, adapter=HTTPAdapter(verify_key='your_verify_key', host='localhost', port=8080))

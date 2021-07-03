@@ -10,11 +10,11 @@ __author__ = '忘忧北萱草'
 
 import logging
 
-from YiriMirai.adapters import Adapter, HTTPAdapter, Method
-from YiriMirai.bot import Mirai, SimpleMirai
-from YiriMirai.bus import EventBus
-from YiriMirai.colorlog import ColoredFormatter
-from YiriMirai.models import (
+from mirai.adapters import Adapter, HTTPAdapter, Method
+from mirai.bot import Mirai, SimpleMirai
+from mirai.bus import EventBus
+from mirai.colorlog import ColoredFormatter
+from mirai.models import (
     At, AtAll, Dice, Event, Face, FriendMessage, GroupMessage, MessageChain,
     MessageEvent, Plain, Poke, StrangerMessage, TempMessage, deserialize,
     serialize

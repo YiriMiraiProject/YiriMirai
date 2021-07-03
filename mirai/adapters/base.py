@@ -8,7 +8,7 @@ import logging
 from enum import Enum
 from typing import Any, Awaitable, Callable, List, Set, Union
 
-from YiriMirai.bus import EventBus
+from mirai.bus import EventBus
 
 
 class Method(str, Enum):

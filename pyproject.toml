@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "YiriMirai"
+name = "yiri-mirai"
 version = "0.1.0"
 description = ""
 authors = ["忘忧北萱草 <wybxc@qq.com>"]

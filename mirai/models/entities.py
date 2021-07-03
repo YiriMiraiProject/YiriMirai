@@ -8,7 +8,7 @@ from enum import Enum
 from typing import Optional
 
 from pydantic import Field
-from YiriMirai.models.base import MiraiBaseModel
+from mirai.models.base import MiraiBaseModel
 
 
 class Entity(MiraiBaseModel):

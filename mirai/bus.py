@@ -2,7 +2,7 @@
 """
 此模块提供基础事件总线相关。
 
-此处的事件总线不包含 model 层封装。包含 model 层封装的版本，请参见模块`YiriMirai.models.bus`。
+此处的事件总线不包含 model 层封装。包含 model 层封装的版本，请参见模块`mirai.models.bus`。
 """
 import asyncio
 
@@ -10,7 +10,7 @@ import logging
 from collections import defaultdict
 from typing import Any, Callable, Iterable, List
 
-from YiriMirai.utils import PriorityList, async_call_with_exception
+from mirai.utils import PriorityList, async_call_with_exception
 
 logger = logging.getLogger(__name__)
 
