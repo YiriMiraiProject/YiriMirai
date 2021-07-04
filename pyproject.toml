@@ -1,8 +1,12 @@
 [tool.poetry]
 name = "yiri-mirai"
 version = "0.1.0"
-description = ""
+description = "一个轻量级、低耦合的基于 mirai-api-http 的 Python SDK。"
 authors = ["忘忧北萱草 <wybxc@qq.com>"]
+packages = [{ include="mirai" }]
+license = "AGPL-3.0"
+readme = "README.md"
+homepage = "https://yiri-mirai.vercel.app"
 
 [tool.poetry.dependencies]
 python = "^3.7"
