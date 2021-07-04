@@ -21,10 +21,15 @@ module.exports = {
       },
       items: [
         {
+          label: '文档',
+          position: 'left',
           type: 'doc',
           docId: 'intro',
+        },
+        {
+          to: '/blog',
+          label: '博客',
           position: 'left',
-          label: '教程',
         },
         {
           href: 'https://yiri-mirai-api.vercel.app',
@@ -70,10 +75,10 @@ module.exports = {
         {
           title: '更多',
           items: [
-            // {
-            //   label: '博客',
-            //   to: '/blog',
-            // },
+            {
+              label: '博客',
+              to: '/blog',
+            },
             {
               label: 'GitHub',
               href: 'https://github.com/Wybxc/YiriMirai',
@@ -94,19 +99,43 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/',
+            'https://github.com/Wybxc/YiriMirai/edit/doc/',
         },
         blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
+          blogTitle: '博客',
+          blogDescription: 'YiriMirai 的开发笔记，以及其他。',
+          blogSidebarCount: 5,
+          blogSidebarTitle: '最近的博文',
+          showReadingTime: false,
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/blog/',
+            'https://github.com/Wybxc/YiriMirai/edit/doc/',
         },
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+          customCss: [
+            require.resolve('./src/css/custom.css'),
+          ],
         },
+      },
+    ],
+  ],
+  plugins: [
+    [
+      require.resolve("@easyops-cn/docusaurus-search-local"),
+      {
+        // `hashed` is recommended as long-term-cache of index file is possible.
+        hashed: true,
+        language: ["en", "zh"],
+        translations: {
+          "search_placeholder": "搜索",
+          "see_all_results": "查看所有结果……",
+          "no_results": "无结果。",
+          "search_results_for": "“{{ keyword }}”的搜索结果",
+          "search_the_documentation": "搜索文档",
+          "count_documents_found": "找到{{ count }}篇文档。",
+          "no_documents_were_found": "没有找到包含指定关键词的文档。"
+        },
+        highlightSearchTermsOnTargetPage: true
       },
     ],
   ],

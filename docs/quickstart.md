@@ -50,7 +50,7 @@ if __name__ == '__main__':
     bot.run()
 ```
 
-记得把 QQ 号改成你自己的。
+记得把 QQ 号改成你自己的，`verify_key` `host` 和 `port` 也要和 mirai-api-http 的配置一致。
 
 运行这个文件：
 
