@@ -23,6 +23,7 @@ poetry add yiri-mirai
 
 ```shell
 git clone https://github.com/Wybxc/YiriMirai.git
+cd YiriMirai
 poetry install
 ```
 
