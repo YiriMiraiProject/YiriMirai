@@ -6,13 +6,20 @@ sidebar_position: 2
 
 ## 准备工作
 
-YiriMirai 需要 **Python 3.7 及以上版本**。同时，YiriMirai 使用 poetry 进行依赖管理，你需要先安装 [poetry](https://python-poetry.org/)。
+YiriMirai 需要 **Python 3.7 及以上版本**。
 
 YiriMirai 基于 mirai 运行。如果你还没有安装 mirai，我们建议你使用 [mcl-installer](https://github.com/iTXTech/mcl-installer)，支持一键安装，并自带 mirai-api-http。安装完成后，**运行 mirai-console，登录你的机器人账号**。
 
 ### 安装
 
-目前，你可以从 Github 上安装 YiriMirai。
+从 PyPI 安装：
+```shell
+pip install yiri-mirai
+# 或者使用 poetry
+poetry add yiri-mirai
+```
+
+此外，你还可以从 Github 上安装 YiriMirai。使用这种方式时，由于 YiriMirai 使用 poetry 进行依赖管理，你需要先安装 [poetry](https://python-poetry.org/)。
 
 ```shell
 git clone https://github.com/Wybxc/YiriMirai.git
@@ -29,7 +36,7 @@ poetry install
 在你的项目中新建一个`quickstart.py`文件，内容如下：
 
 ```python title='quickstart.py'
-from YiriMirai import Mirai, HTTPAdapter, FriendMessage, Plain
+from mirai import Mirai, HTTPAdapter, FriendMessage, Plain
 
 if __name__ == '__main__':
     bot = Mirai(qq=12345678, adapter=HTTPAdapter(verify_key='your_verify_key', host='localhost', port=8080))
@@ -37,7 +44,7 @@ if __name__ == '__main__':
     @bot.on(FriendMessage)
     async def on_friend_message(event: FriendMessage):
         if str(event.message_chain) == '你好':
-            await bot.send_friend_message(event.sender.id, [Plain('Hello World!')]
+            await bot.send_friend_message(event.sender.id, [Plain('Hello World!')])
 
     bot.run()
 ```
