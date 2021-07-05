@@ -1,0 +1,83 @@
+---
+sidebar_position: 3.2
+---
+
+# 事件处理
+
+## 注册事件处理器
+
+`Mirai` 对象的 `on` 方法用于注册事件处理器。
+
+```python
+from mirai import GroupMessage
+
+# 接收群消息
+@bot.on(GroupMessage)
+async def handle_group_message(event: GroupMessage):
+    print(str(event.message_chain)) # 打印消息内容
+```
+
+`on` 方法可以接受一个 `Event` 类型的子类，或字符串类型的事件名。
+
+```python {2}
+# 接收群消息
+@bot.on(GroupMessage) # 或 @bot.on('GroupMessage')
+async def handle_group_message(event: GroupMessage):
+    print(str(event.message_chain)) # 打印消息内容
+```
+
+:::tip
+在 [`mirai.models.events` 模块](https://yiri-mirai-api.vercel.app/models/events.html)中找到更多事件类型。
+:::
+
+事件处理器可以是同步的或异步的。
+
+```python
+# 接收群消息
+@bot.on(GroupMessage)
+def handle_group_message_sync(event: GroupMessage):
+    print(str(event.message_chain)) # 打印消息内容
+```
+
+`on` 方法的第二个参数是 `priority`，用于指定事件处理器的优先级。值越小，优先程度越高。默认值为0。
+
+```python
+# 接收群消息
+@bot.on(GroupMessage)
+def handle_group_message(event: GroupMessage):
+    print(str(event.message_chain)) # 打印消息内容
+
+
+@bot.on(GroupMessage, priority=1)
+def handle_group_message_another(event: GroupMessage):
+    print('After handle_group_message') # 这句话会在消息内容之后打印
+```
+
+:::caution
+当定义异步事件处理器时，由于控制流切换，事件处理器并不一定严格地按照 `priority` 来执行。（这一特性可能会在之后版本更改。）
+:::
+
+事件处理器接受唯一的一个参数 `event`，它是一个 `Event` 类型的对象，包含了事件的相关信息。
+
+## 事件传播
+
+事件传播指的是当一个事件被触发时，它所在的事件链的所有事件也会被触发。
+
+当使用 Mirai 对象注册事件处理器时，事件传播使用的是继承事件链，一个事件会传播到它的父事件和祖先事件。
+
+```python
+from mirai import GroupMessage, FriendMessage, MessageEvent
+
+@bot.on(GroupMessage)
+async def handle_group_message(event: GroupMessage):
+    print("收到群消息。")
+
+@bot.on(FriendMessage)
+async def handle_friend_message(event: FriendMessage):
+    print("收到好友消息。")
+
+@bot.on(MessageEvent)
+async def handle_message_event(event: MessageEvent):
+    # 无论是群消息还是好友消息，这里都会被触发。
+    print(f"收到消息，类型为{event.type}。")
+```
