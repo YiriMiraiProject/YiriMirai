@@ -13,6 +13,7 @@ YiriMirai 基于 mirai 运行。如果你还没有安装 mirai，我们建议你
 ### 安装
 
 从 PyPI 安装：
+
 ```shell
 pip install yiri-mirai
 # 或者使用 poetry
@@ -31,10 +32,9 @@ poetry install
 
 按照 mirai-api-http 的[配置文档](https://project-mirai.github.io/mirai-api-http/)配置 mirai-api-http，启用 http adapter，配置完成后记录你设置的 `verifyKey` ，以及 http adapter 的 `host` 和 `port` 。
 
-
 ## 编写第一个机器人
 
-在你的项目中新建一个`quickstart.py`文件，内容如下：
+在你的项目中新建一个 `quickstart.py` 文件，内容如下：
 
 ```python title='quickstart.py'
 from mirai import Mirai, HTTPAdapter, FriendMessage, Plain
@@ -61,6 +61,13 @@ python quickstart.py
 看到如上输出，说明机器人已经开始运行。
 
 试着给你的机器人发送一条“你好”，你的机器人就会发送一条消息“Hello World!”。
+
+import {ChatBox, ChatMessage} from "@site/src/components/ChatMessage.js";
+
+<ChatBox>
+  <ChatMessage name="忘忧北萱草" msg="你好"/>
+  <ChatMessage name="Yiri" msg="Hello World!"/>
+</ChatBox>
 
 ## 发生了什么？
 

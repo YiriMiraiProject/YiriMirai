@@ -1,42 +1,15 @@
 ---
+title: 事件继承关系
+hide_title: false
 sidebar_position: 5.1
 ---
 
-# 事件继承链
-
 以下是 YiriMirai 定义的事件继承关系：
 
-import Tree from "../../src/components/tree.js";
+import SearchTree from "@site/src/components/tree.js";
+import data from "./event-chains.js";
 
-<Tree data={
-    {
-        name: 'root',
-        toggled: true,
-        children: [
-            {
-                name: 'parent',
-                children: [
-                    { name: 'child1' },
-                    { name: 'child2' }
-                ]
-            },
-            {
-                name: 'loading parent',
-                loading: true,
-                children: []
-            },
-            {
-                name: 'parent',
-                children: [
-                    {
-                        name: 'nested parent',
-                        children: [
-                            { name: 'nested child 1' },
-                            { name: 'nested child 2' }
-                        ]
-                    }
-                ]
-            }
-        ]
-    }
-}/>
+<SearchTree
+  data={data}
+  hrefPrefix="https://yiri-mirai-api.vercel.app/models/events.html#mirai.models.events."
+/>

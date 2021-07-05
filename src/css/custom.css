@@ -24,10 +24,36 @@
   padding: 0 var(--ifm-pre-padding);
 }
 
-html[data-theme='dark'] .docusaurus-highlight-code-line {
+html[data-theme="dark"] .docusaurus-highlight-code-line {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
 .blog-list-page .markdown:after {
   content: "…………";
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--ifm-heading-color) !important;
+  font-weight: var(--ifm-heading-font-weight) !important;
+}
+
+body {
+  font: var(--ifm-font-size-base) / var(--ifm-line-height-base)
+    var(--ifm-font-family-base) !important;
+}
+
+main a {
+  color: var(--ifm-link-color) !important;
+  text-decoration: var(--ifm-link-decoration) !important;
+  transition: color var(--ifm-transition-fast) var(--ifm-transition-timing-default) !important;
+}
+
+.alert a {
+  color: var(--ifm-alert-color) !important;
+  text-decoration: underline !important;
 }
