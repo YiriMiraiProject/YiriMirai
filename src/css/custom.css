@@ -47,7 +47,7 @@ body {
     var(--ifm-font-family-base) !important;
 }
 
-main a {
+article a {
   color: var(--ifm-link-color) !important;
   text-decoration: var(--ifm-link-decoration) !important;
   transition: color var(--ifm-transition-fast) var(--ifm-transition-timing-default) !important;
