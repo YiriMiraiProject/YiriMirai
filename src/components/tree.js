@@ -90,6 +90,11 @@ class SearchTree extends React.Component {
     });
   };
 
+  componentWillUnmount() {
+    // 解决 ant-design 可能存在的内存泄漏问题
+    this.setState = (..._) => {};
+  }
+
   render() {
     const { searchValue, expandedKeys, autoExpandParent } = this.state;
     const loop = (data) =>

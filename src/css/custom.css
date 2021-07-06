@@ -47,10 +47,12 @@ body {
     var(--ifm-font-family-base) !important;
 }
 
-article a {
+article a,
+nav.pagination-nav a {
   color: var(--ifm-link-color) !important;
   text-decoration: var(--ifm-link-decoration) !important;
-  transition: color var(--ifm-transition-fast) var(--ifm-transition-timing-default) !important;
+  transition: color var(--ifm-transition-fast)
+    var(--ifm-transition-timing-default) !important;
 }
 
 .alert a {

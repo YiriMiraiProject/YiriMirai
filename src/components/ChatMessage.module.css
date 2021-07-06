@@ -60,9 +60,15 @@
 .chatMessage {
     position: relative;
     margin: 1rem 0;
+    opacity: 0;
+    transform: translateX(-20%);
+    transition: transform .3s ease-out,opacity .3s ease;
+}
+
+.chatMessageShown {
     opacity: 1;
     transform: translateX(0);
-    transition: transform .3s ease-out,opacity .3s ease;
+    composes: chatMessage;
 }
 
 .avatar {

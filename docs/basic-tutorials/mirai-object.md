@@ -82,7 +82,7 @@ SimpleMirai 的事件处理器接收到的 `event` 参数是字典类型，存�
 ```python
 @bot.on('FriendMessage')
 async def handle_group_message(event: dict):
-    print(f"收到来自{event['sender']['nickname']的消息。}")
+    print(f"收到来自{event['sender']['nickname']}的消息。")
 
 # # FriendMessage 不会被传播到 Event
 # @bot.on('Event')
