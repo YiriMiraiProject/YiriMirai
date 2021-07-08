@@ -1,0 +1,76 @@
+---
+sidebar_position: 4.1
+---
+
+# YiriMirai 的架构
+
+为降低耦合度，YiriMirai 在设计时分为四层：基础网络层（mirai-api-http）、基础层（adapters 和事件总线）、模型层（models）、接口层（Mirai 类）。
+
+## 图示
+
+import StructureDiagram from "@site/src/components/StructureDiagram.js";
+
+<StructureDiagram
+  data={[
+    ["Mirai"],
+    ["models", "SimpleMirai"],
+    ["adapters", "Eventbus"],
+    ["mirai-api-http"],
+  ]}
+/>
+
+*（画的好丑，将就着看吧）*
+
+## 各层级的功能
+
+### 基础网络层
+
+基础网络层指 mirai-api-http，它是 YiriMirai 工作的基础。
+
+### 基础层
+
+基础层指接口适配器和事件总线，它们直接与 mirai-api-http 通信。
+
+### 模型层
+
+模型层是在基础层之上的抽象。“模型”得名于 pydantic 的 `BaseModel`。
+
+模型层负责将基础层得到的数据解析为 pydantic 模型，以更方便地获取和操作其中的信息。
+
+模型层的模块全部定义于 `mirai.models` 命名空间中。
+
+以下是模型层包含的主要模块：
+
+#### mirai.models.api
+
+API 调用相关。
+
+#### mirai.models.bus
+
+模型事件总线。模型事件总线拓展了事件总线的功能，使之可以使用 `mirai.models.events` 中定义的事件类型来注册和接收事件。
+
+`Mirai` 和 `SimpleMirai` 的一个区别就在于，`Mirai` 使用了模型事件总线，而 `SimpleMirai` 使用了普通的事件总线。
+
+#### mirai.models.entities
+
+数据实体。包含 `Friend` `Group` `GroupMember`，以及群设置等类。
+
+#### mirai.models.events
+
+事件。定义了各种事件的数据结构。
+
+#### mirai.models.message
+
+消息链相关。
+
+### 接口层
+
+接口层指 Mirai 类，负责统筹各层功能，提供用户友好的接口。
+
+## 再谈 SimpleMirai
+
+SimpleMirai 是 Mirai 的简化版本，它只包含了基础层，并且没有模型层。为什么在 Mirai 之外，另外提供了一个并不好用的 SimpleMirai 类呢？
+
+这来自于 YiriMirai 的架构设计。在诸层级中，模型层被设计为“可抽离”的。它仅提供更加便捷的数据处理方式，而没有增加新的功能。如果不使用模型层，完全可以仅靠基础层实现同样的功能，只是会繁琐一些。
+
+因此，SimpleMirai 就是抽离了模型层的 Mirai。我们提供 SimpleMirai，作为展示抽离模型层的可能性。

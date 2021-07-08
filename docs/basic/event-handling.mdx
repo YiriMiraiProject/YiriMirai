@@ -87,3 +87,29 @@ import EventChain from "../others/event-chains.mdx";
 <EventChain />
 
 你可以从 `mirai.models.events` 模块引入这些事件。部分常用的事件也可从顶层模块 `mirai` 的命名空间引入。
+
+## 获取事件的信息
+
+事件处理器接收唯一参数 `event`，它是一个 `Event` 类型的对象，包含了事件的相关信息。
+
+一般来说，`event` 参数会传入一个 `Event` 的子类对象，具体类型与注册事件处理器时传入的事件类型相同。
+
+YiriMirai 通过 pydantic 解析事件信息。`Event` 类型是 pydantic 的模型，可以从属性中获取事件信息。
+
+例如：
+
+```python
+@bot.on(Event)
+async def handle_message_event(event: Event):
+    print(f"收到事件{event.type}。") # 获取事件名称
+
+@bot.on(FriendMessage)
+async def handle_friend_message(event: FriendMessage):
+    print("收到好友消息。",
+        f"来源：{event.friend.nickname}", # 获取好友昵称
+        f"来源qq号：{event.friend.id}", # 获取好友qq号
+        f"消息内容：{event.message_chain}" # 获取消息链
+    )
+```
+
+关于不同事件可用的属性，可以参考 mirai-api-http 的[文档](https://project-mirai.github.io/mirai-api-http/api/EventType.html)，或查看 YiriMirai 的 [API 文档](https://yiri-mirai-api.vercel.app/models/events.html)。

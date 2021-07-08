@@ -62,7 +62,7 @@ SimpleMirai 是工作在模型层之下的 Mirai。
 :::note
 模型层（model 层）提供了对 mirai-api-http 发回的原始数据的封装，让我们可以以更加 pythonic 的方式来处理这些数据。
 
-关于模型层的更多信息，参看[YiriMirai 的架构](..\advanced-tutorials\structure-of-yiri-mirai.md)章节。
+关于模型层的更多信息，参看[YiriMirai 的架构](..\advanced-tutorials\structure-of-yiri-mirai.mdx)章节。
 :::
 
 SimpleMirai 不含模型层封装，这意味着一切都必须和 mirai-api-http 的原始定义一致，并且只能使用基本类型，比如 dict 来描述数据。
