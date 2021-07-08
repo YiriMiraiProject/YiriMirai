@@ -12,6 +12,16 @@ module.exports = {
   favicon: 'img/favicon.ico',
   organizationName: 'Wybxc',
   projectName: 'YiriMirai',
+  i18n: {
+    defaultLocale: 'zh-CN',
+    locales: ['zh-CN'],
+    localeConfigs: {
+      "zh-CN": {
+        label: '简体中文',
+        direction: 'ltr',
+      },
+    },
+  },
   themeConfig: {
     navbar: {
       title: 'YiriMirai',

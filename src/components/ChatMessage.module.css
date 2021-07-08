@@ -1,6 +1,7 @@
 .panelView {
     min-width: -webkit-fit-content;
     min-width: -moz-fit-content;
+    min-width: -webkit-fill-available;
     min-width: fit-content;
     max-width: 75%;
     position: relative;
@@ -26,21 +27,21 @@
 }
 
 .circleRed {
+    composes: circle;
     left: 17px;
     background-color: #ff5f56;
-    composes: circle;
 }
 
 .circleYellow {
+    composes: circle;
     left: 39px;
     background-color: #ffbd2e;
-    composes: circle;
 }
 
 .circleGreen {
+    composes: circle;
     left: 61px;
     background-color: #4cae4c;
-    composes: circle;
 }
 
 .title {
@@ -62,18 +63,19 @@
     margin: 1rem 0;
     opacity: 0;
     transform: translateX(-20%);
-    transition: transform .3s ease-out,opacity .3s ease;
+    transition: transform .3s ease-out, opacity .3s ease;
 }
 
 .chatMessageShown {
+    composes: chatMessage;
     opacity: 1;
     transform: translateX(0);
-    composes: chatMessage;
 }
 
 .avatar {
     width: 3rem;
     height: 3rem;
+    float: left;
     position: absolute;
     border-radius: 100%;
     transform: translateY(-1px);
