@@ -7252,10 +7252,10 @@ react-error-overlay@^6.0.9:
   resolved "https://registry.npm.taobao.org/react-error-overlay/download/react-error-overlay-6.0.9.tgz?cache=0&sync_timestamp=1612387724751&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Freact-error-overlay%2Fdownload%2Freact-error-overlay-6.0.9.tgz#3c743010c9359608c375ecd6bc76f35d93995b0a"
   integrity sha1-PHQwEMk1lgjDdezWvHbzXZOZWwo=
 
-react-expanse@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.nlark.com/react-expanse/download/react-expanse-1.0.0.tgz#e45d5f522a66f5d41f5aaaa6285338274c48ca1c"
-  integrity sha1-5F1fUipm9dQfWqqmKFM4J0xIyhw=
+react-expand-animated@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.nlark.com/react-expand-animated/download/react-expand-animated-1.0.2.tgz#17bc31a9defd153df99364e1aa0d3b1ba96d64f3"
+  integrity sha1-F7wxqd79FT35k2Thqg07G6ltZPM=
 
 react-fast-compare@^3.1.1:
   version "3.2.0"

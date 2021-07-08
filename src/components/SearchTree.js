@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./SearchTree.module.css";
-import Expanse from "react-expanse";
+import Expand from 'react-expand-animated';
 import { BsChevronRight } from "react-icons/bs";
 import { AiOutlineSearch } from "react-icons/ai";
 import HrefSvg from "@site/static/img/href.svg";
@@ -24,7 +24,7 @@ function Stack(length) {
 function Tree(props) {
   const { data, onExpand } = props;
   // Element Stack
-  const { push, pop, peek, isEmpty, _look } = Stack(data.length);
+  const { push, pop, peek, isEmpty } = Stack(data.length);
   for (let node of data) {
     // console.log(_look());
 
@@ -52,9 +52,9 @@ function Tree(props) {
               {icon}
               {node.title}
             </span>
-            <Expanse show={node.expand}>
+            <Expand open={node.expand}>
               <ul className={`${styles.tree} ${styles.subTree}`}>{children}</ul>
-            </Expanse>
+            </Expand>
           </li>
         ),
       });
@@ -178,7 +178,7 @@ class SearchTree extends React.Component {
         }
         return null;
       })
-      .filter((item, i, self) => item && self.indexOf(item) === i);
+      .filter((item, i, list) => item && list.indexOf(item) === i);
     this.setExpandedNodeIds(expandedNodeIds);
   };
 
@@ -217,7 +217,6 @@ class SearchTree extends React.Component {
         </span>
       );
     };
-    const isRoot = (node) => node.parentId === -1;
     return (
       <div>
         <Search placeholder="搜索..." onChange={this.onSearchChange} />
