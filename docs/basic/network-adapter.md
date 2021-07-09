@@ -31,7 +31,7 @@ adapter.unregister_event_bus(bus2)
 
 `Adapter.buses` 属性是一个 set，表示当前注册到适配器的所有事件总线。
 
-关于事件总线的更多信息，请参考 [事件总线](../advanced/event-bus.md)。
+关于事件总线的更多信息，请参考 [事件总线](../advanced/event-bus.mdx)。
 
 在 bot 创建时，会**自动把 bot 的内部事件总线注册入 Adapter 中**。
 

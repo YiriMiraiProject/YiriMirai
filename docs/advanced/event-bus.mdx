@@ -1,0 +1,140 @@
+---
+sidebar_position: 4.2
+---
+
+# 事件总线
+
+事件总线是一个简单的消息队列，用于接收、广播、处理事件。
+
+## 创建与使用事件总线
+
+`EventBus` 定义在 `mirai.bus` 模块中，也存在于 `mirai` 命名空间。
+
+```python
+from mirai import EventBus
+
+bus = EventBus()
+```
+
+使用 `on` 装饰器定义事件处理器。
+
+`on` 接收两个参数，第一个是事件名称，第二个是优先级。
+
+```python
+@bus.on('MyEvent')
+def my_event_handler(event):
+    print('MyEvent:', event)
+```
+
+与 `bot.on` 相同，事件处理器可以是同步的或异步的。
+
+使用 `emit` 发送事件。
+
+```python
+await bus.emit('MyEvent', {'foo': 'bar'})
+```
+
+## 事件传播
+
+事件总线通过事件链实现事件传播。当一个事件被触发时，它所在的事件链的所有事件也会被触发。
+
+事件总线在创建时，可以接受一个参数 `event_chain_generator`，规定事件链如何构建。`event_chain_generator` 是一个函数，它接收事件名，返回一个生成事件链中各事件的生成器。
+
+例如，如下代码规定了按点号分隔的事件链：
+
+```python
+def func(event: str):
+    while True:
+        yield event
+        event, *sub_event = event.rsplit('.', maxsplit=1) # 由下到上依次触发
+        if not sub_event: # 顶层事件触发完成
+            break
+
+bus = EventBus(func)
+
+@bus.on('MyEvent')
+def my_event_handler(event):
+    print('MyEvent:', event)
+
+@bus.on('MyEvent.SubEvent')
+def my_sub_event_handler(event):
+    print('SubEvent:', event)
+
+await bus.emit('MyEvent.SubEvent', {'foo': 'bar'})
+```
+
+在上面的代码中，`MyEvent.SubEvent` 触发时，根据事件链生成器，得到的是事件链是 `['MyEvent.SubEvent', 'MyEvent']`，因此，事件总线会依次执行 `MyEvent.SubEvent` 和 `MyEvent` 的事件处理器。
+
+实际应用中，我们提供了对这一类事件链生成器的封装：
+
+```python
+bus = EventBus(event_chain_generator=event_chain_separator('.'))
+```
+
+这和上面的代码等价，都是按点号分隔的事件链。
+
+另一种常用的事件链是继承事件链。由于继承关系涉及到了事件的具体内容，按照设计逻辑，继承时间链隶属于模型事件总线。
+
+## 模型事件总线与继承事件链
+
+模型事件总线定义于 `mirai.models.bus` 模块，它拓展了事件总线的功能，使其支持使用事件类型注册和触发事件，以及支持继承事件链。
+
+继承事件链是基于事件的继承关系，包含事件及所有父事件的事件链。
+
+例如：FriendMessage的事件链为`['FriendMessage', 'MessageEvent', 'Event']`。
+
+import EventChain from "../others/event-chains.mdx";
+
+<EventChain />
+
+模型事件总线仅支持继承事件链，在创建时不再接受事件链生成器参数。
+
+模型事件总线支持用事件类型调用 `on` 方法，也可用事件名字符串。
+
+```python
+from mirai.models.bus import ModelEventBus
+
+mbus = ModelEventBus()
+
+@mbus.on(GroupMessage) # 或 @mbus.on('GroupMessage')
+async def handle_group_message(event: GroupMessage):
+    print('GroupMessage')
+
+@mbus.on('MessageEvent')
+async def handle_message_event(event: MessageEvent):
+    print('MessageEvent')
+```
+
+不论使用事件类型还是字符串，事件都会按照继承事件链传播。比如上例中，收到群消息时，`handle_message_event` 也会被触发。
+
+模型事件总线的 `emit` 方法仅能发送类型为 `Event` 的子类的事件。
+
+```python
+await mbus.emit(Event(type='Event'))
+```
+
+模型事件总线提供了 `base_bus` 属性，用于访问其内部的普通事件总线。
+
+## 自定义事件
+
+事件总线的 `emit` 方法可以发送自定义事件。
+
+```python
+@bus.on('CustomEvent')
+def handle_custom_event(x, y, z):
+    print('CustomEvent', x, y, z)
+
+await bus.emit('CustomEvent', 1, 2, 3)
+```
+
+自定义事件可以携带一个或多个参数。
+
+模型事件总线暂时不支持自定义事件。不过可以通过 `base_bus` 发送自定义事件。
+
+```python
+@mbus.base_bus.on('CustomEvent')
+def handle_custom_event(x, y, z):
+    print('CustomEvent', x, y, z)
+
+await mbus.base_bus.emit('CustomEvent', 1, 2, 3)
+```
