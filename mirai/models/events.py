@@ -2,52 +2,24 @@
 """
 此模块提供事件模型。
 """
-import sys
 from datetime import datetime
-from typing import Optional, Type
+from typing import Optional
 
 try:
     from typing import Literal
 except ImportError:
     from typing_extensions import Literal
 
-from pydantic import Field
-from mirai.models.base import MiraiBaseModel
-from mirai.models.entities import (
-    Friend, Group, GroupMember, Permission, Sender
-)
+from mirai.models.base import MiraiIndexedModel
+from mirai.models.entities import (Friend, Group, GroupMember, Permission,
+                                   Sender)
 from mirai.models.message import MessageChain
+from pydantic import Field
 
 
-class Event(MiraiBaseModel):
+class Event(MiraiIndexedModel):
     """事件基类。"""
     type: str
-
-    @classmethod
-    def get_subtype(cls, name: str) -> Type['Event']:
-        """根据类名称，获取相应的子类类型。
-
-        `name` 类名称。
-        """
-        try:
-            type_ = getattr(sys.modules[__name__], name)
-            if not issubclass(type_, cls):
-                raise ValueError(f'`{name}`不是`{cls.__name__}`的子类！')
-            return type_
-        except AttributeError as e:
-            raise ValueError(f'`{name}`不是`{cls.__name__}`的子类！') from e
-
-    @classmethod
-    def parse_obj(cls, event: dict):
-        """通过 mirai-api-http 发回的事件，构造对应的`Event`对象。
-
-        `event: dict` 已解析的事件 JSON。
-        """
-        if cls == Event:
-            EventType = cls.get_subtype(event['type'])
-            return EventType.parse_obj(event)
-        else:
-            return super().parse_obj(event)
 
 
 ###############################

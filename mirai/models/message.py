@@ -4,14 +4,13 @@
 """
 import logging
 import re
-import sys
 from datetime import datetime
 from json import loads as json_loads
-from typing import List, Optional, Type
+from typing import List, Optional
 
-from pydantic import Field, HttpUrl, validator
-from mirai.models.base import MiraiBaseModel
+from mirai.models.base import MiraiBaseModel, MiraiIndexedModel
 from mirai.utils import KMP
+from pydantic import Field, HttpUrl, validator
 
 logger = logging.getLogger(__name__)
 
@@ -32,39 +31,9 @@ def deserialize(s: str) -> str:
     return re.sub(r'\\([\[\]:,\\nr])', lambda match: match.group(1), s)
 
 
-class MessageComponent(MiraiBaseModel):
+class MessageComponent(MiraiIndexedModel):
     """消息组件。"""
     type: str
-
-    class Config:
-        extra = 'allow'
-        allow_population_by_field_name = True
-
-    @classmethod
-    def get_subtype(cls, name: str) -> Type['MessageComponent']:
-        """根据类名称，获取相应的子类类型。
-
-        `name: str` 类名称。
-        """
-        try:
-            type_ = getattr(sys.modules[__name__], name)
-            if not issubclass(type_, cls):
-                raise ValueError(f'`{name}`不是`{cls.__name__}`的子类！')
-            return type_
-        except AttributeError as e:
-            raise ValueError(f'`{name}`不是`{cls.__name__}`的子类！') from e
-
-    @classmethod
-    def parse_obj(cls, msg: dict):
-        """通过字典形式的消息链组件，构造对应的`MessageComponent`对象。
-
-        `msg: dict` 字典形式的消息链组件。
-        """
-        if cls == MessageComponent:
-            MessageComponentType = cls.get_subtype(msg['type'])
-            return MessageComponentType.parse_obj(msg)
-        else:
-            return super().parse_obj(msg)
 
     def __str__(self):
         return ''
@@ -221,21 +190,21 @@ class MessageChain(MiraiBaseModel):
             ]
 
     def __contains__(self, sub) -> bool:
-        if isinstance(sub, type): # 检测消息链中是否有某种类型的对象
+        if isinstance(sub, type):  # 检测消息链中是否有某种类型的对象
             for i in self:
                 if type(i) == sub:
                     return True
             else:
                 return False
-        elif isinstance(sub, MessageComponent): # 检查消息链中是否有某个组件
+        elif isinstance(sub, MessageComponent):  # 检查消息链中是否有某个组件
             for i in self:
                 if i == sub:
                     return True
             else:
                 return False
-        elif isinstance(sub, MessageChain): # 检查消息链中是否有某个子消息链
+        elif isinstance(sub, MessageChain):  # 检查消息链中是否有某个子消息链
             return bool(KMP(self, sub))
-        elif isinstance(sub, str): # 检查消息中有无指定字符串子串
+        elif isinstance(sub, str):  # 检查消息中有无指定字符串子串
             return sub in deserialize(str(self))
 
     def __ge__(self, other):
@@ -378,9 +347,9 @@ class Image(MessageComponent):
     @property
     def uuid(self):
         image_id = self.image_id
-        if image_id[0] == '{': # 群图片
+        if image_id[0] == '{':  # 群图片
             image_id = image_id[1:37]
-        elif image_id[0] == '/': # 好友图片
+        elif image_id[0] == '/':  # 好友图片
             image_id = image_id[1:]
         return image_id
 
