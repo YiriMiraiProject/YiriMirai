@@ -13,6 +13,7 @@ from mirai.models.base import MiraiBaseModel
 
 class Entity(MiraiBaseModel):
     """实体，表示一个用户或群。"""
+
     def __repr__(self):
         return f'<{self.__class__.__name__} {str(self)}>'
 
@@ -25,8 +26,11 @@ class Entity(MiraiBaseModel):
 class Friend(Entity):
     """好友。"""
     id: int
+    """QQ 号。"""
     nickname: Optional[str]
+    """昵称。"""
     remark: Optional[str]
+    """备注。"""
 
     def get_avatar_url(self) -> str:
         return f'http://q4.qlogo.cn/g?b=qq&nk={self.id}&s=140'
@@ -35,15 +39,21 @@ class Friend(Entity):
 class Permission(str, Enum):
     """群成员身份权限。"""
     Member = "MEMBER"
+    """成员。"""
     Administrator = "ADMINISTRATOR"
+    """管理员。"""
     Owner = "OWNER"
+    """群主。"""
 
 
 class Group(Entity):
     """群。"""
     id: int
+    """群号。"""
     name: str
+    """群名称。"""
     permission: Permission
+    """Bot 在群中的权限。"""
 
     def get_avatar_url(self) -> str:
         return f'https://p.qlogo.cn/gh/{self.id}/{self.id}/'
@@ -52,13 +62,22 @@ class Group(Entity):
 class GroupMember(Entity):
     """群成员。"""
     id: int
+    """QQ 号。"""
     member_name: str = Field(..., alias='memberName')
+    """群成员名称。"""
     permission: Permission
+    """Bot 在群中的权限。"""
     group: Group
-    special_title: str = Field('', alias='specialTitle')
-    join_timestamp: datetime = Field(0, alias='joinTimestamp')
-    last_speak_timestamp: datetime = Field(0, alias='lastSpeakTimestamp')
-    mute_time_remaining: int = Field(0, alias='muteTimeRemaining')
+    """群。"""
+    special_title: Optional[str] = Field('', alias='specialTitle')
+    """群头衔。"""
+    join_timestamp: Optional[datetime] = Field(0, alias='joinTimestamp')
+    """加入群的时间。"""
+    last_speak_timestamp: Optional[datetime] = Field(
+        0, alias='lastSpeakTimestamp')
+    """最后一次发言的时间。"""
+    mute_time_remaining: Optional[int] = Field(0, alias='muteTimeRemaining')
+    """禁言剩余时间。"""
 
     def __repr__(self):
         return f"<GroupMember id={self.id} group={self.group} permission={self.permission} group={self.group.id}>"
@@ -70,7 +89,9 @@ class GroupMember(Entity):
 class Sender(Entity):
     """来自其他客户端的用户。"""
     id: int
+    """QQ 号。"""
     platform: str
+    """来源平台。"""
 
     def get_avatar_url(self) -> str:
         return f'http://q4.qlogo.cn/g?b=qq&nk={self.id}&s=140'
@@ -78,6 +99,7 @@ class Sender(Entity):
 
 class Config(MiraiBaseModel):
     """配置项类型。"""
+
     def modify(self, **kwargs) -> 'Config':
         """修改部分设置。"""
         for k, v in kwargs.items():
@@ -91,11 +113,17 @@ class Config(MiraiBaseModel):
 class GroupConfig(Config):
     """群配置。"""
     name: str
+    """群名称。"""
     announcement: str
+    """群公告。"""
     confess_talk: bool = Field(..., alias='confessTalk')
+    """是否允许坦白说。"""
     allow_member_invite: bool = Field(..., alias='allowMemberInvite')
+    """是否允许成员邀请好友入群。"""
     auto_approve: bool = Field(..., alias='autoApprove')
+    """是否开启自动审批入群。"""
     anonymous_chat: bool = Field(..., alias='anonymousChat')
+    """是否开启匿名聊天。"""
 
 
 class MemberInfo(Config, GroupMember):

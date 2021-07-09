@@ -134,7 +134,10 @@ dmypy.json
 # test cases
 /test.py
 
-# doc
+# pdoc documents
+/docs
+
+# doc branch
 /node_modules
 
 # Production
