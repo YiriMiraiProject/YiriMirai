@@ -4,6 +4,7 @@
 """
 import asyncio
 import logging
+import sys
 from typing import Callable, Type, Union
 
 from mirai.adapters.base import Adapter, ApiProvider
@@ -86,14 +87,20 @@ class SimpleMirai(ApiProvider):
         await self._adapter.login(self.qq)
         for func in self.setup_functions:
             await async_(func())
-        await self._adapter.run(*args, **kwargs)
+        try:
+            await self._adapter.run(*args, **kwargs)
+        finally:
+            await self._adapter.logout()
 
     def run(self, *args, **kwargs):
         """开始运行机器人。
 
         一般情况下，此函数会进入主循环，不再返回。
         """
-        asyncio.run(self._run(*args, **kwargs))
+        try:
+            asyncio.run(self._run(*args, **kwargs))
+        except KeyboardInterrupt:
+            sys.exit(0)
 
 
 class Mirai(SimpleMirai):

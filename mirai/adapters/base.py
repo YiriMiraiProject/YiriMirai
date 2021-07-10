@@ -4,11 +4,22 @@
 """
 import abc
 import functools
-import logging
+from datetime import datetime
 from enum import Enum
+from json import dumps
 from typing import Any, Awaitable, Callable, List, Set, Union
 
 from mirai.bus import EventBus
+
+
+def _json_default(obj): # 支持 datetime
+    if isinstance(obj, datetime):
+        return int(obj.timestamp())
+
+
+def json_dumps(obj) -> str:
+    """保存为 json。"""
+    return dumps(obj, default=_json_default)
 
 
 class Method(str, Enum):
@@ -17,8 +28,11 @@ class Method(str, Enum):
     """使用 GET 方法调用。"""
     POST = "POST"
     """使用 POST 方法调用。"""
-    REST = "REST"
-    """表明这是一个 RESTful 的 POST。"""
+    # 区分下面两个，是为了兼容 websocket
+    RESTGET = "RESTGET"
+    """表明这是一个对 RESTful 接口的 GET。"""
+    RESTPOST = "RESTPOST"
+    """表明这是一个对 RESTful 接口的 POST。"""
 
 
 class ApiProvider(object):
@@ -50,13 +64,19 @@ class Adapter(ApiProvider):
 
     属性 `buses` 为适配器注册的事件总线集合。适配器被绑定到 bot 时，bot 会自动将自身的事件总线注册到适配器。
     """
-    def __init__(self, verify_key: str = ''):
+    verify_key: str
+    """mirai-api-http 配置的认证 key。"""
+    session: str
+    """从 mirai-api-http 处获得的 session。"""
+    buses: Set[EventBus]
+    """注册的事件总线集合。"""
+    def __init__(self, verify_key: str):
         """
         `verify_key: str = ''` mirai-api-http 配置的认证 key。
         """
         self.verify_key = verify_key
-        self.buses: Set[EventBus] = set()
-        self.logger = logging.getLogger(__name__)
+        self.session = ''
+        self.buses = set()
 
     def register_event_bus(self, *buses: List[EventBus]):
         """注册事件总线。
@@ -74,11 +94,17 @@ class Adapter(ApiProvider):
 
     @abc.abstractmethod
     async def login(self, qq: int):
-        """登录到 mirai-api-http。此处为抽象方法，具体实现由子类决定。"""
+        """登录到 mirai-api-http。"""
+
+    @abc.abstractmethod
+    async def logout(self):
+        """登出。"""
 
     async def _before_run(self):
         if not self.buses:
             raise RuntimeError('事件总线未指定！')
+        if not self.session:
+            raise RuntimeError('未登录！')
 
     async def run(self):
         """运行。

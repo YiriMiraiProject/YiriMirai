@@ -79,7 +79,7 @@ class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):
                 raise ValueError(f'`{name}` 不是 `{cls.__name__}` 的子类！')
             return type_
         except AttributeError as e:
-            raise ValueError(f'`{name}` 不是 `{cls.__name__}` 的子类！') from e
+            raise ValueError(f'`{name}` 不是 `{cls.__name__}` 的子类！') from None
 
     @classmethod
     def parse_obj(cls, obj: dict):

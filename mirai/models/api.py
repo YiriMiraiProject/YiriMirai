@@ -349,14 +349,19 @@ class ApiRest(ApiModel):
 
             async def get(self, *args, **kwargs) -> MiraiBaseModel:
                 """获取。"""
-                return await super().get(
-                    *self.partial_args, *args, **self.partial_kwargs, **kwargs
+                return await self._call_api(
+                    method=Method.RESTGET,
+                    args=[*self.partial_args, *args],
+                    kwargs={
+                        **self.partial_kwargs,
+                        **kwargs
+                    }
                 )
 
             async def set(self, *args, **kwargs) -> MiraiBaseModel:
                 """设置。"""
                 return await self._call_api(
-                    method=Method.POST,
+                    method=Method.RESTPOST,
                     response_type=self.api_type.Info.response_type_post,
                     args=[*self.partial_args, *args],
                     kwargs={

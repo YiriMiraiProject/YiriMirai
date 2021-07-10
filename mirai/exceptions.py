@@ -36,12 +36,6 @@ class ApiError(RuntimeError):
         self.args = (code, f'[ERROR {code}]' + API_ERROR_FMT[code])
 
 
-class LoginError(ApiError):
-    """登陆出错。
-    """
-    pass
-
-
 def print_exception(e: Exception):
     """打印异常信息。
     """

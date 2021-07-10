@@ -3,11 +3,13 @@
 此模块提供 HTTP 轮询适配器，适用于 mirai-api-http 的 http adapter。
 """
 import asyncio
-from datetime import datetime
-from json import dumps as json_dumps
+import logging
+
 import httpx
 from mirai import exceptions
-from mirai.adapters.base import Adapter, Method
+from mirai.adapters.base import Adapter, Method, json_dumps
+
+logger = logging.getLogger(__name__)
 
 
 def _parse_response(response: httpx.Response) -> dict:
@@ -19,27 +21,46 @@ def _parse_response(response: httpx.Response) -> dict:
     return result
 
 
-def _json_default(obj): # 支持 datetime
-    if isinstance(obj, datetime):
-        return int(obj.timestamp())
+def _error_handler_async(func):
+    """错误处理装饰器。"""
+    async def wrapper(self, *args, **kwargs):
+        try:
+            return await func(self, *args, **kwargs)
+        except (httpx.NetworkError, httpx.InvalidURL) as e:
+            err = exceptions.NetworkError('无法连接到 mirai。请检查地址与端口是否正确。')
+            logger.error(e)
+            raise err from e
+        except Exception as e:
+            logger.error(e)
+            raise
+
+    return wrapper
 
 
 class HTTPAdapter(Adapter):
     """HTTP 轮询适配器。使用 HTTP 轮询的方式与 mirai-api-http 沟通。
     """
+    host_name: str
+    """mirai-api-http 的 HTTPAdapter Server 主机名。"""
+    poll_interval: float
+    """轮询时间间隔，单位秒。"""
+    qq: int
+    """机器人的 QQ 号。"""
+    headers: httpx.Headers
+    """HTTP 请求头。"""
     def __init__(
         self,
-        verify_key: str = '',
-        host: str = 'localhost',
-        port: int = 8080,
+        verify_key: str,
+        host: str,
+        port: int,
         poll_interval: float = 1.
     ):
         """
-        `verify_key: str = ''` mirai-api-http 配置的认证 key。
+        `verify_key: str` mirai-api-http 配置的认证 key。
 
-        `host: str = 'localhost'` HTTP Server 的地址。
+        `host: str` HTTP Server 的地址。
 
-        `port: int = 8080` HTTP Server 的端口。
+        `port: int` HTTP Server 的端口。
 
         `poll_interval: float = 1.` 轮询时间间隔，单位秒。
         """
@@ -59,34 +80,37 @@ class HTTPAdapter(Adapter):
 
         self.poll_interval = poll_interval
 
-        self.session = ''
+        self.qq = 0
         self.headers = httpx.Headers() # 使用 headers 传递 session
 
+    @_error_handler_async
     async def _post(
         self, client: httpx.AsyncClient, url: str, json: dict
     ) -> dict:
         """调用 POST 方法。"""
         # 使用自定义的 json.dumps
-        content = json_dumps(json, default=_json_default).encode('utf-8')
+        content = json_dumps(json).encode('utf-8')
         response = await client.post(
             url, content=content, headers={'Content-Type': 'application/json'}
         )
-        self.logger.debug(f'发送 POST 请求，地址{url}，状态 {response.status_code}。')
+        logger.debug(f'发送 POST 请求，地址{url}，状态 {response.status_code}。')
         return _parse_response(response)
 
+    @_error_handler_async
     async def _get(
         self, client: httpx.AsyncClient, url: str, params: dict
     ) -> dict:
         """调用 GET 方法。"""
         response = await client.get(url, params=params)
-        self.logger.debug(f'发送 GET 请求，地址{url}，状态 {response.status_code}。')
+        logger.debug(f'发送 GET 请求，地址{url}，状态 {response.status_code}。')
         return _parse_response(response)
 
+    @_error_handler_async
     async def login(self, qq: int):
         async with httpx.AsyncClient(
             base_url=self.host_name, headers=self.headers
         ) as client:
-            try:
+            if not self.session:
                 self.session = (
                     await self._post(
                         client, '/verify', {
@@ -94,20 +118,30 @@ class HTTPAdapter(Adapter):
                         }
                     )
                 )['session']
-                await self._post(
-                    client, '/bind', {
-                        "sessionKey": self.session,
-                        'qq': qq,
-                    }
-                )
-                self.headers = httpx.Headers({'sessionKey': self.session})
-                self.logger.info(f'成功登录到账号{qq}。')
-            except (httpx.NetworkError, httpx.InvalidURL) as e:
-                raise exceptions.NetworkError(
-                    '无法连接到 mirai。请检查地址与端口是否正确。'
-                ) from e
-            except exceptions.ApiError as e:
-                raise exceptions.LoginError(e.code) from None
+
+            await self._post(
+                client, '/bind', {
+                    "sessionKey": self.session,
+                    "qq": qq,
+                }
+            )
+
+            self.headers = httpx.Headers({'sessionKey': self.session})
+            self.qq = qq
+            logger.info(f'成功登录到账号{qq}。')
+
+    @_error_handler_async
+    async def logout(self):
+        async with httpx.AsyncClient(
+            base_url=self.host_name, headers=self.headers
+        ) as client:
+            await self._post(
+                client, '/release', {
+                    "sessionKey": self.session,
+                    "qq": self.qq,
+                }
+            )
+            logger.info(f"从账号{self.qq}退出。")
 
     async def poll_event(self):
         """进行一次轮询，获取并处理事件。"""
@@ -120,9 +154,12 @@ class HTTPAdapter(Adapter):
                     await
                     self._get(client, '/fetchMessage', {'count': msg_count})
                 )['data']
+
+                coros = []
                 for bus in self.buses:
                     for msg in msg_list:
-                        await bus.emit(msg['type'], msg)
+                        coros.append(bus.emit(msg['type'], msg))
+                await asyncio.gather(*coros)
 
     async def call_api(self, api: str, method: Method = Method.GET, **params):
         """调用 API。
@@ -136,15 +173,15 @@ class HTTPAdapter(Adapter):
         async with httpx.AsyncClient(
             base_url=self.host_name, headers=self.headers
         ) as client:
-            if method == Method.GET:
+            if method == Method.GET or method == Method.RESTGET:
                 return await self._get(client, f'/{api}', params)
-            elif method == Method.POST or method == Method.REST:
+            elif method == Method.POST or method == Method.RESTPOST:
                 return await self._post(client, f'/{api}', params)
 
     async def run(self):
         """开始轮询。"""
         await self._before_run()
-        self.logger.info('机器人开始运行。按 Ctrl + C 停止。')
+        logger.info('机器人开始运行。按 Ctrl + C 停止。')
         while True:
-            await self.poll_event()
+            asyncio.create_task(self.poll_event())
             await asyncio.sleep(self.poll_interval)
