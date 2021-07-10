@@ -10,7 +10,7 @@ Mirai 对象表示一个机器人实例。我们要进行的一切操作几乎�
 
 ## 创建 Mirai 对象
 
-`Mirai` 类的构造函数包含两个参数：`qq` 和 `adapter`。`qq` 是机器人的 QQ 号，类型为整数。`adapter` 是网络适配器，当前版本支持 `HTTPAdapter`。
+`Mirai` 类的构造函数包含两个参数：`qq` 和 `adapter`。`qq` 是机器人的 QQ 号，类型为整数。`adapter` 是网络适配器。
 
 ```python
 from mirai import Mirai, HTTPAdapter

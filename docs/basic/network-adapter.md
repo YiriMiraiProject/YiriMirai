@@ -1,12 +1,12 @@
 ---
-sidebar_position: 3.4
+sidebar_position: 3.5
 ---
 
 # 接口适配器
 
 在 mirai-api-http 2.X 版本中，将不同的连接方式拆分为 4 种接口适配器（adapter）。YiriMirai 针对 mirai-api-http 的接口适配器，设计了 `Adapter` 类。
 
-当前版本仅支持 `HTTPAdapter`，对其他接口适配器的支持会在之后版本加入。
+当前版本支持 `HTTPAdapter` 和 `WebSocketAdapter`，对其他接口适配器的支持会在之后版本加入。
 
 ## 创建 Adapter
 
@@ -48,6 +48,17 @@ async def login(self, qq: int):
 
 一般情况下，此方法**无需手动调用**。`bot.run()` 将自动调用此方法。
 
+### logout
+
+```python
+async def logout(self):
+    ...
+```
+
+`logout` 方法表示登出机器人实例。
+
+一般情况下，此方法**无需手动调用**。`bot.run()` 将自动在运行结束时调用此方法。
+
 ### run
 
 ```python
@@ -84,4 +95,18 @@ def register_event_bus(self, *buses: List[EventBus]):
 adapter = HTTPAdapter(verify_key='your_verify_key', host='localhost', port=8080)
 ```
 
-`verify_key` 与与 mirai-api-http 的配置一致。`host` 和 `port` 与 mirai-api-http 中 http adapter 的配置一致。
+`verify_key` 与 mirai-api-http 的配置一致。`host` 和 `port` 与 mirai-api-http 中 http adapter 的配置一致。
+
+## WebSocketAdapter
+
+`WebSocketAdapter` 是 `Adapter` 的子类，对应 mirai-api-http 中的正向 websocket 连接，YiriMirai 作为 websocket 客户端，mirai-api-http 作为 websocket 服务端。
+
+### 创建
+
+```python
+adapter = WebSocketAdapter(verify_key='your_verify_key', host='localhost', port=8080, sync_id='-1')
+```
+
+`verify_key` 与 mirai-api-http 的配置一致。`host` 和 `port` 与 mirai-api-http 中 wensocket adapter 的配置一致。
+
+`sync_id` 与 mirai-api-http 中 websocket adapter 的配置一致。需注意，mirai-api-http 默认的 sync_id 为字符串 `'-1'`。

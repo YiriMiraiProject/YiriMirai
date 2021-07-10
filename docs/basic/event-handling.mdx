@@ -113,3 +113,30 @@ async def handle_friend_message(event: FriendMessage):
 ```
 
 关于不同事件可用的属性，可以参考 mirai-api-http 的[文档](https://project-mirai.github.io/mirai-api-http/api/EventType.html)，或查看 YiriMirai 的 [API 文档](https://yiri-mirai-api.vercel.app/models/events.html)。
+
+## 快速响应
+
+在事件处理器中，返回一个 API 调用的 corotine，即可快速响应。
+
+```python
+@bot.on(FriendMessage)
+def handle_friend_message(event: FriendMessage):
+    return bot.send_friend_message(event.sender.id, [Plain('Hello, World!')])
+```
+
+快速响应可以用于在同步的事件处理器中调用 API。
+
+有的时候使用快速响应可以增强代码的可读性。
+
+```python
+# 同意所有加好友申请
+@bot.on(NewFriendRequestEvent)
+def handle_new_friend_request(event: NewFriendRequestEvent):
+    return bot.resp_new_friend_request_event(
+        event_id=event.event_id,
+        from_id=event.from_id,
+        group_id=event.group_id,
+        operate=RespOperate.ALLOW,
+        message=''
+    )
+```
