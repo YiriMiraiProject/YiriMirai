@@ -28,8 +28,8 @@ poetry install
 from mirai import Mirai, FriendMessage, WebSocketAdapter
 
 if __name__ == '__main__':
-    bot = Mirai(748753384, adapter=WebSocketAdapter(
-        verify_key='uki2qwcxx8', host='localhost', port=6090
+    bot = Mirai(12345678, adapter=WebSocketAdapter(
+        verify_key='your_verify_key', host='localhost', port=6090
     ))
 
     @bot.on(FriendMessage)
