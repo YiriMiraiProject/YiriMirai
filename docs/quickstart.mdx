@@ -30,22 +30,23 @@ poetry install
 
 ### 配置
 
-按照 mirai-api-http 的[配置文档](https://project-mirai.github.io/mirai-api-http/)配置 mirai-api-http，启用 http adapter，配置完成后记录你设置的 `verifyKey` ，以及 http adapter 的 `host` 和 `port` 。
+按照 mirai-api-http 的[配置文档](https://project-mirai.github.io/mirai-api-http/)配置 mirai-api-http，启用 websocket adapter，配置完成后记录你设置的 `verifyKey` ，以及 websocket adapter 的 `host` 和 `port` 。
 
 ## 编写第一个机器人
 
 在你的项目中新建一个 `quickstart.py` 文件，内容如下：
 
 ```python title='quickstart.py'
-from mirai import Mirai, HTTPAdapter, FriendMessage, Plain
+from mirai import Mirai, WebSocketAdapter, FriendMessage, Plain
 
 if __name__ == '__main__':
-    bot = Mirai(qq=12345678, adapter=HTTPAdapter(verify_key='your_verify_key', host='localhost', port=8080))
+    bot = Mirai(qq=12345678, adapter=WebSocketAdapter(verify_key='your_verify_key', host='localhost', port=8080))
 
     @bot.on(FriendMessage)
     async def on_friend_message(event: FriendMessage):
         if str(event.message_chain) == '你好':
-            await bot.send_friend_message(event.sender.id, [Plain('Hello World!')])
+            await bot.send_friend_message(event.sender.id, [Plain('欢迎使用 YiriMirai。')])
+            return bot.send_friend_message(event.sender.id, [Plain('Hello, World!')])
 
     bot.run()
 ```
@@ -56,19 +57,20 @@ if __name__ == '__main__':
 
 ```shell
 >>> python quickstart.py
-2021-07-06 00:05:04 - INFO     成功登录到账号748753384。
-2021-07-06 00:05:04 - INFO     机器人开始运行。按 Ctrl + C 停止。
+2021-02-15 00:00:00 - INFO     成功登录到账号12345678。
+2021-02-15 00:00:00 - INFO     机器人开始运行。按 Ctrl + C 停止。
 ```
 
 看到如上输出，说明机器人已经开始运行。
 
-试着给你的机器人发送一条“你好”，你的机器人就会发送一条消息“Hello World!”。
+试着给你的机器人发送一条“你好”，你的机器人就会发送消息。
 
-import {ChatBox, ChatMessage} from "@site/src/components/ChatMessage.js";
+import { ChatBox, ChatMessage } from "@site/src/components/ChatMessage.js";
 
 <ChatBox>
-  <ChatMessage name="忘忧北萱草" msg="你好"/>
-  <ChatMessage name="Yiri" msg="Hello World!"/>
+  <ChatMessage name="忘忧北萱草" msg="你好" />
+  <ChatMessage name="Yiri" msg="欢迎使用 YiriMirai。" />
+  <ChatMessage name="Yiri" msg="Hello, World!" />
 </ChatBox>
 
 ## 发生了什么？
@@ -81,10 +83,10 @@ import {ChatBox, ChatMessage} from "@site/src/components/ChatMessage.js";
 
 首先，我们创建了一个 Mirai 实例，并设置了 QQ 号和 adapter。
 
-adapter 是网络适配器，负责与 mirai-api-http 通信。当前版本只支持 `HTTPAdapter` ，与 mirai-api-http 的 http adapter 对接。
+adapter 是网络适配器，负责与 mirai-api-http 通信。这里使用的是 `WebSocketAdapter` ，与 mirai-api-http 的 websocket adapter 对接。
 
 ```python
-bot = Mirai(qq=12345678, adapter=HTTPAdapter(verify_key='your_verify_key', host='localhost', port=8080))
+bot = Mirai(qq=12345678, adapter=WebSocketAdapter(verify_key='your_verify_key', host='localhost', port=8080))
 ```
 
 然后，我们定义了一个 `FriendMessage` 类型的事件处理器，并且把它注册到了 Mirai 中。
@@ -93,7 +95,8 @@ bot = Mirai(qq=12345678, adapter=HTTPAdapter(verify_key='your_verify_key', host=
 @bot.on(FriendMessage)
 async def on_friend_message(event: FriendMessage):
     if str(event.message_chain) == '你好':
-        await bot.send_friend_message(event.sender.id, [Plain('Hello World!')])
+        await bot.send_friend_message(event.sender.id, [Plain('欢迎使用 YiriMirai。')])
+        return bot.send_friend_message(event.sender.id, [Plain('Hello, World!')])
 ```
 
 事件处理器是一个异步函数，接收一个唯一参数 `event`，它是 `FriendMessage` 类型，包含了发送者的 QQ 号和消息。
@@ -125,10 +128,13 @@ YiriMirai 依靠 pydantic 解析 mirai-api-http 发回的数据，并将其转�
 接下来，我们创建了一个包含 `Plain` 类型的消息链，并且把它发送给了好友。
 
 ```python
-await bot.send_friend_message(event.sender.id, [Plain('Hello World!')])
+await bot.send_friend_message(event.sender.id, [Plain('欢迎使用 YiriMirai。')])
+return bot.send_friend_message(event.sender.id, [Plain('Hello World!')])
 ```
 
 这里，我们使用了 `send_friend_message` 方法来发送消息。这个方法有两个参数，即好友的 QQ 号和欲发送的消息链。
+
+第二行使用了 YiriMirai 的事件快速响应机制。像这样，直接返回一个 API 调用，就可以实现快速响应。
 
 :::note NOTE: 调用 API
 在上面的代码中，我们调用了 `send_friend_message` 方法，这个方法会调用 mirai-api-http 的 API `sendFriendMessage`。
@@ -143,7 +149,9 @@ API 的参数和 mirai-api-http 中的定义一致，可以使用位置参数或
 :::note NOTE: 异步
 在上面的代码中，我们使用了 `async` 关键字定义异步的事件处理器。这是因为 `send_friend_message` 是一个异步方法，所以我们需要使用 `await` 来调用它。
 
-事实上，你也可以不使用 `async` 关键字，定义同步的事件处理器。但是因为所有的 API 都是异步的，这会导致你无法在事件处理器内调用 API。
+如果不使用 `await`，也可以使用快速响应机制。由于异步函数的特性，直接调用时，函数不会直接运行，而是得到一个 corotine。快速响应就是在事件处理器中返回这个 corotine，YiriMirai 会自动运行它。
+
+事实上，你也可以不使用 `async` 关键字，定义同步的事件处理器。但是因为所有的 API 都是异步的，这会导致你只能使用快速响应调用 API。
 :::
 
 最后，我们调用了 `run` 方法，来启动机器人。这一方法会进入事件循环，一直运行。

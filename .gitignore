@@ -135,6 +135,7 @@ dmypy.json
 /test.py
 
 # doc
+/docs
 /node_modules
 
 # Production
