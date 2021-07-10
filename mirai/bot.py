@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-此模块定义机器人类，包含处于 model 层之下的`SimpleMirai`和建立在 model 层上的`Mirai`。
+此模块定义机器人类，包含处于 model 层之下的 `SimpleMirai` 和建立在 model 层上的 `Mirai`。
 """
 import asyncio
 import logging
@@ -18,9 +18,9 @@ class SimpleMirai(ApiProider):
     """
     基于 adapter 和 bus，处于 model 层之下的机器人类。
 
-    使用了`__getattr__`魔术方法，可以直接在对象上调用 API。
+    使用了 `__getattr__` 魔术方法，可以直接在对象上调用 API。
 
-    通过`SimpleMirai`调用 API 时，需注意此类不含 model 层封装，因此 API 名称与参数名称需与 mirai-api-http 中的定义相同，
+    通过 `SimpleMirai` 调用 API 时，需注意此类不含 model 层封装，因此 API 名称与参数名称需与 mirai-api-http 中的定义相同，
     参数需要全部以具名参数的形式给出，并且需要指明使用的方法（GET/POST）。
 
     例如：
@@ -30,9 +30,9 @@ class SimpleMirai(ApiProider):
     ], method="POST")
     ```
 
-    也可以使用`call_api`方法。
+    也可以使用 `call_api` 方法。
 
-    对于名称的路由含有二级目录的 API，由于名称中含有斜杠，必须使用`call_api`调用，例如：
+    对于名称的路由含有二级目录的 API，由于名称中含有斜杠，必须使用 `call_api` 调用，例如：
     ```py
     file_list = await bot.call_api("file/list", id="", target=12345678, method="GET")
     ```
@@ -91,11 +91,11 @@ class Mirai(SimpleMirai):
     """
     机器人主类。
 
-    使用了`__getattr__`魔术方法，可以直接在对象上调用 API。
+    使用了 `__getattr__` 魔术方法，可以直接在对象上调用 API。
 
     `Mirai` 类包含 model 层封装，API 名称经过转写以符合命名规范，所有的 API 全部使用小写字母及下划线命名。
     （API 名称也可使用原名。）
-    API 参数可以使用具名参数，也可以使用位置参数，关于 API 参数的更多信息请参见模块`mirai.models.api`。
+    API 参数可以使用具名参数，也可以使用位置参数，关于 API 参数的更多信息请参见模块 `mirai.models.api`。
 
     例如：
     ```py
@@ -104,8 +104,8 @@ class Mirai(SimpleMirai):
     ])
     ```
 
-    也可以使用`call_api`方法，须注意此方法直接继承自`SimpleMirai`，因此未经 model 层封装，
-    需要遵循`SimpleMirai`的规定。
+    也可以使用 `call_api` 方法，须注意此方法直接继承自 `SimpleMirai`，因此未经 model 层封装，
+    需要遵循 `SimpleMirai` 的规定。
     """
     def __init__(self, qq: int, adapter: Adapter):
         super().__init__(qq=qq, adapter=adapter)

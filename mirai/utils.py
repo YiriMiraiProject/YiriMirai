@@ -9,7 +9,7 @@ from mirai import exceptions
 
 
 async def async_(coro):
-    """将一个对象包装为`Awaitable`。
+    """将一个对象包装为 `Awaitable`。
     """
     if inspect.isawaitable(coro):
         return await coro

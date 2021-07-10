@@ -2,7 +2,7 @@
 """
 此模块提供基础事件总线相关。
 
-此处的事件总线不包含 model 层封装。包含 model 层封装的版本，请参见模块`mirai.models.bus`。
+此处的事件总线不包含 model 层封装。包含 model 层封装的版本，请参见模块 `mirai.models.bus`。
 """
 import asyncio
 
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 def event_chain_separator(sep: str = '.'):
     """按照分隔符划分事件链，默认按点号划分。
 
-    例如使用`event_chain_separator('.')`时，
+    例如使用 `event_chain_separator('.')` 时，
     `"Event.MyEvent"` 所在事件链为 `["Event.MyEvent", "Event"]`。"""
     def generator(event: str):
         while True:
@@ -38,13 +38,13 @@ def event_chain_single(event: str):
 class EventBus(object):
     """事件总线。
 
-    事件总线提供了一个简单的方法，用于分发事件。事件处理器可以通过`subscribe`或`on`注册事件，
-    并通过`emit`来触发事件。
+    事件总线提供了一个简单的方法，用于分发事件。事件处理器可以通过 `subscribe` 或 `on` 注册事件，
+    并通过 `emit` 来触发事件。
 
     事件链（Event Chain）是一种特殊的事件处理机制。事件链包含一系列事件，其中底层事件触发时，上层事件也会响应。
 
-    事件总线的构造函数中的`event_chain_generator`参数规定了生成事件链的方式。
-    此模块中的`event_chain_single`和`event_chain_separator`可应用于此参数，分别生成单一事件的事件链和按照分隔符划分的事件链。
+    事件总线的构造函数中的 `event_chain_generator` 参数规定了生成事件链的方式。
+    此模块中的 `event_chain_single` 和 `event_chain_separator` 可应用于此参数，分别生成单一事件的事件链和按照分隔符划分的事件链。
     """
     _default_bus = None
 
@@ -80,7 +80,7 @@ class EventBus(object):
         `func: Callable` 事件处理器。
         """
         if not self._subscribers[event].remove(func):
-            logger.warn(f'试图移除事件`{event}`的一个不存在的事件处理器`{func}`。')
+            logger.warn(f'试图移除事件 `{event}` 的一个不存在的事件处理器 `{func}`。')
 
     def on(self, event: str, priority: int = 0) -> Callable:
         """以装饰器的方式注册事件处理器。

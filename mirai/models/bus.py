@@ -2,7 +2,7 @@
 """
 此模块提供模型事件总线相关。
 
-关于一般的事件总线，参看模块`mirai.bus`。
+关于一般的事件总线，参看模块 `mirai.bus`。
 """
 import logging
 from collections import defaultdict
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 def event_chain_parents(event: str):
     """包含事件及所有父事件的事件链。
 
-    例如：`FriendMessage`的事件链为`['FriendMessage', 'MessageEvent', 'Event']`
+    例如：`FriendMessage` 的事件链为 `['FriendMessage', 'MessageEvent', 'Event']`。
     """
     event_type = Event.get_subtype(event)
     while issubclass(event_type, Event):
@@ -29,12 +29,12 @@ def event_chain_parents(event: str):
 class ModelEventBus(EventBus):
     """模型事件总线，实现底层事件总线上的事件再分发，以将事件解析到 Event 对象。
 
-    `ModelEventBus`在注册事件处理器时，可使用`Event`类或事件名。关于可用的`Event`类，
-    参见模块`mirai.models.events`。
+    `ModelEventBus` 在注册事件处理器时，可使用 `Event` 类或事件名。关于可用的 `Event` 类，
+    参见模块 `mirai.models.events`。
 
-    模型事件总线支持的事件处理器接受唯一的参数`event`，该参数是一个`Event`对象，包含触发的事件的信息。
+    模型事件总线支持的事件处理器接受唯一的参数`event`，该参数是一个 `Event` 对象，包含触发的事件的信息。
 
-    事件触发时，会自动按照`Event`类的继承关系向上级传播。
+    事件触发时，会自动按照 `Event` 类的继承关系向上级传播。
     """
     def __init__(self):
         self.base_bus = EventBus(event_chain_generator=event_chain_parents)

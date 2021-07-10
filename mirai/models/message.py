@@ -50,7 +50,15 @@ class MessageChain(MiraiBaseModel):
     ])
     ```
 
-    在调用 API 时，参数中需要 MessageChain 的，也可以使用`List[MessageComponent]`代替。
+    `Plain` 可以省略。
+    ```py
+    message_chain = MessageChain([
+        AtAll(),
+        "Hello World!",
+    ])
+    ```
+
+    在调用 API 时，参数中需要 MessageChain 的，也可以使用 `List[MessageComponent]` 代替。
     例如，以下两种写法是等价的：
     ```py
     await bot.send_friend_message(12345678, [
@@ -74,7 +82,7 @@ class MessageChain(MiraiBaseModel):
         print(repr(component))
     ```
 
-    可以使用`==`运算符比较两个消息链是否相同。
+    可以使用 `==` 运算符比较两个消息链是否相同。
     ```py
     another_msg_chain = MessageChain([
         {
@@ -88,7 +96,7 @@ class MessageChain(MiraiBaseModel):
     'True'
     ```
 
-    可以使用`in`运算检查消息链中：
+    可以使用 `in` 运算检查消息链中：
     1. 是否有某个消息组件。
     2. 是否有某个类型的消息组件。
     3. 是否有某个子消息链。
@@ -108,7 +116,7 @@ class MessageChain(MiraiBaseModel):
         print('Hi!')
     ```
 
-    也可以使用`>=`和`<=`运算符：
+    也可以使用 `>=` 和 `<= `运算符：
     ```py
     if MessageChain([At(bot.qq), Plain('Hello!')]) <= message_chain:
         print('Hello!')
@@ -123,7 +131,7 @@ class MessageChain(MiraiBaseModel):
     '[Plain("Hello World!")]'
     ```
 
-    以`类型: 数量`为索引，获取前至多多少个该类型的消息组件。
+    以 `类型: 数量` 为索引，获取前至多多少个该类型的消息组件。
     ```py
     plain_list_first = message_chain[Plain: 1]
     '[Plain("Hello World!")]'
@@ -155,7 +163,7 @@ class MessageChain(MiraiBaseModel):
 
     @classmethod
     def parse_obj(cls, msg_chain: list):
-        """通过列表形式的消息链，构造对应的`MessageChain`对象。
+        """通过列表形式的消息链，构造对应的 `MessageChain` 对象。
 
         `msg_chain: list` 列表形式的消息链。
         """
@@ -217,7 +225,7 @@ class MessageChain(MiraiBaseModel):
 
     @property
     def source(self) -> 'Source':
-        """获取消息链中的`Source`对象。"""
+        """获取消息链中的 `Source` 对象。"""
         return self[Source:1][0]
 
 
@@ -345,7 +353,7 @@ class Image(MessageComponent):
     url: Optional[HttpUrl] = None
     """图片的 URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载。"""
     path: Optional[str] = None
-    """图片的路径，发送本地图片，路径相对于`plugins/MiraiAPIHTTP/images`。"""
+    """图片的路径，发送本地图片，路径相对于 `plugins/MiraiAPIHTTP/images`。"""
     base64: Optional[str] = None
     """图片的 Base64 编码。"""
     def __init__(
@@ -496,7 +504,7 @@ class FlashImage(Image):
     url: Optional[HttpUrl] = None
     """图片的 URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载。"""
     path: Optional[str] = None
-    """图片的路径，发送本地图片，路径相对于`plugins/MiraiAPIHTTP/images`。"""
+    """图片的路径，发送本地图片，路径相对于 `plugins/MiraiAPIHTTP/images`。"""
     base64: Optional[str] = None
     """图片的 Base64 编码。"""
     def __init__(self, imageId, url=None, **_):
@@ -518,7 +526,7 @@ class Voice(MessageComponent):
     url: Optional[str]
     """语音的 URL，发送时可作网络语音的链接；接收时为腾讯语音服务器的链接，可用于语音下载。"""
     path: Optional[str]
-    """语音的路径，发送本地语音，路径相对于`plugins/MiraiAPIHTTP/voices`。"""
+    """语音的路径，发送本地语音，路径相对于 `plugins/MiraiAPIHTTP/voices`。"""
     base64: Optional[str]
     """语音的 Base64 编码。"""
 

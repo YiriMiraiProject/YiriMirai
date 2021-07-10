@@ -299,22 +299,22 @@ class ApiModel(ApiBaseModel):
 class ApiGet(ApiModel):
     class Proxy(ApiModel.Proxy):
         async def set(self, *args, **kwargs):
-            """GET 方法的 API 不具有`set`。
+            """GET 方法的 API 不具有 `set`。
 
-            调用此方法会报错`TypeError`。
+            调用此方法会报错 `TypeError`。
             """
-            raise TypeError(f'`{self.command}`不支持`set`方法。')
+            raise TypeError(f'`{self.command}` 不支持 `set` 方法。')
 
 
 class ApiPost(ApiModel):
     class Proxy(ApiModel.Proxy):
         """POST 方法的 API 代理对象。"""
         async def get(self, *args, **kwargs):
-            """POST 方法的 API 不具有`get`。
+            """POST 方法的 API 不具有 `get`。
 
-            调用此方法会报错`TypeError`。
+            调用此方法会报错 `TypeError`。
             """
-            raise TypeError(f'`{self.command}`不支持`get`方法。')
+            raise TypeError(f'`{self.command}` 不支持 `get` 方法。')
 
         async def __call__(self, *args, **kwargs):
             return await self.set(*args, **kwargs)
@@ -332,7 +332,7 @@ class ApiRest(ApiModel):
     class Proxy(ApiModel.Proxy):
         """RESTful 的 API 代理对象。
 
-        直接调用时，传入 GET 和 POST 的公共参数，返回一个`ApiProxyRestPartial`对象，
+        直接调用时，传入 GET 和 POST 的公共参数，返回一个 `ApiRest.Proxy.Partial` 对象，
         由此对象提供实际调用支持。
         """
         def __call__(self, *args, **kwargs) -> 'ApiRest.Proxy.Partial':
