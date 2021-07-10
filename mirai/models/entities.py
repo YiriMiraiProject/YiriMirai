@@ -13,7 +13,6 @@ from mirai.models.base import MiraiBaseModel
 
 class Entity(MiraiBaseModel):
     """实体，表示一个用户或群。"""
-
     def __repr__(self):
         return f'<{self.__class__.__name__} {str(self)}>'
 
@@ -31,7 +30,6 @@ class Friend(Entity):
     """昵称。"""
     remark: Optional[str]
     """备注。"""
-
     def get_avatar_url(self) -> str:
         return f'http://q4.qlogo.cn/g?b=qq&nk={self.id}&s=140'
 
@@ -54,7 +52,6 @@ class Group(Entity):
     """群名称。"""
     permission: Permission
     """Bot 在群中的权限。"""
-
     def get_avatar_url(self) -> str:
         return f'https://p.qlogo.cn/gh/{self.id}/{self.id}/'
 
@@ -74,11 +71,11 @@ class GroupMember(Entity):
     join_timestamp: Optional[datetime] = Field(0, alias='joinTimestamp')
     """加入群的时间。"""
     last_speak_timestamp: Optional[datetime] = Field(
-        0, alias='lastSpeakTimestamp')
+        0, alias='lastSpeakTimestamp'
+    )
     """最后一次发言的时间。"""
     mute_time_remaining: Optional[int] = Field(0, alias='muteTimeRemaining')
     """禁言剩余时间。"""
-
     def __repr__(self):
         return f"<GroupMember id={self.id} group={self.group} permission={self.permission} group={self.group.id}>"
 
@@ -92,14 +89,12 @@ class Sender(Entity):
     """QQ 号。"""
     platform: str
     """来源平台。"""
-
     def get_avatar_url(self) -> str:
         return f'http://q4.qlogo.cn/g?b=qq&nk={self.id}&s=140'
 
 
 class Config(MiraiBaseModel):
     """配置项类型。"""
-
     def modify(self, **kwargs) -> 'Config':
         """修改部分设置。"""
         for k, v in kwargs.items():

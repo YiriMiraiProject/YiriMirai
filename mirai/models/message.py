@@ -35,7 +35,6 @@ class MessageComponent(MiraiIndexedModel):
     """消息组件。"""
     type: str
     """消息组件类型。"""
-
     def __str__(self):
         return ''
 
@@ -140,9 +139,11 @@ class MessageChain(MiraiBaseModel):
                 result.append(MessageComponent.parse_obj(msg))
             elif isinstance(msg, MessageComponent):
                 result.append(msg)
+            elif isinstance(msg, str):
+                result.append(Plain(msg))
             else:
                 raise TypeError(
-                    f"消息链中元素需为 dict 或 MessageComponent，当前类型：{type(msg)}"
+                    f"消息链中元素需为 dict 或 str 或 MessageComponent，当前类型：{type(msg)}"
                 )
         return result
 
@@ -191,21 +192,21 @@ class MessageChain(MiraiBaseModel):
             ]
 
     def __contains__(self, sub) -> bool:
-        if isinstance(sub, type):  # 检测消息链中是否有某种类型的对象
+        if isinstance(sub, type): # 检测消息链中是否有某种类型的对象
             for i in self:
                 if type(i) == sub:
                     return True
             else:
                 return False
-        elif isinstance(sub, MessageComponent):  # 检查消息链中是否有某个组件
+        elif isinstance(sub, MessageComponent): # 检查消息链中是否有某个组件
             for i in self:
                 if i == sub:
                     return True
             else:
                 return False
-        elif isinstance(sub, MessageChain):  # 检查消息链中是否有某个子消息链
+        elif isinstance(sub, MessageChain): # 检查消息链中是否有某个子消息链
             return bool(KMP(self, sub))
-        elif isinstance(sub, str):  # 检查消息中有无指定字符串子串
+        elif isinstance(sub, str): # 检查消息中有无指定字符串子串
             return sub in deserialize(str(self))
 
     def __ge__(self, other):
@@ -236,7 +237,6 @@ class Plain(MessageComponent):
     """消息组件类型。"""
     text: str
     """文字消息。"""
-
     def __init__(self, text: str = '', **_):
         if len(text) > 128:
             logger.warn(f"Plain 文本过长。当前长度： {len(text)}。")
@@ -260,7 +260,6 @@ class Quote(MessageComponent):
     """被引用回复的原消息的接收者者的QQ号（或群号）。"""
     origin: MessageChain
     """被引用回复的原消息的消息链对象。"""
-
     @validator("origin", always=True, pre=True)
     @classmethod
     def origin_formater(cls, v):
@@ -295,7 +294,6 @@ class At(MessageComponent):
     """群员 QQ 号。"""
     display: Optional[str] = None
     """At时显示的文字，发送消息时无效，自动使用群名片"""
-
     def __init__(self, target: int, **_):
         super().__init__(target=target)
 
@@ -310,7 +308,6 @@ class AtAll(MessageComponent):
     """At全体。"""
     type: str = "AtAll"
     """消息组件类型。"""
-
     def __str__(self):
         return f"[mirai:atall]"
 
@@ -323,7 +320,6 @@ class Face(MessageComponent):
     """QQ 表情编号，可选，优先度高于 name。"""
     name: Optional[str]
     """QQ表情拼音，可选。"""
-
     def __init__(
         self,
         face_id: Optional[int] = None,
@@ -352,7 +348,6 @@ class Image(MessageComponent):
     """图片的路径，发送本地图片，路径相对于`plugins/MiraiAPIHTTP/images`。"""
     base64: Optional[str] = None
     """图片的 Base64 编码。"""
-
     def __init__(
         self,
         image_id: Optional[str] = None,
@@ -373,9 +368,9 @@ class Image(MessageComponent):
     @property
     def uuid(self):
         image_id = self.image_id
-        if image_id[0] == '{':  # 群图片
+        if image_id[0] == '{': # 群图片
             image_id = image_id[1:37]
-        elif image_id[0] == '/':  # 好友图片
+        elif image_id[0] == '/': # 好友图片
             image_id = image_id[1:]
         return image_id
 
@@ -395,7 +390,6 @@ class Xml(MessageComponent):
     """消息组件类型。"""
     xml: str
     """XML文本。"""
-
     def __init__(self, xml: str, **_):
         super().__init__(xml=xml)
 
@@ -406,7 +400,6 @@ class Json(MessageComponent):
     """消息组件类型。"""
     json_: dict = Field(..., alias='json')
     """JSON 文本。"""
-
     def __init__(self, json: dict):
         super().__init__(json=json)
 
@@ -417,7 +410,6 @@ class App(MessageComponent):
     """消息组件类型。"""
     content: str
     """内容。"""
-
     def __init__(self, content: str, **_):
         super().__init__(content=content)
 
@@ -472,7 +464,6 @@ class Poke(MessageComponent):
     """消息组件类型。"""
     name: str
     """名称。"""
-
     def __init__(self, name: str, **_):
         super().__init__(name=name)
 
@@ -508,7 +499,6 @@ class FlashImage(Image):
     """图片的路径，发送本地图片，路径相对于`plugins/MiraiAPIHTTP/images`。"""
     base64: Optional[str] = None
     """图片的 Base64 编码。"""
-
     def __init__(self, imageId, url=None, **_):
         super().__init__(imageId=imageId, url=url)
 
@@ -539,7 +529,6 @@ class Dice(MessageComponent):
     """消息组件类型。"""
     value: int
     """点数。"""
-
     def __init__(self, value: int, **_):
         super().__init__(value=value)
 

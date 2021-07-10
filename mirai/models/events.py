@@ -11,8 +11,9 @@ except ImportError:
     from typing_extensions import Literal
 
 from mirai.models.base import MiraiIndexedModel
-from mirai.models.entities import (Friend, Group, GroupMember, Permission,
-                                   Sender)
+from mirai.models.entities import (
+    Friend, Group, GroupMember, Permission, Sender
+)
 from mirai.models.message import MessageChain
 from pydantic import Field
 
@@ -177,11 +178,10 @@ class GroupEvent(Event):
 
     type: str
     """事件名。"""
-
     def __getattr__(self, name) -> Union[Group, Any]:
         if name == 'group':
-            member = getattr(self, 'operator', None) or getattr(
-                self, 'member', None)
+            member = getattr(self, 'operator',
+                             None) or getattr(self, 'member', None)
             if member:
                 return member.group
         return super().__getattr__(name)
@@ -669,6 +669,10 @@ class RequestEvent(Event):
     """事件名。"""
     event_id: int = Field(..., alias='eventId')
     """事件标识，响应该事件时的标识。"""
+    from_id: int = Field(..., alias='fromId')
+    """申请人 QQ 号。"""
+    group_id: int = Field(..., alias='groupId')
+    """申请人群号，可能为0。"""
 
 
 class NewFriendRequestEvent(RequestEvent):

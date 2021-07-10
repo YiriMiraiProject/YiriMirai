@@ -6,15 +6,15 @@ import asyncio
 import logging
 from typing import Callable, Type, Union
 
-from mirai.adapters.base import Adapter, Api
+from mirai.adapters.base import Adapter, ApiProider
 from mirai.bus import EventBus
-from mirai.models.api import ApiProxy
+from mirai.models.api import ApiModel
 from mirai.models.bus import ModelEventBus
 from mirai.models.events import Event
 from mirai.utils import async_
 
 
-class SimpleMirai(Api):
+class SimpleMirai(ApiProider):
     """
     基于 adapter 和 bus，处于 model 层之下的机器人类。
 
@@ -134,16 +134,17 @@ class Mirai(SimpleMirai):
         """
         return self._bus.on(event_type=event_type, priority=priority)
 
-    def api(self, api: str) -> ApiProxy:
+    def api(self, api: str) -> ApiModel.Proxy:
         """获取 API Proxy 对象。
 
         API Proxy 提供更加简便的调用 API 的写法，详见`mirai.models.api`。
 
-        `Mirai`的`__getattr__`与此方法完全相同，可支持直接在对象上调用 API。
+        `Mirai` 的 `__getattr__` 与此方法完全相同，可支持直接在对象上调用 API。
 
         `api: str` API 名称。
         """
-        return ApiProxy.analyze(api, self)
+        api_type = ApiModel.get_subtype(api)
+        return api_type.Proxy(self, api_type)
 
-    def __getattr__(self, api: str) -> ApiProxy:
+    def __getattr__(self, api: str) -> ApiModel.Proxy:
         return self.api(api)

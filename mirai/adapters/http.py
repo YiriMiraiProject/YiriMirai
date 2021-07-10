@@ -19,7 +19,7 @@ def _parse_response(response: httpx.Response) -> dict:
     return result
 
 
-def _json_default(obj):  # 支持 datetime
+def _json_default(obj): # 支持 datetime
     if isinstance(obj, datetime):
         return int(obj.timestamp())
 
@@ -27,7 +27,6 @@ def _json_default(obj):  # 支持 datetime
 class HTTPAdapter(Adapter):
     """HTTP 轮询适配器。使用 HTTP 轮询的方式与 mirai-api-http 沟通。
     """
-
     def __init__(
         self,
         verify_key: str = '',
@@ -61,7 +60,7 @@ class HTTPAdapter(Adapter):
         self.poll_interval = poll_interval
 
         self.session = ''
-        self.headers = httpx.Headers()  # 使用 headers 传递 session
+        self.headers = httpx.Headers() # 使用 headers 传递 session
 
     async def _post(
         self, client: httpx.AsyncClient, url: str, json: dict
@@ -103,9 +102,7 @@ class HTTPAdapter(Adapter):
                 )
                 self.headers = httpx.Headers({'sessionKey': self.session})
                 self.logger.info(f'成功登录到账号{qq}。')
-            except (
-                httpx.NetworkError, httpx.InvalidURL
-            ) as e:
+            except (httpx.NetworkError, httpx.InvalidURL) as e:
                 raise exceptions.NetworkError(
                     '无法连接到 mirai。请检查地址与端口是否正确。'
                 ) from e

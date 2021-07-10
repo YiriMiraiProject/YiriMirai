@@ -21,7 +21,7 @@ class Method(str, Enum):
     """表明这是一个 RESTful 的 POST。"""
 
 
-class Api(object):
+class ApiProider(object):
     """支持从属性调用 API 的类。
 
     使用了`__getattr__`，可以直接通过属性调用 API。
@@ -45,7 +45,7 @@ class Api(object):
         return functools.partial(self.call_api, api)
 
 
-class Adapter(Api):
+class Adapter(ApiProider):
     """适配器基类，与 mirai-api-http 沟通的底层实现。
 
     属性`buses`为适配器注册的事件总线集合。适配器被绑定到 bot 时，bot 会自动将自身的事件总线注册到适配器。

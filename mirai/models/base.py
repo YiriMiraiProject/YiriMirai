@@ -19,7 +19,6 @@ class MiraiBaseModel(BaseModel, metaclass=MiraiMetaclass):
     1. 允许解析时传入额外的值，并将额外值保存在模型中。
     2. 允许通过别名访问字段。
     """
-
     def __init__(self, *args, **kwargs):
         """"""
         super().__init__(*args, **kwargs)
@@ -51,6 +50,9 @@ class MiraiIndexedMetaclass(MiraiMetaclass):
             if issubclass(new_cls, base):
                 base.__indexes__[name] = new_cls
                 return new_cls
+
+    def __getitem__(cls, name):
+        return cls.get_subtype(name)
 
 
 class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):

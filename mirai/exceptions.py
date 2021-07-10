@@ -47,4 +47,5 @@ def print_exception(e: Exception):
     """
     traceback.print_exception(type(e), e, e.__traceback__)
 
+
 __all__ = ['NetworkError', 'ApiError', 'LoginError', 'print_exception']
