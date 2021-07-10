@@ -226,7 +226,14 @@ class MessageChain(MiraiBaseModel):
     @property
     def source(self) -> 'Source':
         """获取消息链中的 `Source` 对象。"""
-        return self[Source:1][0]
+        source = self[Source:1]
+        return source[0] if source else None
+
+    @property
+    def message_id(self) -> int:
+        """获取消息链的 message_id。"""
+        source = self.source
+        return source.id if source else None
 
 
 class Source(MessageComponent):
@@ -406,7 +413,7 @@ class Json(MessageComponent):
     """JSON。"""
     type: str = "Json"
     """消息组件类型。"""
-    json_: dict = Field(..., alias='json')
+    json_: dict
     """JSON 文本。"""
     def __init__(self, json: dict):
         super().__init__(json=json)
@@ -554,11 +561,11 @@ class MusicShare(MessageComponent):
     """标题。"""
     summary: str
     """概括。"""
-    jump_url: HttpUrl = Field(..., alias='jumpUrl')
+    jump_url: HttpUrl
     """跳转路径。"""
-    picture_url: HttpUrl = Field(..., alias='pictureUrl')
+    picture_url: HttpUrl
     """封面路径。"""
-    music_url: HttpUrl = Field(..., alias='musicUrl')
+    music_url: HttpUrl
     """音源路径。"""
     brief: str
     """简介。"""
@@ -566,15 +573,15 @@ class MusicShare(MessageComponent):
 
 class ForwardMessageNode(MiraiBaseModel):
     """合并转发中的一条消息。"""
-    sender_id: int = Field(..., alias='senderId')
+    sender_id: int
     """发送人QQ号。"""
     time: datetime
     """发送时间。"""
-    sender_name: str = Field(..., alias='senderName')
+    sender_name: str
     """显示名称。"""
     source_id: Optional[int] = Field(alias='sourceId')
     """消息的 message_id，可以只使用此属性，从缓存中读取消息内容。"""
-    message_chain: MessageChain = Field(..., alias='messageChain')
+    message_chain: MessageChain
     """消息内容。"""
 
 
@@ -582,7 +589,7 @@ class Forward(MessageComponent):
     """合并转发。"""
     type: str = "Forward"
     """消息组件类型。"""
-    node_list: List[ForwardMessageNode] = Field(..., alias='nodeList')
+    node_list: List[ForwardMessageNode]
     """转发消息节点列表。"""
 
 

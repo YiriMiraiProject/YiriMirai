@@ -6,7 +6,7 @@ import asyncio
 import logging
 from typing import Callable, Type, Union
 
-from mirai.adapters.base import Adapter, ApiProider
+from mirai.adapters.base import Adapter, ApiProvider
 from mirai.bus import EventBus
 from mirai.models.api import ApiModel
 from mirai.models.bus import ModelEventBus
@@ -14,7 +14,7 @@ from mirai.models.events import Event
 from mirai.utils import async_
 
 
-class SimpleMirai(ApiProider):
+class SimpleMirai(ApiProvider):
     """
     基于 adapter 和 bus，处于 model 层之下的机器人类。
 

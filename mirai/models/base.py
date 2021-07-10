@@ -12,12 +12,21 @@ class MiraiMetaclass(pdm.ModelMetaclass):
     """此类是 YiriMirai 中使用的 pydantic 模型的元类的基类。"""
 
 
+def to_camel(name: str) -> str:
+    """将下划线命名风格转换为小驼峰命名。"""
+    if name[:2] == '__': # 不处理双下划线开头的特殊命名。
+        return name
+    name_parts = name.split('_')
+    return ''.join(name_parts[:1] + [x.title() for x in name_parts[1:]])
+
+
 class MiraiBaseModel(BaseModel, metaclass=MiraiMetaclass):
     """模型基类。
 
-    启用了两项配置：
+    启用了三项配置：
     1. 允许解析时传入额外的值，并将额外值保存在模型中。
     2. 允许通过别名访问字段。
+    3. 自动生成小驼峰风格的别名，以符合 mirai-api-http 的命名。
     """
     def __init__(self, *args, **kwargs):
         """"""
@@ -26,6 +35,7 @@ class MiraiBaseModel(BaseModel, metaclass=MiraiMetaclass):
     class Config:
         extra = 'allow'
         allow_population_by_field_name = True
+        alias_generator = to_camel
 
 
 class MiraiIndexedMetaclass(MiraiMetaclass):

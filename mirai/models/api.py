@@ -10,7 +10,7 @@ try:
 except ImportError:
     from typing_extensions import Literal
 
-from mirai.adapters.base import ApiProider, Method
+from mirai.adapters.base import ApiProvider, Method
 from mirai.models.base import (
     MiraiBaseModel, MiraiIndexedMetaclass, MiraiIndexedModel
 )
@@ -95,7 +95,7 @@ class ProfileResponse(MiraiBaseModel):
 
 class MessageResponse(Response):
     """发送消息的响应。"""
-    message_id: int = Field(..., alias='messageId')
+    message_id: int
     """消息的 message_id。"""
 
 
@@ -111,9 +111,9 @@ class File(MiraiBaseModel):
     """父文件对象，递归类型。None 为存在根目录。"""
     contact: Union[Group, Friend]
     """群信息或好友信息。"""
-    is_file: bool = Field(..., alias='isFile')
+    is_file: bool
     """是否是文件。"""
-    is_dictionary: bool = Field(..., alias='isDictionary')
+    is_dictionary: bool
     """是否是文件夹。"""
 
 
@@ -138,19 +138,6 @@ class FileMkdirResponse(Response):
     data: File
 
 
-def encode_model(model) -> dict:
-    """将含有 `BaseModel` 的对象编码为 `dict`。
-
-    `model` 待编码的对象。
-    """
-    if isinstance(model, BaseModel):
-        return model.dict()
-    elif isinstance(model, list):
-        return [encode_model(node) for node in model]
-    else:
-        return model
-
-
 class ApiMetaclass(MiraiIndexedMetaclass):
     """API 模型的元类。"""
     __apimodel__ = None
@@ -160,6 +147,9 @@ class ApiMetaclass(MiraiIndexedMetaclass):
 
         if name == 'ApiModel':
             cls.__apimodel__ = new_cls
+            return new_cls
+
+        if not cls.__apimodel__: # ApiBaseModel 构造时，ApiModel 还未构造
             return new_cls
 
         for base in bases:
@@ -215,10 +205,7 @@ class ApiModel(ApiBaseModel):
             else:
                 kwargs[name] = value
 
-        super().__init__(
-            **{name: encode_model(value)
-               for name, value in kwargs.items()}
-        )
+        super().__init__(**kwargs)
 
     class Proxy():
         """API 代理类。由 API 构造，提供对适配器的访问。
@@ -254,7 +241,7 @@ class ApiModel(ApiBaseModel):
         除去`sessionKey`由适配器自动指定外，其余参数可按顺序传入。具名参数仍然可用，适当地使用具名参数可增强代码的可读性。
         """
         def __init__(
-            self, api_provider: ApiProider, api_type: Type['ApiModel']
+            self, api_provider: ApiProvider, api_type: Type['ApiModel']
         ):
             self.api_provider = api_provider
             self.api_type = api_type
@@ -274,7 +261,7 @@ class ApiModel(ApiBaseModel):
             info = self.api_type.Info
             raw_response = await async_(
                 self.api_provider.call_api(
-                    api=info.name, method=method, **api.dict()
+                    api=info.name, method=method, **api.dict(by_alias=True, exclude_none=True)
                 )
             )
             response_type = response_type or info.response_type
@@ -343,7 +330,7 @@ class ApiRest(ApiModel):
         class Partial(ApiModel.Proxy):
             """RESTful 的 API 代理对象（已传入公共参数）。"""
             def __init__(
-                self, api_provider: ApiProider, api_type: Type['ApiRest'],
+                self, api_provider: ApiProvider, api_type: Type['ApiRest'],
                 partial_args: list, partial_kwargs: dict
             ):
                 super().__init__(api_provider=api_provider, api_type=api_type)
@@ -435,7 +422,7 @@ class MemberProfile(ApiGet):
     """获取群成员资料。"""
     target: int
     """指定群的群号。"""
-    member_id: int = Field(..., alias='memberId')
+    member_id: int
     """指定群成员的 QQ 号。"""
     class Info(ApiGet.Info):
         name = "memberProfile"
@@ -445,7 +432,7 @@ class MemberProfile(ApiGet):
 
 class SendMessage(ApiBaseModel):
     """发送消息的 API 的方法复用，不作为 API 使用。"""
-    message_chain: Union[MessageChain, list] = Field(..., alias='messageChain')
+    message_chain: Union[MessageChain, list]
 
     @validator('message_chain')
     def _validate_message_chain(cls, value: Union[MessageChain, list]):
@@ -459,7 +446,7 @@ class SendFriendMessage(ApiPost, SendMessage):
     """发送好友消息。"""
     target: int
     """发送消息目标好友的 QQ 号。"""
-    message_chain: Union[MessageChain, list] = Field(..., alias='messageChain')
+    message_chain: Union[MessageChain, list]
     """消息链。"""
     quote: Optional[int] = None
     """可选。引用一条消息的 message_id 进行回复。"""
@@ -473,7 +460,7 @@ class SendGroupMessage(ApiPost, SendMessage):
     """发送群消息。"""
     target: int
     """发送消息目标群的群号。"""
-    message_chain: Union[MessageChain, list] = Field(..., alias='messageChain')
+    message_chain: Union[MessageChain, list]
     """消息链。"""
     quote: Optional[int] = None
     """可选。引用一条消息的 message_id 进行回复。"""
@@ -489,7 +476,7 @@ class SendTempMessage(ApiPost, SendMessage):
     """临时会话对象 QQ 号。"""
     group: int
     """临时会话对象群号。"""
-    message_chain: Union[MessageChain, list] = Field(..., alias='messageChain')
+    message_chain: Union[MessageChain, list]
     """消息链。"""
     quote: Optional[int] = None
     """可选。引用一条消息的 message_id 进行回复。"""
@@ -553,7 +540,7 @@ class FileMkdir(ApiPost):
     """父目录 id。"""
     target: int
     """群号或好友 QQ 号。"""
-    dictionary_name: str = Field(..., alias='dictionaryName')
+    dictionary_name: str
     """新建文件夹名。"""
     class Info(ApiPost.Info):
         name = "file/mkdir"
@@ -579,7 +566,7 @@ class FileMove(ApiPost):
     """欲移动的文件 id。"""
     target: int
     """群号或好友 QQ 号。"""
-    move_to: str = Field(..., alias='moveTo')
+    move_to: str
     """移动目标文件夹 id。"""
     class Info(ApiPost.Info):
         name = "file/move"
@@ -593,7 +580,7 @@ class FileRename(ApiPost):
     """欲重命名的文件 id。"""
     target: int
     """群号或好友 QQ 号。"""
-    rename_to: str = Field(..., alias='renameTo')
+    rename_to: str
     """新文件名。"""
     class Info(ApiPost.Info):
         name = "file/rename"
@@ -631,7 +618,7 @@ class Mute(ApiPost):
     """禁言群成员。"""
     target: int
     """指定群的群号。"""
-    memder_id: int = Field(..., alias='memderId')
+    memder_id: int
     """指定群成员的 QQ 号。"""
     time: int
     """禁言时间，单位为秒，最多30天，默认为0。"""
@@ -645,7 +632,7 @@ class Unmute(ApiPost):
     """解除群成员禁言。"""
     target: int
     """指定群的群号。"""
-    memder_id: int = Field(..., alias='memderId')
+    memder_id: int
     """指定群成员的 QQ 号。"""
     class Info(ApiPost.Info):
         name = "unmute"
@@ -657,7 +644,7 @@ class Kick(ApiPost):
     """移出群成员。"""
     target: int
     """指定群的群号。"""
-    memder_id: int = Field(..., alias='memderId')
+    memder_id: int
     """指定群成员的 QQ 号。"""
     msg: str = ""
     """可选。信息。"""
@@ -724,7 +711,7 @@ class MemberInfo(ApiRest):
     """获取或修改群成员资料。"""
     target: int
     """群号。"""
-    member_id: int = Field(..., alias='memberId')
+    member_id: int
     """指定群成员的 QQ 号。"""
     info: Optional[MemberInfo] = None
     """仅修改时可用。群成员资料。"""
@@ -756,11 +743,11 @@ class RespOperate(Flag):
 
 class RespEvent(ApiBaseModel):
     """事件处理的 API 的方法复用，不作为 API 使用。"""
-    event_id: int = Field(..., alias='eventId')
+    event_id: int
     """响应申请事件的标识。"""
-    from_id: int = Field(..., alias='fromId')
+    from_id: int
     """事件对应申请人 QQ 号。"""
-    group_id: int = Field(..., alias='groupId')
+    group_id: int
     """事件对应申请人的群号，可能为0。"""
     operate: Union[int, RespOperate]
     """响应的操作类型。"""
@@ -783,11 +770,11 @@ class RespEvent(ApiBaseModel):
 
 class RespNewFriendRequestEvent(ApiPost):
     """响应添加好友申请。"""
-    event_id: int = Field(..., alias='eventId')
+    event_id: int
     """响应申请事件的标识。"""
-    from_id: int = Field(..., alias='fromId')
+    from_id: int
     """事件对应申请人 QQ 号。"""
-    group_id: int = Field(..., alias='groupId')
+    group_id: int
     """事件对应申请人的群号，可能为0。"""
     operate: Union[int, RespOperate]
     """响应的操作类型。"""
@@ -815,11 +802,11 @@ class RespNewFriendRequestEvent(ApiPost):
 
 class RespMemberJoinRequestEvent(ApiPost):
     """响应用户入群申请。"""
-    event_id: int = Field(..., alias='eventId')
+    event_id: int
     """响应申请事件的标识。"""
-    from_id: int = Field(..., alias='fromId')
+    from_id: int
     """事件对应申请人 QQ 号。"""
-    group_id: int = Field(..., alias='groupId')
+    group_id: int
     """事件对应申请人的群号。"""
     operate: Union[int, RespOperate]
     """响应的操作类型。"""
@@ -850,11 +837,11 @@ class RespMemberJoinRequestEvent(ApiPost):
 
 
 class RespBotInvitedJoinGroupRequestEvent(ApiPost):
-    event_id: int = Field(..., alias='eventId')
+    event_id: int
     """响应申请事件的标识。"""
-    from_id: int = Field(..., alias='fromId')
+    from_id: int
     """事件对应申请人 QQ 号。"""
-    group_id: int = Field(..., alias='groupId')
+    group_id: int
     """事件对应申请人的群号，可能为0。"""
     operate: Union[int, RespOperate]
     """响应的操作类型。"""

@@ -60,21 +60,19 @@ class GroupMember(Entity):
     """群成员。"""
     id: int
     """QQ 号。"""
-    member_name: str = Field(..., alias='memberName')
+    member_name: str
     """群成员名称。"""
     permission: Permission
     """Bot 在群中的权限。"""
     group: Group
     """群。"""
-    special_title: Optional[str] = Field('', alias='specialTitle')
+    special_title: str = ''
     """群头衔。"""
-    join_timestamp: Optional[datetime] = Field(0, alias='joinTimestamp')
+    join_timestamp: datetime = 0
     """加入群的时间。"""
-    last_speak_timestamp: Optional[datetime] = Field(
-        0, alias='lastSpeakTimestamp'
-    )
+    last_speak_timestamp: datetime = 0
     """最后一次发言的时间。"""
-    mute_time_remaining: Optional[int] = Field(0, alias='muteTimeRemaining')
+    mute_time_remaining: int = 0
     """禁言剩余时间。"""
     def __repr__(self):
         return f"<GroupMember id={self.id} group={self.group} permission={self.permission} group={self.group.id}>"
@@ -111,13 +109,13 @@ class GroupConfig(Config):
     """群名称。"""
     announcement: str
     """群公告。"""
-    confess_talk: bool = Field(..., alias='confessTalk')
+    confess_talk: bool
     """是否允许坦白说。"""
-    allow_member_invite: bool = Field(..., alias='allowMemberInvite')
+    allow_member_invite: bool
     """是否允许成员邀请好友入群。"""
-    auto_approve: bool = Field(..., alias='autoApprove')
+    auto_approve: bool
     """是否开启自动审批入群。"""
-    anonymous_chat: bool = Field(..., alias='anonymousChat')
+    anonymous_chat: bool
     """是否开启匿名聊天。"""
 
 

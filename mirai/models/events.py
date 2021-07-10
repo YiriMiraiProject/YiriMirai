@@ -156,7 +156,7 @@ class FriendNickChangedEvent(FriendEvent):
     """事件名。"""
     friend: Friend
     """事件对应的好友。"""
-    from_: str = Field(..., alias="from")
+    from_: str
     """原昵称。"""
     to: str
     """新昵称。"""
@@ -219,7 +219,7 @@ class BotMuteEvent(GroupEvent):
     """
     type: str = 'BotMuteEvent'
     """事件名。"""
-    duration_seconds: int = Field(..., alias='durationSeconds')
+    duration_seconds: int
     """禁言时间，单位秒。"""
     operator: Optional[GroupMember]
     """禁言的操作者。"""
@@ -294,9 +294,9 @@ class GroupRecallEvent(GroupEvent):
     """
     type: str = 'GroupRecallEvent'
     """事件名。"""
-    author_id: int = Field(..., alias='authorId')
+    author_id: int
     """原消息发送者的 QQ 号。"""
-    message_id: int = Field(..., alias='messageId')
+    message_id: int
     """原消息 message_id。"""
     time: datetime
     """原消息发送时间。"""
@@ -323,9 +323,9 @@ class FriendRecallEvent(Event):
     """事件名。"""
     # 按照文档顺序，这个事件确实应该在这个位置。
     # 而且它不符合 FriendEvent 的形式，就放在这里吧。
-    author_id: int = Field(..., alias='authorId')
+    author_id: int
     """原消息发送者的 QQ 号。"""
-    message_id: int = Field(..., alias='messageId')
+    message_id: int
     """原消息 message_id。"""
     time: datetime
     """原消息发送时间。"""
@@ -454,7 +454,7 @@ class GroupAllowConfessTalkEvent(GroupEvent):
     """现在是否允许坦白说。"""
     group: Group
     """坦白说状态改变的群。"""
-    is_by_bot: bool = Field(..., alias='isByBot')
+    is_by_bot: bool
     """是否是 Bot 进行该操作。"""
 
 
@@ -610,7 +610,7 @@ class MemberMuteEvent(GroupEvent):
     """
     type: str = 'MemberMuteEvent'
     """事件名。"""
-    duration_seconds: int = Field(..., alias='durationSeconds')
+    duration_seconds: int
     """禁言时间，单位为秒。"""
 
 
@@ -667,11 +667,11 @@ class RequestEvent(Event):
     """
     type: str
     """事件名。"""
-    event_id: int = Field(..., alias='eventId')
+    event_id: int
     """事件标识，响应该事件时的标识。"""
-    from_id: int = Field(..., alias='fromId')
+    from_id: int
     """申请人 QQ 号。"""
-    group_id: int = Field(..., alias='groupId')
+    group_id: int
     """申请人群号，可能为0。"""
 
 
@@ -692,11 +692,11 @@ class NewFriendRequestEvent(RequestEvent):
     """
     type: str = 'NewFriendRequestEvent'
     """事件名。"""
-    event_id: int = Field(..., alias='eventId')
+    event_id: int
     """事件标识，响应该事件时的标识。"""
-    from_id: int = Field(..., alias='fromId')
+    from_id: int
     """申请人 QQ 号。"""
-    group_id: int = Field(..., alias='groupId')
+    group_id: int
     """申请人如果通过某个群添加好友，该项为该群群号；否则为0。"""
     nick: str
     """申请人的昵称或群名片。"""
@@ -723,13 +723,13 @@ class MemberJoinRequestEvent(RequestEvent):
     """
     type: str = 'MemberJoinRequestEvent'
     """事件名。"""
-    event_id: int = Field(..., alias='eventId')
+    event_id: int
     """事件标识，响应该事件时的标识。"""
-    from_id: int = Field(..., alias='fromId')
+    from_id: int
     """申请人 QQ 号。"""
-    group_id: int = Field(..., alias='groupId')
+    group_id: int
     """申请人申请入群的群号。"""
-    group_name: str = Field(..., alias='groupName')
+    group_name: str
     """申请人申请入群的群名称。"""
     nick: str
     """申请人的昵称或群名片。"""
@@ -756,13 +756,13 @@ class BotInvitedJoinGroupRequestEvent(RequestEvent):
     """
     type: str = 'BotInvitedJoinGroupRequestEvent'
     """事件名。"""
-    event_id: int = Field(..., alias='eventId')
+    event_id: int
     """事件标识，响应该事件时的标识。"""
-    from_id: int = Field(..., alias='fromId')
+    from_id: int
     """邀请人 QQ 号。"""
-    group_id: int = Field(..., alias='groupId')
+    group_id: int
     """被邀请进入群的群号。"""
-    group_name: str = Field(..., alias='groupName')
+    group_name: str
     """被邀请进入群的群名称。"""
     nick: str
     """邀请人（好友）的昵称。"""
@@ -819,7 +819,7 @@ class MessageEvent(Event):
     """
     type: str
     """事件名。"""
-    message_chain: MessageChain = Field(..., alias='messageChain')
+    message_chain: MessageChain
     """消息内容。"""
 
 
@@ -836,7 +836,7 @@ class FriendMessage(MessageEvent):
     """事件名。"""
     sender: Friend
     """发送消息的好友。"""
-    message_chain: MessageChain = Field(..., alias='messageChain')
+    message_chain: MessageChain
     """消息内容。"""
 
 
@@ -853,7 +853,7 @@ class GroupMessage(MessageEvent):
     """事件名。"""
     sender: GroupMember
     """发送消息的群成员。"""
-    message_chain: MessageChain = Field(..., alias='messageChain')
+    message_chain: MessageChain
     """消息内容。"""
 
 
@@ -870,7 +870,7 @@ class TempMessage(MessageEvent):
     """事件名。"""
     sender: GroupMember
     """发送消息的群成员。"""
-    message_chain: MessageChain = Field(..., alias='messageChain')
+    message_chain: MessageChain
     """消息内容。"""
 
 
@@ -887,7 +887,7 @@ class StrangerMessage(MessageEvent):
     """事件名。"""
     sender: Friend
     """发送消息的人。"""
-    message_chain: MessageChain = Field(..., alias='messageChain')
+    message_chain: MessageChain
     """消息内容。"""
 
 
@@ -904,7 +904,7 @@ class OtherClientMessage(MessageEvent):
     """事件名。"""
     sender: Sender
     """发送消息的人。"""
-    message_chain: MessageChain = Field(..., alias='messageChain')
+    message_chain: MessageChain
     """消息内容。"""
 
 

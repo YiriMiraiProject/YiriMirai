@@ -4,10 +4,12 @@
 
 关于一般的事件总线，参看模块 `mirai.bus`。
 """
+import inspect
 import logging
 from collections import defaultdict
 from typing import Any, Callable, List, Type, Union
 
+import mirai.exceptions as exceptions
 from mirai.bus import EventBus
 from mirai.models.events import Event
 from mirai.utils import async_call_with_exception
@@ -26,6 +28,16 @@ def event_chain_parents(event: str):
         event_type = event_type.__base__
 
 
+async def quick_response(event: str, args: list, kwargs: dict, result: Any):
+    """快速响应。"""
+    # 通过常规 API 调用，此时 result 应为一个协程对象。
+    try:
+        if inspect.isawaitable(result):
+            return await result
+    except Exception as e:
+        exceptions.print_exception(e) # 打印异常信息，但不打断执行流程
+
+
 class ModelEventBus(EventBus):
     """模型事件总线，实现底层事件总线上的事件再分发，以将事件解析到 Event 对象。
 
@@ -37,7 +49,11 @@ class ModelEventBus(EventBus):
     事件触发时，会自动按照 `Event` 类的继承关系向上级传播。
     """
     def __init__(self):
-        self.base_bus = EventBus(event_chain_generator=event_chain_parents)
+
+        self.base_bus = EventBus(
+            event_chain_generator=event_chain_parents,
+            quick_response=quick_response
+        )
         self._middlewares = defaultdict(type(None))
 
     def subscribe(
@@ -105,4 +121,6 @@ class ModelEventBus(EventBus):
 
         `event: Event` 要触发的事件
         """
-        return await self.base_bus.emit(event.type, event.dict())
+        return await self.base_bus.emit(
+            event.type, event.dict(by_alias=True, exclude_none=True)
+        )

@@ -4,7 +4,7 @@
 
 网络适配器负责与 mirai-api-http 沟通，详见各子模块。
 """
-from .base import ApiProider, Adapter, Method
+from .base import ApiProvider, Adapter, Method
 from .http import HTTPAdapter
 
-__all__ = ['Api', 'Adapter', 'Method', 'HTTPAdapter']
+__all__ = ['ApiProvider', 'Adapter', 'Method', 'HTTPAdapter']

@@ -8,7 +8,7 @@ import asyncio
 
 import logging
 from collections import defaultdict
-from typing import Any, Callable, Iterable, List
+from typing import Any, Callable, Iterable, List, Optional, Awaitable
 
 from mirai.utils import PriorityList, async_call_with_exception
 
@@ -51,15 +51,21 @@ class EventBus(object):
     def __init__(
         self,
         event_chain_generator: Callable[[str],
-                                        Iterable[str]] = event_chain_single
+                                        Iterable[str]] = event_chain_single,
+        quick_response: Optional[Awaitable[Callable[[str, list, dict, Any],
+                                                    None]]] = None
     ):
         """
         `event_chain_generator: Callable[[str], Iterable[str]]`
             一个函数，输入事件名，返回一个生成此事件所在事件链的全部事件的事件名的生成器，
             默认行为是事件链只包含单一事件。
+
+        `quick_response: Optional[Awaitable[Callable[[str, list, dict, Any], None]]]`
+            快速响应方式。留空表示不使用快速响应。
         """
         self._subscribers = defaultdict(PriorityList)
         self.event_chain_generator = event_chain_generator
+        self.quick_response = quick_response
 
     def subscribe(self, event: str, func: Callable, priority: int) -> None:
         """注册事件处理器。
@@ -109,12 +115,16 @@ class EventBus(object):
 
         `*args, **kwargs` 传递给事件处理器的参数。
         """
+        async def call(f):
+            if self.quick_response:
+                result = await async_call_with_exception(f, *args, **kwargs)
+                return await self.quick_response(event, args, kwargs, result)
+            else:
+                return await async_call_with_exception(f, *args, **kwargs)
+
         results = []
         for m_event in self.event_chain_generator(event):
-            coros = [
-                async_call_with_exception(f, *args, **kwargs)
-                for _, f in self._subscribers[m_event]
-            ]
+            coros = [call(f) for _, f in self._subscribers[m_event]]
             if coros:
                 results += await asyncio.gather(*coros)
         return results
