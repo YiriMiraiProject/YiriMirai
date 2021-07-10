@@ -81,7 +81,7 @@ bus = EventBus(event_chain_generator=event_chain_separator('.'))
 
 继承事件链是基于事件的继承关系，包含事件及所有父事件的事件链。
 
-例如：FriendMessage的事件链为`['FriendMessage', 'MessageEvent', 'Event']`。
+例如：FriendMessage 的事件链为 `['FriendMessage', 'MessageEvent', 'Event']`。
 
 import EventChain from "../others/event-chains.mdx";
 
@@ -117,6 +117,8 @@ await mbus.emit(Event(type='Event'))
 
 ## 自定义事件
 
+### 事件总线
+
 事件总线的 `emit` 方法可以发送自定义事件。
 
 ```python
@@ -129,12 +131,20 @@ await bus.emit('CustomEvent', 1, 2, 3)
 
 自定义事件可以携带一个或多个参数。
 
-模型事件总线暂时不支持自定义事件。不过可以通过 `base_bus` 发送自定义事件。
+### 模型事件总线
+
+使用模型事件总线时，自定义事件需要继承 `Event` 类。
 
 ```python
-@mbus.base_bus.on('CustomEvent')
-def handle_custom_event(x, y, z):
-    print('CustomEvent', x, y, z)
+class CustomEvent(Event):
+    type: str = 'CustomEvent'
+    param: int
 
-await mbus.base_bus.emit('CustomEvent', 1, 2, 3)
+@mbus.on(CustomEvent)
+def handle_custom_event(event: CustomEvent):
+    print('CustomEvent', event.param)
+
+await mbus.emit(CustomEvent(param=1))
 ```
+
+继承 `Event` 类时，需要定义 `type` 属性，并指明默认值为事件名。
