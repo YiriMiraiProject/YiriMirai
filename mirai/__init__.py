@@ -5,12 +5,12 @@
 
 更多信息参看[文档](https://yiri-mirai.vercel.app/)
 """
-__version__ = '0.1.0'
+__version__ = '0.1.2'
 __author__ = '忘忧北萱草'
 
 import logging
 
-from mirai.adapters import Adapter, HTTPAdapter, Method
+from mirai.adapters import Adapter, HTTPAdapter, Method, WebSocketAdapter
 from mirai.bot import Mirai, SimpleMirai
 from mirai.bus import EventBus
 from mirai.colorlog import ColoredFormatter
@@ -21,10 +21,11 @@ from mirai.models import (
 )
 
 __all__ = [
-    'Mirai', 'SimpleMirai', 'Adapter', 'Method', 'HTTPAdapter', 'EventBus',
-    'get_logger', 'Event', 'MessageEvent', 'FriendMessage', 'GroupMessage',
-    'TempMessage', 'StrangerMessage', 'MessageChain', 'Plain', 'At', 'AtAll',
-    'Dice', 'Face', 'Poke', 'serialize', 'deserialize'
+    'Mirai', 'SimpleMirai', 'Adapter', 'Method', 'HTTPAdapter',
+    'WebSocketAdapter', 'EventBus', 'get_logger', 'Event', 'MessageEvent',
+    'FriendMessage', 'GroupMessage', 'TempMessage', 'StrangerMessage',
+    'MessageChain', 'Plain', 'At', 'AtAll', 'Dice', 'Face', 'Poke',
+    'serialize', 'deserialize'
 ]
 
 logger = logging.getLogger(__name__)
