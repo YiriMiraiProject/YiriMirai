@@ -48,6 +48,8 @@ class SimpleMirai(ApiProvider):
         self._bus = EventBus()
         self._adapter.register_event_bus(self._bus)
 
+        self.setup_functions = []
+
         self.logger = logging.getLogger(__name__)
 
     async def call_api(self, api: str, **params):
@@ -75,8 +77,15 @@ class SimpleMirai(ApiProvider):
         """
         return self._bus.on(event, priority=priority)
 
+    def setup(self, func: Callable) -> Callable:
+        """注册机器人初始化处理器。"""
+        self.setup_functions.append(func)
+        return func
+
     async def _run(self, *args, **kwargs):
         await self._adapter.login(self.qq)
+        for func in self.setup_functions:
+            await async_(func())
         await self._adapter.run(*args, **kwargs)
 
     def run(self, *args, **kwargs):

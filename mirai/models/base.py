@@ -75,7 +75,7 @@ class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):
         """
         try:
             type_ = cls.__indexes__.get(name)
-            if not issubclass(type_, cls):
+            if not (type_ and issubclass(type_, cls)):
                 raise ValueError(f'`{name}` 不是 `{cls.__name__}` 的子类！')
             return type_
         except AttributeError as e:

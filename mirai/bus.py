@@ -52,15 +52,15 @@ class EventBus(object):
         self,
         event_chain_generator: Callable[[str],
                                         Iterable[str]] = event_chain_single,
-        quick_response: Optional[Awaitable[Callable[[str, list, dict, Any],
-                                                    None]]] = None
+        quick_response: Optional[Callable[[str, list, dict, Any],
+                                          Awaitable]] = None
     ):
         """
         `event_chain_generator: Callable[[str], Iterable[str]]`
             一个函数，输入事件名，返回一个生成此事件所在事件链的全部事件的事件名的生成器，
             默认行为是事件链只包含单一事件。
 
-        `quick_response: Optional[Awaitable[Callable[[str, list, dict, Any], None]]]`
+        `quick_response:Optional[Callable[[str, list, dict, Any], Awaitable]]`
             快速响应方式。留空表示不使用快速响应。
         """
         self._subscribers = defaultdict(PriorityList)

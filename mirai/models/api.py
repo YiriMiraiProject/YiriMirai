@@ -3,7 +3,7 @@
 此模块提供 API 调用与返回数据解析相关。
 """
 from enum import Enum, Flag
-from typing import Any, List, Optional, Type, Union
+from typing import List, Optional, Type, Union
 
 try:
     from typing import Literal
@@ -23,7 +23,7 @@ from mirai.models.events import (
 )
 from mirai.models.message import Image, MessageChain, Voice
 from mirai.utils import async_
-from pydantic import BaseModel, Field, validator
+from pydantic import Field, validator
 
 
 class Response(MiraiBaseModel):
@@ -172,6 +172,7 @@ class ApiMetaclass(MiraiIndexedMetaclass):
                         else:
                             info.parameter_names.append(field_name)
                 break
+
         return new_cls
 
 
@@ -206,6 +207,13 @@ class ApiModel(ApiBaseModel):
                 kwargs[name] = value
 
         super().__init__(**kwargs)
+
+    @classmethod
+    def get_subtype(cls, name: str) -> Type['ApiModel']:
+        try:
+            return super().get_subtype(name)
+        except ValueError as e:
+            raise ValueError(f'`{name}` 不是可用的 API！') from e
 
     class Proxy():
         """API 代理类。由 API 构造，提供对适配器的访问。
@@ -261,7 +269,9 @@ class ApiModel(ApiBaseModel):
             info = self.api_type.Info
             raw_response = await async_(
                 self.api_provider.call_api(
-                    api=info.name, method=method, **api.dict(by_alias=True, exclude_none=True)
+                    api=info.name,
+                    method=method,
+                    **api.dict(by_alias=True, exclude_none=True)
                 )
             )
             response_type = response_type or info.response_type
