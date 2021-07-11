@@ -12,7 +12,7 @@ from mirai.bus import EventBus
 from mirai.models.api import ApiModel
 from mirai.models.bus import ModelEventBus
 from mirai.models.events import Event
-from mirai.utils import async_
+from mirai.utils import async_, async_call_with_exception, asgi_serve
 
 
 class SimpleMirai(ApiProvider):
@@ -83,24 +83,75 @@ class SimpleMirai(ApiProvider):
         self.setup_functions.append(func)
         return func
 
-    async def _run(self, *args, **kwargs):
+    async def _run_startup(self):
+        """开始运行机器人（立即返回）。"""
         await self._adapter.login(self.qq)
-        for func in self.setup_functions:
-            await async_(func())
-        try:
-            await self._adapter.run(*args, **kwargs)
-        finally:
-            await self._adapter.logout()
 
-    def run(self, *args, **kwargs):
+        for func in self.setup_functions:
+            await async_call_with_exception(func)
+
+        self._adapter.start()
+
+    async def _run_shutdown(self):
+        """结束运行机器人。"""
+        await self._adapter.logout()
+        self._adapter.shutdown()
+
+    async def _run(self):
+        try:
+            await self._run_startup()
+            await self._adapter.background
+        finally:
+            await self._run_shutdown()
+
+    @property
+    def asgi(self):
+        """返回 ASGI 实例，用于启动服务。"""
+        asgi = self._adapter.asgi
+
+        async def asgi_wrapper(scope, recv, send):
+            if scope['type'] == 'lifespan':
+                while True:
+                    message = await recv()
+                    if message['type'] == 'lifespan.startup':
+                        await self._run_startup()
+                        await send({'type': 'lifespan.startup.complete'})
+                    elif message['type'] == 'lifespan.shutdown':
+                        await self._run_shutdown()
+                        await send({'type': 'lifespan.shutdown.complete'})
+                        return
+            else:
+                return await asgi(scope, recv, send)
+
+        return asgi_wrapper
+
+    def run(
+        self,
+        host: str = '127.0.0.1',
+        port: int = 8000,
+        asgi_server: str = 'auto',
+        **kwargs
+    ):
         """开始运行机器人。
 
         一般情况下，此函数会进入主循环，不再返回。
         """
-        try:
-            asyncio.run(self._run(*args, **kwargs))
-        except KeyboardInterrupt:
-            sys.exit(0)
+        if not asgi_serve(
+            self.asgi, host=host, port=port, asgi_server=asgi_server, **kwargs
+        ):
+            logger = logging.getLogger(__name__)
+            logger.warning(
+                """未找到可用的 ASGI 服务，反向 WebSocket 和 WebHook 上报将不可用。
+建议安装 ASGI 服务器，如 `uvicorn` 或 `hypercorn`。
+在命令行键入：
+    pip install uvicorn
+或者
+    pip install hypercorn"""
+            )
+            try:
+                asyncio.run(self._run())
+            except KeyboardInterrupt:
+                sys.exit(0)
 
 
 class Mirai(SimpleMirai):
@@ -145,7 +196,7 @@ class Mirai(SimpleMirai):
         ```python
         @bot.on(FriendMessage)
         async def on_friend_message(event: FriendMessage):
-            print(f"收到来自{event.sender.nickname]}的消息。")
+            print(f"收到来自{event.sender.nickname}的消息。")
         ```
         """
         return self._bus.on(event_type=event_type, priority=priority)

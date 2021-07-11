@@ -12,8 +12,10 @@ homepage = "https://yiri-mirai.vercel.app"
 python = "^3.7"
 httpx = "^0.18.2"
 pydantic = "^1.8.2"
-typing-extensions = "^3.10.0"
 websockets = "^9.1"
+typing-extensions = {version = "^3.10.0", python = "3.7"}
+uvicorn = {version = "^0.14.0", extras = ["uvicorn"]}
+hypercorn = {version = "^0.11.2", extras = ["hypercorn"]}
 
 [tool.poetry.dev-dependencies]
 yapf = "^0.31.0"

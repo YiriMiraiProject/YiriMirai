@@ -27,8 +27,10 @@ def _error_handler_async(func):
         try:
             return await func(self, *args, **kwargs)
         except (httpx.NetworkError, httpx.InvalidURL) as e:
-            err = exceptions.NetworkError('无法连接到 mirai。请检查地址与端口是否正确。')
-            logger.error(e)
+            err = exceptions.NetworkError(
+                '无法连接到 mirai。请检查 mirai-api-http 是否启动，地址与端口是否正确。'
+            )
+            logger.error(err)
             raise err from e
         except Exception as e:
             logger.error(e)
@@ -132,16 +134,17 @@ class HTTPAdapter(Adapter):
 
     @_error_handler_async
     async def logout(self):
-        async with httpx.AsyncClient(
-            base_url=self.host_name, headers=self.headers
-        ) as client:
-            await self._post(
-                client, '/release', {
-                    "sessionKey": self.session,
-                    "qq": self.qq,
-                }
-            )
-            logger.info(f"从账号{self.qq}退出。")
+        if self.session:
+            async with httpx.AsyncClient(
+                base_url=self.host_name, headers=self.headers
+            ) as client:
+                await self._post(
+                    client, '/release', {
+                        "sessionKey": self.session,
+                        "qq": self.qq,
+                    }
+                )
+                logger.info(f"从账号{self.qq}退出。")
 
     async def poll_event(self):
         """进行一次轮询，获取并处理事件。"""
@@ -178,10 +181,15 @@ class HTTPAdapter(Adapter):
             elif method == Method.POST or method == Method.RESTPOST:
                 return await self._post(client, f'/{api}', params)
 
-    async def run(self):
+    async def _background(self):
         """开始轮询。"""
-        await self._before_run()
         logger.info('机器人开始运行。按 Ctrl + C 停止。')
-        while True:
-            asyncio.create_task(self.poll_event())
-            await asyncio.sleep(self.poll_interval)
+
+        tasks = []
+        try:
+            while True:
+                tasks.append(asyncio.create_task(self.poll_event()))
+                await asyncio.sleep(self.poll_interval)
+        finally:
+            for task in tasks:
+                task.cancel()

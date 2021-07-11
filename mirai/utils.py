@@ -2,19 +2,20 @@
 """
 此模块提供一些实用的辅助方法。
 """
+import sys
 import inspect
-from typing import Callable, List
+from typing import Callable, List, Union
 
 from mirai import exceptions
 
 
-async def async_(coro):
+async def async_(obj):
     """将一个对象包装为 `Awaitable`。
     """
-    if inspect.isawaitable(coro):
-        return await coro
+    if inspect.isawaitable(obj):
+        return await obj
     else:
-        return coro
+        return obj
 
 
 async def async_call(func: Callable, *args, **kwargs):
@@ -101,3 +102,48 @@ def KMP(string, pattern, count: int = 1) -> List[int]:
         if len(matches) == count:
             break
     return matches
+
+
+def asgi_serve(
+    app: Union[Callable, str],
+    host: str = '127.0.0.1',
+    port: int = 8000,
+    asgi_server: str = 'auto',
+    **kwargs
+):
+    """运行一个 ASGI 服务器。
+
+    `app: Union[Callable, str]` ASGI 应用程序。
+
+    `host: str = '127.0.0.1'` 服务器地址。
+
+    `port: int = 8000` 服务器端口。
+
+    `asgi_server='auto'` ASGI 服务器，可选的有 `hypercorn` `uvicorn` 和 `auto`。
+        如果设置为 `auto`，自动寻找是否已安装可用的 ASGI 服务（`unicorn` 或 `hypercorn`），并运行。
+    """
+
+    if asgi_server == 'auto':
+        try:
+            from uvicorn import run
+            asgi = 'uvicorn'
+        except ImportError:
+            try:
+                from hypercorn.asyncio import serve
+                from hypercorn.config import Config
+                asgi = 'hypercorn'
+            except ImportError:
+                asgi = 'none'
+    else:
+        asgi = asgi_server
+
+    if asgi == 'uvicorn':
+        run(app, host=host, port=port, **kwargs)
+        return True
+    elif asgi == 'hypercorn':
+        import asyncio
+        config = Config().from_mapping(bind=f'{host}:{port}', **kwargs)
+        asyncio.run(serve(app, config))
+        return True
+    else:
+        return False

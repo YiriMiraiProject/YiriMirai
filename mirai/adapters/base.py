@@ -3,6 +3,7 @@
 此模块提供网络适配器的一系列基础定义。
 """
 import abc
+import asyncio
 import functools
 from datetime import datetime
 from enum import Enum
@@ -20,6 +21,23 @@ def _json_default(obj): # 支持 datetime
 def json_dumps(obj) -> str:
     """保存为 json。"""
     return dumps(obj, default=_json_default)
+
+
+async def default_asgi(scope, recv, send):
+    """默认的 ASGI 行为：把所有 HTTP 请求重定向到项目主页。"""
+    if scope["type"] == "http":
+        await recv()
+        await send(
+            {
+                "type": "http.response.start",
+                "status": 301,
+                "headers": [[b"Location", b"https://yiri-mirai.vercel.app"], ]
+            }
+        )
+        await send({
+            'type': 'http.response.body',
+            'body': b'',
+        })
 
 
 class Method(str, Enum):
@@ -70,6 +88,8 @@ class Adapter(ApiProvider):
     """从 mirai-api-http 处获得的 session。"""
     buses: Set[EventBus]
     """注册的事件总线集合。"""
+    background: asyncio.Task
+
     def __init__(self, verify_key: str):
         """
         `verify_key: str = ''` mirai-api-http 配置的认证 key。
@@ -100,15 +120,25 @@ class Adapter(ApiProvider):
     async def logout(self):
         """登出。"""
 
-    async def _before_run(self):
+    @abc.abstractmethod
+    async def _background(self):
+        """背景事件循环，用于接收事件。"""
+
+    def start(self):
+        """运行背景事件循环。"""
         if not self.buses:
             raise RuntimeError('事件总线未指定！')
         if not self.session:
             raise RuntimeError('未登录！')
 
-    async def run(self):
-        """运行。
+        self.background = asyncio.create_task(self._background())
 
-        具体实现由子类决定。一般的行为是进入事件循环。
-        """
-        await self._before_run()
+    def shutdown(self):
+        """停止背景事件循环。"""
+        if self.background:
+            self.background.cancel()
+
+    @property
+    def asgi(self) -> Callable:
+        """返回 ASGI 实例，可用于启动服务。"""
+        return default_asgi

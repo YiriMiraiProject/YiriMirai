@@ -11,6 +11,24 @@ from mirai.adapters.base import Adapter, Method, json_dumps
 logger = logging.getLogger(__name__)
 
 
+def _error_handler_async(func):
+    """错误处理装饰器。"""
+    async def wrapper(self, *args, **kwargs):
+        try:
+            return await func(self, *args, **kwargs)
+        except (ConnectionRefusedError, websockets.InvalidURI) as e:
+            err = exceptions.NetworkError(
+                '无法连接到 mirai。请检查 mirai-api-http 是否启动，地址与端口是否正确。'
+            )
+            logger.error(err)
+            raise err from e
+        except Exception as e:
+            logger.error(e)
+            raise
+
+    return wrapper
+
+
 class WebSocketAdapter(Adapter):
     """WebSocket 适配器。作为 WebSocket 客户端与 mirai-api-http 沟通。
     """
@@ -58,6 +76,7 @@ class WebSocketAdapter(Adapter):
         # 本地同步 ID，每次调用 API 递增。
         self._local_sync_id = random.randint(1, 1024) * 1024
 
+    @_error_handler_async
     async def _start(self):
         """开始接收 websocket 数据。"""
         if not self.connect:
@@ -88,9 +107,10 @@ class WebSocketAdapter(Adapter):
         """接收并解析 websocket 数据。"""
         while not self._recv_dict[sync_id]:
             # 如果没有对应同步 ID 的数据，则等待 websocket 数据
-            await asyncio.sleep(0)
+            await asyncio.sleep(0.1)
         return self._recv_dict[sync_id].pop(0)
 
+    @_error_handler_async
     async def login(self, qq: int):
         headers = {
             'verifyKey': self.verify_key,
@@ -110,19 +130,23 @@ class WebSocketAdapter(Adapter):
         self.qq = qq
         logger.info(f'成功登录到账号{qq}。')
 
+    @_error_handler_async
     async def logout(self):
-        await self.connection.close()
+        if self.connection:
+            await self.connection.close()
 
-        await self._start_task
+            await self._start_task
 
-        logger.info(f"从账号{self.qq}退出。")
+            logger.info(f"从账号{self.qq}退出。")
 
     async def poll_event(self):
         """获取并处理事件。"""
         event = await self._recv(self.sync_id)
 
+        tasks = []
         for bus in self.buses:
-            asyncio.create_task(bus.emit(event['type'], event))
+            tasks.append(asyncio.create_task(bus.emit(event['type'], event)))
+        return tasks
 
     async def call_api(self, api: str, method: Method = Method.GET, **params):
         """调用 API。
@@ -149,9 +173,14 @@ class WebSocketAdapter(Adapter):
         logger.debug(f"发送 WebSocket 数据，同步 ID：{sync_id}。")
         return await self._recv(sync_id)
 
-    async def run(self):
+    async def _background(self):
         """开始接收事件。"""
-        await self._before_run()
         logger.info('机器人开始运行。按 Ctrl + C 停止。')
-        while True:
-            await self.poll_event()
+
+        tasks = []
+        try:
+            while True:
+                tasks.extend(await self.poll_event())
+        finally:
+            for task in tasks:
+                task.cancel()
