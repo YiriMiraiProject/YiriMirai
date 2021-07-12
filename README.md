@@ -2,6 +2,8 @@
 
 一个轻量级、低耦合度的基于 mirai-api-http 的 Python SDK。
 
+**本项目适用于 mirai-api-http 2.X 版本**。
+
 目前仍处于开发阶段，各种内容可能会有较大的变化。
 
 ## 安装
