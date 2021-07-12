@@ -258,13 +258,16 @@ class ApiModel(ApiBaseModel):
             self,
             method: Method = Method.GET,
             response_type: Optional[Type[MiraiBaseModel]] = None,
-            args: list = [],
-            kwargs: dict = {}
+            args: Optional[list] = None,
+            kwargs: Optional[dict] = None
         ) -> MiraiBaseModel:
             """调用 API。
 
             将结果解析为 Model。
             """
+            args = args or []
+            kwargs = kwargs or {}
+
             api = self.api_type(*args, **kwargs)
             info = self.api_type.Info
             raw_response = await async_(
@@ -274,6 +277,10 @@ class ApiModel(ApiBaseModel):
                     **api.dict(by_alias=True, exclude_none=True)
                 )
             )
+            # 如果 API 无法调用，raw_response 为空
+            if not raw_response:
+                return None
+            # 解析 API 返回数据
             response_type = response_type or info.response_type
             return response_type.parse_obj(raw_response)
 

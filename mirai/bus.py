@@ -5,12 +5,13 @@
 此处的事件总线不包含 model 层封装。包含 model 层封装的版本，请参见模块 `mirai.models.bus`。
 """
 import asyncio
+import inspect
 
 import logging
 from collections import defaultdict
-from typing import Any, Callable, Iterable, List, Optional, Awaitable
+from typing import Any, Awaitable, Callable, Iterable, List, Optional
 
-from mirai.utils import PriorityList, async_call_with_exception
+from mirai.utils import async_call_with_exception
 
 logger = logging.getLogger(__name__)
 
@@ -52,31 +53,23 @@ class EventBus(object):
         self,
         event_chain_generator: Callable[[str],
                                         Iterable[str]] = event_chain_single,
-        quick_response: Optional[Callable[[str, list, dict, Any],
-                                          Awaitable]] = None
     ):
         """
         `event_chain_generator: Callable[[str], Iterable[str]]`
             一个函数，输入事件名，返回一个生成此事件所在事件链的全部事件的事件名的生成器，
             默认行为是事件链只包含单一事件。
-
-        `quick_response:Optional[Callable[[str, list, dict, Any], Awaitable]]`
-            快速响应方式。留空表示不使用快速响应。
         """
-        self._subscribers = defaultdict(PriorityList)
+        self._subscribers = defaultdict(set)
         self.event_chain_generator = event_chain_generator
-        self.quick_response = quick_response
 
-    def subscribe(self, event: str, func: Callable, priority: int) -> None:
+    def subscribe(self, event: str, func: Callable) -> None:
         """注册事件处理器。
 
         `event: str` 事件名。
 
         `func: Callable` 事件处理器。
-
-        `priority: int` 事件处理器的优先级，小者优先。
         """
-        self._subscribers[event].add(priority, func)
+        self._subscribers[event].add(func)
 
     def unsubscribe(self, event: str, func: Callable) -> None:
         """移除事件处理器。
@@ -85,15 +78,15 @@ class EventBus(object):
 
         `func: Callable` 事件处理器。
         """
-        if not self._subscribers[event].remove(func):
+        try:
+            self._subscribers[event].remove(func)
+        except KeyError:
             logger.warn(f'试图移除事件 `{event}` 的一个不存在的事件处理器 `{func}`。')
 
-    def on(self, event: str, priority: int = 0) -> Callable:
+    def on(self, event: str) -> Callable:
         """以装饰器的方式注册事件处理器。
 
         `event: str` 事件名。
-
-        `priority: int` 事件处理器的优先级，小者优先。
 
         例如：
         ```py
@@ -103,31 +96,38 @@ class EventBus(object):
         ```
         """
         def decorator(func: Callable) -> Callable:
-            self.subscribe(event, func, priority)
+            self.subscribe(event, func)
             return func
 
         return decorator
 
-    async def emit(self, event: str, *args, **kwargs) -> List[Any]:
+    async def emit(self, event: str, *args, **kwargs) -> List[Awaitable[Any]]:
         """触发一个事件。
+
+        异步执行说明：`await emit` 时执行事件处理器，所有事件处理器执行完后，并行运行所有快速响应。
 
         `event: str` 要触发的事件名称。
 
         `*args, **kwargs` 传递给事件处理器的参数。
-        """
-        async def call(f):
-            if self.quick_response:
-                result = await async_call_with_exception(f, *args, **kwargs)
-                return await self.quick_response(event, args, kwargs, result)
-            else:
-                return await async_call_with_exception(f, *args, **kwargs)
 
-        results = []
+        Returns: `List[Awaitable[Any]]`
+            所有事件处理器的快速响应协程的 Task。
+        """
+        async def call(f) -> Optional[Awaitable[Any]]:
+            result = await async_call_with_exception(f, *args, **kwargs)
+            # 快速响应：如果事件处理器返回一个协程，那么立即运行这个协程。
+            if inspect.isawaitable(result):
+                return result
+            else: # 当不使用快速响应时，返回值无意义。
+                return None
+
+        coros = []
         for m_event in self.event_chain_generator(event):
-            coros = [call(f) for _, f in self._subscribers[m_event]]
-            if coros:
-                results += await asyncio.gather(*coros)
-        return results
+            coros += [(await call(f)) for f in self._subscribers[m_event]]
+        coros = filter(None, coros) # 只保留快速响应的返回值。
+
+        results = asyncio.gather(*coros) if coros else []
+        return list(map(lambda coro: asyncio.create_task(coro), results))
 
     @classmethod
     def get_default_bus(cls):

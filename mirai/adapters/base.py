@@ -5,12 +5,16 @@
 import abc
 import asyncio
 import functools
+import logging
 from datetime import datetime
 from enum import Enum
 from json import dumps
 from typing import Any, Awaitable, Callable, List, Set, Union
 
+from mirai import exceptions
 from mirai.bus import EventBus
+
+logger = logging.getLogger(__name__)
 
 
 def _json_default(obj): # 支持 datetime
@@ -21,6 +25,27 @@ def _json_default(obj): # 支持 datetime
 def json_dumps(obj) -> str:
     """保存为 json。"""
     return dumps(obj, default=_json_default)
+
+
+def error_handler_async(errors):
+    """错误处理装饰器。"""
+    def wrapper(func):
+        async def wrapped(self, *args, **kwargs):
+            try:
+                return await func(self, *args, **kwargs)
+            except errors as e:
+                err = exceptions.NetworkError(
+                    '无法连接到 mirai。请检查 mirai-api-http 是否启动，地址与端口是否正确。'
+                )
+                logger.error(err)
+                raise err from e
+            except Exception as e:
+                logger.error(e)
+                raise
+
+        return wrapped
+
+    return wrapper
 
 
 async def default_asgi(scope, recv, send):
@@ -89,10 +114,10 @@ class Adapter(ApiProvider):
     buses: Set[EventBus]
     """注册的事件总线集合。"""
     background: asyncio.Task
-
+    """背景事件循环任务。"""
     def __init__(self, verify_key: str):
         """
-        `verify_key: str = ''` mirai-api-http 配置的认证 key。
+        `verify_key: str` mirai-api-http 配置的认证 key。
         """
         self.verify_key = verify_key
         self.session = ''
@@ -119,6 +144,17 @@ class Adapter(ApiProvider):
     @abc.abstractmethod
     async def logout(self):
         """登出。"""
+
+    @abc.abstractmethod
+    async def call_api(self, api: str, method: Method = Method.GET, **params):
+        """调用 API。
+
+        `api`: API 名称，需与 mirai-api-http 中的定义一致。
+
+        `method`: 调用方法。默认为 GET。
+
+        `params`: 参数。
+        """
 
     @abc.abstractmethod
     async def _background(self):

@@ -2,7 +2,6 @@
 """
 此模块提供一些实用的辅助方法。
 """
-import sys
 import inspect
 from typing import Callable, List, Union
 
@@ -30,39 +29,6 @@ async def async_call_with_exception(func: Callable, *args, **kwargs):
         return await async_call(func, *args, **kwargs)
     except Exception as e:
         exceptions.print_exception(e) # 打印异常信息，但不打断执行流程
-
-
-class PriorityList(list):
-    """优先级列表。
-
-    根据应用场景优化：改动较慢，读取较快。
-    """
-    def add(self, priority, value):
-        """添加元素。
-
-        `priority` 优先级，小者优先。
-
-        `value` 元素。
-        """
-        index = 0
-        for i, (prior, data) in enumerate(self):
-            if data == value:
-                raise RuntimeError("优先级列表不支持重复添加元素!")
-            if prior <= priority:
-                index = i
-        self.insert(index, (priority, value))
-
-    def remove(self, value):
-        """删除元素。
-
-        `value` 元素。
-        """
-        for i, (_, data) in enumerate(self):
-            if data == value:
-                self.pop(i)
-                return True
-        else:
-            return False
 
 
 def KMP(string, pattern, count: int = 1) -> List[int]:

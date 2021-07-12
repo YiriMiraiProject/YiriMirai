@@ -184,7 +184,6 @@ class Mirai(SimpleMirai):
     def on(
         self,
         event_type: Union[Type[Event], str],
-        priority: int = 0
     ) -> Callable:
         """注册事件处理器。
 
@@ -199,7 +198,7 @@ class Mirai(SimpleMirai):
             print(f"收到来自{event.sender.nickname}的消息。")
         ```
         """
-        return self._bus.on(event_type=event_type, priority=priority)
+        return self._bus.on(event_type=event_type)
 
     def api(self, api: str) -> ApiModel.Proxy:
         """获取 API Proxy 对象。

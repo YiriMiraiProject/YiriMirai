@@ -7,7 +7,15 @@
 from .base import Adapter, ApiProvider, Method
 from .http import HTTPAdapter
 from .websocket import WebSocketAdapter
+from .webhook import WebHookAdapter
+from .compose import ComposeAdapter
 
 __all__ = [
-    'ApiProvider', 'Adapter', 'Method', 'HTTPAdapter', 'WebSocketAdapter'
+    'ApiProvider',
+    'Adapter',
+    'Method',
+    'HTTPAdapter',
+    'WebSocketAdapter',
+    'WebHookAdapter',
+    'ComposeAdapter',
 ]

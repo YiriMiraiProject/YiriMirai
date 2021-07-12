@@ -1,32 +1,25 @@
+# -*- coding: utf-8 -*-
+"""
+此模块提供正向 WebSocket 适配器，适用于 mirai-api-http 的 websocket adapter。
+"""
 import asyncio
 import json
 import logging
 import random
 from collections import defaultdict
+from typing import List
 
 import websockets
 from mirai import exceptions
-from mirai.adapters.base import Adapter, Method, json_dumps
+from mirai.adapters.base import (
+    Adapter, Method, error_handler_async, json_dumps
+)
 
 logger = logging.getLogger(__name__)
 
-
-def _error_handler_async(func):
-    """错误处理装饰器。"""
-    async def wrapper(self, *args, **kwargs):
-        try:
-            return await func(self, *args, **kwargs)
-        except (ConnectionRefusedError, websockets.InvalidURI) as e:
-            err = exceptions.NetworkError(
-                '无法连接到 mirai。请检查 mirai-api-http 是否启动，地址与端口是否正确。'
-            )
-            logger.error(err)
-            raise err from e
-        except Exception as e:
-            logger.error(e)
-            raise
-
-    return wrapper
+_error_handler_async_local = error_handler_async(
+    (ConnectionRefusedError, websockets.InvalidURI)
+)
 
 
 class WebSocketAdapter(Adapter):
@@ -76,7 +69,7 @@ class WebSocketAdapter(Adapter):
         # 本地同步 ID，每次调用 API 递增。
         self._local_sync_id = random.randint(1, 1024) * 1024
 
-    @_error_handler_async
+    @_error_handler_async_local
     async def _start(self):
         """开始接收 websocket 数据。"""
         if not self.connect:
@@ -85,21 +78,28 @@ class WebSocketAdapter(Adapter):
             )
         while self._started:
             try:
+                # 数据格式：
+                # {
+                #   'syncId': '-1',
+                #   'data': {
+                #       // Event Content
+                #   }
+                # }
                 response = json.loads(await self.connection.recv())
                 data = response['data']
 
                 if data.get('code', 0) != 0:
                     raise exceptions.ApiError(data['code'])
 
-                logger.debug(f"收到 WebSocket 数据，同步 ID：{response['syncId']}。")
+                logger.debug(f"[WebSocket] 收到 WebSocket 数据，同步 ID：{response['syncId']}。")
                 self._recv_dict[response['syncId']].append(data)
             except KeyError:
-                logger.error(f'不正确的数据：{response}')
+                logger.error(f'[WebSocket] 不正确的数据：{response}')
             except websockets.ConnectionClosedOK:
                 return
             except websockets.ConnectionClosed as e:
                 logger.error(
-                    f'WebSocket 通道意外关闭。code: {e.code}, reason: {e.reason}'
+                    f'[WebSocket] WebSocket 通道意外关闭。code: {e.code}, reason: {e.reason}'
                 )
                 return
 
@@ -110,7 +110,7 @@ class WebSocketAdapter(Adapter):
             await asyncio.sleep(0.1)
         return self._recv_dict[sync_id].pop(0)
 
-    @_error_handler_async
+    @_error_handler_async_local
     async def login(self, qq: int):
         headers = {
             'verifyKey': self.verify_key,
@@ -128,18 +128,18 @@ class WebSocketAdapter(Adapter):
         self.session = verify_response['session']
 
         self.qq = qq
-        logger.info(f'成功登录到账号{qq}。')
+        logger.info(f'[WebSocket] 成功登录到账号{qq}。')
 
-    @_error_handler_async
+    @_error_handler_async_local
     async def logout(self):
         if self.connection:
             await self.connection.close()
 
             await self._start_task
 
-            logger.info(f"从账号{self.qq}退出。")
+            logger.info(f"[WebSocket] 从账号{self.qq}退出。")
 
-    async def poll_event(self):
+    async def poll_event(self) -> List[asyncio.Task]:
         """获取并处理事件。"""
         event = await self._recv(self.sync_id)
 
@@ -149,14 +149,6 @@ class WebSocketAdapter(Adapter):
         return tasks
 
     async def call_api(self, api: str, method: Method = Method.GET, **params):
-        """调用 API。
-
-        `api`: API 名称，需与 mirai-api-http 中的定义一致。
-
-        `method`: 调用方法。默认为 GET。
-
-        `params`: 参数。
-        """
         self._local_sync_id += 1 # 使用不同的 sync_id
         sync_id = str(self._local_sync_id)
         content = {
@@ -170,12 +162,12 @@ class WebSocketAdapter(Adapter):
             content['subCommand'] = 'update'
 
         await self.connection.send(json_dumps(content))
-        logger.debug(f"发送 WebSocket 数据，同步 ID：{sync_id}。")
+        logger.debug(f"[WebSocket] 发送 WebSocket 数据，同步 ID：{sync_id}。")
         return await self._recv(sync_id)
 
     async def _background(self):
         """开始接收事件。"""
-        logger.info('机器人开始运行。按 Ctrl + C 停止。')
+        logger.info('[WebSocket] 机器人开始运行。按 Ctrl + C 停止。')
 
         tasks = []
         try:
