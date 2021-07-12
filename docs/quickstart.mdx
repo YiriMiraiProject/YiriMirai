@@ -8,7 +8,7 @@ sidebar_position: 2
 
 YiriMirai 需要 **Python 3.7 及以上版本**。
 
-YiriMirai 基于 mirai 运行。如果你还没有安装 mirai，我们建议你使用 [mcl-installer](https://github.com/iTXTech/mcl-installer)，支持一键安装，并自带 mirai-api-http。安装完成后，**运行 mirai-console，登录你的机器人账号**。
+YiriMirai 基于 mirai 运行。如果你还没有安装 mirai，我们建议你使用 [mcl-installer](https://github.com/iTXTech/mcl-installer)，支持一键安装，并自带 mirai-api-http。
 
 ### 安装
 
@@ -30,7 +30,28 @@ poetry install
 
 ### 配置
 
-按照 mirai-api-http 的[配置文档](https://project-mirai.github.io/mirai-api-http/)配置 mirai-api-http，启用 websocket adapter，配置完成后记录你设置的 `verifyKey` ，以及 websocket adapter 的 `host` 和 `port` 。
+配置 mirai-api-http，启用 websocket adapter，配置完成后记录你设置的 `verifyKey` ，以及 websocket adapter 的 `host` 和 `port` 。
+
+首先在 mirai-console 目录下，找到 `config/net.mamoe.mirai-api-http/setting.yml`，编辑这个文件：
+
+```yaml
+adapters:
+  - ws
+debug: false
+enableVerify: true
+verifyKey: your_verify_key # 此处可以自己设置
+singleMode: false
+cacheSize: 4096
+adapterSettings:
+  ws:
+    host: localhost # 此处可以自己设置
+    port: 8080 # 此处可以自己设置
+    reservedSyncId: -1
+```
+
+记录你设置的 `verifyKey` ，以及 websocket adapter 的 `host` 和 `port` 。
+
+完成后，**运行 mirai-console，登录你的机器人账号**。
 
 ## 编写第一个机器人
 
@@ -40,7 +61,12 @@ poetry install
 from mirai import Mirai, WebSocketAdapter, FriendMessage, Plain
 
 if __name__ == '__main__':
-    bot = Mirai(qq=12345678, adapter=WebSocketAdapter(verify_key='your_verify_key', host='localhost', port=8080))
+    bot = Mirai(
+        qq=12345678, # 改成你的机器人的 QQ 号
+        adapter=WebSocketAdapter(
+            verify_key='your_verify_key', host='localhost', port=8080
+        )
+    )
 
     @bot.on(FriendMessage)
     async def on_friend_message(event: FriendMessage):
@@ -77,6 +103,8 @@ import { ChatBox, ChatMessage } from "@site/src/components/ChatMessage.js";
 
 :::info
 要理解接下来的内容，你需要掌握 Python 异步编程（asyncio）的相关知识。你可以在[这里](https://docs.python.org/3/library/asyncio.html)查看 Python 的 asyncio 官方文档。
+
+如果你还不清楚“异步”的概念，请移步[这里](asyncio-tutorial.mdx)。
 :::
 
 我们来看看这段代码的具体运行过程。

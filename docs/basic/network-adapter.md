@@ -59,15 +59,6 @@ async def logout(self):
 
 一般情况下，此方法**无需手动调用**。`bot.run()` 将自动在运行结束时调用此方法。
 
-### run
-
-```python
-async def run(self):
-    ...
-```
-
-`run` 方法表示运行。同样，此方法**无需手动调用**，将在`bot.run()` 中自动调用。
-
 ### call_api
 
 ```python
@@ -83,7 +74,6 @@ def call_api(self, api: str, method: Method = 'GET', **params) ‑> Union[Awaita
 def register_event_bus(self, *buses: List[EventBus]):
     ...
 ```
-
 
 ## HTTPAdapter
 
@@ -110,3 +100,66 @@ adapter = WebSocketAdapter(verify_key='your_verify_key', host='localhost', port=
 `verify_key` 与 mirai-api-http 的配置一致。`host` 和 `port` 与 mirai-api-http 中 wensocket adapter 的配置一致。
 
 `sync_id` 与 mirai-api-http 中 websocket adapter 的配置一致。需注意，mirai-api-http 默认的 sync_id 为字符串 `'-1'`。
+
+## WebHookAdapter
+
+`WebHookAdapter` 是 `Adapter` 的子类，对应 mirai-api-http 中的 HTTP 事件上报。
+
+### 创建
+
+```python
+adapter = WebHookAdapter(verify_key='your_verify_key', route='/post/', extra_headers={'Authorization': 'bearer AAAAAA'})
+```
+
+`verify_key` 与 mirai-api-http 的配置一致。
+
+`route` 表示 WebHook 工作的路由。如设置为 `/post/`，表示在 `http://[BASEURI]/post/` 上接收 WebHook 事件，其中 `[BASEURI]` 为 WebHook 工作的地址。
+
+`extra_headers` 表示 WebHook 事件上报时附带的额外头信息，与 mirai-api-http 的 webhook adapter 的配置一致。
+
+### 启动服务
+
+WebHook Adapter 工作的地址和端口在 `bot.run` 中指定。
+
+```python
+bot.run(host='localhost', port=8080)
+```
+
+当 WebHook Adapter 的 `route` 设置为 `/post/` 时，会在 `http://localhost:8080/post/` 上接收 WebHook 事件。
+
+或者使用 ASGI 服务器，在启动 ASGI 服务器时指定地址和端口。
+
+```shell
+uvicorn main:app --host 127.0.0.1 --port 8080
+```
+
+## 适配器组合
+
+`ComposeAdapter` 是 `Adapter` 的子类，使用这个适配器，可以将用一个适配器调用 API，另一个适配器接收事件。
+
+一种常用的组合方式是 HTTP Adapter 与 WebHook 的组合：
+
+```python
+adapter = ComposeAdapter(
+    api_channel=HTTPAdapter(
+        verify_key='your_verify_key', host='127.0.0.1', port=6090
+    ),
+    event_channel=WebHookAdapter(
+        verify_key='your_verify_key',
+        extra_headers={'authorization': 'Bearer AAAAAAA'},
+        enable_quick_response=False
+    )
+)
+```
+
+`api_channel` 与 `event_channel` 为 `Adapter` 实例，前者调用 API，后者接收事件。
+
+组合的适配器必须设置相同的 `verify_key`。
+
+:::tip
+WebHook Adapter 用于组合时，只能做接收事件的适配器。
+
+此时，将 `enable_quick_response` 参数设置为 `False`，禁用 WebHook 的事件快速响应，可以提高事件处理的效率。
+
+这**并不影响**正常的快速响应的使用。快速响应仍然可用，它将通过 `api_channel` 调用 API。
+:::

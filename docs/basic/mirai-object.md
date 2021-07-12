@@ -47,13 +47,60 @@ async def handle_group_message(event: GroupMessage):
 
 ## 运行
 
+### 使用 run 方法
+
 使用 `run` 方法启动机器人。
 
 ```python
 bot.run()
 ```
 
-一般情况下，`run` 方法不再返回。
+当使用 WebHook 时，在此处指定 WebHook 的地址和端口。
+
+```python
+bot.run(host='127.0.0.1', port=8081)
+```
+
+:::tip 端口冲突
+即使不使用 WebHook，在不指定 `run` 的参数时，Mirai 默认占用 `localhost:8080` 的端口。
+
+如果遇到端口冲突无法启动，试着指定一个别的端口。
+:::
+
+### 使用 ASGI 服务器
+
+另一种方式是使用 `bot.asgi`，这一属性可访问到 bot 的 ASGI 实例。
+
+可以使用 `uvivorn` 或 `hypercorn` 等 ASGI 服务器运行机器人。
+
+```python main.py
+from mirai import Mirai
+bot = Mirai(...)
+
+...
+
+app = bot.asgi
+```
+
+在命令行运行：
+
+```shell
+uvicorn main:app --host 127.0.0.1 --port 8081
+# 或者
+hypercorn main:app --bind 127.0.0.1:8081
+```
+
+:::note 在 run 方法中使用 ASGI
+当你安装了 uvicorn 或 hypercorn 时，`bot.run` 会自动使用 ASGI 的方式启动。
+
+默认优先使用 uvicorn。可以通过参数 `asgi_server` 来控制使用的服务器。此参数的默认值为 `auto`，表示自动选择（uvicorn 优先）；设置为 `uvicorn` 或 `hypercorn` 则使用指定的服务器。
+
+`asgi_server` 设置为其他值，或未找到可用的 ASGI 服务器，将禁用 ASGI。此时，WebHook 将不可用。
+
+```python
+bot.run(host='127.0.0.1', port=8081, asgi_server='uvicorn')
+```
+:::
 
 ## SimpleMirai
 
@@ -75,6 +122,7 @@ from mirai import SimpleMirai, HTTPAdapter
 adapter = HTTPAdapter(verify_key='your_verify_key', host='localhost', port=8080)
 bot = SimpleMirai(qq=12345678, adapter=adapter)
 ```
+
 SimpleMirai 对象也可以通过 `on` 注册事件处理器，但由于没有模型层封装，所以**只能使用字符串型的事件名称**，并且不会发生[事件传播](event-handling.mdx#事件传播)。
 
 SimpleMirai 的事件处理器接收到的 `event` 参数是字典类型，存放 mirai-api-http 发回的原始数据。

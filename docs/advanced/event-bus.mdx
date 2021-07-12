@@ -115,6 +115,18 @@ await mbus.emit(Event(type='Event'))
 
 模型事件总线提供了 `base_bus` 属性，用于访问其内部的普通事件总线。
 
+## 快速响应
+
+如果事件处理器返回了一个 awaitable，事件总线会把它作为一个 Task 开始运行。
+
+这可以用于快速响应事件，比如：
+
+```python
+@mbus.on(FriendMessage)
+def handle_friend_message(event: FriendMessage):
+    return bot.send_friend_message(event.sender.id, [Plain('Hello, World!')])
+```
+
 ## 自定义事件
 
 ### 事件总线

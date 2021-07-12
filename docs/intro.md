@@ -9,6 +9,7 @@ YiriMirai 是一个轻量级、低耦合的基于 mirai-api-http 的 Python SDK�
 
 ## 特点
 
+ - 全面支持 mirai-api-http 2.X 版本的新 API。
  - 基于 asyncio，支持异步 I/O，运行效率更高。
  - 使用 pydantic 进行数据解析，对几乎所有数据进行了封装，提供了更好的可读性，支持在编写代码时使用 IDE 的自动完成。
 
@@ -26,4 +27,3 @@ YiriMirai 是一个轻量级、低耦合的基于 mirai-api-http 的 Python SDK�
 
  - [NoneBot](https://github.com/nonebot/nonebot2)。这是一个可扩展的 Python 异步机器人框架，支持 mirai（OneBot）、Telegram、钉钉等多种平台。
  - [aiocqhttp](https://github.com/nonebot/aiocqhttp)。这是 NoneBot 所使用的 OneBot SDK。
-

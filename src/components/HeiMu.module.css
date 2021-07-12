@@ -1,0 +1,10 @@
+.HeiMu {
+  background-color: #000;
+  color: #000;
+  display: inline;
+}
+
+.HeiMu:hover {
+  background-color: inherit;
+  color: inherit;
+}
