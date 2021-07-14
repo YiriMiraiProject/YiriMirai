@@ -1,5 +1,10 @@
 # YiriMirai
 
+[![Licence](https://img.shields.io/github/license/YiriMiraiProject/YiriMirai)](https://github.com/YiriMiraiProject/YiriMirai/blob/master/LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/yiri-mirai)](https://pypi.org/project/yiri-mirai/)
+![Python Version](https://img.shields.io/pypi/pyversions/yiri-mirai)
+[![Document](https://img.shields.io/badge/document-vercel-brightgreen)](https://yiri-mirai.vercel.app)
+
 一个轻量级、低耦合度的基于 mirai-api-http 的 Python SDK。
 
 **本项目适用于 mirai-api-http 2.X 版本**。
@@ -46,4 +51,6 @@ if __name__ == '__main__':
 
 ## 开源协议
 
-本项目使用 AGPLv3 开源协议。
+由于 mirai 及 mirai-api-http 均采用了 AGPL-3.0 开源协议，本项目同样采用 AGPL-3.0 协议。
+
+请注意，AGPL-3.0 是传染性协议。如果你的项目引用了 YiriMirai，请在发布时公开源代码，并同样采用 AGPL-3.0 协议。
