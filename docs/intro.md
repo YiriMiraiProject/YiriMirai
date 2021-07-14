@@ -16,7 +16,7 @@ YiriMirai 是一个轻量级、低耦合的基于 mirai-api-http 的 Python SDK�
 
 ## 其他优秀的项目
 
-首先感谢 [mirai](https://github.com/mamoe/mirai) 和 [mirai-api-http](https://gi thub.com/project-mirai/mirai-api-http)，这两个项目是我们的基础。
+首先感谢 [mirai](https://github.com/mamoe/mirai) 和 [mirai-api-http](https://github.com/project-mirai/mirai-api-http)，这两个项目是我们的基础。
 
 基于 mirai-api-http 的 Python 框架还有：
 
