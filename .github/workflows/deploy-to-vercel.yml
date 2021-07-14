@@ -1,0 +1,38 @@
+# deploy on vercel
+name: vercel document
+
+on:
+  push:
+    branches: [ doc ]
+  pull_request:
+    branches: [ doc ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v1
+        with:
+         node-version: '14.x'
+
+      - name: install dependeces
+        run: |
+          npm i yarn
+          npm i vercel
+          yarn install
+
+      - name: build site
+        run: |
+          yarn build
+          mv ./build ./docs/yiri-mirai
+
+      - name: deploy
+        run: |
+          vercel link "$PWD/docs/yiri-mirai" --confirm --token=${{ secrets.VERCEL_TOKEN }}
+          vercel deploy "$PWD/docs/yiri-mirai" --prod --token=${{ secrets.VERCEL_TOKEN }}
