@@ -10,7 +10,7 @@ module.exports = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'Wybxc',
+  organizationName: 'YiriMiraiProject',
   projectName: 'YiriMirai',
   i18n: {
     defaultLocale: 'zh-CN',
@@ -47,7 +47,7 @@ module.exports = {
           position: 'left'
         },
         {
-          href: 'https://github.com/Wybxc/YiriMirai',
+          href: 'https://github.com/YiriMiraiProject/YiriMirai',
           label: 'GitHub',
           position: 'right',
         },
@@ -74,7 +74,7 @@ module.exports = {
           items: [
             {
               label: 'Github Discussion',
-              href: 'https://github.com/Wybxc/YiriMirai/discussions',
+              href: 'https://github.com/YiriMiraiProject/YiriMirai/discussions',
             },
             {
               label: 'Discord',
@@ -91,12 +91,12 @@ module.exports = {
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/Wybxc/YiriMirai',
+              href: 'https://github.com/YiriMiraiProject/YiriMirai',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} 忘忧北萱草，由 Docusaurus 2 构建。`,
+      copyright: `Copyright © ${new Date().getFullYear()} YiriMiraiProject，由 Docusaurus 2 构建。`,
     },
     prism: {
       theme: lightCodeTheme,
@@ -110,7 +110,7 @@ module.exports = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
-            'https://github.com/Wybxc/YiriMirai/edit/doc/',
+            'https://github.com/YiriMiraiProject/YiriMirai/edit/doc/',
         },
         blog: {
           blogTitle: '博客',
@@ -119,7 +119,7 @@ module.exports = {
           blogSidebarTitle: '最近的博文',
           showReadingTime: false,
           editUrl:
-            'https://github.com/Wybxc/YiriMirai/edit/doc/',
+            'https://github.com/YiriMiraiProject/YiriMirai/edit/doc/',
         },
         theme: {
           customCss: [
