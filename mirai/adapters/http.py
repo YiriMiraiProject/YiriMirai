@@ -4,9 +4,12 @@
 """
 import asyncio
 import logging
+import random
+from typing import Optional
 
 import httpx
 from mirai import exceptions
+from mirai.tasks import Tasks
 from mirai.adapters.base import Adapter, Method, json_dumps, error_handler_async
 
 logger = logging.getLogger(__name__)
@@ -39,13 +42,13 @@ class HTTPAdapter(Adapter):
     """HTTP 请求头。"""
     def __init__(
         self,
-        verify_key: str,
+        verify_key: Optional[str],
         host: str,
         port: int,
         poll_interval: float = 1.
     ):
         """
-        `verify_key: str` mirai-api-http 配置的认证 key。
+        `verify_key: str` mirai-api-http 配置的认证 key，关闭认证时为 None。
 
         `host: str` HTTP Server 的地址。
 
@@ -71,6 +74,7 @@ class HTTPAdapter(Adapter):
 
         self.qq = 0
         self.headers = httpx.Headers() # 使用 headers 传递 session
+        self._tasks = Tasks()
 
     @_error_handler_async_local
     async def _post(
@@ -100,13 +104,16 @@ class HTTPAdapter(Adapter):
             base_url=self.host_name, headers=self.headers
         ) as client:
             if not self.session:
-                self.session = (
-                    await self._post(
-                        client, '/verify', {
-                            "verifyKey": self.verify_key,
-                        }
-                    )
-                )['session']
+                if self.verify_key is not None:
+                    self.session = (
+                        await self._post(
+                            client, '/verify', {
+                                "verifyKey": self.verify_key,
+                            }
+                        )
+                    )['session']
+                else:
+                    self.session = str(random.randint(1, 2**20))
 
             await self._post(
                 client, '/bind', {
@@ -164,11 +171,9 @@ class HTTPAdapter(Adapter):
         """开始轮询。"""
         logger.info('[HTTP] 机器人开始运行。按 Ctrl + C 停止。')
 
-        tasks = []
         try:
             while True:
-                tasks.append(asyncio.create_task(self.poll_event()))
+                self._tasks.create_task(self.poll_event())
                 await asyncio.sleep(self.poll_interval)
         finally:
-            for task in tasks:
-                task.cancel()
+            self._tasks.cancel_all()

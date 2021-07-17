@@ -6,14 +6,15 @@ import asyncio
 import json
 import logging
 import random
-from collections import defaultdict
-from typing import List
+from collections import defaultdict, deque
+from typing import List, Optional
 
 import websockets
 from mirai import exceptions
 from mirai.adapters.base import (
     Adapter, Method, error_handler_async, json_dumps
 )
+from mirai.tasks import Tasks
 
 logger = logging.getLogger(__name__)
 
@@ -34,10 +35,14 @@ class WebSocketAdapter(Adapter):
     connection: websockets.WebSocketClientProtocol
     """WebSocket 客户端连接。"""
     def __init__(
-        self, verify_key: str, host: str, port: int, sync_id: str = '-1'
+        self,
+        verify_key: Optional[str],
+        host: str,
+        port: int,
+        sync_id: str = '-1'
     ):
         """
-        `verify_key: str` mirai-api-http 配置的认证 key。
+        `verify_key: str` mirai-api-http 配置的认证 key，关闭认证时为 None。
 
         `host: str` WebSocket Server 的地址。
 
@@ -63,14 +68,16 @@ class WebSocketAdapter(Adapter):
         # 既然这样不如把 sync_id 全改成字符串好了
 
         # 接收 WebSocket 数据的 Task
-        self._start_task = None
+        self._receiver_task = None
         # 用于临时保存接收到的数据，以便根据 sync_id 进行同步识别
-        self._recv_dict = defaultdict(list)
+        self._recv_dict = defaultdict(deque)
         # 本地同步 ID，每次调用 API 递增。
         self._local_sync_id = random.randint(1, 1024) * 1024
+        #
+        self._tasks = Tasks()
 
     @_error_handler_async_local
-    async def _start(self):
+    async def _receiver(self):
         """开始接收 websocket 数据。"""
         if not self.connect:
             raise exceptions.NetworkError(
@@ -91,7 +98,9 @@ class WebSocketAdapter(Adapter):
                 if data.get('code', 0) != 0:
                     raise exceptions.ApiError(data['code'])
 
-                logger.debug(f"[WebSocket] 收到 WebSocket 数据，同步 ID：{response['syncId']}。")
+                logger.debug(
+                    f"[WebSocket] 收到 WebSocket 数据，同步 ID：{response['syncId']}。"
+                )
                 self._recv_dict[response['syncId']].append(data)
             except KeyError:
                 logger.error(f'[WebSocket] 不正确的数据：{response}')
@@ -108,12 +117,12 @@ class WebSocketAdapter(Adapter):
         while not self._recv_dict[sync_id]:
             # 如果没有对应同步 ID 的数据，则等待 websocket 数据
             await asyncio.sleep(0.1)
-        return self._recv_dict[sync_id].pop(0)
+        return self._recv_dict[sync_id].popleft()
 
     @_error_handler_async_local
     async def login(self, qq: int):
         headers = {
-            'verifyKey': self.verify_key,
+            'verifyKey': self.verify_key or '', # 关闭认证时，WebSocket 可传入任意 verify_key
             'qq': qq,
         }
         if self.session:
@@ -122,7 +131,7 @@ class WebSocketAdapter(Adapter):
         self.connection = await websockets.connect(
             self.host_name, extra_headers=headers
         )
-        self._start_task = asyncio.create_task(self._start())
+        self._receiver_task = asyncio.create_task(self._receiver())
 
         verify_response = await self._recv('') # 神奇现象：这里的 syncId 是个空字符串
         self.session = verify_response['session']
@@ -135,18 +144,16 @@ class WebSocketAdapter(Adapter):
         if self.connection:
             await self.connection.close()
 
-            await self._start_task
+            await self._receiver_task
 
             logger.info(f"[WebSocket] 从账号{self.qq}退出。")
 
-    async def poll_event(self) -> List[asyncio.Task]:
+    async def poll_event(self):
         """获取并处理事件。"""
         event = await self._recv(self.sync_id)
 
-        tasks = []
         for bus in self.buses:
-            tasks.append(asyncio.create_task(bus.emit(event['type'], event)))
-        return tasks
+            self._tasks.create_task(bus.emit(event['type'], event))
 
     async def call_api(self, api: str, method: Method = Method.GET, **params):
         self._local_sync_id += 1 # 使用不同的 sync_id
@@ -169,10 +176,8 @@ class WebSocketAdapter(Adapter):
         """开始接收事件。"""
         logger.info('[WebSocket] 机器人开始运行。按 Ctrl + C 停止。')
 
-        tasks = []
         try:
             while True:
-                tasks.extend(await self.poll_event())
+                await self.poll_event()
         finally:
-            for task in tasks:
-                task.cancel()
+            self._tasks.cancel_all()

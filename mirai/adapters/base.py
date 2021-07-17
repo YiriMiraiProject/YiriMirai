@@ -9,7 +9,7 @@ import logging
 from datetime import datetime
 from enum import Enum
 from json import dumps
-from typing import Any, Awaitable, Callable, List, Set, Union
+from typing import Any, Awaitable, Callable, List, Optional, Set, Union
 
 from mirai import exceptions
 from mirai.bus import EventBus
@@ -107,7 +107,7 @@ class Adapter(ApiProvider):
 
     属性 `buses` 为适配器注册的事件总线集合。适配器被绑定到 bot 时，bot 会自动将自身的事件总线注册到适配器。
     """
-    verify_key: str
+    verify_key: Optional[str]
     """mirai-api-http 配置的认证 key。"""
     session: str
     """从 mirai-api-http 处获得的 session。"""
@@ -115,9 +115,9 @@ class Adapter(ApiProvider):
     """注册的事件总线集合。"""
     background: asyncio.Task
     """背景事件循环任务。"""
-    def __init__(self, verify_key: str):
+    def __init__(self, verify_key: Optional[str]):
         """
-        `verify_key: str` mirai-api-http 配置的认证 key。
+        `verify_key: str` mirai-api-http 配置的认证 key，关闭认证时为 None。
         """
         self.verify_key = verify_key
         self.session = ''

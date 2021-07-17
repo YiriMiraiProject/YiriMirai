@@ -32,13 +32,13 @@ class WebHookAdapter(Adapter):
     """是否启用快速响应。"""
     def __init__(
         self,
-        verify_key: str,
+        verify_key: Optional[str],
         route: str = '/',
         extra_headers: Optional[dict] = None,
         enable_quick_response: bool = True,
     ):
         """
-        `verify_key: str` mirai-api-http 配置的认证 key。
+        `verify_key: str` mirai-api-http 配置的认证 key，关闭认证时为 None。
 
         `route: str = '/'` 适配器的路由，默认在根目录上提供服务。
 
@@ -84,10 +84,8 @@ class WebHookAdapter(Adapter):
 
     async def handle_event(self, event):
         try:
-            tasks = []
             for bus in self.buses:
-                tasks += await bus.emit(event['type'], event)
-                # bus.emit await 的结果是快速响应的 tasks 列表
+                await bus.emit(event['type'], event)
         except WebHookAdapter.QuickResponse as response:
             # 快速响应，直接返回。
             return response.data
