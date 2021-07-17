@@ -36,6 +36,7 @@ class WebHookAdapter(Adapter):
         route: str = '/',
         extra_headers: Optional[dict] = None,
         enable_quick_response: bool = True,
+        single_mode: bool = False
     ):
         """
         `verify_key: str` mirai-api-http 配置的认证 key，关闭认证时为 None。
@@ -46,8 +47,10 @@ class WebHookAdapter(Adapter):
 
         `enable_quick_response: bool = True` 是否启用快速响应，当与其他适配器混合使用时，
             禁用可以提高响应速度。
+
+        `single_mode: bool = False` 是否启用单例模式。
         """
-        super().__init__(verify_key=verify_key)
+        super().__init__(verify_key=verify_key, single_mode=single_mode)
         self.route = route
         self.extra_headers = extra_headers or {}
         self.enable_quick_response = enable_quick_response

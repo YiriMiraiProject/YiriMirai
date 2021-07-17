@@ -19,7 +19,7 @@ class ComposeAdapter(Adapter):
 
         `event_channel: Adapter` 提供事件处理的适配器。
         """
-        super().__init__(verify_key=api_channel.verify_key)
+        super().__init__(verify_key=api_channel.verify_key, single_mode=api_channel.single_mode)
         if api_channel.verify_key != event_channel.verify_key:
             raise ValueError('组合适配器应使用相同的 verify_key。')
 

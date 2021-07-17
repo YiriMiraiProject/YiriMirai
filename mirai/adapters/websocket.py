@@ -39,7 +39,8 @@ class WebSocketAdapter(Adapter):
         verify_key: Optional[str],
         host: str,
         port: int,
-        sync_id: str = '-1'
+        sync_id: str = '-1',
+        single_mode: bool = False
     ):
         """
         `verify_key: str` mirai-api-http 配置的认证 key，关闭认证时为 None。
@@ -49,6 +50,8 @@ class WebSocketAdapter(Adapter):
         `port: int` WebSocket Server 的端口。
 
         `sync_id: int` mirai-api-http 配置的同步 ID。
+
+        `single_mode: bool = False` 是否启用单例模式。
         """
         super().__init__(verify_key=verify_key)
 
@@ -122,7 +125,8 @@ class WebSocketAdapter(Adapter):
     @_error_handler_async_local
     async def login(self, qq: int):
         headers = {
-            'verifyKey': self.verify_key or '', # 关闭认证时，WebSocket 可传入任意 verify_key
+            'verifyKey': self.verify_key or
+                         '', # 关闭认证时，WebSocket 可传入任意 verify_key
             'qq': qq,
         }
         if self.session:

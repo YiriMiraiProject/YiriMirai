@@ -45,7 +45,8 @@ class HTTPAdapter(Adapter):
         verify_key: Optional[str],
         host: str,
         port: int,
-        poll_interval: float = 1.
+        poll_interval: float = 1.,
+        single_mode: bool = False
     ):
         """
         `verify_key: str` mirai-api-http 配置的认证 key，关闭认证时为 None。
@@ -55,8 +56,10 @@ class HTTPAdapter(Adapter):
         `port: int` HTTP Server 的端口。
 
         `poll_interval: float = 1.` 轮询时间间隔，单位秒。
+
+        `single_mode: bool = False` 是否为单例模式。
         """
-        super().__init__(verify_key=verify_key)
+        super().__init__(verify_key=verify_key, single_mode=single_mode)
 
         if host[:2] == '//':
             host = 'http:' + host
@@ -115,12 +118,13 @@ class HTTPAdapter(Adapter):
                 else:
                     self.session = str(random.randint(1, 2**20))
 
-            await self._post(
-                client, '/bind', {
-                    "sessionKey": self.session,
-                    "qq": qq,
-                }
-            )
+            if not self.single_mode:
+                await self._post(
+                    client, '/bind', {
+                        "sessionKey": self.session,
+                        "qq": qq,
+                    }
+                )
 
             self.headers = httpx.Headers({'sessionKey': self.session})
             self.qq = qq
