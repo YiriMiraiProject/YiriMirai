@@ -125,7 +125,7 @@ class EventBus(object):
             coros += [(await call(f)) for f in self._subscribers[m_event]]
         coros = filter(None, coros) # 只保留快速响应的返回值。
 
-        results = asyncio.gather(*coros) if coros else []
+        results = list(coros)
         return list(map(lambda coro: asyncio.create_task(coro), results))
 
     @classmethod
