@@ -102,6 +102,33 @@ bot.run(host='127.0.0.1', port=8081, asgi_server='uvicorn')
 ```
 :::
 
+### 多例运行
+
+使用 `MiraiRunner` 类可以同时运行多个 Mirai 对象。
+
+```python
+from mirai import MiraiRunner
+bot1 = Mirai(...)
+bot2 = Mirai(...)
+
+runner = MiraiRunner(bot1, bot2)
+runner.run()
+```
+
+`MiraiRunner` 的 `run` 方法的参数与 `bot.run` 的参数相同。
+
+:::tip
+`MiraiRunner` 本身是一个 ASGI 实例，可以用于 uvicorn 等 ASGI 服务器。
+
+```shell
+uvicorn main:runner --host 127.0.0.1 --port 8081
+```
+:::
+
+:::caution
+`MiraiRunner` 是单例类，请不要使用不同的参数多次创建 `MiraiRunner` 实例。
+:::
+
 ## SimpleMirai
 
 SimpleMirai 是工作在模型层之下的 Mirai。

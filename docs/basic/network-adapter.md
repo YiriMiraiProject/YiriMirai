@@ -20,6 +20,26 @@ from mirai import HTTPAdapter
 adapter = HTTPAdapter(verify_key='your_verify_key', host='localhost', port=8080)
 ```
 
+### 禁用身份验证
+
+在 mirai-api-http 的配置中设置 `enableVerify: false` 之后，不会对请求进行身份验证。
+
+此时，应在创建适配器时，将 `verify_key` 置为 `None`。
+
+```python
+adapter = HTTPAdapter(verify_key=None, host='localhost', port=8080)
+```
+
+### Single Mode
+
+再 mirai-api-http 的配置中设置 `singleMode: true` 之后，将启用 Single Mode。
+
+此时，应在创建适配器时，指定 `single_mode=True`。
+
+```python
+adapter = HTTPAdapter(verify_key='your_verify_key', host='localhost', port=8080, single_mode=True)
+```
+
 ## Adapter 与事件总线
 
 使用 `register_event_bus` 和 `unregister_event_bus` 方法注册和解注册事件总线。这两个方法都可以接收一个或多个参数，表示一个或多个事件总线。
