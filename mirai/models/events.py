@@ -10,12 +10,13 @@ try:
 except ImportError:
     from typing_extensions import Literal
 
+from pydantic import Field
+
 from mirai.models.base import MiraiIndexedModel
 from mirai.models.entities import (
     Friend, Group, GroupMember, Permission, Sender
 )
 from mirai.models.message import MessageChain
-from pydantic import Field
 
 
 class Event(MiraiIndexedModel):

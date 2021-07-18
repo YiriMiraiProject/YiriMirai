@@ -7,13 +7,13 @@ import json
 import logging
 import random
 from collections import defaultdict, deque
-from typing import List, Optional
+from typing import Optional
 
 import websockets
+
 from mirai import exceptions
-from mirai.adapters.base import (
-    Adapter, Method, error_handler_async, json_dumps
-)
+from mirai.adapters.base import Adapter, error_handler_async, json_dumps
+from mirai.api_provider import Method
 from mirai.tasks import Tasks
 
 logger = logging.getLogger(__name__)

@@ -4,14 +4,14 @@
 """
 import abc
 import asyncio
-import functools
 import logging
 from datetime import datetime
-from enum import Enum
 from json import dumps
-from typing import Any, Awaitable, Callable, List, Optional, Set, Union
+from typing import List, Optional, Set
 
 from mirai import exceptions
+from mirai.api_provider import ApiProvider, Method
+from mirai.asgi import ASGI
 from mirai.bus import EventBus
 
 logger = logging.getLogger(__name__)
@@ -46,60 +46,6 @@ def error_handler_async(errors):
         return wrapped
 
     return wrapper
-
-
-async def default_asgi(scope, recv, send):
-    """默认的 ASGI 行为：把所有 HTTP 请求重定向到项目主页。"""
-    if scope["type"] == "http":
-        await recv()
-        await send(
-            {
-                "type": "http.response.start",
-                "status": 301,
-                "headers": [[b"Location", b"https://yiri-mirai.vercel.app"], ]
-            }
-        )
-        await send({
-            'type': 'http.response.body',
-            'body': b'',
-        })
-
-
-class Method(str, Enum):
-    """API 接口的调用方法。"""
-    GET = "GET"
-    """使用 GET 方法调用。"""
-    POST = "POST"
-    """使用 POST 方法调用。"""
-    # 区分下面两个，是为了兼容 websocket
-    RESTGET = "RESTGET"
-    """表明这是一个对 RESTful 接口的 GET。"""
-    RESTPOST = "RESTPOST"
-    """表明这是一个对 RESTful 接口的 POST。"""
-
-
-class ApiProvider(object):
-    """支持从属性调用 API 的类。
-
-    使用了 `__getattr__`，可以直接通过属性调用 API。
-    """
-    @abc.abstractmethod
-    def call_api(self,
-                 api: str,
-                 method: Method = Method.GET,
-                 **params) -> Union[Awaitable[Any], Any]:
-        """调用 API。此处为抽象方法，具体实现由子类决定。
-
-        `api`: API 名称。
-
-        `method`: 调用方法。默认为 GET。
-
-        `params`: 参数。
-        """
-
-    def __getattr__(self,
-                    api: str) -> Callable[..., Union[Awaitable[Any], Any]]:
-        return functools.partial(self.call_api, api)
 
 
 class Adapter(ApiProvider):
@@ -176,8 +122,3 @@ class Adapter(ApiProvider):
         """停止背景事件循环。"""
         if self.background:
             self.background.cancel()
-
-    @property
-    def asgi(self) -> Callable:
-        """返回 ASGI 实例，可用于启动服务。"""
-        return default_asgi

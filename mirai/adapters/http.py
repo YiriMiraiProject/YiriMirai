@@ -8,9 +8,11 @@ import random
 from typing import Optional
 
 import httpx
+
 from mirai import exceptions
+from mirai.adapters.base import Adapter, error_handler_async, json_dumps
+from mirai.api_provider import Method
 from mirai.tasks import Tasks
-from mirai.adapters.base import Adapter, Method, json_dumps, error_handler_async
 
 logger = logging.getLogger(__name__)
 

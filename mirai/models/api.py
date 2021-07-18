@@ -10,7 +10,9 @@ try:
 except ImportError:
     from typing_extensions import Literal
 
-from mirai.adapters.base import ApiProvider, Method
+from pydantic import Field, validator
+
+from mirai.api_provider import ApiProvider, Method
 from mirai.models.base import (
     MiraiBaseModel, MiraiIndexedMetaclass, MiraiIndexedModel
 )
@@ -23,7 +25,6 @@ from mirai.models.events import (
 )
 from mirai.models.message import Image, MessageChain, Voice
 from mirai.utils import async_
-from pydantic import Field, validator
 
 
 class Response(MiraiBaseModel):

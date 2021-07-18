@@ -5,16 +5,18 @@
 import logging
 from typing import Optional
 
-from mirai.adapters.base import Adapter, Method, json_dumps
-from starlette.applications import Starlette
 from starlette.requests import Request
 from starlette.responses import JSONResponse
-from starlette.routing import Route
+
+from mirai.adapters.base import Adapter, json_dumps
+from mirai.api_provider import Method
+from mirai.asgi import ASGI
 
 logger = logging.getLogger(__name__)
 
 
 class YiriMiraiJSONResponse(JSONResponse):
+    """调用自定义的 json_dumps 的 JSONResponse。"""
     def render(self, content) -> bytes:
         return json_dumps(content).encode('utf-8')
 
@@ -55,6 +57,29 @@ class WebHookAdapter(Adapter):
         self.extra_headers = extra_headers or {}
         self.enable_quick_response = enable_quick_response
 
+        async def endpoint(request: Request):
+            # 鉴权（QQ 号和额外请求头）
+            if request.headers.get('bot') != self.session: # 验证 QQ 号
+                logger.debug(f"收到来自其他账号（{request.headers.get('bot')}）的事件。")
+                return
+            for key in self.extra_headers: # 验证请求头
+                key = key.lower() # HTTP headers 不区分大小写
+                if request.headers.get(key).lower(
+                ) != self.extra_headers[key].lower():
+                    logger.debug(
+                        f"请求头验证失败：expect {self.extra_headers[key].lower()}, " +
+                        f"got {request.headers.get(key).lower()}。"
+                    )
+                    return JSONResponse(
+                        status_code=401, content={'error': 'Unauthorized'}
+                    )
+            # 处理事件
+            event = await request.json()
+            result = await self.handle_event(event)
+            return YiriMiraiJSONResponse(result)
+
+        ASGI().add_route(self.route, endpoint, methods=['POST'])
+
     class QuickResponse(BaseException):
         """WebHook 快速响应，以异常的方式跳出。"""
         def __init__(self, data: dict):
@@ -94,30 +119,3 @@ class WebHookAdapter(Adapter):
             return response.data
 
         return {}
-
-    @property
-    def asgi(self):
-        async def endpoint(request: Request):
-            # 鉴权（QQ 号和额外请求头）
-            if request.headers.get('bot') != self.session: # 验证 QQ 号
-                logger.debug(f"收到来自其他账号（{request.headers.get('bot')}）的事件。")
-                return JSONResponse({})
-            for key in self.extra_headers: # 验证请求头
-                key = key.lower() # HTTP headers 不区分大小写
-                if request.headers.get(key).lower(
-                ) != self.extra_headers[key].lower():
-                    logger.debug(
-                        f"请求头验证失败：expect {self.extra_headers[key].lower()}, " +
-                        f"got {request.headers.get(key).lower()}。"
-                    )
-                    return JSONResponse(
-                        status_code=401, content={'error': 'Unauthorized'}
-                    )
-            # 处理事件
-            event = await request.json()
-            result = await self.handle_event(event)
-            return YiriMiraiJSONResponse(result)
-
-        return Starlette(
-            routes=[Route(self.route, endpoint, methods=['POST'])]
-        )

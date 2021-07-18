@@ -8,9 +8,10 @@ from datetime import datetime
 from json import loads as json_loads
 from typing import List, Optional
 
+from pydantic import Field, HttpUrl, validator
+
 from mirai.models.base import MiraiBaseModel, MiraiIndexedModel
 from mirai.utils import KMP
-from pydantic import Field, HttpUrl, validator
 
 logger = logging.getLogger(__name__)
 

@@ -70,46 +70,37 @@ def KMP(string, pattern, count: int = 1) -> List[int]:
     return matches
 
 
-def asgi_serve(
-    app: Union[Callable, str],
-    host: str = '127.0.0.1',
-    port: int = 8000,
-    asgi_server: str = 'auto',
-    **kwargs
-):
-    """运行一个 ASGI 服务器。
+class SingletonMetaclass(type):
+    """单例类元类。修改了单例类的 `__init__` 方法，使之只会被调用一次。"""
+    def __new__(cls, name, bases, attrs, **kwargs):
+        new_cls = super().__new__(cls, name, bases, attrs, **kwargs)
 
-    `app: Union[Callable, str]` ASGI 应用程序。
+        __init__ = new_cls.__init__
 
-    `host: str = '127.0.0.1'` 服务器地址。
+        def __init__new(self, *args, **kwargs):
+            if self._instance is None:
+                __init__(self, *args, **kwargs)
 
-    `port: int = 8000` 服务器端口。
+        new_cls.__init__ = __init__new
+        return new_cls
 
-    `asgi_server='auto'` ASGI 服务器，可选的有 `hypercorn` `uvicorn` 和 `auto`。
-        如果设置为 `auto`，自动寻找是否已安装可用的 ASGI 服务（`unicorn` 或 `hypercorn`），并运行。
-    """
 
-    if asgi_server == 'auto':
-        try:
-            from uvicorn import run
-            asgi = 'uvicorn'
-        except ImportError:
-            try:
-                from hypercorn.asyncio import serve
-                from hypercorn.config import Config
-                asgi = 'hypercorn'
-            except ImportError:
-                asgi = 'none'
-    else:
-        asgi = asgi_server
+class Singleton(metaclass=SingletonMetaclass):
+    """单例模式。"""
+    _instance = None
+    _args = None
 
-    if asgi == 'uvicorn':
-        run(app, host=host, port=port, **kwargs)
-        return True
-    elif asgi == 'hypercorn':
-        import asyncio
-        config = Config().from_mapping(bind=f'{host}:{port}', **kwargs)
-        asyncio.run(serve(app, config))
-        return True
-    else:
-        return False
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+
+            # 保存参数
+            cls._args = (args, kwargs)
+
+            # 初始化
+            cls._instance._init(*args, **kwargs)
+            return cls._instance
+        elif cls._args == (args, kwargs):
+            return cls._instance
+        else:
+            raise RuntimeError(f"只能创建 {cls.__name__} 的一个实例！")

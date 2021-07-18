@@ -11,10 +11,10 @@ __author__ = '忘忧北萱草'
 import logging
 
 from mirai.adapters import (
-    Adapter, HTTPAdapter, Method, WebSocketAdapter, WebHookAdapter,
-    ComposeAdapter
+    Adapter, ComposeAdapter, HTTPAdapter, WebHookAdapter, WebSocketAdapter
 )
-from mirai.bot import Mirai, SimpleMirai
+from mirai.api_provider import Method
+from mirai.bot import Mirai, MiraiRunner, SimpleMirai
 from mirai.bus import EventBus
 from mirai.colorlog import ColoredFormatter
 from mirai.models import (
@@ -24,7 +24,7 @@ from mirai.models import (
 )
 
 __all__ = [
-    'Mirai', 'SimpleMirai', 'Adapter', 'Method', 'HTTPAdapter',
+    'Mirai', 'SimpleMirai', 'MiraiRunner', 'Adapter', 'Method', 'HTTPAdapter',
     'WebSocketAdapter', 'WebHookAdapter', 'ComposeAdapter', 'EventBus',
     'get_logger', 'Event', 'MessageEvent', 'FriendMessage', 'GroupMessage',
     'TempMessage', 'StrangerMessage', 'MessageChain', 'Plain', 'At', 'AtAll',
