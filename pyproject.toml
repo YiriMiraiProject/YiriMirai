@@ -15,6 +15,7 @@ pydantic = "^1.8.2"
 websockets = "^9.1"
 typing-extensions = {version = "^3.10.0", python = "3.7"}
 starlette = "^0.14.2"
+aiofiles = "^0.7.0"
 
 [tool.poetry.dev-dependencies]
 yapf = "^0.31.0"

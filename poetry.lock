@@ -1,4 +1,17 @@
 [[package]]
+name = "aiofiles"
+version = "0.7.0"
+description = "File support for asyncio."
+category = "main"
+optional = false
+python-versions = ">=3.6,<4.0"
+
+[package.source]
+type = "legacy"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+reference = "tuna"
+
+[[package]]
 name = "anyio"
 version = "3.2.1"
 description = "High level compatibility layer for multiple asynchronous event loop implementations"
@@ -335,9 +348,13 @@ reference = "tuna"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "ee3bfc4b94df3ddd996919846cac88482426029eb81cd45243970b49d975ce53"
+content-hash = "8b5909ede4a266fd6a7c8106dd473ec46dc957479274b3582f6cd06a3b17b271"
 
 [metadata.files]
+aiofiles = [
+    {file = "aiofiles-0.7.0-py3-none-any.whl", hash = "sha256:c67a6823b5f23fcab0a2595a289cec7d8c863ffcb4322fb8cd6b90400aedfdbc"},
+    {file = "aiofiles-0.7.0.tar.gz", hash = "sha256:a1c4fc9b2ff81568c83e21392a82f344ea9d23da906e4f6a52662764545e19d4"},
+]
 anyio = [
     {file = "anyio-3.2.1-py3-none-any.whl", hash = "sha256:442678a3c7e1cdcdbc37dcfe4527aa851b1b0c9162653b516e9f509821691d50"},
     {file = "anyio-3.2.1.tar.gz", hash = "sha256:07968db9fa7c1ca5435a133dc62f988d84ef78e1d9b22814a59d1c62618afbc5"},

@@ -2,16 +2,19 @@
 """
 此模块提供消息链相关。
 """
+import imghdr
 import logging
 import re
 from datetime import datetime
 from json import loads as json_loads
-from typing import List, Optional
+from pathlib import Path
+from typing import List, Optional, Union
 
-from pydantic import Field, HttpUrl, validator
-
+import aiofiles
+import httpx
 from mirai.models.base import MiraiBaseModel, MiraiIndexedModel
 from mirai.utils import KMP
+from pydantic import Field, HttpUrl, validator
 
 logger = logging.getLogger(__name__)
 
@@ -180,7 +183,7 @@ class MessageChain(MiraiBaseModel):
     def __iter__(self):
         yield from self.__root__
 
-    def __getitem__(self, index):
+    def __getitem__(self, index) -> Union[MessageComponent, List[MessageComponent]]:
         # 正常索引
         if isinstance(index, int):
             return self.__root__[index]
@@ -398,6 +401,37 @@ class Image(MessageComponent):
 
     def as_flash_image(self) -> "FlashImage":
         return FlashImage(self.image_id, self.url)
+
+    async def download(
+        self, filename=None, directory=None, determine_type: bool = True
+    ):
+        """下载图片到本地。
+
+        `filename = None` 下载到本地的文件路径。与 `directory` 二选一。
+
+        `directory = None` 下载到本地的文件夹路径。与 `filename` 二选一。
+
+        `determine_type: bool = True` 是否自动根据图片类型确定拓展名。
+        """
+        async with httpx.AsyncClient() as client:
+            response = await client.get(self.url)
+            response.raise_for_status()
+            content = response.content
+
+            if filename:
+                path = Path(filename)
+                if determine_type:
+                    path = path.with_suffix('.' + imghdr.what(None, content))
+                path.parent.mkdir(parents=True, exist_ok=True)
+            elif directory:
+                path = Path(directory)
+                path.mkdir(parents=True, exist_ok=True)
+                path = path / f'{self.uuid}.{imghdr.what(None, content)}'
+            else:
+                raise ValueError("请指定文件路径或文件夹路径！")
+
+            async with aiofiles.open(path, 'wb') as f:
+                await f.write(content)
 
 
 class Xml(MessageComponent):
