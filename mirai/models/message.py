@@ -256,9 +256,7 @@ class Plain(MessageComponent):
     """消息组件类型。"""
     text: str
     """文字消息。"""
-    def __init__(self, text: str = '', **_):
-        if len(text) > 128:
-            logger.warn(f"Plain 文本过长。当前长度： {len(text)}。")
+    def __init__(self, text: str, **_):
         super().__init__(text=text)
 
     def __str__(self):
