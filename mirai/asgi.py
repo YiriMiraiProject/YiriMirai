@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """此模块提供公共 ASGI 前端。"""
 
+import logging
 from typing import Callable, Dict, List, Optional, Tuple, Union
 
 from starlette.applications import Starlette
@@ -8,6 +9,8 @@ from starlette.requests import Request
 from starlette.responses import RedirectResponse
 
 from mirai.utils import Singleton
+
+logger = logging.getLogger(__name__)
 
 
 async def default_endpoint(_: Request):
@@ -68,6 +71,18 @@ class ASGI(Singleton):
     def add_event_handler(self, event_type: str, handler: Callable):
         """注册生命周期事件处理函数。"""
         self.app.add_event_handler(event_type, handler)
+        return self
+
+    def mount(self, path: str, app: Callable):
+        """挂载另一个 ASGI 服务器。通过这个方法，可以同时运行 FastAPI 之类的服务。
+
+        `path: str` 要挂载的路径。
+
+        `app: Callable` 要挂载的 ASGI 服务器。
+        """
+        self.app.mount(path, app)
+        logger.debug(f'向 {path} 挂载 {app}。')
+        return self
 
     async def __call__(self, scope, recv, send):
         await self.app(scope, recv, send)

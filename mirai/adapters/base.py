@@ -11,7 +11,6 @@ from typing import List, Optional, Set
 
 from mirai import exceptions
 from mirai.api_provider import ApiProvider, Method
-from mirai.asgi import ASGI
 from mirai.bus import EventBus
 
 logger = logging.getLogger(__name__)

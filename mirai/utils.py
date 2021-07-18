@@ -92,14 +92,15 @@ class Singleton(metaclass=SingletonMetaclass):
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
-            cls._instance = super().__new__(cls)
+            _instance = super().__new__(cls)
 
             # 保存参数
             cls._args = (args, kwargs)
 
             # 初始化
-            cls._instance._init(*args, **kwargs)
-            return cls._instance
+            _instance.__init__(*args, **kwargs)
+            cls._instance = _instance
+            return _instance
         elif cls._args == (args, kwargs):
             return cls._instance
         else:
