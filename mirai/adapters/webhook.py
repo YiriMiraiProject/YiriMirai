@@ -129,6 +129,10 @@ class WebHookAdapter(Adapter):
                 content['subCommand'] = 'get'
             elif method == Method.RESTPOST:
                 content['subCommand'] = 'update'
+            elif method == Method.MULTIPART:
+                raise NotImplementedError(
+                    "WebHook 适配器不支持上传操作。请使用 bot.use_adapter 临时调用 HTTP 适配器。"
+                )
 
             logger.debug(f'[WebHook] WebHook 快速响应 {api}。')
             raise WebHookAdapter.QuickResponse(content)

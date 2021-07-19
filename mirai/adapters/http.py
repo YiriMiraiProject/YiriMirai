@@ -132,6 +132,15 @@ class HTTPAdapter(Adapter):
         return _parse_response(response)
 
     @_error_handler_async_local
+    async def _post_multipart(
+        self, client: httpx.AsyncClient, url: str, data: dict, files: dict
+    ) -> dict:
+        """调用 POST 方法，发送 multipart 数据。"""
+        response = await client.post(url, data=data, files=files)
+        logger.debug(f'[HTTP] 发送 POST 请求，地址{url}，状态 {response.status_code}。')
+        return _parse_response(response)
+
+    @_error_handler_async_local
     async def login(self, qq: int):
         async with httpx.AsyncClient(
             base_url=self.host_name, headers=self.headers
@@ -200,6 +209,10 @@ class HTTPAdapter(Adapter):
                 return await self._get(client, f'/{api}', params)
             elif method == Method.POST or method == Method.RESTPOST:
                 return await self._post(client, f'/{api}', params)
+            elif method == Method.MULTIPART:
+                return await self._post_multipart(
+                    client, f'/{api}', params['data'], params['files']
+                )
 
     async def _background(self):
         """开始轮询。"""

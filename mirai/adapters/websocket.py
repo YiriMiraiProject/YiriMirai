@@ -199,6 +199,10 @@ class WebSocketAdapter(Adapter):
             content['subCommand'] = 'get'
         elif method == Method.RESTPOST:
             content['subCommand'] = 'update'
+        elif method == Method.MULTIPART:
+            raise NotImplementedError(
+                "WebSocket 适配器不支持上传操作。请使用 bot.use_adapter 临时调用 HTTP 适配器。"
+            )
 
         await self.connection.send(json_dumps(content))
         logger.debug(f"[WebSocket] 发送 WebSocket 数据，同步 ID：{sync_id}。")

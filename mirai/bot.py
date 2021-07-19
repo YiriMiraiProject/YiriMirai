@@ -109,7 +109,7 @@ class SimpleMirai(ApiProvider, AdapterInterface):
         self._adapter = adapter
         yield
         self._adapter = origin_adapter
-        await adapter.logout()
+        # await adapter.logout()
 
     async def startup(self):
         """开始运行机器人（立即返回）。"""

@@ -51,7 +51,7 @@ class MessageComponentMetaclass(MiraiIndexedMetaclass):
         for base in bases:
             if issubclass(base, cls.__message_component__):
                 # 获取字段名
-                if getattr(new_cls, '__annotations__', None):
+                if hasattr(new_cls, '__annotations__'):
                     # 忽略 type 字段
                     new_cls.__parameter_names__ = list(
                         new_cls.__annotations__

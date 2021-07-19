@@ -19,6 +19,8 @@ class Method(str, Enum):
     """表明这是一个对 RESTful 接口的 GET。"""
     RESTPOST = "RESTPOST"
     """表明这是一个对 RESTful 接口的 POST。"""
+    MULTIPART = "MULTIPART"
+    """表明这是一个使用了 multipart/form-data 的 POST。"""
 
 
 class ApiProvider(abc.ABC):

@@ -3,14 +3,15 @@
 此模块提供 API 调用与返回数据解析相关。
 """
 from enum import Enum, Flag
+from pathlib import Path
 from typing import List, Optional, Type, Union
+
+import aiofiles
 
 try:
     from typing import Literal
 except ImportError:
     from typing_extensions import Literal
-
-from pydantic import Field, validator
 
 from mirai.api_provider import ApiProvider, Method
 from mirai.models.base import (
@@ -25,6 +26,7 @@ from mirai.models.events import (
 )
 from mirai.models.message import Image, MessageChain, Voice
 from mirai.utils import async_
+from pydantic import Field, validator
 
 
 class Response(MiraiBaseModel):
@@ -156,13 +158,13 @@ class ApiMetaclass(MiraiIndexedMetaclass):
         for base in bases:
             if issubclass(base, cls.__apimodel__):
                 info = new_cls.Info
-                if getattr(info, 'name', None):
+                if hasattr(info, 'name'):
                     base.__indexes__[info.name] = new_cls
-                if getattr(info, 'alias', None):
+                if hasattr(info, 'alias'):
                     base.__indexes__[info.alias] = new_cls
 
                 # 获取 API 参数名
-                if getattr(new_cls, '__annotations__', None):
+                if hasattr(new_cls, '__annotations__'):
                     info.parameter_names = list(new_cls.__annotations__)
                 break
 
@@ -265,13 +267,16 @@ class ApiModel(ApiBaseModel):
 
             api = self.api_type(*args, **kwargs)
             info = self.api_type.Info
-            raw_response = await async_(
-                self.api_provider.call_api(
-                    api=info.name,
-                    method=method,
-                    **api.dict(by_alias=True, exclude_none=True)
+            if hasattr(api, 'call'):
+                raw_response = await api.call(self.api_provider)
+            else:
+                raw_response = await async_(
+                    self.api_provider.call_api(
+                        api=info.name,
+                        method=method,
+                        **api.dict(by_alias=True, exclude_none=True)
+                    )
                 )
-            )
             # 如果 API 无法调用，raw_response 为空
             if not raw_response:
                 return None
@@ -606,7 +611,21 @@ class FileRename(ApiPost):
 
 
 class UploadImage(ApiGet):
-    """图片文件上传（暂不可用）。"""
+    """图片文件上传。"""
+    type: Literal["friend", "group", "temp"]
+    """上传的图片类型。"""
+    img: Union[str, Path]
+    """上传的图片的本地路径。"""
+    async def call(self, api_provider: ApiProvider):
+        async with aiofiles.open(self.img, 'rb') as f:
+            img = await f.read()
+        return await api_provider.call_api(
+            'uploadImage',
+            method=Method.MULTIPART,
+            data={'type': self.type},
+            files={'img': img}
+        )
+
     class Info(ApiGet.Info):
         name = "uploadImage"
         alias = "upload_image"
