@@ -2,6 +2,7 @@
 """
 此模块提供消息链相关。
 """
+import base64
 import imghdr
 import logging
 import re
@@ -12,7 +13,7 @@ from typing import List, Optional, Union
 
 import aiofiles
 import httpx
-from mirai.models.base import MiraiBaseModel, MiraiIndexedModel
+from mirai.models.base import MiraiBaseModel, MiraiIndexedMetaclass, MiraiIndexedModel
 from mirai.utils import KMP
 from pydantic import Field, HttpUrl, validator
 
@@ -35,12 +36,52 @@ def deserialize(s: str) -> str:
     return re.sub(r'\\([\[\]:,\\nr])', lambda match: match.group(1), s)
 
 
-class MessageComponent(MiraiIndexedModel):
+class MessageComponentMetaclass(MiraiIndexedMetaclass):
+    """消息组件元类。"""
+    __message_component__ = None
+
+    def __new__(cls, name, bases, attrs, **kwargs):
+        new_cls = super().__new__(cls, name, bases, attrs, **kwargs)
+        if name == 'MessageComponent':
+            cls.__message_component__ = new_cls
+
+        if not cls.__message_component__:
+            return new_cls
+
+        for base in bases:
+            if issubclass(base, cls.__message_component__):
+                # 获取字段名
+                if getattr(new_cls, '__annotations__', None):
+                    # 忽略 type 字段
+                    new_cls.__parameter_names__ = list(
+                        new_cls.__annotations__
+                    )[1:]
+                break
+
+        return new_cls
+
+
+class MessageComponent(MiraiIndexedModel, metaclass=MessageComponentMetaclass):
     """消息组件。"""
     type: str
     """消息组件类型。"""
     def __str__(self):
         return ''
+
+    def __init__(self, *args, **kwargs):
+        # 解析参数列表，将位置参数转化为具名参数
+        parameter_names = self.__parameter_names__
+        if len(args) > len(parameter_names):
+            raise TypeError(
+                f'`{self.type}`需要{len(parameter_names)}个参数，但传入了{len(args)}个。'
+            )
+        for name, value in zip(parameter_names, args):
+            if kwargs.get(name):
+                raise TypeError(f'在 `{self.type}` 中，具名参数 `{name}` 与位置参数重复。')
+            else:
+                kwargs[name] = value
+
+        super().__init__(**kwargs)
 
 
 class MessageChain(MiraiBaseModel):
@@ -183,7 +224,8 @@ class MessageChain(MiraiBaseModel):
     def __iter__(self):
         yield from self.__root__
 
-    def __getitem__(self, index) -> Union[MessageComponent, List[MessageComponent]]:
+    def __getitem__(self,
+                    index) -> Union[MessageComponent, List[MessageComponent]]:
         # 正常索引
         if isinstance(index, int):
             return self.__root__[index]
@@ -256,9 +298,6 @@ class Plain(MessageComponent):
     """消息组件类型。"""
     text: str
     """文字消息。"""
-    def __init__(self, text: str, **_):
-        super().__init__(text=text)
-
     def __str__(self):
         return serialize(self.text)
 
@@ -282,26 +321,6 @@ class Quote(MessageComponent):
     def origin_formater(cls, v):
         return MessageChain.parse_obj(v)
 
-    def __init__(
-        self,
-        id: Optional[int] = None,
-        group_id: Optional[int] = None,
-        sender_id: Optional[int] = None,
-        target_id: Optional[int] = None,
-        origin: MessageChain = None,
-        groupId: Optional[int] = None,
-        senderId: Optional[int] = None,
-        targetId: Optional[int] = None,
-        **_
-    ):
-        super().__init__(
-            id=id,
-            groupId=group_id or groupId,
-            senderId=sender_id or senderId,
-            targetId=target_id or targetId,
-            origin=origin
-        )
-
 
 class At(MessageComponent):
     """At某人。"""
@@ -311,9 +330,6 @@ class At(MessageComponent):
     """群员 QQ 号。"""
     display: Optional[str] = None
     """At时显示的文字，发送消息时无效，自动使用群名片"""
-    def __init__(self, target: int, **_):
-        super().__init__(target=target)
-
     def __eq__(self, other):
         return isinstance(other, At) and self.target == other.target
 
@@ -333,19 +349,10 @@ class Face(MessageComponent):
     """表情。"""
     type: str = "Face"
     """消息组件类型。"""
-    face_id: Optional[int] = Field(alias='faceId')
+    face_id: Optional[int]
     """QQ 表情编号，可选，优先度高于 name。"""
     name: Optional[str]
     """QQ表情拼音，可选。"""
-    def __init__(
-        self,
-        face_id: Optional[int] = None,
-        name: Optional[str] = None,
-        faceId: Optional[int] = None,
-        **_
-    ):
-        super().__init__(faceId=face_id or faceId, name=name)
-
     def __eq__(self, other):
         return isinstance(other, Face) and self.face_id == other.face_id
 
@@ -357,23 +364,14 @@ class Image(MessageComponent):
     """图片。"""
     type: str = "Image"
     """消息组件类型。"""
-    image_id: Optional[str] = Field(alias='imageId')
+    image_id: Optional[str]
     """图片的 image_id，群图片与好友图片格式不同。不为空时将忽略 url 属性。"""
     url: Optional[HttpUrl] = None
     """图片的 URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载。"""
     path: Optional[str] = None
-    """图片的路径，发送本地图片，路径相对于 `plugins/MiraiAPIHTTP/images`。"""
+    """图片的路径，发送本地图片，路径相对于 mirai-console 的目录，也可传入绝对路径。"""
     base64: Optional[str] = None
     """图片的 Base64 编码。"""
-    def __init__(
-        self,
-        image_id: Optional[str] = None,
-        url: Optional[str] = None,
-        imageId: Optional[str] = None,
-        **_
-    ):
-        super().__init__(imageId=image_id or imageId, url=url)
-
     def __eq__(self, other):
         return isinstance(
             other, Image
@@ -401,13 +399,16 @@ class Image(MessageComponent):
         return FlashImage(self.image_id, self.url)
 
     async def download(
-        self, filename=None, directory=None, determine_type: bool = True
+        self,
+        filename: Optional[Union[str, Path]] = None,
+        directory: Optional[Union[str, Path]] = None,
+        determine_type: bool = True
     ):
         """下载图片到本地。
 
-        `filename = None` 下载到本地的文件路径。与 `directory` 二选一。
+        `filename: Optional[Union[str, Path]] = None` 下载到本地的文件路径。与 `directory` 二选一。
 
-        `directory = None` 下载到本地的文件夹路径。与 `filename` 二选一。
+        `directory: Optional[Union[str, Path]] = None` 下载到本地的文件夹路径。与 `filename` 二选一。
 
         `determine_type: bool = True` 是否自动根据图片类型确定拓展名。
         """
@@ -431,6 +432,31 @@ class Image(MessageComponent):
             async with aiofiles.open(path, 'wb') as f:
                 await f.write(content)
 
+            return path
+
+    @classmethod
+    async def from_local(
+        cls,
+        filename: Optional[Union[str, Path]] = None,
+        content: Optional[bytes] = None,
+    ) -> "Image":
+        """从本地文件路径加载图片，以 base64 的形式传递。
+
+        `filename: Optional[Union[str, Path]] = None` 从本地文件路径加载图片，与 `content` 二选一。
+
+        `content: Optional[bytes] = None` 从本地文件内容加载图片，与 `filename` 二选一。
+        """
+        if content:
+            pass
+        if filename:
+            path = Path(filename)
+            async with aiofiles.open(path, 'rb') as f:
+                content = await f.read()
+        else:
+            raise ValueError("请指定图片路径或图片内容！")
+        img = cls(base64=base64.b64encode(content).decode())
+        return img
+
 
 class Xml(MessageComponent):
     """XML。"""
@@ -438,8 +464,6 @@ class Xml(MessageComponent):
     """消息组件类型。"""
     xml: str
     """XML文本。"""
-    def __init__(self, xml: str, **_):
-        super().__init__(xml=xml)
 
 
 class Json(MessageComponent):
@@ -448,8 +472,6 @@ class Json(MessageComponent):
     """消息组件类型。"""
     json_: dict
     """JSON 文本。"""
-    def __init__(self, json: dict):
-        super().__init__(json=json)
 
 
 class App(MessageComponent):
@@ -458,9 +480,6 @@ class App(MessageComponent):
     """消息组件类型。"""
     content: str
     """内容。"""
-    def __init__(self, content: str, **_):
-        super().__init__(content=content)
-
     def as_json(self):
         return json_loads(self.content)
 
@@ -512,9 +531,6 @@ class Poke(MessageComponent):
     """消息组件类型。"""
     name: str
     """名称。"""
-    def __init__(self, name: str, **_):
-        super().__init__(name=name)
-
     @property
     def poke_type(self):
         return POKE_TYPE[self.name]
@@ -539,7 +555,7 @@ class FlashImage(Image):
     """闪照。"""
     type: str = "FlashImage"
     """消息组件类型。"""
-    image_id: Optional[str] = Field(alias='imageId')
+    image_id: Optional[str]
     """图片的 image_id，群图片与好友图片格式不同。不为空时将忽略 url 属性。"""
     url: Optional[HttpUrl] = None
     """图片的 URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载。"""
@@ -547,9 +563,6 @@ class FlashImage(Image):
     """图片的路径，发送本地图片，路径相对于 `plugins/MiraiAPIHTTP/images`。"""
     base64: Optional[str] = None
     """图片的 Base64 编码。"""
-    def __init__(self, imageId, url=None, **_):
-        super().__init__(imageId=imageId, url=url)
-
     def __str__(self):
         return f"[mirai:flash:{self.image_id}]"
 
@@ -561,14 +574,40 @@ class Voice(MessageComponent):
     """语音。"""
     type: str = "Voice"
     """消息组件类型。"""
-    voice_id: Optional[str] = Field(alias="voiceId")
-    """语音的 voice_id，不为空时将忽略 ur l属性。"""
+    voice_id: Optional[str]
+    """语音的 voice_id，不为空时将忽略 url 属性。"""
     url: Optional[str]
     """语音的 URL，发送时可作网络语音的链接；接收时为腾讯语音服务器的链接，可用于语音下载。"""
     path: Optional[str]
     """语音的路径，发送本地语音，路径相对于 `plugins/MiraiAPIHTTP/voices`。"""
     base64: Optional[str]
     """语音的 Base64 编码。"""
+    async def download(self, filename=None, directory=None):
+        """下载语音到本地。
+
+        语音采用 silk v3 格式，silk 格式的编码解码请使用 [graiax-silkcoder](https://pypi.org/project/graiax-silkcoder/)。
+
+        `filename = None` 下载到本地的文件路径。与 `directory` 二选一。
+
+        `directory = None` 下载到本地的文件夹路径。与 `filename` 二选一。
+        """
+        async with httpx.AsyncClient() as client:
+            response = await client.get(self.url)
+            response.raise_for_status()
+            content = response.content
+
+            if filename:
+                path = Path(filename)
+                path.parent.mkdir(parents=True, exist_ok=True)
+            elif directory:
+                path = Path(directory)
+                path.mkdir(parents=True, exist_ok=True)
+                path = path / f'{self.voice_id}.silk'
+            else:
+                raise ValueError("请指定文件路径或文件夹路径！")
+
+            async with aiofiles.open(path, 'wb') as f:
+                await f.write(content)
 
 
 class Dice(MessageComponent):
@@ -577,9 +616,6 @@ class Dice(MessageComponent):
     """消息组件类型。"""
     value: int
     """点数。"""
-    def __init__(self, value: int, **_):
-        super().__init__(value=value)
-
     def __str__(self):
         return f'[mirai:dice:{self.value}]'
 
@@ -612,7 +648,7 @@ class ForwardMessageNode(MiraiBaseModel):
     """发送时间。"""
     sender_name: str
     """显示名称。"""
-    source_id: Optional[int] = Field(alias='sourceId')
+    source_id: Optional[int]
     """消息的 message_id，可以只使用此属性，从缓存中读取消息内容。"""
     message_chain: MessageChain
     """消息内容。"""

@@ -162,16 +162,8 @@ class ApiMetaclass(MiraiIndexedMetaclass):
                     base.__indexes__[info.alias] = new_cls
 
                 # 获取 API 参数名
-                if not getattr(info, 'parameter_names', None):
-                    info.parameter_names = []
                 if getattr(new_cls, '__annotations__', None):
-                    for field_name in new_cls.__annotations__:
-                        field = getattr(new_cls, field_name, None)
-                        # 如果使用了别名
-                        if field and isinstance(field, Field) and field.alias:
-                            info.parameter_names.append(field.alias)
-                        else:
-                            info.parameter_names.append(field_name)
+                    info.parameter_names = list(new_cls.__annotations__)
                 break
 
         return new_cls
@@ -203,7 +195,9 @@ class ApiModel(ApiBaseModel):
             )
         for name, value in zip(parameter_names, args):
             if kwargs.get(name):
-                raise TypeError(f'在`{self.Info.alias}`中，具名参数`{name}`与位置参数重复。')
+                raise TypeError(
+                    f'在 `{self.Info.alias}` 中，具名参数 `{name}` 与位置参数重复。'
+                )
             else:
                 kwargs[name] = value
 
