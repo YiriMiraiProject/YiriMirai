@@ -396,7 +396,12 @@ class Image(MessageComponent):
         return f"/{self.uuid.lower()}"
 
     def as_flash_image(self) -> "FlashImage":
-        return FlashImage(self.image_id, self.url)
+        return FlashImage(
+            image_id=self.image_id,
+            url=self.url,
+            path=self.path,
+            base64=self.base64
+        )
 
     async def download(
         self,
