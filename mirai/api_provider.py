@@ -21,7 +21,7 @@ class Method(str, Enum):
     """表明这是一个对 RESTful 接口的 POST。"""
 
 
-class ApiProvider(object):
+class ApiProvider(abc.ABC):
     """支持从属性调用 API 的类。
 
     使用了 `__getattr__`，可以直接通过属性调用 API。

@@ -7,7 +7,7 @@ import asyncio
 import logging
 from datetime import datetime
 from json import dumps
-from typing import List, Optional, Set
+from typing import Any, Dict, List, Optional, Set
 
 from mirai import exceptions
 from mirai.api_provider import ApiProvider, Method
@@ -47,7 +47,22 @@ def error_handler_async(errors):
     return wrapper
 
 
-class Adapter(ApiProvider):
+class AdapterInterface(abc.ABC):
+    """适配器接口，包含适配器信息。"""
+    @property
+    @abc.abstractmethod
+    def adapter_info(self) -> Dict[str, Any]:
+        "适配器信息。"
+
+    @classmethod
+    def __subclasshook__(cls, C):
+        if cls is AdapterInterface:
+            if any("adapter_info" in B.__dict__ for B in C.__mro__):
+                return True
+        return NotImplemented
+
+
+class Adapter(ApiProvider, AdapterInterface):
     """适配器基类，与 mirai-api-http 沟通的底层实现。
 
     属性 `buses` 为适配器注册的事件总线集合。适配器被绑定到 bot 时，bot 会自动将自身的事件总线注册到适配器。
@@ -70,6 +85,28 @@ class Adapter(ApiProvider):
         self.single_mode = single_mode
         self.session = ''
         self.buses = set()
+
+    @property
+    def adapter_info(self):
+        return {
+            'verify_key': self.verify_key,
+            'session': self.session,
+            'single_mode': self.single_mode,
+        }
+
+    @classmethod
+    def via(cls, adapter_interface: AdapterInterface) -> "Adapter":
+        """从适配器接口创建适配器。"""
+        info = adapter_interface.adapter_info
+        adapter = cls(
+            verify_key=info['verify_key'],
+            **{
+                key: info[key]
+                for key in ['single_mode'] if info.get(key) is not None
+            }
+        )
+        adapter.session = info.get('session')
+        return adapter
 
     def register_event_bus(self, *buses: List[EventBus]):
         """注册事件总线。

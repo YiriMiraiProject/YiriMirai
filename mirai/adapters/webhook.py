@@ -8,7 +8,7 @@ from typing import Optional
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
-from mirai.adapters.base import Adapter, json_dumps
+from mirai.adapters.base import Adapter, AdapterInterface, json_dumps
 from mirai.api_provider import Method
 from mirai.asgi import ASGI
 
@@ -84,6 +84,33 @@ class WebHookAdapter(Adapter):
         """WebHook 快速响应，以异常的方式跳出。"""
         def __init__(self, data: dict):
             self.data = data
+
+    @property
+    def adapter_info(self):
+        return {
+            'verify_key': self.verify_key,
+            'session': self.session,
+            'single_mode': self.single_mode,
+            'route': self.route,
+            'extra_headers': self.extra_headers,
+            'enable_quick_response': self.enable_quick_response,
+        }
+
+    @classmethod
+    def via(cls, adapter_interface: AdapterInterface) -> "WebHookAdapter":
+        info = adapter_interface.adapter_info
+        adapter = cls(
+            verify_key=info['verify_key'],
+            **{
+                key: info[key]
+                for key in [
+                    'route', 'extra_headers', 'enable_quick_response',
+                    'single_mode'
+                ] if info.get(key) is not None
+            }
+        )
+        adapter.session = info.get('session')
+        return adapter
 
     async def login(self, qq: int):
         """WebHook 不需要登录。直接返回。"""

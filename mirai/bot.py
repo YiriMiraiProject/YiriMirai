@@ -5,9 +5,10 @@
 import asyncio
 import logging
 import sys
+import contextlib
 from typing import Callable, List, Type, Union
 
-from mirai.adapters.base import Adapter, ApiProvider
+from mirai.adapters.base import Adapter, ApiProvider, AdapterInterface
 from mirai.asgi import ASGI, asgi_serve
 from mirai.bus import EventBus
 from mirai.models.api import ApiModel
@@ -16,7 +17,7 @@ from mirai.models.events import Event
 from mirai.utils import Singleton, async_, async_call_with_exception
 
 
-class SimpleMirai(ApiProvider):
+class SimpleMirai(ApiProvider, AdapterInterface):
     """
     基于 adapter 和 bus，处于 model 层之下的机器人类。
 
@@ -86,6 +87,29 @@ class SimpleMirai(ApiProvider):
         """注册机器人初始化处理器。"""
         self.setup_functions.append(func)
         return func
+
+    @property
+    def adapter_info(self):
+        return self._adapter.adapter_info
+
+    @contextlib.asynccontextmanager
+    async def use_adapter(self, adapter: Adapter):
+        """临时使用另一个适配器。
+
+        `adapter: Adapter` 使用的适配器。
+
+        用法：
+        ```py
+        async with bot.use_adapter(HTTPAdapter.via(bot)):
+            ...
+        ```
+        """
+        origin_adapter = self._adapter
+        await adapter.login(self.qq)
+        self._adapter = adapter
+        yield
+        self._adapter = origin_adapter
+        await adapter.logout()
 
     async def startup(self):
         """开始运行机器人（立即返回）。"""

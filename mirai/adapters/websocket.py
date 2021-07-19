@@ -12,7 +12,7 @@ from typing import Optional
 import websockets
 
 from mirai import exceptions
-from mirai.adapters.base import Adapter, error_handler_async, json_dumps
+from mirai.adapters.base import Adapter, AdapterInterface, error_handler_async, json_dumps
 from mirai.api_provider import Method
 from mirai.tasks import Tasks
 
@@ -53,7 +53,10 @@ class WebSocketAdapter(Adapter):
 
         `single_mode: bool = False` 是否启用单例模式。
         """
-        super().__init__(verify_key=verify_key)
+        super().__init__(verify_key=verify_key, single_mode=single_mode)
+
+        self._host = host
+        self._port = port
 
         if host[:2] == '//':
             host = 'ws:' + host
@@ -78,6 +81,31 @@ class WebSocketAdapter(Adapter):
         self._local_sync_id = random.randint(1, 1024) * 1024
         #
         self._tasks = Tasks()
+
+    @property
+    def adapter_info(self):
+        return {
+            'verify_key': self.verify_key,
+            'session': self.session,
+            'single_mode': self.single_mode,
+            'host': self._host,
+            'port': self._port,
+            'sync_id': self.sync_id,
+        }
+
+    @classmethod
+    def via(cls, adapter_interface: AdapterInterface) -> "WebSocketAdapter":
+        info = adapter_interface.adapter_info
+        adapter = cls(
+            verify_key=info['verify_key'],
+            **{
+                key: info[key]
+                for key in ['host', 'port', 'sync_id', 'single_mode']
+                if info.get(key) is not None
+            }
+        )
+        adapter.session = info.get('session')
+        return adapter
 
     @_error_handler_async_local
     async def _receiver(self):

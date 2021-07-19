@@ -10,7 +10,7 @@ from typing import Optional
 import httpx
 
 from mirai import exceptions
-from mirai.adapters.base import Adapter, error_handler_async, json_dumps
+from mirai.adapters.base import Adapter, AdapterInterface, error_handler_async, json_dumps
 from mirai.api_provider import Method
 from mirai.tasks import Tasks
 
@@ -63,6 +63,9 @@ class HTTPAdapter(Adapter):
         """
         super().__init__(verify_key=verify_key, single_mode=single_mode)
 
+        self._host = host
+        self._port = port
+
         if host[:2] == '//':
             host = 'http:' + host
         elif host[:8] == 'https://':
@@ -80,6 +83,31 @@ class HTTPAdapter(Adapter):
         self.qq = 0
         self.headers = httpx.Headers() # 使用 headers 传递 session
         self._tasks = Tasks()
+
+    @property
+    def adapter_info(self):
+        return {
+            'verify_key': self.verify_key,
+            'session': self.session,
+            'single_mode': self.single_mode,
+            'host': self._host,
+            'port': self._port,
+            'poll_interval': self.poll_interval,
+        }
+
+    @classmethod
+    def via(cls, adapter_interface: AdapterInterface) -> "HTTPAdapter":
+        info = adapter_interface.adapter_info
+        adapter = cls(
+            verify_key=info['verify_key'],
+            **{
+                key: info[key]
+                for key in ['host', 'port', 'poll_interval', 'single_mode']
+                if info.get(key) is not None
+            }
+        )
+        adapter.session = info.get('session')
+        return adapter
 
     @_error_handler_async_local
     async def _post(
