@@ -79,7 +79,7 @@ class WebSocketAdapter(Adapter):
         self._recv_dict = defaultdict(deque)
         # 本地同步 ID，每次调用 API 递增。
         self._local_sync_id = random.randint(1, 1024) * 1024
-        #
+        # 事件处理任务管理器
         self._tasks = Tasks()
 
     @property
