@@ -30,6 +30,17 @@ profile = await bot.bot_profile.get() # 获取机器人账号的资料
 
 更多信息，查看[调用 API](call-api.md)章节。
 
+### 临时适配器切换
+
+某些特殊的 API，比如 `upload_image` 和 `upload_voice` 只能在 HTTP 适配器下工作。如果想要在其他适配下使用这些 API，可以用 `use_adpter` 方法临时切换适配器。
+
+`use_adapter` 返回一个异步上下文对象，用于 `async with` 中。
+
+```python
+async with bot.use_adapter(HTTPAdapter.via(bot)):
+    ...
+```
+
 ## 处理事件
 
 Mirai 对象的 `on` 方法用于注册事件处理器。

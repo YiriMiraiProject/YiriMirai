@@ -40,6 +40,21 @@ adapter = HTTPAdapter(verify_key=None, host='localhost', port=8080)
 adapter = HTTPAdapter(verify_key='your_verify_key', host='localhost', port=8080, single_mode=True)
 ```
 
+### 通过已有的适配器创建
+
+使用 `via` 方法，可以通过一个已有的适配器创建新适配器。
+
+新适配器会尽可能地复制原适配器的信息。
+
+一个特殊的应用是在 `bot.use_adapter` 中，使用 `via` 以快速创建临时适配器。此时 `via` 可以接收 Mirai 对象作为参数，来读取到 Mirai 对象内部的适配器信息。
+
+```python
+new_adapter = HTTPAdapter.via(adapter)
+# 在 use_adapter 中使用
+async with bot.use_adapter(HTTPAdapter.via(bot)):
+    ...
+```
+
 ## Adapter 与事件总线
 
 使用 `register_event_bus` 和 `unregister_event_bus` 方法注册和解注册事件总线。这两个方法都可以接收一个或多个参数，表示一个或多个事件总线。
