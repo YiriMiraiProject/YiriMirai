@@ -633,7 +633,21 @@ class UploadImage(ApiGet):
 
 
 class UploadVoice(ApiGet):
-    """语音文件上传（暂不可用）。"""
+    """语音文件上传。"""
+    type: Literal["group"]
+    """上传的语音类型。"""
+    voice: Union[str, Path]
+    """上传的语音的本地路径。"""
+    async def call(self, api_provider: ApiProvider):
+        async with aiofiles.open(self.voice, 'rb') as f:
+            voice = await f.read()
+        return await api_provider.call_api(
+            'uploadVoice',
+            method=Method.MULTIPART,
+            data={'type': self.type},
+            files={'voice': voice}
+        )
+
     class Info(ApiGet.Info):
         name = "uploadVoice"
         alias = "upload_voice"

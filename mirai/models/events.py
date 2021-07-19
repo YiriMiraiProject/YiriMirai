@@ -857,6 +857,10 @@ class GroupMessage(MessageEvent):
     message_chain: MessageChain
     """消息内容。"""
 
+    @property
+    def group(self) -> Group:
+        return self.sender.group
+
 
 class TempMessage(MessageEvent):
     """群临时消息。

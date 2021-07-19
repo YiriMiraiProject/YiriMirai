@@ -579,13 +579,13 @@ class Voice(MessageComponent):
     """语音。"""
     type: str = "Voice"
     """消息组件类型。"""
-    voice_id: Optional[str]
+    voice_id: Optional[str] = None
     """语音的 voice_id，不为空时将忽略 url 属性。"""
-    url: Optional[str]
+    url: Optional[str] = None
     """语音的 URL，发送时可作网络语音的链接；接收时为腾讯语音服务器的链接，可用于语音下载。"""
-    path: Optional[str]
+    path: Optional[str] = None
     """语音的路径，发送本地语音，路径相对于 `plugins/MiraiAPIHTTP/voices`。"""
-    base64: Optional[str]
+    base64: Optional[str] = None
     """语音的 Base64 编码。"""
     async def download(self, filename=None, directory=None):
         """下载语音到本地。
@@ -613,6 +613,29 @@ class Voice(MessageComponent):
 
             async with aiofiles.open(path, 'wb') as f:
                 await f.write(content)
+
+    @classmethod
+    async def from_local(
+        cls,
+        filename: Optional[Union[str, Path]] = None,
+        content: Optional[bytes] = None,
+    ) -> "Image":
+        """从本地文件路径加载语音，以 base64 的形式传递。
+
+        `filename: Optional[Union[str, Path]] = None` 从本地文件路径加载图片，与 `content` 二选一。
+
+        `content: Optional[bytes] = None` 从本地文件内容加载图片，与 `filename` 二选一。
+        """
+        if content:
+            pass
+        if filename:
+            path = Path(filename)
+            async with aiofiles.open(path, 'rb') as f:
+                content = await f.read()
+        else:
+            raise ValueError("请指定语音路径或语音内容！")
+        img = cls(base64=base64.b64encode(content).decode())
+        return img
 
 
 class Dice(MessageComponent):
