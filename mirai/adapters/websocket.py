@@ -127,7 +127,7 @@ class WebSocketAdapter(Adapter):
                 data = response['data']
 
                 if data.get('code', 0) != 0:
-                    raise exceptions.ApiError(data['code'])
+                    raise exceptions.ApiError(data)
 
                 logger.debug(
                     f"[WebSocket] 收到 WebSocket 数据，同步 ID：{response['syncId']}。"

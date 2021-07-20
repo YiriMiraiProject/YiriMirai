@@ -22,7 +22,7 @@ def _parse_response(response: httpx.Response) -> dict:
     response.raise_for_status()
     result = response.json()
     if result.get('code', 0) != 0:
-        raise exceptions.ApiError(result['code'])
+        raise exceptions.ApiError(result)
     return result
 
 

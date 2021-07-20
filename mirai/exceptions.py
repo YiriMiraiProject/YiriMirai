@@ -23,6 +23,7 @@ API_ERROR_FMT = {
     20: 'Bot 被禁言。',
     30: '消息过长。',
     400: '参数错误。',
+    500: '消息内容为空。',
 }
 
 
@@ -31,9 +32,13 @@ class ApiError(RuntimeError):
 
     `code: int` mirai-api-http 的 API 状态码。
     """
-    def __init__(self, code: int):
+    def __init__(self, response: dict):
+        code = response['code']
         self.code = code
-        self.args = (code, f'[ERROR {code}]' + API_ERROR_FMT[code])
+        self.args = (
+            code, f'[ERROR {code}]' + API_ERROR_FMT.get(code, ''),
+            response.get('msg', '')
+        )
 
 
 def print_exception(e: Exception):
