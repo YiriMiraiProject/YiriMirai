@@ -3,7 +3,8 @@
 此模块提供 YiriMirai 中使用的 pydantic 模型的基类。
 """
 from typing import Type
-
+import textwrap
+import reprlib
 import pydantic.main as pdm
 from pydantic import BaseModel
 
@@ -20,6 +21,31 @@ def to_camel(name: str) -> str:
     return ''.join(name_parts[:1] + [x.title() for x in name_parts[1:]])
 
 
+def _custom_repr_iter(obj, formatter=repr) -> str:
+    """转换 iterable 的字符串表示。"""
+    result = '\n'.join((formatter(x) + ',' for x in obj))
+    result = textwrap.indent(result, ' ' * 4)
+    return result
+
+
+@reprlib.recursive_repr()
+def _custom_repr(obj) -> str:
+    """转换模型的字符串表示。"""
+    if isinstance(obj, list):
+        return '[\n' \
+            + _custom_repr_iter(obj) \
+            + '\n]'
+    if isinstance(obj, dict):
+        return '{\n' \
+            + _custom_repr_iter(obj.items(), lambda kv: f'{kv[0]}: {_custom_repr(kv[1])}') \
+            + '\n}'
+    if isinstance(obj, MiraiBaseModel):
+        return obj.__class__.__name__ + '(\n' + _custom_repr_iter(
+            obj.__dict__.items(), lambda kv: f'{kv[0]}={_custom_repr(kv[1])}'
+        ) + '\n)'
+    return repr(obj)
+
+
 class MiraiBaseModel(BaseModel, metaclass=MiraiMetaclass):
     """模型基类。
 
@@ -31,6 +57,9 @@ class MiraiBaseModel(BaseModel, metaclass=MiraiMetaclass):
     def __init__(self, *args, **kwargs):
         """"""
         super().__init__(*args, **kwargs)
+
+    def __repr__(self) -> str:
+        return _custom_repr(self)
 
     class Config:
         extra = 'allow'

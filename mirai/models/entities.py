@@ -17,9 +17,6 @@ from mirai.models.base import MiraiBaseModel
 
 class Entity(MiraiBaseModel):
     """实体，表示一个用户或群。"""
-    def __repr__(self):
-        return f'<{self.__class__.__name__} {str(self)}>'
-
     @abc.abstractmethod
     def get_avatar_url(self) -> str:
         """获取头像图片链接。"""
@@ -46,6 +43,9 @@ class Permission(str, Enum):
     """管理员。"""
     Owner = "OWNER"
     """群主。"""
+
+    def __repr__(self) -> str:
+        return repr(self.value)
 
 
 class Group(Entity):
@@ -78,9 +78,6 @@ class GroupMember(Entity):
     """最后一次发言的时间。"""
     mute_time_remaining: int = 0
     """禁言剩余时间。"""
-    def __repr__(self):
-        return f"<GroupMember id={self.id} group={self.group} permission={self.permission} group={self.group.id}>"
-
     def get_avatar_url(self) -> str:
         return f'http://q4.qlogo.cn/g?b=qq&nk={self.id}&s=140'
 

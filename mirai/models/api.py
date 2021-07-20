@@ -102,6 +102,9 @@ class Sex(str, Enum):
     Male = 'MALE'
     Female = 'FEMALE'
 
+    def __repr__(self) -> str:
+        return repr(self.value)
+
 
 class ProfileResponse(MiraiBaseModel):
     """好友资料。"""
