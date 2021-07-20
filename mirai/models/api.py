@@ -646,7 +646,37 @@ class FileRename(ApiPost):
         response_type = Response
 
 
-class UploadImage(ApiGet):
+class FileUpload(ApiPost):
+    """文件上传。"""
+    type: Literal["group"]
+    """上传的文件类型。"""
+    target: int
+    """群号。"""
+    file: Union[str, Path]
+    """上传的文件的本地路径。"""
+    path: str = ''
+    """上传目录的 id，空串为上传到根目录。"""
+    async def call(self, api_provider: ApiProvider):
+        async with aiofiles.open(self.file, 'rb') as f:
+            file = await f.read()
+        return await api_provider.call_api(
+            'file/upload',
+            method=Method.MULTIPART,
+            data={
+                'type': self.type,
+                'target': self.target,
+                'path': self.path,
+            },
+            files={'file': file}
+        )
+
+    class Info(ApiPost.Info):
+        name = "file/upload"
+        alias = "file_upload"
+        response_type = File
+
+
+class UploadImage(ApiPost):
     """图片文件上传。"""
     type: Literal["friend", "group", "temp"]
     """上传的图片类型。"""
@@ -662,13 +692,13 @@ class UploadImage(ApiGet):
             files={'img': img}
         )
 
-    class Info(ApiGet.Info):
+    class Info(ApiPost.Info):
         name = "uploadImage"
         alias = "upload_image"
         response_type = Image
 
 
-class UploadVoice(ApiGet):
+class UploadVoice(ApiPost):
     """语音文件上传。"""
     type: Literal["group"]
     """上传的语音类型。"""
@@ -684,7 +714,7 @@ class UploadVoice(ApiGet):
             files={'voice': voice}
         )
 
-    class Info(ApiGet.Info):
+    class Info(ApiPost.Info):
         name = "uploadVoice"
         alias = "upload_voice"
         response_type = Voice
