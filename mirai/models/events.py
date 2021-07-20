@@ -858,6 +858,7 @@ class GroupMessage(MessageEvent):
     """发送消息的群成员。"""
     message_chain: MessageChain
     """消息内容。"""
+
     @property
     def group(self) -> Group:
         return self.sender.group
