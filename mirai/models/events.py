@@ -14,7 +14,7 @@ from pydantic import Field
 
 from mirai.models.base import MiraiIndexedModel
 from mirai.models.entities import (
-    Entity, Friend, Group, GroupMember, Permission, Sender
+    Entity, Friend, Group, GroupMember, Permission, Sender, Subject
 )
 from mirai.models.message import MessageChain
 
@@ -771,6 +771,21 @@ class BotInvitedJoinGroupRequestEvent(RequestEvent):
     """邀请消息。"""
 
 
+class NudgeEvent(Event):
+    """头像戳一戳事件。"""
+    type: str = "NudgeEvent"
+    """事件名。"""
+    from_id: int
+    """动作发出者的 QQ 号。"""
+    target: int
+    """动作目标的 QQ 号。"""
+    subject: Subject
+    """来源。"""
+    action: str
+    """戳一戳类型。"""
+    suffix: str
+    """自定义戳一戳内容。"""
+
 ###############################
 # Command Event
 
@@ -858,7 +873,6 @@ class GroupMessage(MessageEvent):
     """发送消息的群成员。"""
     message_chain: MessageChain
     """消息内容。"""
-
     @property
     def group(self) -> Group:
         return self.sender.group
@@ -961,6 +975,7 @@ __all__ = [
     'MemberUnmuteEvent',
     'MessageEvent',
     'NewFriendRequestEvent',
+    'NudgeEvent',
     'OtherClientMessage',
     'RequestEvent',
     'StrangerMessage',

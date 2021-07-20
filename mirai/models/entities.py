@@ -7,7 +7,10 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional
 
-from pydantic import Field
+try:
+    from typing import Literal
+except ImportError:
+    from typing_extensions import Literal
 
 from mirai.models.base import MiraiBaseModel
 
@@ -90,6 +93,14 @@ class Sender(Entity):
     """来源平台。"""
     def get_avatar_url(self) -> str:
         return f'http://q4.qlogo.cn/g?b=qq&nk={self.id}&s=140'
+
+
+class Subject(MiraiBaseModel):
+    """另一种实体类型表示。"""
+    id: int
+    """QQ 号或群号。"""
+    kind: Literal['Friend', 'Group', 'Stranger']
+    """类型。"""
 
 
 class Config(MiraiBaseModel):

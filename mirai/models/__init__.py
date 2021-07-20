@@ -25,7 +25,7 @@ from mirai.models.events import (
     MemberHonorChangeEvent, MemberJoinEvent, MemberJoinRequestEvent,
     MemberLeaveEventKick, MemberLeaveEventQuit, MemberMuteEvent,
     MemberPermissionChangeEvent, MemberSpecialTitleChangeEvent,
-    MemberUnmuteEvent, MessageEvent, NewFriendRequestEvent, OtherClientMessage,
+    MemberUnmuteEvent, MessageEvent, NewFriendRequestEvent, NudgeEvent, OtherClientMessage,
     RequestEvent, StrangerMessage, TempMessage
 )
 from mirai.models.message import (
@@ -82,6 +82,7 @@ __all__ = [
     'MemberSpecialTitleChangeEvent',
     'MemberUnmuteEvent',
     'MessageEvent',
+    'NudgeEvent',
     'NewFriendRequestEvent',
     'OtherClientMessage',
     'RequestEvent',

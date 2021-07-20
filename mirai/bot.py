@@ -5,7 +5,7 @@
 import asyncio
 import logging
 from re import I
-from mirai.models.entities import Entity, Friend, Group, GroupMember, Permission
+from mirai.models.entities import Entity, Friend, Group, GroupMember, Permission, Subject
 import sys
 import contextlib
 from typing import Callable, List, Optional, Type, Union
@@ -376,6 +376,16 @@ class Mirai(SimpleMirai):
         for member in await self.member_list(group):
             if member.id == id:
                 return member
+
+    async def get_entity(self, subject: Subject) -> Optional[Entity]:
+        """获取实体对象。
+
+        `subject: Subject` 实体对象。
+        """
+        if subject.kind == 'Friend':
+            return await self.get_friend(subject.id)
+        elif subject.kind == 'Group':
+            return await self.get_group(subject.id)
 
     async def is_admin(self, group: Group) -> bool:
         """判断机器人在群组中是否是管理员。
