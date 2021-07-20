@@ -75,7 +75,7 @@ class Adapter(ApiProvider, AdapterInterface):
     """从 mirai-api-http 处获得的 session。"""
     buses: Set[EventBus]
     """注册的事件总线集合。"""
-    background: asyncio.Task
+    background: Optional[asyncio.Task]
     """背景事件循环任务。"""
     def __init__(self, verify_key: Optional[str], single_mode: bool = False):
         """
@@ -85,6 +85,7 @@ class Adapter(ApiProvider, AdapterInterface):
         self.single_mode = single_mode
         self.session = ''
         self.buses = set()
+        self.background = None
 
     @property
     def adapter_info(self):

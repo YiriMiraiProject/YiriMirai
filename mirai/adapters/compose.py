@@ -32,10 +32,18 @@ class ComposeAdapter(Adapter):
 
         event_channel.buses = self.buses
 
+        self.verify_key = api_channel.verify_key
+        self.single_mode = api_channel.single_mode
+
+    @property
+    def adapter_info(self):
+        return self.api_channel.adapter_info
+
     async def login(self, qq: int):
         await self.api_channel.login(qq)
         # 绑定 session
         self.event_channel.session = self.api_channel.session
+        self.session = self.api_channel.session
         await self.event_channel.login(qq)
 
     async def logout(self):
@@ -47,7 +55,3 @@ class ComposeAdapter(Adapter):
 
     async def _background(self):
         await self.event_channel._background()
-
-    @property
-    def asgi(self):
-        return self.event_channel.asgi
