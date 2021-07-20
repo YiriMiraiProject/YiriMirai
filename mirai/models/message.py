@@ -13,9 +13,12 @@ from typing import List, Optional, Union
 
 import aiofiles
 import httpx
-from mirai.models.base import MiraiBaseModel, MiraiIndexedMetaclass, MiraiIndexedModel
-from mirai.utils import KMP
 from pydantic import Field, HttpUrl, validator
+
+from mirai.models.base import (
+    MiraiBaseModel, MiraiIndexedMetaclass, MiraiIndexedModel
+)
+from mirai.utils import KMP
 
 logger = logging.getLogger(__name__)
 
@@ -56,6 +59,8 @@ class MessageComponentMetaclass(MiraiIndexedMetaclass):
                     new_cls.__parameter_names__ = list(
                         new_cls.__annotations__
                     )[1:]
+                else:
+                    new_cls.__parameter_names__ = []
                 break
 
         return new_cls

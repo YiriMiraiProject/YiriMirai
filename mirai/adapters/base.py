@@ -159,3 +159,8 @@ class Adapter(ApiProvider, AdapterInterface):
         """停止背景事件循环。"""
         if self.background:
             self.background.cancel()
+
+    async def emit(self, event: str, *args, **kwargs):
+        """向事件总线发送一个事件。"""
+        coros = [bus.emit(event, *args, **kwargs) for bus in self.buses]
+        await asyncio.gather(*coros)

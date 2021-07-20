@@ -3,21 +3,27 @@
 此模块定义机器人类，包含处于 model 层之下的 `SimpleMirai` 和建立在 model 层上的 `Mirai`。
 """
 import asyncio
-import logging
-from re import I
-from mirai.models.entities import Entity, Friend, Group, GroupMember, Permission, Subject
-import sys
 import contextlib
+import logging
+import sys
+from re import I
 from typing import Callable, List, Optional, Type, Union
 
-from mirai.adapters.base import Adapter, ApiProvider, AdapterInterface
+from mirai.adapters.base import Adapter, AdapterInterface, ApiProvider
 from mirai.asgi import ASGI, asgi_serve
 from mirai.bus import EventBus
 from mirai.models.api import ApiModel, MessageResponse
 from mirai.models.bus import ModelEventBus
-from mirai.models.events import Event, FriendMessage, MessageEvent, TempMessage
+from mirai.models.entities import (
+    Entity, Friend, Group, GroupMember, Permission, Subject
+)
+from mirai.models.events import Event, MessageEvent, TempMessage
 from mirai.models.message import MessageChain, MessageComponent
-from mirai.utils import Singleton, async_, async_call_with_exception
+from mirai.utils import Singleton, async_
+
+__all__ = [
+    'Mirai', 'SimpleMirai', 'MiraiRunner', 'LifeSpan', 'Startup', 'Shutdown'
+]
 
 
 class SimpleMirai(ApiProvider, AdapterInterface):
@@ -32,7 +38,7 @@ class SimpleMirai(ApiProvider, AdapterInterface):
     例如：
     ```py
     await bot.sendFriendMessage(target=12345678, messageChain=[
-        {"type":"Plain", "text":"Hello World!"}
+        {"type": "Plain", "text": "Hello World!"}
     ], method="POST")
     ```
 
@@ -45,7 +51,7 @@ class SimpleMirai(ApiProvider, AdapterInterface):
     """
     def __init__(self, qq: int, adapter: Adapter):
         """
-        `qq: int` QQ 号。
+        `qq: int` QQ 号。启用 Single Mode 时，可以随便传入，登陆后会自动获取正确的 QQ 号。
 
         `adapter: Adapter` 适配器，负责与 mirai-api-http 沟通，详见模块`mirai.adapters`。
 
@@ -56,8 +62,6 @@ class SimpleMirai(ApiProvider, AdapterInterface):
         self._adapter = adapter
         self._bus = EventBus()
         self._adapter.register_event_bus(self._bus)
-
-        self.setup_functions = []
 
         self.logger = logging.getLogger(__name__)
 
@@ -86,11 +90,6 @@ class SimpleMirai(ApiProvider, AdapterInterface):
         """
         return self._bus.on(event, priority=priority)
 
-    def setup(self, func: Callable) -> Callable:
-        """注册机器人初始化处理器。"""
-        self.setup_functions.append(func)
-        return func
-
     @property
     def adapter_info(self):
         return self._adapter.adapter_info
@@ -118,9 +117,11 @@ class SimpleMirai(ApiProvider, AdapterInterface):
         """开始运行机器人（立即返回）。"""
         await self._adapter.login(self.qq)
 
-        for func in self.setup_functions:
-            await async_call_with_exception(func)
+        if self._adapter.single_mode:
+            # Single Mode 下，QQ 号可以随便传入。这里从 session info 中获取正确的 QQ 号。
+            self.qq = (await self.session_info.get()).qq
 
+        await self._adapter.emit("Startup", {'type': 'Startup'})
         self._adapter.start()
 
     async def background(self):
@@ -130,6 +131,7 @@ class SimpleMirai(ApiProvider, AdapterInterface):
     async def shutdown(self):
         """结束运行机器人。"""
         await self._adapter.logout()
+        await self._adapter.emit("Shutdown", {'type': 'Shutdown'})
         self._adapter.shutdown()
 
     @property
@@ -393,3 +395,21 @@ class Mirai(SimpleMirai):
         `group: Group` 群组对象。
         """
         return group.permission in (Permission.Administrator, Permission.Owner)
+
+
+class LifeSpan(Event):
+    """生命周期事件。"""
+    type: str = 'LifeSpan'
+    """事件名。"""
+
+
+class Startup(LifeSpan):
+    """启动事件。"""
+    type: str = 'Startup'
+    """事件名。"""
+
+
+class Shutdown(LifeSpan):
+    """关闭事件。"""
+    type: str = 'Shutdown'
+    """事件名。"""

@@ -786,6 +786,7 @@ class NudgeEvent(Event):
     suffix: str
     """自定义戳一戳内容。"""
 
+
 ###############################
 # Command Event
 

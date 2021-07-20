@@ -13,6 +13,8 @@ try:
 except ImportError:
     from typing_extensions import Literal
 
+from pydantic import Field, validator
+
 from mirai.api_provider import ApiProvider, Method
 from mirai.models.base import (
     MiraiBaseModel, MiraiIndexedMetaclass, MiraiIndexedModel
@@ -26,7 +28,6 @@ from mirai.models.events import (
 )
 from mirai.models.message import Image, MessageChain, Voice
 from mirai.utils import async_
-from pydantic import Field, validator
 
 
 class Response(MiraiBaseModel):
@@ -40,6 +41,28 @@ class Response(MiraiBaseModel):
 class AboutResponse(Response):
     """插件信息。"""
     data: dict
+
+
+class SessionInfoResponse(Response):
+    """机器人信息。"""
+    data: 'SessionInfoResponse.Data'
+
+    class Data(MiraiBaseModel):
+        session_key: str = 'SINGLE_SESSION'
+        """session_key，不知道干啥用的。"""
+        qq: Friend
+        """机器人信息。"""
+
+    @property
+    def qq(self):
+        return self.data.qq.id
+
+    @property
+    def nickname(self):
+        return self.data.qq.nickname
+
+
+SessionInfoResponse.update_forward_refs()
 
 
 class MessageFromIdResponse(Response):
@@ -166,6 +189,8 @@ class ApiMetaclass(MiraiIndexedMetaclass):
                 # 获取 API 参数名
                 if hasattr(new_cls, '__annotations__'):
                     info.parameter_names = list(new_cls.__annotations__)
+                else:
+                    info.parameter_names = []
                 break
 
         return new_cls
@@ -384,6 +409,14 @@ class About(ApiGet):
         name = "about"
         alias = "about"
         response_type = AboutResponse
+
+
+class SessionInfo(ApiGet):
+    """获取机器人信息。"""
+    class Info(ApiGet.Info):
+        name = "sessionInfo"
+        alias = "session_info"
+        response_type = SessionInfoResponse
 
 
 class MessageFromId(ApiGet):

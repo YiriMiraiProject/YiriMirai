@@ -143,8 +143,7 @@ class WebHookAdapter(Adapter):
 
     async def handle_event(self, event):
         try:
-            for bus in self.buses:
-                await bus.emit(event['type'], event)
+            await self.emit(event['type'], event)
         except WebHookAdapter.QuickResponse as response:
             # 快速响应，直接返回。
             return response.data

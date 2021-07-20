@@ -12,7 +12,9 @@ from typing import Optional
 import websockets
 
 from mirai import exceptions
-from mirai.adapters.base import Adapter, AdapterInterface, error_handler_async, json_dumps
+from mirai.adapters.base import (
+    Adapter, AdapterInterface, error_handler_async, json_dumps
+)
 from mirai.api_provider import Method
 from mirai.tasks import Tasks
 
@@ -193,8 +195,7 @@ class WebSocketAdapter(Adapter):
         """获取并处理事件。"""
         event = await self._recv(self.sync_id)
 
-        for bus in self.buses:
-            self._tasks.create_task(bus.emit(event['type'], event))
+        self._tasks.create_task(self.emit(event['type'], event))
 
     async def call_api(self, api: str, method: Method = Method.GET, **params):
         self._local_sync_id += 1 # 使用不同的 sync_id

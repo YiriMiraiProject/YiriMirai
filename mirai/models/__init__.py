@@ -25,8 +25,8 @@ from mirai.models.events import (
     MemberHonorChangeEvent, MemberJoinEvent, MemberJoinRequestEvent,
     MemberLeaveEventKick, MemberLeaveEventQuit, MemberMuteEvent,
     MemberPermissionChangeEvent, MemberSpecialTitleChangeEvent,
-    MemberUnmuteEvent, MessageEvent, NewFriendRequestEvent, NudgeEvent, OtherClientMessage,
-    RequestEvent, StrangerMessage, TempMessage
+    MemberUnmuteEvent, MessageEvent, NewFriendRequestEvent, NudgeEvent,
+    OtherClientMessage, RequestEvent, StrangerMessage, TempMessage
 )
 from mirai.models.message import (
     App, At, AtAll, Dice, Face, File, FlashImage, Forward, ForwardMessageNode,

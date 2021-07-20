@@ -14,21 +14,24 @@ from mirai.adapters import (
     Adapter, ComposeAdapter, HTTPAdapter, WebHookAdapter, WebSocketAdapter
 )
 from mirai.api_provider import Method
-from mirai.bot import Mirai, MiraiRunner, SimpleMirai
+from mirai.bot import (
+    LifeSpan, Mirai, MiraiRunner, Shutdown, SimpleMirai, Startup
+)
 from mirai.bus import EventBus
 from mirai.colorlog import ColoredFormatter
 from mirai.models import (
-    At, AtAll, Dice, Event, Face, FriendMessage, GroupMessage, MessageChain,
-    MessageEvent, Plain, Poke, StrangerMessage, TempMessage, deserialize,
-    serialize
+    At, AtAll, Dice, Event, Face, FriendMessage, GroupMessage, Image,
+    MessageChain, MessageEvent, Plain, Poke, StrangerMessage, TempMessage,
+    Voice, deserialize, serialize
 )
 
 __all__ = [
-    'Mirai', 'SimpleMirai', 'MiraiRunner', 'Adapter', 'Method', 'HTTPAdapter',
-    'WebSocketAdapter', 'WebHookAdapter', 'ComposeAdapter', 'EventBus',
-    'get_logger', 'Event', 'MessageEvent', 'FriendMessage', 'GroupMessage',
-    'TempMessage', 'StrangerMessage', 'MessageChain', 'Plain', 'At', 'AtAll',
-    'Dice', 'Face', 'Poke', 'serialize', 'deserialize'
+    'Mirai', 'SimpleMirai', 'MiraiRunner', 'LifeSpan', 'Startup', 'Shutdown',
+    'Adapter', 'Method', 'HTTPAdapter', 'WebSocketAdapter', 'WebHookAdapter',
+    'ComposeAdapter', 'EventBus', 'get_logger', 'Event', 'MessageEvent',
+    'FriendMessage', 'GroupMessage', 'TempMessage', 'StrangerMessage',
+    'MessageChain', 'Plain', 'At', 'AtAll', 'Dice', 'Face', 'Poke', 'Image',
+    'Voice', 'serialize', 'deserialize'
 ]
 
 logger = logging.getLogger(__name__)

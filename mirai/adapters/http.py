@@ -10,7 +10,9 @@ from typing import Optional
 import httpx
 
 from mirai import exceptions
-from mirai.adapters.base import Adapter, AdapterInterface, error_handler_async, json_dumps
+from mirai.adapters.base import (
+    Adapter, AdapterInterface, error_handler_async, json_dumps
+)
 from mirai.api_provider import Method
 from mirai.tasks import Tasks
 
@@ -171,7 +173,7 @@ class HTTPAdapter(Adapter):
 
     @_error_handler_async_local
     async def logout(self, terminate: bool = True):
-        if self.session:
+        if self.session and not self.single_mode:
             if terminate:
                 async with httpx.AsyncClient(
                     base_url=self.host_name, headers=self.headers
@@ -182,7 +184,7 @@ class HTTPAdapter(Adapter):
                             "qq": self.qq,
                         }
                     )
-            logger.info(f"[HTTP] 从账号{self.qq}退出。")
+        logger.info(f"[HTTP] 从账号{self.qq}退出。")
 
     async def poll_event(self):
         """进行一次轮询，获取并处理事件。"""
@@ -196,10 +198,7 @@ class HTTPAdapter(Adapter):
                     self._get(client, '/fetchMessage', {'count': msg_count})
                 )['data']
 
-                coros = []
-                for bus in self.buses:
-                    for msg in msg_list:
-                        coros.append(bus.emit(msg['type'], msg))
+                coros = [self.emit(msg['type'], msg) for msg in msg_list]
                 await asyncio.gather(*coros)
 
     async def call_api(self, api: str, method: Method = Method.GET, **params):
