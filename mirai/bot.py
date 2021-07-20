@@ -4,16 +4,19 @@
 """
 import asyncio
 import logging
+from re import I
+from mirai.models.entities import Entity, Friend, Group, GroupMember, Permission
 import sys
 import contextlib
-from typing import Callable, List, Type, Union
+from typing import Callable, List, Optional, Type, Union
 
 from mirai.adapters.base import Adapter, ApiProvider, AdapterInterface
 from mirai.asgi import ASGI, asgi_serve
 from mirai.bus import EventBus
-from mirai.models.api import ApiModel
+from mirai.models.api import ApiModel, MessageResponse
 from mirai.models.bus import ModelEventBus
-from mirai.models.events import Event
+from mirai.models.events import Event, FriendMessage, MessageEvent, TempMessage
+from mirai.models.message import MessageChain, MessageComponent
 from mirai.utils import Singleton, async_, async_call_with_exception
 
 
@@ -294,3 +297,89 @@ class Mirai(SimpleMirai):
 
     def __getattr__(self, api: str) -> ApiModel.Proxy:
         return self.api(api)
+
+    async def send(
+        self,
+        target: Union[Entity, MessageEvent],
+        message: Union[MessageChain, List[Union[MessageComponent, str]], str],
+        quote: bool = False
+    ) -> MessageResponse:
+        """发送消息。可以从 `Friend` `Group` 等对象，或者从 `MessageEvent` 中自动识别消息发送对象。
+
+        `target: Union[Entity, MessageEvent]` 目标对象。
+
+        `message: Union[MessageChain, List[Union[MessageComponent, str]], str]` 发送的消息。
+
+        `quote: bool = False` 是否以回复消息的形式发送。
+        """
+        # 构造消息链
+        if isinstance(message, str):
+            message = [message]
+        # 识别消息发送对象
+        if isinstance(target, TempMessage):
+            quote = target.message_chain.message_id if quote else None
+            return await self.send_temp_message(
+                qq=target.sender.id,
+                group=target.group.id,
+                message_chain=message,
+                quote=quote
+            )
+        else:
+            if isinstance(target, MessageEvent):
+                quote = target.message_chain.message_id if quote else None
+                target = target.sender
+            else:
+                quote = None
+
+            if isinstance(target, Friend):
+                send_message = self.send_friend_message
+                id = target.id
+            elif isinstance(target, Group):
+                send_message = self.send_group_message
+                id = target.id
+            elif isinstance(target, GroupMember):
+                send_message = self.send_group_message
+                id = target.group.id
+
+            return await send_message(
+                target=id, message_chain=message, quote=quote
+            )
+
+    async def get_friend(self, id: int) -> Optional[Friend]:
+        """获取好友对象。
+
+        `id: int` 好友 ID。
+        """
+        for friend in await self.friend_list.get():
+            if friend.id == id:
+                return friend
+
+    async def get_group(self, id: int) -> Optional[Group]:
+        """获取群组对象。
+
+        `id: int` 群组 ID。
+        """
+        for group in await self.group_list.get():
+            if group.id == id:
+                return group
+
+    async def get_group_member(self, group: Union[Group, int],
+                               id: int) -> Optional[GroupMember]:
+        """获取群成员对象。
+
+        `group: Union[Group, int]` 群组对象或群组 ID。
+
+        `id: int` 群成员 ID。
+        """
+        if isinstance(group, Group):
+            group = group.id
+        for member in await self.member_list(group):
+            if member.id == id:
+                return member
+
+    async def is_admin(self, group: Group) -> bool:
+        """判断机器人在群组中是否是管理员。
+
+        `group: Group` 群组对象。
+        """
+        return group.permission in (Permission.Administrator, Permission.Owner)

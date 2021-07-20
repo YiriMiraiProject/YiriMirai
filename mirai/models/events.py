@@ -14,7 +14,7 @@ from pydantic import Field
 
 from mirai.models.base import MiraiIndexedModel
 from mirai.models.entities import (
-    Friend, Group, GroupMember, Permission, Sender
+    Entity, Friend, Group, GroupMember, Permission, Sender
 )
 from mirai.models.message import MessageChain
 
@@ -820,6 +820,8 @@ class MessageEvent(Event):
     """
     type: str
     """事件名。"""
+    sender: Entity
+    """发送消息的来源。"""
     message_chain: MessageChain
     """消息内容。"""
 
@@ -856,7 +858,6 @@ class GroupMessage(MessageEvent):
     """发送消息的群成员。"""
     message_chain: MessageChain
     """消息内容。"""
-
     @property
     def group(self) -> Group:
         return self.sender.group
@@ -877,6 +878,9 @@ class TempMessage(MessageEvent):
     """发送消息的群成员。"""
     message_chain: MessageChain
     """消息内容。"""
+    @property
+    def group(self) -> Group:
+        return self.sender.group
 
 
 class StrangerMessage(MessageEvent):
