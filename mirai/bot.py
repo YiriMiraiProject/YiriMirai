@@ -6,7 +6,6 @@ import asyncio
 import contextlib
 import logging
 import sys
-from re import I
 from typing import Callable, List, Optional, Type, Union
 
 from mirai.adapters.base import Adapter, AdapterInterface, ApiProvider

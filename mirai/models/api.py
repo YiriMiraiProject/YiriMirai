@@ -139,7 +139,7 @@ class File(MiraiBaseModel):
     """群信息或好友信息。"""
     is_file: bool
     """是否是文件。"""
-    is_dictionary: bool
+    is_directory: bool
     """是否是文件夹。"""
 
 
@@ -595,7 +595,7 @@ class FileMkdir(ApiPost):
     """父目录 id。"""
     target: int
     """群号或好友 QQ 号。"""
-    dictionary_name: str
+    directory_name: str
     """新建文件夹名。"""
     class Info(ApiPost.Info):
         name = "file/mkdir"
