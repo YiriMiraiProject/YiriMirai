@@ -181,7 +181,7 @@ class WebSocketAdapter(Adapter):
         logger.info(f'[WebSocket] 成功登录到账号{qq}。')
 
     @_error_handler_async_local
-    async def logout(self):
+    async def logout(self, terminate: bool = True):
         if self.connection:
             await self.connection.close()
 

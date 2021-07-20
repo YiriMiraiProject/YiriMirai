@@ -117,7 +117,7 @@ class WebHookAdapter(Adapter):
         self.session = str(qq)
         logger.info(f'[WebHook] 成功登录到账号{qq}。')
 
-    async def logout(self):
+    async def logout(self, terminate: bool = True):
         """WebHook 不需要登出。直接返回。"""
         logger.info(f"[WebHook] 从账号{self.session}退出。")
 

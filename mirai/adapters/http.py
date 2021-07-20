@@ -170,18 +170,19 @@ class HTTPAdapter(Adapter):
             logger.info(f'[HTTP] 成功登录到账号{qq}。')
 
     @_error_handler_async_local
-    async def logout(self):
+    async def logout(self, terminate: bool = True):
         if self.session:
-            async with httpx.AsyncClient(
-                base_url=self.host_name, headers=self.headers
-            ) as client:
-                await self._post(
-                    client, '/release', {
-                        "sessionKey": self.session,
-                        "qq": self.qq,
-                    }
-                )
-                logger.info(f"[HTTP] 从账号{self.qq}退出。")
+            if terminate:
+                async with httpx.AsyncClient(
+                    base_url=self.host_name, headers=self.headers
+                ) as client:
+                    await self._post(
+                        client, '/release', {
+                            "sessionKey": self.session,
+                            "qq": self.qq,
+                        }
+                    )
+            logger.info(f"[HTTP] 从账号{self.qq}退出。")
 
     async def poll_event(self):
         """进行一次轮询，获取并处理事件。"""

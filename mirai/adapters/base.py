@@ -127,7 +127,7 @@ class Adapter(ApiProvider, AdapterInterface):
         """登录到 mirai-api-http。"""
 
     @abc.abstractmethod
-    async def logout(self):
+    async def logout(self, terminate: bool = True):
         """登出。"""
 
     @abc.abstractmethod
