@@ -13,7 +13,7 @@ from typing import List, Optional, Union
 
 import aiofiles
 import httpx
-from pydantic import Field, HttpUrl, validator
+from pydantic import HttpUrl, validator
 
 from mirai.models.base import (
     MiraiBaseModel, MiraiIndexedMetaclass, MiraiIndexedModel
@@ -28,7 +28,8 @@ def serialize(s: str) -> str:
 
     `s: str` 待转义的字符串。
     """
-    return re.sub(r'[\[\]:,\\\n\r]', lambda match: '\\' + match.group(0), s)
+    return re.sub(r'[\[\]:,\\]', lambda match: '\\' + match.group(0),
+                  s).replace('\n', '\\n').replace('\r', '\\r')
 
 
 def deserialize(s: str) -> str:
@@ -36,7 +37,10 @@ def deserialize(s: str) -> str:
 
     `s: str` 待去转义的字符串。
     """
-    return re.sub(r'\\([\[\]:,\\nr])', lambda match: match.group(1), s)
+    return re.sub(
+        r'\\([\[\]:,\\])', lambda match: match.group(1),
+        s.replace('\\n', '\n').replace('\\r', '\r')
+    )
 
 
 class MessageComponentMetaclass(MiraiIndexedMetaclass):
@@ -313,11 +317,11 @@ class Quote(MessageComponent):
     """消息组件类型。"""
     id: Optional[int]
     """被引用回复的原消息的 message_id。"""
-    group_id: Optional[int] = Field(alias='groupId')
+    group_id: Optional[int]
     """被引用回复的原消息所接收的群号，当为好友消息时为0。"""
-    sender_id: Optional[int] = Field(alias='senderId')
+    sender_id: Optional[int]
     """被引用回复的原消息的发送者的QQ号。"""
-    target_id: Optional[int] = Field(alias='targetId')
+    target_id: Optional[int]
     """被引用回复的原消息的接收者者的QQ号（或群号）。"""
     origin: MessageChain
     """被引用回复的原消息的消息链对象。"""
