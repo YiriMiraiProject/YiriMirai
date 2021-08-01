@@ -378,7 +378,7 @@ class Image(MessageComponent):
     url: Optional[HttpUrl] = None
     """图片的 URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载。"""
     path: Optional[str] = None
-    """图片的路径，发送本地图片，路径相对于 mirai-console 的目录，也可传入绝对路径。"""
+    """图片的路径，发送本地图片。"""
     base64: Optional[str] = None
     """图片的 Base64 编码。"""
     def __eq__(self, other):
@@ -388,6 +388,17 @@ class Image(MessageComponent):
 
     def __str__(self):
         return f"[mirai:image:{self.image_id}]"
+
+    @validator('path')
+    def validate_path(cls, path: Optional[str]):
+        """修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。"""
+        if path:
+            try:
+                return str(Path(path).resolve(strict=True))
+            except FileNotFoundError:
+                raise ValueError(f"无效路径：{path}")
+        else:
+            return path
 
     @property
     def uuid(self):
@@ -593,9 +604,20 @@ class Voice(MessageComponent):
     url: Optional[str] = None
     """语音的 URL，发送时可作网络语音的链接；接收时为腾讯语音服务器的链接，可用于语音下载。"""
     path: Optional[str] = None
-    """语音的路径，发送本地语音，路径相对于 `plugins/MiraiAPIHTTP/voices`。"""
+    """语音的路径，发送本地语音。"""
     base64: Optional[str] = None
     """语音的 Base64 编码。"""
+    @validator('path')
+    def validate_path(cls, path: Optional[str]):
+        """修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。"""
+        if path:
+            try:
+                return str(Path(path).resolve(strict=True))
+            except FileNotFoundError:
+                raise ValueError(f"无效路径：{path}")
+        else:
+            return path
+
     async def download(self, filename=None, directory=None):
         """下载语音到本地。
 
