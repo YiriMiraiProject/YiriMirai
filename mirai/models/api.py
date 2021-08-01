@@ -647,7 +647,7 @@ class FileRename(ApiPost):
 
 
 class FileUpload(ApiPost):
-    """文件上传。"""
+    """文件上传。（暂时不可用）"""
     type: Literal["group"]
     """上传的文件类型。"""
     target: int
