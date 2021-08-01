@@ -77,6 +77,14 @@ class MessageComponent(MiraiIndexedModel, metaclass=MessageComponentMetaclass):
     def __str__(self):
         return ''
 
+    def repr(self):
+        return self.__class__.__name__ + '(' + ', '.join(
+            (
+                f'{k}={repr(v)}'
+                for k, v in self.__dict__.items() if k != 'type' and v
+            )
+        ) + ')'
+
     def __init__(self, *args, **kwargs):
         # 解析参数列表，将位置参数转化为具名参数
         parameter_names = self.__parameter_names__
@@ -230,6 +238,9 @@ class MessageChain(MiraiBaseModel):
     def __str__(self):
         return "".join((str(component) for component in self.__root__))
 
+    def __repr__(self):
+        return f'{self.__class__.__name__}({self.__root__!r})'
+
     def __iter__(self):
         yield from self.__root__
 
@@ -310,18 +321,21 @@ class Plain(MessageComponent):
     def __str__(self):
         return serialize(self.text)
 
+    def __repr__(self):
+        return f'{self.__class__.__name__}({self.text!r})'
+
 
 class Quote(MessageComponent):
     """引用。"""
     type: str = "Quote"
     """消息组件类型。"""
-    id: Optional[int]
+    id: Optional[int] = None
     """被引用回复的原消息的 message_id。"""
-    group_id: Optional[int]
+    group_id: Optional[int] = None
     """被引用回复的原消息所接收的群号，当为好友消息时为0。"""
-    sender_id: Optional[int]
+    sender_id: Optional[int] = None
     """被引用回复的原消息的发送者的QQ号。"""
-    target_id: Optional[int]
+    target_id: Optional[int] = None
     """被引用回复的原消息的接收者者的QQ号（或群号）。"""
     origin: MessageChain
     """被引用回复的原消息的消息链对象。"""
@@ -358,9 +372,9 @@ class Face(MessageComponent):
     """表情。"""
     type: str = "Face"
     """消息组件类型。"""
-    face_id: Optional[int]
+    face_id: Optional[int] = None
     """QQ 表情编号，可选，优先度高于 name。"""
-    name: Optional[str]
+    name: Optional[str] = None
     """QQ表情拼音，可选。"""
     def __eq__(self, other):
         return isinstance(other, Face) and self.face_id == other.face_id
@@ -373,7 +387,7 @@ class Image(MessageComponent):
     """图片。"""
     type: str = "Image"
     """消息组件类型。"""
-    image_id: Optional[str]
+    image_id: Optional[str] = None
     """图片的 image_id，群图片与好友图片格式不同。不为空时将忽略 url 属性。"""
     url: Optional[HttpUrl] = None
     """图片的 URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载。"""
@@ -584,7 +598,7 @@ class FlashImage(Image):
     """闪照。"""
     type: str = "FlashImage"
     """消息组件类型。"""
-    image_id: Optional[str]
+    image_id: Optional[str] = None
     """图片的 image_id，群图片与好友图片格式不同。不为空时将忽略 url 属性。"""
     url: Optional[HttpUrl] = None
     """图片的 URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载。"""
