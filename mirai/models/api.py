@@ -2,9 +2,10 @@
 """
 此模块提供 API 调用与返回数据解析相关。
 """
+import logging
 from enum import Enum, Flag
 from pathlib import Path
-from typing import List, Optional, Type, Union
+from typing import Any, List, Optional, Type, Union
 
 import aiofiles
 
@@ -29,6 +30,8 @@ from mirai.models.events import (
 from mirai.models.message import Image, MessageChain, Voice
 from mirai.utils import async_
 
+logger = logging.getLogger(__name__)
+
 
 class Response(MiraiBaseModel):
     """响应对象。"""
@@ -36,6 +39,16 @@ class Response(MiraiBaseModel):
     """状态码。"""
     msg: str
     """消息。"""
+    data: Optional[Any] = None
+    """返回数据。"""
+    def __getattr__(self, item):
+        return getattr(self.data, item)
+
+    def __iter__(self):
+        return iter(self.data)
+
+    def __getitem__(self, item):
+        return self.data[item]
 
 
 class AboutResponse(Response):
@@ -295,6 +308,7 @@ class ApiModel(ApiBaseModel):
 
             api = self.api_type(*args, **kwargs)
             info = self.api_type.Info
+            logger.debug(f'调用 API：{repr(api)}')
             if hasattr(api, 'call'):
                 raw_response = await api.call(self.api_provider)
             else:
@@ -424,7 +438,7 @@ class SessionInfo(ApiGet):
 
 class MessageFromId(ApiGet):
     """通过 message_id 获取消息。"""
-    target: int
+    id: int
     """获取消息的 message_id。"""
     class Info(ApiGet.Info):
         name = "messageFromId"

@@ -43,7 +43,6 @@ class Permission(str, Enum):
     """管理员。"""
     Owner = "OWNER"
     """群主。"""
-
     def __repr__(self) -> str:
         return repr(self.value)
 

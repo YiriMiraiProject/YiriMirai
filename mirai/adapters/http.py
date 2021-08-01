@@ -119,7 +119,10 @@ class HTTPAdapter(Adapter):
         # 使用自定义的 json.dumps
         content = json_dumps(json).encode('utf-8')
         response = await client.post(
-            url, content=content, headers={'Content-Type': 'application/json'}
+            url,
+            content=content,
+            headers={'Content-Type': 'application/json'},
+            timeout=10.
         )
         logger.debug(f'[HTTP] 发送 POST 请求，地址{url}，状态 {response.status_code}。')
         return _parse_response(response)
@@ -129,7 +132,7 @@ class HTTPAdapter(Adapter):
         self, client: httpx.AsyncClient, url: str, params: dict
     ) -> dict:
         """调用 GET 方法。"""
-        response = await client.get(url, params=params)
+        response = await client.get(url, params=params, timeout=10.)
         logger.debug(f'[HTTP] 发送 GET 请求，地址{url}，状态 {response.status_code}。')
         return _parse_response(response)
 
@@ -138,7 +141,7 @@ class HTTPAdapter(Adapter):
         self, client: httpx.AsyncClient, url: str, data: dict, files: dict
     ) -> dict:
         """调用 POST 方法，发送 multipart 数据。"""
-        response = await client.post(url, data=data, files=files)
+        response = await client.post(url, data=data, files=files, timeout=30.)
         logger.debug(f'[HTTP] 发送 POST 请求，地址{url}，状态 {response.status_code}。')
         return _parse_response(response)
 

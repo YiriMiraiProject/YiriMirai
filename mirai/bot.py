@@ -134,6 +134,11 @@ class SimpleMirai(ApiProvider, AdapterInterface):
         self._adapter.shutdown()
 
     @property
+    def session(self):
+        """获取 session key，可用于调试。"""
+        return self._adapter.session
+
+    @property
     def asgi(self):
         return MiraiRunner(self)
 
@@ -304,7 +309,7 @@ class Mirai(SimpleMirai):
         target: Union[Entity, MessageEvent],
         message: Union[MessageChain, List[Union[MessageComponent, str]], str],
         quote: bool = False
-    ) -> MessageResponse:
+    ) -> int:
         """发送消息。可以从 `Friend` `Group` 等对象，或者从 `MessageEvent` 中自动识别消息发送对象。
 
         `target: Union[Entity, MessageEvent]` 目标对象。
@@ -319,12 +324,14 @@ class Mirai(SimpleMirai):
         # 识别消息发送对象
         if isinstance(target, TempMessage):
             quote = target.message_chain.message_id if quote else None
-            return await self.send_temp_message(
-                qq=target.sender.id,
-                group=target.group.id,
-                message_chain=message,
-                quote=quote
-            )
+            return (
+                await self.send_temp_message(
+                    qq=target.sender.id,
+                    group=target.group.id,
+                    message_chain=message,
+                    quote=quote
+                )
+            ).message_id
         else:
             if isinstance(target, MessageEvent):
                 quote = target.message_chain.message_id if quote else None
@@ -342,9 +349,10 @@ class Mirai(SimpleMirai):
                 send_message = self.send_group_message
                 id = target.group.id
 
-            return await send_message(
-                target=id, message_chain=message, quote=quote
-            )
+            return (
+                await
+                send_message(target=id, message_chain=message, quote=quote)
+            ).message_id
 
     async def get_friend(self, id: int) -> Optional[Friend]:
         """获取好友对象。
