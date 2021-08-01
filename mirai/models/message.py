@@ -437,6 +437,10 @@ class Image(MessageComponent):
 
         `determine_type: bool = True` 是否自动根据图片类型确定拓展名。
         """
+        if not self.url:
+            logger.warning(f'图片 `{self.uuid}` 无 url 参数，下载失败。')
+            return
+
         async with httpx.AsyncClient() as client:
             response = await client.get(self.url)
             response.raise_for_status()
@@ -627,6 +631,10 @@ class Voice(MessageComponent):
 
         `directory = None` 下载到本地的文件夹路径。与 `filename` 二选一。
         """
+        if not self.url:
+            logger.warning(f'语音 `{self.voice_id}` 无 url 参数，下载失败。')
+            return
+
         async with httpx.AsyncClient() as client:
             response = await client.get(self.url)
             response.raise_for_status()

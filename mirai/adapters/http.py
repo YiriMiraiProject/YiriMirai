@@ -112,37 +112,55 @@ class HTTPAdapter(Adapter):
         return adapter
 
     @_error_handler_async_local
-    async def _post(
-        self, client: httpx.AsyncClient, url: str, json: dict
-    ) -> dict:
+    async def _post(self, client: httpx.AsyncClient, url: str,
+                    json: dict) -> Optional[dict]:
         """调用 POST 方法。"""
         # 使用自定义的 json.dumps
         content = json_dumps(json).encode('utf-8')
-        response = await client.post(
-            url,
-            content=content,
-            headers={'Content-Type': 'application/json'},
-            timeout=10.
-        )
-        logger.debug(f'[HTTP] 发送 POST 请求，地址{url}，状态 {response.status_code}。')
+        try:
+            response = await client.post(
+                url,
+                content=content,
+                headers={'Content-Type': 'application/json'},
+                timeout=10.
+            )
+            logger.debug(
+                f'[HTTP] 发送 POST 请求，地址{url}，状态 {response.status_code}。'
+            )
+        except httpx.TimeoutException:
+            logger.error(f'[HTTP] POST 请求超时，地址{url}。')
+            return None
         return _parse_response(response)
 
     @_error_handler_async_local
-    async def _get(
-        self, client: httpx.AsyncClient, url: str, params: dict
-    ) -> dict:
+    async def _get(self, client: httpx.AsyncClient, url: str,
+                   params: dict) -> Optional[dict]:
         """调用 GET 方法。"""
-        response = await client.get(url, params=params, timeout=10.)
-        logger.debug(f'[HTTP] 发送 GET 请求，地址{url}，状态 {response.status_code}。')
+        try:
+            response = await client.get(url, params=params, timeout=10.)
+            logger.debug(
+                f'[HTTP] 发送 GET 请求，地址{url}，状态 {response.status_code}。'
+            )
+        except httpx.TimeoutException:
+            logger.error(f'[HTTP] GET 请求超时，地址{url}。')
+            return None
         return _parse_response(response)
 
     @_error_handler_async_local
     async def _post_multipart(
         self, client: httpx.AsyncClient, url: str, data: dict, files: dict
-    ) -> dict:
+    ) -> Optional[dict]:
         """调用 POST 方法，发送 multipart 数据。"""
-        response = await client.post(url, data=data, files=files, timeout=30.)
-        logger.debug(f'[HTTP] 发送 POST 请求，地址{url}，状态 {response.status_code}。')
+        try:
+            response = await client.post(
+                url, data=data, files=files, timeout=30.
+            )
+            logger.debug(
+                f'[HTTP] 发送 POST 请求，地址{url}，状态 {response.status_code}。'
+            )
+        except httpx.TimeoutException:
+            logger.error(f'[HTTP] POST 请求超时，地址{url}。')
+            return None
         return _parse_response(response)
 
     @_error_handler_async_local
@@ -204,7 +222,10 @@ class HTTPAdapter(Adapter):
                 coros = [self.emit(msg['type'], msg) for msg in msg_list]
                 await asyncio.gather(*coros)
 
-    async def call_api(self, api: str, method: Method = Method.GET, **params):
+    async def call_api(self,
+                       api: str,
+                       method: Method = Method.GET,
+                       **params) -> Optional[dict]:
         async with httpx.AsyncClient(
             base_url=self.host_name, headers=self.headers
         ) as client:

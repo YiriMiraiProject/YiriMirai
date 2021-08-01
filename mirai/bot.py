@@ -317,6 +317,8 @@ class Mirai(SimpleMirai):
         `message: Union[MessageChain, List[Union[MessageComponent, str]], str]` 发送的消息。
 
         `quote: bool = False` 是否以回复消息的形式发送。
+
+        返回值：int 发送的消息的 message_id。
         """
         # 构造消息链
         if isinstance(message, str):
