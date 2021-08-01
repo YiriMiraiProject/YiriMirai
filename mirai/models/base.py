@@ -2,7 +2,6 @@
 """
 此模块提供 YiriMirai 中使用的 pydantic 模型的基类。
 """
-import textwrap
 from typing import Type
 
 import pydantic.main as pdm
@@ -35,7 +34,7 @@ class MiraiBaseModel(BaseModel, metaclass=MiraiMetaclass):
 
     def __repr__(self) -> str:
         return self.__class__.__name__ + '(' + ', '.join(
-            (f'{k}={repr(v)}' for k, v in self.__dict__.items())
+            (f'{k}={repr(v)}' for k, v in self.__dict__.items() if v)
         ) + ')'
 
     class Config:

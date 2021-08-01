@@ -77,7 +77,7 @@ class MessageComponent(MiraiIndexedModel, metaclass=MessageComponentMetaclass):
     def __str__(self):
         return ''
 
-    def repr(self):
+    def __repr__(self):
         return self.__class__.__name__ + '(' + ', '.join(
             (
                 f'{k}={repr(v)}'
