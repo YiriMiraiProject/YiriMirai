@@ -10,8 +10,10 @@ import random
 from collections import defaultdict, deque
 from typing import Dict, Optional, cast
 
-from websockets.exceptions import InvalidURI, ConnectionClosedOK, ConnectionClosed
 from websockets.client import WebSocketClientProtocol, connect
+from websockets.exceptions import (
+    ConnectionClosed, ConnectionClosedOK, InvalidURI
+)
 
 from mirai import exceptions
 from mirai.adapters.base import (
