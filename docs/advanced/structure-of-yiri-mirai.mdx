@@ -76,3 +76,23 @@ SimpleMirai 是 Mirai 的简化版本，它只包含了基础层，并且没有�
 如何界定模型层的边界？凡是涉及到 API、事件等的具体内容的，都应该放在模型层。基础层并不区分不同的 API 或事件的功能的区别。
 
 因此，SimpleMirai 就是抽离了模型层的 Mirai。我们提供 SimpleMirai，作为展示抽离模型层的可能性。
+
+## 关于 MiraiBaseModel
+
+[`MiraiBaseModel`](https://yiri-mirai-api.vercel.app/models/base.html#mirai.models.base.MiraiBaseModel) 定义于 `mirai.models.base` 模块。它是 YiriMirai 所有 pydantic 模型的基类。
+
+`MiraiBaseModel` 启用了三项配置：
+1. 允许解析时传入额外的值，并将额外值保存在模型中。
+2. 允许通过别名访问字段。
+3. 自动生成小驼峰风格的别名，以符合 mirai-api-http 的命名。
+
+`MiraiBaseModel` 对 `repr` 方法做了优化，当需要调试打印时，不妨试试使用 `repr`。
+
+### MiraiIndexedModel
+
+[`MiraiIndexedModel`](https://yiri-mirai-api.vercel.app/models/base.html#mirai.models.base.MiraiIndexedModel) 定义于 `mirai.models.base` 模块，使用了 metaclass，以支持通过子类名获取子类的反射功能。
+
+`Event` `ApiModel` 和 `MessageComponent` 能够自动将数据解析到正确的子类，正是基于 `MiraiIndexedModel` 的这一反射功能。
+
+YiriMirai 选择通过反射而非查找静态字典来实现这样的功能。尽管这会增加一点冷启动的时间，但并不影响运行时的效率。
+更重要的是，反射增强了 YiriMirai 的拓展性。你可以简单地通过继承 `Event` 类来定义自己的事件，甚至可以通过继承 `ApiModel` 类来定义自己的 API，这些自定义内容会完美地与内置内容融合在一起，而不需要额外的绑定。

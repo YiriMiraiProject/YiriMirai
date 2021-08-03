@@ -59,6 +59,18 @@ def handle_group_message_another(event: GroupMessage):
 
 事件处理器接受唯一的一个参数 `event`，它是一个 `Event` 类型的对象，包含了事件的相关信息。
 
+### 生命周期
+
+YiriMirai 提供了两个特殊的事件 `Startup` 和 `Shutdown`，用于在程序启动和关闭时进行相关操作。
+
+YiriMirai 保证这两个事件触发时，机器人处于登陆状态。因此，可以在处理这两个事件时调用 API。
+
+```python
+@bot.on(Startup)
+async def startup(_: Startup):
+    print(repr(bot.session_info.get()))
+```
+
 ## 事件传播
 
 事件传播指的是当一个事件被触发时，它所在的事件链的所有事件也会被触发。

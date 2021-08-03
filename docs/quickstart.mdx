@@ -8,7 +8,7 @@ sidebar_position: 2
 
 YiriMirai 需要 **Python 3.7 及以上版本**。
 
-YiriMirai 基于 mirai 运行。如果你还没有安装 mirai，我们建议你使用 [mcl-installer](https://github.com/iTXTech/mcl-installer)，支持一键安装，并自带 mirai-api-http。
+YiriMirai 基于 mirai 运行。如果你还没有安装 mirai，我们建议你使用 [mcl-installer](https://github.com/iTXTech/mcl-installer)，支持一键安装。
 
 ### 安装
 
@@ -72,7 +72,7 @@ if __name__ == '__main__':
     async def on_friend_message(event: FriendMessage):
         if str(event.message_chain) == '你好':
             await bot.send_friend_message(event.sender.id, [Plain('欢迎使用 YiriMirai。')])
-            return bot.send_friend_message(event.sender.id, [Plain('Hello, World!')])
+            return bot.send(event, 'Hello, World!')
 
     bot.run()
 ```
@@ -124,7 +124,7 @@ bot = Mirai(qq=12345678, adapter=WebSocketAdapter(verify_key='your_verify_key', 
 async def on_friend_message(event: FriendMessage):
     if str(event.message_chain) == '你好':
         await bot.send_friend_message(event.sender.id, [Plain('欢迎使用 YiriMirai。')])
-        return bot.send_friend_message(event.sender.id, [Plain('Hello, World!')])
+        return bot.send(event, 'Hello, World!')
 ```
 
 事件处理器是一个异步函数，接收一个唯一参数 `event`，它是 `FriendMessage` 类型，包含了发送者的 QQ 号和消息。
@@ -157,12 +157,14 @@ YiriMirai 依靠 pydantic 解析 mirai-api-http 发回的数据，并将其转�
 
 ```python
 await bot.send_friend_message(event.sender.id, [Plain('欢迎使用 YiriMirai。')])
-return bot.send_friend_message(event.sender.id, [Plain('Hello World!')])
+return bot.send(event, 'Hello, World!')
 ```
 
 这里，我们使用了 `send_friend_message` 方法来发送消息。这个方法有两个参数，即好友的 QQ 号和欲发送的消息链。
 
 第二行使用了 YiriMirai 的事件快速响应机制。像这样，直接返回一个 API 调用，就可以实现快速响应。
+
+同时，第二行使用的是 YiriMirai 提供的辅助方法 `send`，它可以自动从 `event` 中识别消息发送的对象。
 
 :::note NOTE: 调用 API
 在上面的代码中，我们调用了 `send_friend_message` 方法，这个方法会调用 mirai-api-http 的 API `sendFriendMessage`。

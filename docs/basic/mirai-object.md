@@ -19,6 +19,22 @@ adapter = HTTPAdapter(verify_key='your_verify_key', host='localhost', port=8080)
 bot = Mirai(qq=12345678, adapter=adapter)
 ```
 
+### Single Mode
+
+在 Single Mode 下，创建机器人实例不需要 qq 参数，此时，此参数可传入任意值。
+
+```python
+bot = Mirai(qq=0, adapter=adapter)
+```
+
+登录之后，YiriMirai 会获取正确的 QQ 号，并将其保存在 `bot.qq` 中。
+
+```python
+@bot.on(Startup)
+async def startup(_: Startup):
+    print(bot.qq)
+```
+
 ## 调用 API
 
 可以直接通过在 Mirai 对象上使用点号调用 mirai-api-http 的 API。
