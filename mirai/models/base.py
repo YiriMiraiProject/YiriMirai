@@ -95,7 +95,7 @@ class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):
         `obj: dict`
         """
         if cls in MiraiIndexedModel.__subclasses__():
-            EventType = cls.get_subtype(obj['type'])
-            return EventType.parse_obj(obj)
+            ModelType = cls.get_subtype(obj['type'])
+            return ModelType.parse_obj(obj)
         else:
             return super().parse_obj(obj)
