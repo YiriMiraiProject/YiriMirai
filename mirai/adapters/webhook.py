@@ -3,7 +3,7 @@
 此模块提供 HTTP 回调适配器，适用于 mirai-api-http 的 webhook adapter。
 """
 import logging
-from typing import Optional
+from typing import Optional, cast
 
 from starlette.requests import Request
 from starlette.responses import JSONResponse
@@ -109,7 +109,7 @@ class WebHookAdapter(Adapter):
                 ] if info.get(key) is not None
             }
         )
-        adapter.session = info.get('session')
+        adapter.session = cast(str, info.get('session'))
         return adapter
 
     async def login(self, qq: int):

@@ -6,7 +6,7 @@ import asyncio
 import contextlib
 import logging
 import sys
-from typing import Callable, List, Optional, Type, Union
+from typing import Callable, Iterable, List, Optional, Type, Union, cast
 
 from mirai.adapters.base import Adapter, AdapterInterface, ApiProvider
 from mirai.asgi import ASGI, asgi_serve
@@ -67,21 +67,19 @@ class SimpleMirai(ApiProvider, AdapterInterface):
 
         self.logger = logging.getLogger(__name__)
 
-    async def call_api(self, api: str, **params):
+    async def call_api(self, api: str, *args, **kwargs):
         """调用 API。
 
         `api: str` API 名称。
 
-        `**params` 参数。
+        `*args, **kwargs` 参数。
         """
-        return await async_(self._adapter.call_api(api, **params))
+        return await self._adapter.call_api(api, *args, **kwargs)
 
-    def on(self, event: str, priority: int = 0) -> Callable:
+    def on(self, event: str) -> Callable:
         """注册事件处理器。
 
         `event: str` 事件名。
-
-        `priority: int = 0` 优先级，较小者优先。
 
         用法举例：
         ```py
@@ -90,7 +88,7 @@ class SimpleMirai(ApiProvider, AdapterInterface):
             print(f"收到来自{event['sender']['nickname']}的消息。")
         ```
         """
-        return self._bus.on(event, priority=priority)
+        return self._bus.on(event)
 
     @property
     def adapter_info(self):
@@ -179,7 +177,7 @@ class MiraiRunner(Singleton):
     ```
     """
     _created = None
-    bots: List[SimpleMirai]
+    bots: Iterable[SimpleMirai]
     """运行的 SimpleMirai 对象。"""
     def __init__(self, *bots: SimpleMirai):
         """
@@ -270,7 +268,7 @@ class Mirai(SimpleMirai):
         super().__init__(qq=qq, adapter=adapter)
         # 将 bus 更换为 ModelEventBus
         adapter.unregister_event_bus(self._bus)
-        self._bus = ModelEventBus()
+        self._bus: ModelEventBus = ModelEventBus()
         adapter.register_event_bus(self._bus.base_bus)
 
     def on(
@@ -328,21 +326,21 @@ class Mirai(SimpleMirai):
             message = [message]
         # 识别消息发送对象
         if isinstance(target, TempMessage):
-            quote = target.message_chain.message_id if quote else None
+            quoting = target.message_chain.message_id if quote else None
             return (
                 await self.send_temp_message(
                     qq=target.sender.id,
                     group=target.group.id,
                     message_chain=message,
-                    quote=quote
+                    quote=quoting
                 )
             ).message_id
         else:
             if isinstance(target, MessageEvent):
-                quote = target.message_chain.message_id if quote else None
+                quoting = target.message_chain.message_id if quote else None
                 target = target.sender
             else:
-                quote = None
+                quoting = None
 
             if isinstance(target, Friend):
                 send_message = self.send_friend_message
@@ -356,7 +354,7 @@ class Mirai(SimpleMirai):
 
             return (
                 await
-                send_message(target=id, message_chain=message, quote=quote)
+                send_message(target=id, message_chain=message, quote=quoting)
             ).message_id
 
     async def get_friend(self, id: int) -> Optional[Friend]:
@@ -364,18 +362,26 @@ class Mirai(SimpleMirai):
 
         `id: int` 好友 ID。
         """
-        for friend in await self.friend_list.get():
+        friend_list = await self.friend_list.get()
+        if not friend_list:
+            return None
+        for friend in cast(List[Friend], friend_list):
             if friend.id == id:
                 return friend
+        return None
 
     async def get_group(self, id: int) -> Optional[Group]:
         """获取群组对象。
 
         `id: int` 群组 ID。
         """
-        for group in await self.group_list.get():
+        group_list = await self.group_list.get()
+        if not group_list:
+            return None
+        for group in cast(List[Group], group_list):
             if group.id == id:
                 return group
+        return None
 
     async def get_group_member(self, group: Union[Group, int],
                                id: int) -> Optional[GroupMember]:
@@ -387,9 +393,13 @@ class Mirai(SimpleMirai):
         """
         if isinstance(group, Group):
             group = group.id
-        for member in await self.member_list(group):
+        member_list = await self.member_list.get(group)
+        if not member_list:
+            return None
+        for member in cast(List[GroupMember], member_list):
             if member.id == id:
                 return member
+        return None
 
     async def get_entity(self, subject: Subject) -> Optional[Entity]:
         """获取实体对象。
@@ -400,6 +410,8 @@ class Mirai(SimpleMirai):
             return await self.get_friend(subject.id)
         elif subject.kind == 'Group':
             return await self.get_group(subject.id)
+        else:
+            return None
 
     async def is_admin(self, group: Group) -> bool:
         """判断机器人在群组中是否是管理员。

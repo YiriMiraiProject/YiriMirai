@@ -7,7 +7,7 @@ import asyncio
 import logging
 from datetime import datetime
 from json import dumps
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set, cast
 
 from mirai import exceptions
 from mirai.api_provider import ApiProvider, Method
@@ -106,17 +106,17 @@ class Adapter(ApiProvider, AdapterInterface):
                 for key in ['single_mode'] if info.get(key) is not None
             }
         )
-        adapter.session = info.get('session')
+        adapter.session = cast(str, info.get('session'))
         return adapter
 
-    def register_event_bus(self, *buses: List[EventBus]):
+    def register_event_bus(self, *buses: EventBus):
         """注册事件总线。
 
         `*buses: List[EventBus]` 一个或多个事件总线。
         """
         self.buses |= set(buses)
 
-    def unregister_event_bus(self, *buses: List[EventBus]):
+    def unregister_event_bus(self, *buses: EventBus):
         """解除注册事件总线。
 
         `*buses: List[EventBus]` 一个或多个事件总线。

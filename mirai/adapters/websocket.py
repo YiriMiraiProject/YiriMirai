@@ -7,7 +7,7 @@ import json
 import logging
 import random
 from collections import defaultdict, deque
-from typing import Optional
+from typing import Dict, Optional, cast
 
 import websockets
 
@@ -21,7 +21,10 @@ from mirai.tasks import Tasks
 logger = logging.getLogger(__name__)
 
 _error_handler_async_local = error_handler_async(
-    (ConnectionRefusedError, websockets.InvalidURI)
+    (
+        ConnectionRefusedError,
+        websockets.InvalidURI # type: ignore[attr-defined]
+    )
 )
 
 
@@ -34,7 +37,7 @@ class WebSocketAdapter(Adapter):
     """mirai-api-http 配置的同步 ID。"""
     qq: int
     """机器人的 QQ 号。"""
-    connection: websockets.WebSocketClientProtocol
+    connection: websockets.WebSocketClientProtocol # type: ignore[name-defined]
     """WebSocket 客户端连接。"""
     def __init__(
         self,
@@ -76,9 +79,9 @@ class WebSocketAdapter(Adapter):
         # 既然这样不如把 sync_id 全改成字符串好了
 
         # 接收 WebSocket 数据的 Task
-        self._receiver_task = None
+        self._receiver_task: Optional[asyncio.Task] = None
         # 用于临时保存接收到的数据，以便根据 sync_id 进行同步识别
-        self._recv_dict = defaultdict(deque)
+        self._recv_dict: Dict[str, deque] = defaultdict(deque)
         # 本地同步 ID，每次调用 API 递增。
         self._local_sync_id = random.randint(1, 1024) * 1024
         # 事件处理任务管理器
@@ -106,7 +109,7 @@ class WebSocketAdapter(Adapter):
                 if info.get(key) is not None
             }
         )
-        adapter.session = info.get('session')
+        adapter.session = cast(str, info.get('session'))
         return adapter
 
     @_error_handler_async_local
@@ -171,7 +174,7 @@ class WebSocketAdapter(Adapter):
         if self.session:
             headers['sessionKey'] = self.session
 
-        self.connection = await websockets.connect(
+        self.connection = await websockets.connect( # type: ignore[attr-defined]
             self.host_name, extra_headers=headers
         )
         self._receiver_task = asyncio.create_task(self._receiver())

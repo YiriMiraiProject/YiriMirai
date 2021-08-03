@@ -252,7 +252,8 @@ class MessageChain(MiraiBaseModel):
         # 索引对象为 MessageComponent 类，返回所有对应 component
         elif isinstance(index, type):
             return [
-                cast(MessageComponent, component) for component in self if type(component) == index
+                cast(MessageComponent, component) for component in self
+                if type(component) == index
             ]
         # 索引对象为 MessageComponent 和 int 构成的 slice， 返回指定数量的 component
         elif isinstance(index, slice):
@@ -465,7 +466,9 @@ class Image(MessageComponent):
             if filename:
                 path = Path(filename)
                 if determine_type:
-                    path = path.with_suffix('.' + str(imghdr.what(None, content)))
+                    path = path.with_suffix(
+                        '.' + str(imghdr.what(None, content))
+                    )
                 path.parent.mkdir(parents=True, exist_ok=True)
             elif directory:
                 path = Path(directory)

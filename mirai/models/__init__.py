@@ -20,13 +20,13 @@ from mirai.models.events import (
     FriendMessage, FriendNickChangedEvent, FriendRecallEvent,
     GroupAllowAnonymousChatEvent, GroupAllowConfessTalkEvent,
     GroupAllowMemberInviteEvent, GroupEntranceAnnouncementChangeEvent,
-    GroupEvent, GroupMessage, GroupMuteAllEvent,
-    GroupNameChangeEvent, GroupRecallEvent, MemberCardChangeEvent,
-    MemberHonorChangeEvent, MemberJoinEvent, MemberJoinRequestEvent,
-    MemberLeaveEventKick, MemberLeaveEventQuit, MemberMuteEvent,
-    MemberPermissionChangeEvent, MemberSpecialTitleChangeEvent,
-    MemberUnmuteEvent, MessageEvent, NewFriendRequestEvent, NudgeEvent,
-    OtherClientMessage, RequestEvent, StrangerMessage, TempMessage
+    GroupEvent, GroupMessage, GroupMuteAllEvent, GroupNameChangeEvent,
+    GroupRecallEvent, MemberCardChangeEvent, MemberHonorChangeEvent,
+    MemberJoinEvent, MemberJoinRequestEvent, MemberLeaveEventKick,
+    MemberLeaveEventQuit, MemberMuteEvent, MemberPermissionChangeEvent,
+    MemberSpecialTitleChangeEvent, MemberUnmuteEvent, MessageEvent,
+    NewFriendRequestEvent, NudgeEvent, OtherClientMessage, RequestEvent,
+    StrangerMessage, TempMessage
 )
 from mirai.models.message import (
     App, At, AtAll, Dice, Face, File, FlashImage, Forward, ForwardMessageNode,

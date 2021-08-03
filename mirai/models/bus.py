@@ -6,7 +6,7 @@
 """
 import logging
 from collections import defaultdict
-from typing import Any, Awaitable, Callable, List, Type, Union
+from typing import Any, Awaitable, Callable, List, Type, Union, cast
 
 from mirai.bus import EventBus
 from mirai.models.events import Event
@@ -37,35 +37,44 @@ class ModelEventBus(EventBus):
     事件触发时，会自动按照 `Event` 类的继承关系向上级传播。
     """
     def __init__(self):
-
         self.base_bus = EventBus(event_chain_generator=event_chain_parents)
         self._middlewares = defaultdict(type(None))
 
-    def subscribe(self, event_type: Type[Event], func: Callable) -> None:
+    def subscribe(
+        self, event_type: Union[Type[Event], str], func: Callable
+    ) -> None:
         """注册事件处理器。
 
         `event: Type[Event]` 事件类型。
 
         `func: Callable` 事件处理器。
         """
+        if isinstance(event_type, str):
+            event_type = cast(Type[Event], Event.get_subtype(event_type))
+
         async def middleware(event: dict):
             """中间件。负责与底层 bus 沟通，将 event dict 解析为 Event 对象。
             """
-            event = Event.parse_obj(event)
-            logger.debug(f'收到事件 {event.type}。')
-            return await async_call_with_exception(func, event)
+            event_model = cast(Event, Event.parse_obj(event))
+            logger.debug(f'收到事件 {event_model.type}。')
+            return await async_call_with_exception(func, event_model)
 
         self._middlewares[func] = middleware
         self.base_bus.subscribe(event_type.__name__, middleware)
         logger.debug(f'注册事件 {event_type.__name__} at {func}。')
 
-    def unsubscribe(self, event_type: Type[Event], func: Callable) -> None:
+    def unsubscribe(
+        self, event_type: Union[Type[Event], str], func: Callable
+    ) -> None:
         """移除事件处理器。
 
         `event_type: Type[Event]` 事件类型。
 
         `func: Callable` 事件处理器。
         """
+        if isinstance(event_type, str):
+            event_type = cast(Type[Event], Event.get_subtype(event_type))
+
         self.base_bus.unsubscribe(event_type.__name__, self._middlewares[func])
         del self._middlewares[func]
         logger.debug(f'解除事件注册 {event_type.__name__} at {func}。')
@@ -85,20 +94,21 @@ class ModelEventBus(EventBus):
             print(event.sender.id)
         ```
         """
-        if isinstance(event_type, str):
-            event_type = Event.get_subtype(event_type)
-
         def decorator(func: Callable) -> Callable:
             self.subscribe(event_type, func)
             return func
 
         return decorator
 
-    async def emit(self, event: Event) -> List[Awaitable[Any]]:
+    async def emit(self, event: Union[Event, str], *args,
+                   **kwargs) -> List[Awaitable[Any]]:
         """触发一个事件。
 
         `event: Event` 要触发的事件。
         """
-        return await self.base_bus.emit(
-            event.type, event.dict(by_alias=True, exclude_none=True)
-        )
+        if isinstance(event, str):
+            return await super().emit(event, *args, **kwargs)
+        else:
+            return await self.base_bus.emit(
+                event.type, event.dict(by_alias=True, exclude_none=True)
+            )

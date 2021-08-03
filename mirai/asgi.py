@@ -89,7 +89,7 @@ class ASGI(Singleton):
 
 
 def asgi_serve(
-    app: Union[Callable, str],
+    app,
     host: str = '127.0.0.1',
     port: int = 8000,
     asgi_server: str = 'auto',
@@ -97,7 +97,7 @@ def asgi_serve(
 ):
     """运行一个 ASGI 服务器。
 
-    `app: Union[Callable, str]` ASGI 应用程序。
+    `app` ASGI 应用程序。
 
     `host: str = '127.0.0.1'` 服务器地址。
 

@@ -5,7 +5,7 @@
 import asyncio
 import logging
 import random
-from typing import Optional
+from typing import Optional, cast
 
 import httpx
 
@@ -108,7 +108,7 @@ class HTTPAdapter(Adapter):
                 if info.get(key) is not None
             }
         )
-        adapter.session = info.get('session')
+        adapter.session = cast(str, info.get('session'))
         return adapter
 
     @_error_handler_async_local
@@ -237,6 +237,8 @@ class HTTPAdapter(Adapter):
                 return await self._post_multipart(
                     client, f'/{api}', params['data'], params['files']
                 )
+            else:
+                return None
 
     async def _background(self):
         """开始轮询。"""

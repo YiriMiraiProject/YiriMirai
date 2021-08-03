@@ -8,7 +8,7 @@ import asyncio
 import inspect
 import logging
 from collections import defaultdict
-from typing import Any, Awaitable, Callable, Iterable, List, Optional
+from typing import Any, Awaitable, Callable, Dict, Iterable, List, Optional
 
 from mirai.utils import async_call_with_exception
 
@@ -58,7 +58,7 @@ class EventBus(object):
             一个函数，输入事件名，返回一个生成此事件所在事件链的全部事件的事件名的生成器，
             默认行为是事件链只包含单一事件。
         """
-        self._subscribers = defaultdict(set)
+        self._subscribers: Dict[str, set] = defaultdict(set)
         self.event_chain_generator = event_chain_generator
 
     def subscribe(self, event: str, func: Callable) -> None:
@@ -123,9 +123,8 @@ class EventBus(object):
         coros = []
         for m_event in self.event_chain_generator(event):
             coros += [(await call(f)) for f in self._subscribers[m_event]]
-        coros = filter(None, coros) # 只保留快速响应的返回值。
 
-        results = list(coros)
+        results = list(filter(None, coros)) # 只保留快速响应的返回值。
         return list(map(lambda coro: asyncio.create_task(coro), results))
 
     @classmethod

@@ -2,10 +2,11 @@
 """
 此模块提供 API 调用与返回数据解析相关。
 """
+import abc
 import logging
 from enum import Enum, Flag
 from pathlib import Path
-from typing import Any, List, Optional, Type, Union, TYPE_CHECKING, cast, type_check_only
+from typing import TYPE_CHECKING, Any, List, Optional, Type, Union, cast
 
 import aiofiles
 
@@ -23,7 +24,9 @@ from mirai.api_provider import ApiProvider, Method
 from mirai.models.base import (
     MiraiBaseModel, MiraiIndexedMetaclass, MiraiIndexedModel
 )
-from mirai.models.entities import (Friend, Group, GroupMember, GroupConfigModel, MemberInfoModel)
+from mirai.models.entities import (
+    Friend, Group, GroupConfigModel, GroupMember, MemberInfoModel
+)
 from mirai.models.events import (
     FriendMessage, GroupMessage, OtherClientMessage, RequestEvent,
     StrangerMessage, TempMessage
@@ -224,10 +227,6 @@ class ApiBaseModel(MiraiIndexedModel, metaclass=ApiMetaclass):
 
 class ApiModel(ApiBaseModel):
     """API 模型。"""
-    @type_check_only
-    async def call(self, api_provider: ApiProvider):
-        """调用 API。"""
-
     class Info():
         """API 的信息。"""
         name = ""
@@ -317,16 +316,15 @@ class ApiModel(ApiBaseModel):
             api = self.api_type(*args, **kwargs)
             info = self.api_type.Info
             logger.debug(f'调用 API：{repr(api)}')
-            if hasattr(api, 'call'):
+            if isinstance(api, CustomApiModel):
                 raw_response = await api.call(self.api_provider)
             else:
-                raw_response = await async_(
-                    self.api_provider.call_api(
-                        api=info.name,
-                        method=method,
-                        **api.dict(by_alias=True, exclude_none=True)
-                    )
+                raw_response = await self.api_provider.call_api(
+                    api=info.name,
+                    method=method,
+                    **api.dict(by_alias=True, exclude_none=True)
                 )
+
             # 如果 API 无法调用，raw_response 为空
             if not raw_response:
                 return None
@@ -348,6 +346,13 @@ class ApiModel(ApiBaseModel):
 
         async def __call__(self, *args, **kwargs):
             return await self.get(*args, **kwargs)
+
+
+class CustomApiModel(ApiBaseModel):
+    """自定义调用方式的 API。"""
+    @abc.abstractmethod
+    async def call(self, api_provider: ApiProvider):
+        """调用 API。"""
 
 
 class ApiGet(ApiModel):
@@ -670,7 +675,7 @@ class FileRename(ApiPost):
         response_type = Response
 
 
-class FileUpload(ApiPost):
+class FileUpload(ApiPost, CustomApiModel):
     """文件上传。（暂时不可用）"""
     type: Literal["group"]
     """上传的文件类型。"""
@@ -700,7 +705,7 @@ class FileUpload(ApiPost):
         response_type = File
 
 
-class UploadImage(ApiPost):
+class UploadImage(ApiPost, CustomApiModel):
     """图片文件上传。"""
     type: Literal["friend", "group", "temp"]
     """上传的图片类型。"""
@@ -722,7 +727,7 @@ class UploadImage(ApiPost):
         response_type = Image
 
 
-class UploadVoice(ApiPost):
+class UploadVoice(ApiPost, CustomApiModel):
     """语音文件上传。"""
     type: Literal["group"]
     """上传的语音类型。"""
