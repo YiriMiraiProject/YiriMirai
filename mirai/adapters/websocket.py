@@ -2,6 +2,7 @@
 """
 此模块提供正向 WebSocket 适配器，适用于 mirai-api-http 的 websocket adapter。
 """
+
 import asyncio
 import json
 import logging
@@ -9,7 +10,8 @@ import random
 from collections import defaultdict, deque
 from typing import Dict, Optional, cast
 
-import websockets
+from websockets.exceptions import InvalidURI, ConnectionClosedOK, ConnectionClosed
+from websockets.client import WebSocketClientProtocol, connect
 
 from mirai import exceptions
 from mirai.adapters.base import (
@@ -21,10 +23,7 @@ from mirai.tasks import Tasks
 logger = logging.getLogger(__name__)
 
 _error_handler_async_local = error_handler_async(
-    (
-        ConnectionRefusedError,
-        websockets.InvalidURI # type: ignore[attr-defined]
-    )
+    (ConnectionRefusedError, InvalidURI)
 )
 
 
@@ -37,7 +36,7 @@ class WebSocketAdapter(Adapter):
     """mirai-api-http 配置的同步 ID。"""
     qq: int
     """机器人的 QQ 号。"""
-    connection: websockets.WebSocketClientProtocol # type: ignore[name-defined]
+    connection: WebSocketClientProtocol
     """WebSocket 客户端连接。"""
     def __init__(
         self,
@@ -140,9 +139,9 @@ class WebSocketAdapter(Adapter):
                 self._recv_dict[response['syncId']].append(data)
             except KeyError:
                 logger.error(f'[WebSocket] 不正确的数据：{response}')
-            except websockets.ConnectionClosedOK:
+            except ConnectionClosedOK:
                 return
-            except websockets.ConnectionClosed as e:
+            except ConnectionClosed as e:
                 logger.error(
                     f'[WebSocket] WebSocket 通道意外关闭。code: {e.code}, reason: {e.reason}'
                 )
@@ -169,14 +168,12 @@ class WebSocketAdapter(Adapter):
         headers = {
             'verifyKey': self.verify_key or
                          '', # 关闭认证时，WebSocket 可传入任意 verify_key
-            'qq': qq,
+            'qq': str(qq),
         }
         if self.session:
             headers['sessionKey'] = self.session
 
-        self.connection = await websockets.connect( # type: ignore[attr-defined]
-            self.host_name, extra_headers=headers
-        )
+        self.connection = await connect(self.host_name, extra_headers=headers)
         self._receiver_task = asyncio.create_task(self._receiver())
 
         verify_response = await self._recv('') # 神奇现象：这里的 syncId 是个空字符串
