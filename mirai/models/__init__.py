@@ -20,7 +20,7 @@ from mirai.models.events import (
     FriendMessage, FriendNickChangedEvent, FriendRecallEvent,
     GroupAllowAnonymousChatEvent, GroupAllowConfessTalkEvent,
     GroupAllowMemberInviteEvent, GroupEntranceAnnouncementChangeEvent,
-    GroupEvent, GroupMember, GroupMessage, GroupMuteAllEvent,
+    GroupEvent, GroupMessage, GroupMuteAllEvent,
     GroupNameChangeEvent, GroupRecallEvent, MemberCardChangeEvent,
     MemberHonorChangeEvent, MemberJoinEvent, MemberJoinRequestEvent,
     MemberLeaveEventKick, MemberLeaveEventQuit, MemberMuteEvent,

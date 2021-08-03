@@ -11,7 +11,7 @@ from typing import Callable, List, Optional, Type, Union
 from mirai.adapters.base import Adapter, AdapterInterface, ApiProvider
 from mirai.asgi import ASGI, asgi_serve
 from mirai.bus import EventBus
-from mirai.models.api import ApiModel, MessageResponse
+from mirai.models.api import ApiModel
 from mirai.models.bus import ModelEventBus
 from mirai.models.entities import (
     Entity, Friend, Group, GroupMember, Permission, Subject
@@ -31,7 +31,8 @@ class SimpleMirai(ApiProvider, AdapterInterface):
 
     使用了 `__getattr__` 魔术方法，可以直接在对象上调用 API。
 
-    通过 `SimpleMirai` 调用 API 时，需注意此类不含 model 层封装，因此 API 名称与参数名称需与 mirai-api-http 中的定义相同，
+    通过 `SimpleMirai` 调用 API 时，需注意此类不含 model 层封装，
+    因此 API 名称与参数名称需与 mirai-api-http 中的定义相同，
     参数需要全部以具名参数的形式给出，并且需要指明使用的方法（GET/POST）。
 
     例如：
@@ -45,7 +46,9 @@ class SimpleMirai(ApiProvider, AdapterInterface):
 
     对于名称的路由含有二级目录的 API，由于名称中含有斜杠，必须使用 `call_api` 调用，例如：
     ```py
-    file_list = await bot.call_api("file/list", id="", target=12345678, method="GET")
+    file_list = await bot.call_api(
+        "file/list", id="", target=12345678, method="GET"
+    )
     ```
     """
     def __init__(self, qq: int, adapter: Adapter):

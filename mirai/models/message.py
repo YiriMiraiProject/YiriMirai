@@ -9,7 +9,7 @@ import re
 from datetime import datetime
 from json import loads as json_loads
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import List, Optional, Union, cast
 
 import aiofiles
 import httpx
@@ -252,7 +252,7 @@ class MessageChain(MiraiBaseModel):
         # 索引对象为 MessageComponent 类，返回所有对应 component
         elif isinstance(index, type):
             return [
-                component for component in self if type(component) == index
+                cast(MessageComponent, component) for component in self if type(component) == index
             ]
         # 索引对象为 MessageComponent 和 int 构成的 slice， 返回指定数量的 component
         elif isinstance(index, slice):
@@ -264,6 +264,7 @@ class MessageChain(MiraiBaseModel):
                 component
                 for component, _ in zip(components, range(index.stop))
             ]
+        raise TypeError(f"消息链索引需为 int 或 MessageComponent，当前类型：{type(index)}")
 
     def __contains__(self, sub) -> bool:
         if isinstance(sub, type): # 检测消息链中是否有某种类型的对象
@@ -282,6 +283,7 @@ class MessageChain(MiraiBaseModel):
             return bool(KMP(self, sub))
         elif isinstance(sub, str): # 检查消息中有无指定字符串子串
             return sub in deserialize(str(self))
+        raise TypeError(f"类型不匹配，当前类型：{type(sub)}")
 
     def __ge__(self, other):
         return other in self
@@ -293,10 +295,10 @@ class MessageChain(MiraiBaseModel):
     def source(self) -> 'Source':
         """获取消息链中的 `Source` 对象。"""
         source = self[Source:1]
-        return source[0] if source else None
+        return cast(list, source)[0] if source else None
 
     @property
-    def message_id(self) -> int:
+    def message_id(self) -> Optional[int]:
         """获取消息链的 message_id。"""
         source = self.source
         return source.id if source else None
@@ -463,7 +465,7 @@ class Image(MessageComponent):
             if filename:
                 path = Path(filename)
                 if determine_type:
-                    path = path.with_suffix('.' + imghdr.what(None, content))
+                    path = path.with_suffix('.' + str(imghdr.what(None, content)))
                 path.parent.mkdir(parents=True, exist_ok=True)
             elif directory:
                 path = Path(directory)
@@ -672,7 +674,7 @@ class Voice(MessageComponent):
         cls,
         filename: Optional[Union[str, Path]] = None,
         content: Optional[bytes] = None,
-    ) -> "Image":
+    ) -> "Voice":
         """从本地文件路径加载语音，以 base64 的形式传递。
 
         `filename: Optional[Union[str, Path]] = None` 从本地文件路径加载图片，与 `content` 二选一。

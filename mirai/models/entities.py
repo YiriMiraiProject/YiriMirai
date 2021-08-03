@@ -5,12 +5,15 @@
 import abc
 from datetime import datetime
 from enum import Enum
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
-try:
+if TYPE_CHECKING:
     from typing import Literal
-except ImportError:
-    from typing_extensions import Literal
+else:
+    try:
+        from typing import Literal
+    except ImportError:
+        from typing_extensions import Literal
 
 from mirai.models.base import MiraiBaseModel
 
@@ -71,9 +74,9 @@ class GroupMember(Entity):
     """群。"""
     special_title: str = ''
     """群头衔。"""
-    join_timestamp: datetime = 0
+    join_timestamp: datetime = datetime.fromtimestamp(0)
     """加入群的时间。"""
-    last_speak_timestamp: datetime = 0
+    last_speak_timestamp: datetime = datetime.fromtimestamp(0)
     """最后一次发言的时间。"""
     mute_time_remaining: int = 0
     """禁言剩余时间。"""
@@ -111,7 +114,7 @@ class Config(MiraiBaseModel):
         return self
 
 
-class GroupConfig(Config):
+class GroupConfigModel(Config):
     """群配置。"""
     name: str
     """群名称。"""
@@ -127,7 +130,7 @@ class GroupConfig(Config):
     """是否开启匿名聊天。"""
 
 
-class MemberInfo(Config, GroupMember):
+class MemberInfoModel(Config, GroupMember):
     """群成员信息。"""
 
 

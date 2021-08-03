@@ -13,8 +13,8 @@ __all__ = ['ConsoleColor', 'ColoredFormatter']
 class ConsoleColor(IntEnum):
     """各种颜色。"""
     BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, \
-    BLACK_BOLD, RED_BOLD, GREEN_BOLD, YELLOW_BOLD, \
-    BLUE_BOLD, MAGENTA_BOLD, CYAN_BOLD, WHITE_BOLD = range(16)
+        BLACK_BOLD, RED_BOLD, GREEN_BOLD, YELLOW_BOLD, \
+        BLUE_BOLD, MAGENTA_BOLD, CYAN_BOLD, WHITE_BOLD = range(16)
 
     def seq(self):
         s = '\033[1;' if self.value >= 8 else '\033['

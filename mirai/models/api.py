@@ -5,24 +5,25 @@
 import logging
 from enum import Enum, Flag
 from pathlib import Path
-from typing import Any, List, Optional, Type, Union
+from typing import Any, List, Optional, Type, Union, TYPE_CHECKING, cast, type_check_only
 
 import aiofiles
 
-try:
+if TYPE_CHECKING:
     from typing import Literal
-except ImportError:
-    from typing_extensions import Literal
+else:
+    try:
+        from typing import Literal
+    except ImportError:
+        from typing_extensions import Literal
 
-from pydantic import Field, validator
+from pydantic import validator
 
 from mirai.api_provider import ApiProvider, Method
 from mirai.models.base import (
     MiraiBaseModel, MiraiIndexedMetaclass, MiraiIndexedModel
 )
-from mirai.models.entities import (
-    Friend, Group, GroupConfig, GroupMember, MemberInfo
-)
+from mirai.models.entities import (Friend, Group, GroupMember, GroupConfigModel, MemberInfoModel)
 from mirai.models.events import (
     FriendMessage, GroupMessage, OtherClientMessage, RequestEvent,
     StrangerMessage, TempMessage
@@ -189,6 +190,7 @@ class ApiMetaclass(MiraiIndexedMetaclass):
 
         if name == 'ApiModel':
             cls.__apimodel__ = new_cls
+            new_cls.__indexes__ = {}
             return new_cls
 
         if not cls.__apimodel__: # ApiBaseModel 构造时，ApiModel 还未构造
@@ -203,8 +205,8 @@ class ApiMetaclass(MiraiIndexedMetaclass):
                     base.__indexes__[info.alias] = new_cls
 
                 # 获取 API 参数名
-                if hasattr(new_cls, '__annotations__'):
-                    info.parameter_names = list(new_cls.__annotations__)
+                if hasattr(new_cls, '__fields__'):
+                    info.parameter_names = list(new_cls.__fields__)
                 else:
                     info.parameter_names = []
                 break
@@ -222,19 +224,23 @@ class ApiBaseModel(MiraiIndexedModel, metaclass=ApiMetaclass):
 
 class ApiModel(ApiBaseModel):
     """API 模型。"""
+    @type_check_only
+    async def call(self, api_provider: ApiProvider):
+        """调用 API。"""
+
     class Info():
         """API 的信息。"""
         name = ""
         alias = ""
-        method = Method.GET
-        response_type = Response
+        response_type: Type[MiraiBaseModel] = Response
 
     def __init__(self, *args, **kwargs):
         # 解析参数列表，将位置参数转化为具名参数
         parameter_names = self.Info.parameter_names
         if len(args) > len(parameter_names):
             raise TypeError(
-                f'`{self.Info.alias}`需要{len(parameter_names)}个参数，但传入了{len(args)}个。'
+                f'`{self.Info.alias}`需要{len(parameter_names)}个参数，' +
+                '但传入了{len(args)}个。'
             )
         for name, value in zip(parameter_names, args):
             if kwargs.get(name):
@@ -249,7 +255,7 @@ class ApiModel(ApiBaseModel):
     @classmethod
     def get_subtype(cls, name: str) -> Type['ApiModel']:
         try:
-            return super().get_subtype(name)
+            return cast(Type['ApiModel'], super().get_subtype(name))
         except ValueError as e:
             raise ValueError(f'`{name}` 不是可用的 API！') from e
 
@@ -257,7 +263,8 @@ class ApiModel(ApiBaseModel):
         """API 代理类。由 API 构造，提供对适配器的访问。
 
         `Proxy` 提供更加简便的调用 API 的写法。`Proxy` 对象一般由 `Mirai.__getattr__` 获得，
-        这个方法依托于 `MiraiIndexedModel` 的子类获取机制，支持按照命名规范转写的 API，所有的 API 全部使用小写字母及下划线命名。
+        这个方法依托于 `MiraiIndexedModel` 的子类获取机制，支持按照命名规范转写的 API，
+        所有的 API 全部使用小写字母及下划线命名。
 
         对于 GET 方法的 API，可以使用 `get` 方法：
         ```py
@@ -283,7 +290,8 @@ class ApiModel(ApiBaseModel):
         ```
 
         `ApiProxy` 同时提供位置参数支持。比如上面的例子中，没有使用具名参数，而是使用位置参数，
-        这可以让 API 调用更简洁。参数的顺序可参照 mirai-api-http 的[文档](https://project-mirai.github.io/mirai-api-http/api/API.html)。
+        这可以让 API 调用更简洁。参数的顺序可参照 mirai-api-http
+        的[文档](https://project-mirai.github.io/mirai-api-http/api/API.html)。
         除去`sessionKey`由适配器自动指定外，其余参数可按顺序传入。具名参数仍然可用，适当地使用具名参数可增强代码的可读性。
         """
         def __init__(
@@ -296,9 +304,9 @@ class ApiModel(ApiBaseModel):
             self,
             method: Method = Method.GET,
             response_type: Optional[Type[MiraiBaseModel]] = None,
-            args: Optional[list] = None,
+            args: Optional[Union[list, tuple]] = None,
             kwargs: Optional[dict] = None
-        ) -> MiraiBaseModel:
+        ) -> Optional[MiraiBaseModel]:
             """调用 API。
 
             将结果解析为 Model。
@@ -326,19 +334,19 @@ class ApiModel(ApiBaseModel):
             response_type = response_type or info.response_type
             return response_type.parse_obj(raw_response)
 
-        async def get(self, *args, **kwargs) -> MiraiBaseModel:
+        async def get(self, *args, **kwargs) -> Optional[MiraiBaseModel]:
             """获取。对于 GET 方法的 API，调用此方法。"""
             return await self._call_api(
                 method=Method.GET, args=args, kwargs=kwargs
             )
 
-        async def set(self, *args, **kwargs) -> MiraiBaseModel:
+        async def set(self, *args, **kwargs) -> Optional[MiraiBaseModel]:
             """设置。对于 POST 方法的 API，可调用此方法。"""
             return await self._call_api(
                 method=Method.POST, args=args, kwargs=kwargs
             )
 
-        async def __call__(self, *args, **kwargs) -> MiraiBaseModel:
+        async def __call__(self, *args, **kwargs):
             return await self.get(*args, **kwargs)
 
 
@@ -383,20 +391,21 @@ class ApiRest(ApiModel):
         """
         def __call__(self, *args, **kwargs) -> 'ApiRest.Proxy.Partial':
             return ApiRest.Proxy.Partial(
-                self.api_provider, self.api_type, args, kwargs
+                self.api_provider, cast(Type['ApiRest'], self.api_type), args,
+                kwargs
             )
 
         class Partial(ApiModel.Proxy):
             """RESTful 的 API 代理对象（已传入公共参数）。"""
             def __init__(
                 self, api_provider: ApiProvider, api_type: Type['ApiRest'],
-                partial_args: list, partial_kwargs: dict
+                partial_args: Union[list, tuple], partial_kwargs: dict
             ):
                 super().__init__(api_provider=api_provider, api_type=api_type)
                 self.partial_args = partial_args
                 self.partial_kwargs = partial_kwargs
 
-            async def get(self, *args, **kwargs) -> MiraiBaseModel:
+            async def get(self, *args, **kwargs) -> Optional[MiraiBaseModel]:
                 """获取。"""
                 return await self._call_api(
                     method=Method.RESTGET,
@@ -407,11 +416,12 @@ class ApiRest(ApiModel):
                     }
                 )
 
-            async def set(self, *args, **kwargs) -> MiraiBaseModel:
+            async def set(self, *args, **kwargs) -> Optional[MiraiBaseModel]:
                 """设置。"""
                 return await self._call_api(
                     method=Method.RESTPOST,
-                    response_type=self.api_type.Info.response_type_post,
+                    response_type=cast(Type[ApiRest],
+                                       self.api_type).Info.response_type_post,
                     args=[*self.partial_args, *args],
                     kwargs={
                         **self.partial_kwargs,
@@ -828,12 +838,12 @@ class GroupConfig(ApiRest):
     """获取或修改群设置。"""
     target: int
     """群号。"""
-    config: Optional[GroupConfig] = None
+    config: Optional[GroupConfigModel] = None
     """仅修改时可用。群设置。"""
     class Info(ApiRest.Info):
         name = "groupConfig"
         alias = "group_config"
-        response_type = GroupConfig
+        response_type = GroupConfigModel
         response_type_post = Response
 
 
@@ -843,12 +853,12 @@ class MemberInfo(ApiRest):
     """群号。"""
     member_id: int
     """指定群成员的 QQ 号。"""
-    info: Optional[MemberInfo] = None
+    info: Optional[MemberInfoModel] = None
     """仅修改时可用。群成员资料。"""
     class Info(ApiRest.Info):
         name = "memberInfo"
         alias = "member_info"
-        response_type = MemberInfo
+        response_type = MemberInfoModel
         response_type_post = Response
 
 
@@ -967,6 +977,7 @@ class RespMemberJoinRequestEvent(ApiPost):
 
 
 class RespBotInvitedJoinGroupRequestEvent(ApiPost):
+    """响应被邀请入群申请。"""
     event_id: int
     """响应申请事件的标识。"""
     from_id: int

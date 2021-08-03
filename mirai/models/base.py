@@ -2,7 +2,7 @@
 """
 此模块提供 YiriMirai 中使用的 pydantic 模型的基类。
 """
-from typing import Type
+from typing import Dict, List, Type
 
 import pydantic.main as pdm
 from pydantic import BaseModel
@@ -45,7 +45,7 @@ class MiraiBaseModel(BaseModel, metaclass=MiraiMetaclass):
 
 class MiraiIndexedMetaclass(MiraiMetaclass):
     """可以通过子类名获取子类的类的元类。"""
-    __indexedbases__ = []
+    __indexedbases__: List[Type['MiraiIndexedModel']] = []
     __indexedmodel__ = None
 
     def __new__(cls, name, bases, attrs, **kwargs):
@@ -72,6 +72,8 @@ class MiraiIndexedMetaclass(MiraiMetaclass):
 
 class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):
     """可以通过子类名获取子类的类。"""
+    __indexes__: Dict[str, Type['MiraiIndexedModel']]
+
     @classmethod
     def get_subtype(cls, name: str) -> Type['MiraiIndexedModel']:
         """根据类名称，获取相应的子类类型。

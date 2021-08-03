@@ -3,7 +3,7 @@
 此模块提供一些实用的辅助方法。
 """
 import inspect
-from typing import Callable, List, Union
+from typing import Callable, List
 
 from mirai import exceptions
 
