@@ -49,6 +49,14 @@ if __name__ == '__main__':
 
 更多信息参看[文档](https://yiri-mirai.vercel.app/)。
 
+## 社区
+
+QQ 群：766952599（[链接](https://jq.qq.com/?_wv=1027&k=PXBOuBCI)）
+
+Github Discussion（[链接](https://github.com/YiriMiraiProject/YiriMirai/discussions)）
+
+Discord（[链接](https://discord.gg/RaXsHFC3PH)）
+
 ## 开源协议
 
 由于 mirai 及 mirai-api-http 均采用了 AGPL-3.0 开源协议，本项目同样采用 AGPL-3.0 协议。
