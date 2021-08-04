@@ -63,7 +63,7 @@ def handle_group_message_another(event: GroupMessage):
 
 YiriMirai 提供了两个特殊的事件 `Startup` 和 `Shutdown`，用于在程序启动和关闭时进行相关操作。
 
-YiriMirai 保证这两个事件触发时，机器人处于登陆状态。因此，可以在处理这两个事件时调用 API。
+YiriMirai 保证这两个事件触发时，机器人处于登录状态。因此，可以在处理这两个事件时调用 API。
 
 ```python
 @bot.on(Startup)
