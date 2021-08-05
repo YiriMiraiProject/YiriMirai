@@ -95,6 +95,16 @@ if At(bot.qq) in event.message_chain:
     return bot.send(event, MessageChain([At(event.sender.id), Plain('你在叫我吗？')]))
 ```
 
+还记得我们在上一节里提出的问题吗？因为 `MessageChain` 类型不是字符串，所以想要获得它的文字内容，需要使用 `str` 方法，也就是 `str(event.message_chain)`。使用 `str` 时，消息链会按照“mirai 码”的形式转换其中的非文本内容。关于“mirai 码”，参看 mirai 的[文档](https://docs.mirai.mamoe.net/Messages.html#mirai-%E7%A0%81)。
+
+:::tip 另一种文本化
+如果你希望输出消息链的内容用于调试，那么 `str` 并不是最佳的选择，因为它会丢失一部分信息。
+
+我们建议使用 `repr` 方法，它会完整地呈现消息链的全部内容。YiriMirai 对 `repr` 做了一定的优化，让它的输出更易于识读。同时，`repr` 也保证输出的结果是合法的 Python 表达式，你可以直接用它复原你的消息链。
+
+其实，除了消息链以外，YiriMirai 的很多东西都是可以用 `repr` 方法来输出的。这会让你的调试更加方便。
+:::
+
 ## 事件类型
 
 在上一节，我们用到了 `FriendMessage`，这里我们用到了 `GroupMessage`，这两个都是类。

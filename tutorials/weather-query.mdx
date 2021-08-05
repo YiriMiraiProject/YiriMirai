@@ -1,0 +1,170 @@
+---
+sidebar_position: 5
+---
+
+# 三：查询天气
+
+这一节，我们来实现一个简单的天气查询功能。
+
+## 前置知识
+
+从本节开始，我们需要你对异步的概念，以及 Python 的 asyncio 库比较了解。你可以在[这里](https://docs.python.org/zh-cn/3/library/asyncio.html)查看 Python 的 asyncio 官方文档。
+
+如果你还不清楚“异步”的概念，请移步[这里](/docs/asyncio-tutorial)。
+
+## 预期的功能
+
+我们希望实现这样的功能：
+
+import { ChatBox, ChatMessage } from "@site/src/components/ChatMessage.js";
+
+<ChatBox>
+  <ChatMessage name="忘忧北萱草" msg="查询天气 北京" />
+  <ChatMessage name="Yiri" msg="查询中……" />
+  <ChatMessage name="Yiri" msg="当前北京天气为多云，气温29℃。" />
+</ChatBox>
+
+## 异步的事件处理器
+
+这次的功能和之前有所不同：它需要发送两条消息。而按照我们之前的处理方式，一个事件处理器只能发送一条消息，该怎么办呢？
+
+发送多条消息这样的功能，YiriMirai 当然是支持的。还记得 `bot.send` 方法吗？它是一个异步函数，只要我们把事件处理器声明为异步的，就可以随时调用这个方法。
+
+```python
+@bot.on(GroupMessage)
+async def weather_query(event: GroupMessage):
+    ...
+```
+
+我们用 `async def` 定义了异步的事件处理器，这样我们就能够在事件处理器中调用 API 了。
+
+## 解析消息链
+
+上一节，我们已经接触了消息链的基本用法。现在，为了实现本节需要的功能，我们来了解一些更高级的用法。
+
+### 消息链过滤
+
+消息链支持增强的索引操作。比如，我们可以这样取出消息链中所有的文本：
+
+```python
+event.message_chain[Plain]
+```
+
+这样得到的是一个由消息链中全部 `Plain` 元素组成的列表。接下来我们把其中的文本拼到一起：
+
+```python
+"".join(map(str, event.message_chain[Plain]))
+```
+
+注意需要先用 `str` 把 `Plain` 转换成字符串。
+
+消息链过滤不止可以取出 `Plain`，还可以取出其他类型的元素。比如，我们可以取出消息链中所有的图片：
+
+```python
+event.message_chain[Image]
+```
+
+使用切片的语法，可以取出指定数量的元素：
+
+```python
+event.message_chain[Image:2] # 消息链中的前两个图片
+```
+
+### 实现匹配
+
+有了消息链过滤，我们就可以实现匹配查询天气的指令了。方便起见，我们选择使用正则表达式。
+
+```python
+import re
+
+@bot.on(GroupMessage)
+async def weather_query(event: GroupMessage):
+    # 从消息链中取出文本
+    msg = "".join(map(str, event.message_chain[Plain]))
+    # 匹配指令
+    m = re.match(r'^查询天气\s*(\w+)\s*$', msg.strip())
+    if m:
+        # 取出指令中的地名
+        city = m.group(1)
+        ...
+```
+
+## 发送消息
+
+```python {12}
+import re
+
+@bot.on(GroupMessage)
+async def weather_query(event: GroupMessage):
+    # 从消息链中取出文本
+    msg = "".join(map(str, event.message_chain[Plain]))
+    # 匹配指令
+    m = re.match(r'^查询天气\s*(\w+)\s*$', msg.strip())
+    if m:
+        # 取出指令中的地名
+        city = m.group(1)
+        await bot.send(event, '查询中……')
+```
+
+看起来没有那么难。
+
+## 调用天气接口
+
+因为本篇教程的重点是 YiriMirai 的用法，所以天气接口的细节暂且略过。我们这里使用 [心知天气](https://www.seniverse.com/)，具体的用法请查看官网。
+
+既然已经使用了异步的事件处理器，那么我们干脆把网络部分全部用异步实现。我们使用 httpx 发起异步的请求。
+
+```python
+import httpx
+
+API_KEY = '心知天气的私钥'
+
+async def query(city: str) -> str:
+    """查询天气数据。"""
+    async with httpx.AsyncClient() as client:
+        resp = await client.get(f'https://api.seniverse.com/v3/weather/now.json', params={
+            'key': API_KEY,
+            'location': city,
+            'language': 'zh-Hans',
+            'unit': 'c',
+        })
+        try:
+            resp.raise_for_status()
+        except httpx.HTTPStatusError as e:
+            return f'抱歉，没有找到{city}的天气数据。'
+
+        data = resp.json()
+        try:
+          return f'当前{data["results"][0]["location"]["name"]}天气为'
+              f'{data["results"][0]["now"]["text"]}，'
+              f'气温{data["results"][0]["now"]["temperature"]}℃。'
+        except KeyError:
+            return f'抱歉，没有找到{city}的天气数据。'
+```
+
+下面只需要把查询天气整合到事件处理器中就可以了。
+
+```python
+import re
+
+@bot.on(GroupMessage)
+async def weather_query(event: GroupMessage):
+    # 从消息链中取出文本
+    msg = "".join(map(str, event.message_chain[Plain]))
+    # 匹配指令
+    m = re.match(r'^查询天气\s*(\w+)\s*$', msg.strip())
+    if m:
+        # 取出指令中的地名
+        city = m.group(1)
+        await bot.send(event, '查询中……')
+        # 发送天气消息
+        await bot.send(event, await query(city))
+```
+
+## 总结
+
+这一节我们为机器人实现了简单的天气查询功能。
+
+本节的示例代码在[这里](/examples/03.md)。
+
+准备好了的话，就前往下一节吧。
