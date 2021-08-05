@@ -77,6 +77,8 @@ event.message_chain[Image:2] # 消息链中的前两个图片
 ```python
 import re
 
+from mirai import Plain
+
 @bot.on(GroupMessage)
 async def weather_query(event: GroupMessage):
     # 从消息链中取出文本
@@ -110,9 +112,9 @@ async def weather_query(event: GroupMessage):
 
 ## 调用天气接口
 
-因为本篇教程的重点是 YiriMirai 的用法，所以天气接口的细节暂且略过。我们这里使用 [心知天气](https://www.seniverse.com/)，具体的用法请查看官网。
+因为本篇教程的重点是 YiriMirai 的用法，所以天气接口的细节暂且略过。我们这里使用[心知天气](https://www.seniverse.com/)，具体的用法请查看官网。
 
-既然已经使用了异步的事件处理器，那么我们干脆把网络部分全部用异步实现。我们使用 httpx 发起异步的请求。
+既然已经使用了异步的事件处理器，那么我们干脆把网络部分全部用异步实现，使用 httpx 发起异步的请求。
 
 ```python
 import httpx
@@ -135,8 +137,8 @@ async def query(city: str) -> str:
 
         data = resp.json()
         try:
-          return f'当前{data["results"][0]["location"]["name"]}天气为'
-              f'{data["results"][0]["now"]["text"]}，'
+          return f'当前{data["results"][0]["location"]["name"]}天气为' \
+              f'{data["results"][0]["now"]["text"]}，' \
               f'气温{data["results"][0]["now"]["temperature"]}℃。'
         except KeyError:
             return f'抱歉，没有找到{city}的天气数据。'
