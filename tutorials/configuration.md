@@ -157,7 +157,7 @@ YiriMirai 依赖于 mirai-api-http V2，而 mirai-api-http 并不能通过 mirai
 
 这说明 mirai-api-http 安装成功了。
 
-退出 mirai-console，在 `config/net.mamoe.mirai-api-http` 文件夹中找到 `settings.json`，这是 mirai-api-http 的配置文件。
+退出 mirai-console，在 `config/net.mamoe.mirai-api-http` 文件夹中找到 `setting.yml`，这是 mirai-api-http 的配置文件。
 
 将这个文件的内容修改为：
 
@@ -172,7 +172,7 @@ cacheSize: 4096
 adapterSettings:
   ws:
     host: localhost
-    port: 8000
+    port: 8080
     reservedSyncId: -1
 ```
 

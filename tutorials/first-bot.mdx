@@ -1,0 +1,159 @@
+---
+sidebar_position: 3
+---
+
+# 一：第一个机器人
+
+终于要开始了！接下来，我们将带你逐步编写一个有趣的聊天机器人。
+
+## 前置知识
+
+在本节，我们假定你已经熟悉了 Python 的基本语法，并且知道类和装饰器的用法。
+
+后续的章节会对你的 Python 水平提出更高的要求，比如异步和类型注解；不过如果你现在还不知道如何使用它们，大可不必着急，这一节并不需要你掌握这些知识。等到后面用到的时候，就去 [Python 的文档](https://docs.python.org/zh-cn/3/)学习一下吧。
+
+## 安装 YiriMirai
+
+你可以通过 pip 安装 YiriMirai。
+
+```shell
+pip install yiri-mirai
+```
+
+试着打开 python 交互环境，输入 `import mirai`，如果没有发生错误，说明你已经成功安装了 YiriMirai。
+
+## 新建项目
+
+在合适的地方新建文件夹，然后在其中创建一个文件 `main.py`。
+
+```python title='main.py'
+from mirai import Mirai, WebSocketAdapter, FriendMessage
+
+if __name__ == '__main__':
+    bot = Mirai(
+        qq=12345678, # 改成你的机器人的 QQ 号
+        adapter=WebSocketAdapter(
+            verify_key='yirimirai', host='localhost', port=8080
+        )
+    )
+
+    @bot.on(FriendMessage)
+    def on_friend_message(event: FriendMessage):
+        if str(event.message_chain) == '你好':
+            return bot.send(event, 'Hello, World!')
+
+    bot.run()
+```
+
+在命令行使用 `python main.py` 运行这个程序。
+
+成功的话，你会看到类似下面的输出：
+
+```shell
+>>> python main.py
+2022-02-15 00:00:00 - INFO     成功登录到账号12345678。
+2022-02-15 00:00:00 - INFO     机器人开始运行。按 Ctrl + C 停止。
+```
+
+现在，试着给你的机器人账号发送一条“你好”，看看会发生什么。
+
+import { ChatBox, ChatMessage } from "@site/src/components/ChatMessage.js";
+
+<ChatBox>
+  <ChatMessage name="忘忧北萱草" msg="你好" />
+  <ChatMessage name="Yiri" msg="Hello, World!" />
+</ChatBox>
+
+
+## 阅读初始代码
+
+成功运行之后，我们来看一看这几行代码都是什么意思。
+
+### 引入 YiriMirai
+
+```python
+from mirai import Mirai, WebSocketAdapter, FriendMessage
+```
+
+YiriMirai 的顶层模块名叫 `mirai`。为了便于使用，我们把大部分常用的东西都放在了 `mirai` 模块的命名空间中。这样，可以不必费劲地在子模块中寻找各个类和函数，你可以方便的用 `from mirai import ...` 引入它们。
+
+### 创建 Mirai 实例
+
+```python
+bot = Mirai(
+    qq=12345678, # 改成你的机器人的 QQ 号
+    adapter=WebSocketAdapter(
+        verify_key='yirimirai', host='localhost', port=8080
+    )
+)
+```
+
+这几行代码创建了一个 `Mirai` 实例。`Mirai` 实例表示一个运行的机器人，之后我们主要就是和它打交道。
+
+创建 `Mirai` 实例时，传入了 QQ 号和 WebSocket 适配器。关于“适配器”的内容，我们会在后面的章节中详细介绍，在此处不必关心，仿照示例编写即可。
+
+:::tip 使用你自己的配置
+还记得 mirai-api-http 的配置文件吗？里面有两行：`verifyKey: yirimirai` 和 `port: 8080`，代码中编写的要和这两行一致。
+
+当然你可以把这两行改成你自己的配置，只要顺带着修改一下代码就好。
+
+尤其是遇到端口冲突（8080端口被别的程序占用），你就必须把 8080 改成其他的端口。
+:::
+
+### 处理事件
+
+```python
+@bot.on(FriendMessage)
+def on_friend_message(event: FriendMessage):
+    if str(event.message_chain) == '你好':
+        return bot.send(event, 'Hello, World!')
+```
+
+这一部分是我们的重头戏了。
+
+如果你接触过图形界面编程（比如 MFC 和 VCL 这样的框架），“事件”这个概念应该不会陌生。YiriMirai 同样采用了事件的模式。这里的 `FriendMessage` 便是一个事件，它表示有一个好友发来消息。
+
+YiriMirai 中，使用装饰器来注册事件处理器。这里的 `on_friend_message` 就是一个事件处理器。事件处理器是一个同步或异步的函数，它接受一个参数 `event`。
+
+当事件触发时，YiriMirai 会调用事件处理器，此时 `event` 参数的值包含了事件的信息。比如这里，`event.message_chain` 就是好友发来的消息内容。
+
+:::note 参数名称与类型注解
+事实上，事件处理器的参数名称并不一定需要叫做 `event`，你可以把它叫做任何你喜欢的名字。同样，事件处理器的名称也不一定需要是 `on_friend_message`，你也可以使用其他的名字。
+
+上面的代码中，我们给 `event` 参数加入了类型注解。这不是必需的，但是类型注解可以提升你使用编辑器的代码提示的体验。
+:::
+
+这里的事件处理器包含了一个简单的逻辑。当收到消息时，如果消息内容是“你好”，就回复“Hello, World!”。
+
+```python
+if str(event.message_chain) == '你好':
+    return bot.send(event, 'Hello, World!')
+```
+
+我们用 `str(event.message_chain)` 获得好友发来的消息内容。至于为什么需要 `str`？目前你还不需要知道，之后的章节会解释其中的原因。
+
+然后，通过 `bot.send` 方法发送回复。`send` 是一个很有用的方法，它的第一个参数可以直接接受 `event` 对象，YiriMirai 会自动从 `event` 中解析出消息发送的对象。第二个参数就是要发送的消息内容了。
+
+:::note 快速响应
+不知大家有没有注意到一个奇怪之处：我们把 `bot.send` 作为了事件处理器的返回值。
+
+想要理解其中的原因，需要一点异步的知识。`bot.send` 是一个异步函数，调用之后不会立刻运行，而是返回一个协程对象，当 await 时才真正开始运行。而我们这里定义的事件处理器是一个同步函数，并不能使用 await。这时候，YiriMirai 提供了称为“快速响应”的特性。把 `bot.send` 作为事件处理器的返回值，YiriMirai 会自动在事件处理结束后调用这个方法。
+
+如果上面这一段看不懂也没有关系，只要知道能通过 return 来调用 `send` 方法即可。
+:::
+
+### 运行机器人
+
+```python
+bot.run()
+```
+
+调用 `bot.run` 方法启动机器人。正常情况下，`bot.run` 会阻塞程序的运行，直到你在控制台按下 Ctrl+C 才会退出。
+
+## 总结
+
+这一节我们完成了第一个机器人实例。尽管它只有最简单的功能，但是能看到它跑起来，还是很有成就感的。
+
+本节的示例代码在[这里](/examples/01.md)。
+
+准备好了的话，就前往下一节吧。
