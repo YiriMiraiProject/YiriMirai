@@ -6,7 +6,13 @@ sidebar_position: 3.5
 
 在 mirai-api-http 2.X 版本中，将不同的连接方式拆分为 4 种接口适配器（adapter）。YiriMirai 针对 mirai-api-http 的接口适配器，设计了 `Adapter` 类。
 
-当前版本支持 `HTTPAdapter` 和 `WebSocketAdapter`，对其他接口适配器的支持会在之后版本加入。
+当前版本支持 `HTTPAdapter` `WebSocketAdapter` 和 `WebHookAdapter`。
+
+| 名称             | 类名               | 描述                                                                        |
+| ---------------- | ------------------ | --------------------------------------------------------------------------- |
+| HTTP 适配器      | `HTTPAdapter`      | YiriMirai 作为客户端，向 mirai-api-http 发送 HTTP 请求                      |
+| websocket 适配器 | `WebSocketAdapter` | YiriMirai 作为客户端，与 mirai-api-websocket 建立 websocket 连接            |
+| WebHook 适配器   | `WebHookAdapter`   | YiriMirai 作为服务器，由 mirai-api-http 向 YiriMirai 通过 HTTP 请求上报事件 |
 
 ## 创建 Adapter
 

@@ -161,7 +161,7 @@ YiriMirai 依赖于 mirai-api-http V2，而 mirai-api-http 并不能通过 mirai
 
 将这个文件的内容修改为：
 
-```yaml
+```yaml title='setting.yml'
 adapters:
   - ws
 debug: true
