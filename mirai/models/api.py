@@ -232,6 +232,7 @@ class ApiModel(ApiBaseModel):
         name = ""
         alias = ""
         response_type: Type[MiraiBaseModel] = Response
+        parameter_names: List[str] = []
 
     def __init__(self, *args, **kwargs):
         # 解析参数列表，将位置参数转化为具名参数
@@ -519,9 +520,9 @@ class MemberProfile(ApiGet):
 
 class SendMessage(ApiBaseModel):
     """发送消息的 API 的方法复用，不作为 API 使用。"""
-    message_chain: Union[MessageChain, list]
+    # message_chain: Union[MessageChain, list]
 
-    @validator('message_chain')
+    @validator('message_chain', check_fields=False)
     def _validate_message_chain(cls, value: Union[MessageChain, list]):
         if isinstance(value, list):
             return MessageChain.parse_obj(value)

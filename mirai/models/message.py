@@ -219,6 +219,8 @@ class MessageChain(MiraiBaseModel):
 
     @validator('__root__', always=True, pre=True)
     def _parse_component(cls, msg_chain):
+        if isinstance(msg_chain, str):
+            msg_chain = [msg_chain]
         if not msg_chain:
             msg_chain = []
         return cls._parse_message_chain(msg_chain)
@@ -343,7 +345,6 @@ class Quote(MessageComponent):
     origin: MessageChain
     """被引用回复的原消息的消息链对象。"""
     @validator("origin", always=True, pre=True)
-    @classmethod
     def origin_formater(cls, v):
         return MessageChain.parse_obj(v)
 
