@@ -171,7 +171,7 @@ return bot.send(event, 'Hello, World!')
 
 如果你查看 `Mirai` 类的源代码，你会发现你找不到这个方法。这是因为 `Mirai` 使用了 `__getattr__` 来实现动态调用 API。你只需要知道 mirai-api-http 中 API 的名称和参数，就可以像这样直接通过 `bot.API名称` 调用。
 
-为什么是 `bot.send_friend_message` 而不是 `bot.sendFriendMessage`？虽然后者才是 mirai-api-http 中的给出定义，但这是为了符合 PEP 8 规范，因为 `send_friend_message` 是一个合理的函数命名。事实上，`bot.sendFriendMessage` 也是可用的。**我们对所有的 API 都进行了名称转写，全部使用小写字母和下划线分隔**。你可以仿照这个例子，得出其他 API 的命名。
+为什么是 `bot.send_friend_message` 而不是 `bot.sendFriendMessage`？虽然后者才是 mirai-api-http 中给出的定义，但这是为了符合 PEP 8 规范，因为 `send_friend_message` 是一个合理的函数命名。事实上，`bot.sendFriendMessage` 也是可用的。**我们对所有的 API 都进行了名称转写，全部使用小写字母和下划线分隔**。你可以仿照这个例子，得出其他 API 的命名。
 
 API 的参数和 mirai-api-http 中的定义一致，可以使用位置参数或具名参数的方式给出。
 :::
