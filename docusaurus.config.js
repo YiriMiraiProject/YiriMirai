@@ -165,7 +165,7 @@ module.exports = {
         id: "tutorials",
         path: "tutorials",
         routeBasePath: "tutorials",
-        editUrl: "https://github.com/YiriMiraiProject/YiriMirai/edit/tutorials/",
+        editUrl: "https://github.com/YiriMiraiProject/YiriMirai/edit/doc/",
       },
     ],
   ],
