@@ -7,8 +7,7 @@ import contextlib
 import logging
 import sys
 from typing import (
-    Any, Awaitable, Callable, Dict, Iterable, List, NoReturn, Optional, Type,
-    Union, cast
+    Any, Awaitable, Callable, Dict, Iterable, List, Optional, Type, Union, cast
 )
 
 from mirai.adapters.base import Adapter, AdapterInterface, ApiProvider
@@ -74,10 +73,10 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
     def bus(self) -> EventBus:
         return self._bus
 
-    def subscribe(self, event, func: Callable) -> NoReturn:
+    def subscribe(self, event, func: Callable) -> None:
         self._bus.subscribe(event, func)
 
-    def unsubscribe(self, event, func: Callable) -> NoReturn:
+    def unsubscribe(self, event, func: Callable) -> None:
         self._bus.unsubscribe(event, func)
 
     async def emit(self, event, *args, **kwargs) -> List[Awaitable[Any]]:

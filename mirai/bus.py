@@ -9,7 +9,7 @@ import asyncio
 import inspect
 import logging
 from collections import defaultdict
-from typing import Any, Awaitable, Callable, Dict, Iterable, List, NoReturn, Optional
+from typing import Any, Awaitable, Callable, Dict, Iterable, List, Optional
 
 from mirai.utils import async_call_with_exception, async_with_exception
 
@@ -42,7 +42,7 @@ class AbstractEventBus:
     事件总线的基类。
     """
     @abc.abstractmethod
-    def subscribe(self, event, func: Callable) -> NoReturn:
+    def subscribe(self, event, func: Callable) -> None:
         """注册事件处理器。
 
         `event` 事件名。
@@ -51,7 +51,7 @@ class AbstractEventBus:
         """
 
     @abc.abstractmethod
-    def unsubscribe(self, event, func: Callable) -> NoReturn:
+    def unsubscribe(self, event, func: Callable) -> None:
         """移除事件处理器。
 
         `event` 事件名。
@@ -114,7 +114,7 @@ class EventBus(AbstractEventBus):
         self._subscribers: Dict[str, set] = defaultdict(set)
         self.event_chain_generator = event_chain_generator
 
-    def subscribe(self, event: str, func: Callable) -> NoReturn:
+    def subscribe(self, event: str, func: Callable) -> None:
         """注册事件处理器。
 
         `event: str` 事件名。
@@ -123,7 +123,7 @@ class EventBus(AbstractEventBus):
         """
         self._subscribers[event].add(func)
 
-    def unsubscribe(self, event: str, func: Callable) -> NoReturn:
+    def unsubscribe(self, event: str, func: Callable) -> None:
         """移除事件处理器。
 
         `event: str` 事件名。

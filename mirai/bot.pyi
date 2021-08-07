@@ -4,8 +4,7 @@
 """
 from pathlib import Path
 from typing import (
-    Any, Awaitable, Callable, Dict, Iterable, List, NoReturn, Optional, Type,
-    Union
+    Any, Awaitable, Callable, Dict, Iterable, List, Optional, Type, Union
 )
 
 from mirai.asgi import ASGI
@@ -36,13 +35,13 @@ from mirai.utils import Singleton
 class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
     qq: int
 
-    def __init__(self, qq: int, adapter: Adapter) -> NoReturn:
+    def __init__(self, qq: int, adapter: Adapter) -> None:
         ...
 
-    def subscribe(self, event, func: Callable) -> NoReturn:
+    def subscribe(self, event, func: Callable) -> None:
         ...
 
-    def unsubscribe(self, event, func: Callable) -> NoReturn:
+    def unsubscribe(self, event, func: Callable) -> None:
         ...
 
     async def emit(self, event, *args, **kwargs) -> List[Awaitable[Any]]:
@@ -61,13 +60,13 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
     async def use_adapter(self, adapter: Adapter):
         ...
 
-    async def startup(self) -> NoReturn:
+    async def startup(self) -> None:
         ...
 
-    async def background(self) -> NoReturn:
+    async def background(self) -> None:
         ...
 
-    async def shutdown(self) -> NoReturn:
+    async def shutdown(self) -> None:
         ...
 
     @property
@@ -84,7 +83,7 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
         port: int = ...,
         asgi_server: str = ...,
         **kwargs
-    ) -> NoReturn:
+    ) -> None:
         ...
 
 
@@ -92,16 +91,16 @@ class MiraiRunner(Singleton):
     _asgi: ASGI
     bots: Iterable[SimpleMirai]
 
-    def __init__(self, *bots: SimpleMirai) -> NoReturn:
+    def __init__(self, *bots: SimpleMirai) -> None:
         ...
 
-    async def startup(self) -> NoReturn:
+    async def startup(self) -> None:
         ...
 
-    async def shutdown(self) -> NoReturn:
+    async def shutdown(self) -> None:
         ...
 
-    async def __call__(self, scope, recv, send) -> NoReturn:
+    async def __call__(self, scope, recv, send) -> None:
         ...
 
     def run(
@@ -110,12 +109,12 @@ class MiraiRunner(Singleton):
         port: int = ...,
         asgi_server: str = ...,
         **kwargs
-    ) -> NoReturn:
+    ) -> None:
         ...
 
 
 class Mirai(SimpleMirai):
-    def __init__(self, qq: int, adapter: Adapter) -> NoReturn:
+    def __init__(self, qq: int, adapter: Adapter) -> None:
         ...
 
     def on(self, event_type: Union[Type[Event], str]) -> Callable:
