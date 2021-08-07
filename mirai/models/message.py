@@ -395,7 +395,7 @@ class Image(MessageComponent):
     """图片的 image_id，群图片与好友图片格式不同。不为空时将忽略 url 属性。"""
     url: Optional[HttpUrl] = None
     """图片的 URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载。"""
-    path: Optional[str] = None
+    path: Optional[Union[str, Path]] = None
     """图片的路径，发送本地图片。"""
     base64: Optional[str] = None
     """图片的 Base64 编码。"""
@@ -408,7 +408,7 @@ class Image(MessageComponent):
         return f"[mirai:image:{self.image_id}]"
 
     @validator('path')
-    def validate_path(cls, path: Optional[str]):
+    def validate_path(cls, path: Optional[Union[str, Path]]):
         """修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。"""
         if path:
             try:
@@ -488,7 +488,7 @@ class Image(MessageComponent):
         cls,
         filename: Optional[Union[str, Path]] = None,
         content: Optional[bytes] = None,
-    ) -> "Image":
+    ):
         """从本地文件路径加载图片，以 base64 的形式传递。
 
         `filename: Optional[Union[str, Path]] = None` 从本地文件路径加载图片，与 `content` 二选一。
@@ -505,6 +505,14 @@ class Image(MessageComponent):
             raise ValueError("请指定图片路径或图片内容！")
         img = cls(base64=base64.b64encode(content).decode())
         return img
+
+    @classmethod
+    def from_unsafe_path(cls, path: Union[str, Path]):
+        """从不安全的路径加载图片。
+
+        `path: Union[str, Path]` 从不安全的路径加载图片。
+        """
+        return cls.construct(path=str(path))
 
 
 class Xml(MessageComponent):

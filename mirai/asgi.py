@@ -121,12 +121,12 @@ def asgi_serve(
         asgi = asgi_server
 
     if asgi == 'uvicorn':
-        run(app, host=host, port=port, **kwargs)
+        run(app, host=host, port=port, debug=True, **kwargs)
         return True
     elif asgi == 'hypercorn':
         import asyncio
         config = Config().from_mapping(bind=f'{host}:{port}', **kwargs)
-        asyncio.run(serve(app, config))
+        asyncio.run(serve(app, config), debug=True)
         return True
     else:
         return False

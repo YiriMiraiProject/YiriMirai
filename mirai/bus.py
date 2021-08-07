@@ -10,7 +10,7 @@ import logging
 from collections import defaultdict
 from typing import Any, Awaitable, Callable, Dict, Iterable, List, Optional
 
-from mirai.utils import async_call_with_exception
+from mirai.utils import async_with_exception, async_call_with_exception
 
 logger = logging.getLogger(__name__)
 
@@ -116,7 +116,7 @@ class EventBus(object):
             result = await async_call_with_exception(f, *args, **kwargs)
             # 快速响应：如果事件处理器返回一个协程，那么立即运行这个协程。
             if inspect.isawaitable(result):
-                return result
+                return async_with_exception(result)
             else: # 当不使用快速响应时，返回值无意义。
                 return None
 
@@ -124,8 +124,8 @@ class EventBus(object):
         for m_event in self.event_chain_generator(event):
             coros += [(await call(f)) for f in self._subscribers[m_event]]
 
-        results = list(filter(None, coros)) # 只保留快速响应的返回值。
-        return list(map(lambda coro: asyncio.create_task(coro), results))
+        results = filter(None, coros) # 只保留快速响应的返回值。
+        return [asyncio.create_task(coro) for coro in results]
 
     @classmethod
     def get_default_bus(cls):
