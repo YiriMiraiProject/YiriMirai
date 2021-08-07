@@ -4,11 +4,12 @@
 
 此处的事件总线不包含 model 层封装。包含 model 层封装的版本，请参见模块 `mirai.models.bus`。
 """
+import abc
 import asyncio
 import inspect
 import logging
 from collections import defaultdict
-from typing import Any, Awaitable, Callable, Dict, Iterable, List, Optional
+from typing import Any, Awaitable, Callable, Dict, Iterable, List, NoReturn, Optional
 
 from mirai.utils import async_call_with_exception, async_with_exception
 
@@ -35,7 +36,59 @@ def event_chain_single(event: str):
     yield event
 
 
-class EventBus(object):
+class AbstractEventBus:
+    """抽象事件总线。
+
+    事件总线的基类。
+    """
+    @abc.abstractmethod
+    def subscribe(self, event, func: Callable) -> NoReturn:
+        """注册事件处理器。
+
+        `event` 事件名。
+
+        `func: Callable` 事件处理器。
+        """
+
+    @abc.abstractmethod
+    def unsubscribe(self, event, func: Callable) -> NoReturn:
+        """移除事件处理器。
+
+        `event` 事件名。
+
+        `func: Callable` 事件处理器。
+        """
+
+    @abc.abstractmethod
+    def on(self, event) -> Callable:
+        """以装饰器的方式注册事件处理器。
+
+        `event` 事件名。
+
+        例如：
+        ```py
+        @bus.on('Event.MyEvent')
+        def my_event_handler(event):
+            print(event)
+        ```
+        """
+
+    @abc.abstractmethod
+    async def emit(self, event, *args, **kwargs) -> List[Awaitable[Any]]:
+        """触发一个事件。
+
+        异步执行说明：`await emit` 时执行事件处理器，所有事件处理器执行完后，并行运行所有快速响应。
+
+        `event` 要触发的事件名称。
+
+        `*args, **kwargs` 传递给事件处理器的参数。
+
+        Returns: `List[Awaitable[Any]]`
+            所有事件处理器的快速响应协程的 Task。
+        """
+
+
+class EventBus(AbstractEventBus):
     """事件总线。
 
     事件总线提供了一个简单的方法，用于分发事件。事件处理器可以通过 `subscribe` 或 `on` 注册事件，
@@ -61,7 +114,7 @@ class EventBus(object):
         self._subscribers: Dict[str, set] = defaultdict(set)
         self.event_chain_generator = event_chain_generator
 
-    def subscribe(self, event: str, func: Callable) -> None:
+    def subscribe(self, event: str, func: Callable) -> NoReturn:
         """注册事件处理器。
 
         `event: str` 事件名。
@@ -70,7 +123,7 @@ class EventBus(object):
         """
         self._subscribers[event].add(func)
 
-    def unsubscribe(self, event: str, func: Callable) -> None:
+    def unsubscribe(self, event: str, func: Callable) -> NoReturn:
         """移除事件处理器。
 
         `event: str` 事件名。

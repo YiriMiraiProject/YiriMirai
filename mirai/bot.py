@@ -7,12 +7,13 @@ import contextlib
 import logging
 import sys
 from typing import (
-    Any, Callable, Dict, Iterable, List, Optional, Type, Union, cast
+    Any, Awaitable, Callable, Dict, Iterable, List, NoReturn, Optional, Type,
+    Union, cast
 )
 
 from mirai.adapters.base import Adapter, AdapterInterface, ApiProvider
 from mirai.asgi import ASGI, asgi_serve
-from mirai.bus import EventBus
+from mirai.bus import AbstractEventBus, EventBus
 from mirai.models.api import ApiModel
 from mirai.models.bus import ModelEventBus
 from mirai.models.entities import (
@@ -27,7 +28,7 @@ __all__ = [
 ]
 
 
-class SimpleMirai(ApiProvider, AdapterInterface):
+class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
     """
     基于 adapter 和 bus，处于 model 层之下的机器人类。
 
@@ -68,6 +69,19 @@ class SimpleMirai(ApiProvider, AdapterInterface):
         self._adapter = adapter
         self._bus = EventBus()
         self._adapter.register_event_bus(self._bus)
+
+    @property
+    def bus(self) -> EventBus:
+        return self._bus
+
+    def subscribe(self, event, func: Callable) -> NoReturn:
+        self._bus.subscribe(event, func)
+
+    def unsubscribe(self, event, func: Callable) -> NoReturn:
+        self._bus.unsubscribe(event, func)
+
+    async def emit(self, event, *args, **kwargs) -> List[Awaitable[Any]]:
+        return await self._bus.emit(event, *args, **kwargs)
 
     async def call_api(self, api: str, *args, **kwargs):
         """调用 API。
@@ -271,6 +285,10 @@ class Mirai(SimpleMirai):
         adapter.unregister_event_bus(self._bus)
         self._bus: ModelEventBus = ModelEventBus()
         adapter.register_event_bus(self._bus.base_bus)
+
+    @property
+    def bus(self) -> ModelEventBus:
+        return self._bus
 
     def on(
         self,

@@ -4,7 +4,8 @@
 """
 from pathlib import Path
 from typing import (
-    Any, Callable, Dict, Iterable, List, NoReturn, Optional, Type, Union
+    Any, Awaitable, Callable, Dict, Iterable, List, NoReturn, Optional, Type,
+    Union
 )
 
 from mirai.asgi import ASGI
@@ -16,6 +17,7 @@ except ImportError:
     from typing_extensions import Literal
 
 from mirai.adapters.base import Adapter, AdapterInterface, ApiProvider
+from mirai.bus import AbstractEventBus
 from mirai.models.api import (
     AboutResponse, ApiModel, File, FileInfoResponse, FileListResponse,
     FileMkdirResponse, FriendListResponse, GroupListResponse,
@@ -31,10 +33,19 @@ from mirai.models.message import Image, MessageChain, MessageComponent, Voice
 from mirai.utils import Singleton
 
 
-class SimpleMirai(ApiProvider, AdapterInterface):
+class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
     qq: int
 
     def __init__(self, qq: int, adapter: Adapter) -> NoReturn:
+        ...
+
+    def subscribe(self, event, func: Callable) -> NoReturn:
+        ...
+
+    def unsubscribe(self, event, func: Callable) -> NoReturn:
+        ...
+
+    async def emit(self, event, *args, **kwargs) -> List[Awaitable[Any]]:
         ...
 
     async def call_api(self, api: str, *args, **kwargs):
