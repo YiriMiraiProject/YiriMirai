@@ -14,7 +14,7 @@ class MiraiMetaclass(pdm.ModelMetaclass):
 
 def to_camel(name: str) -> str:
     """将下划线命名风格转换为小驼峰命名。"""
-    if name[:2] == '__': # 不处理双下划线开头的特殊命名。
+    if name[:2] == '__':  # 不处理双下划线开头的特殊命名。
         return name
     name_parts = name.split('_')
     return ''.join(name_parts[:1] + [x.title() for x in name_parts[1:]])

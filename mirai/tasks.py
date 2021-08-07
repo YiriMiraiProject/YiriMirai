@@ -5,7 +5,7 @@
 import asyncio
 
 
-class Tasks():
+class Tasks:
     """管理多个异步任务的类。"""
     def __init__(self):
         self._tasks = set()

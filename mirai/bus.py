@@ -10,7 +10,7 @@ import logging
 from collections import defaultdict
 from typing import Any, Awaitable, Callable, Dict, Iterable, List, Optional
 
-from mirai.utils import async_with_exception, async_call_with_exception
+from mirai.utils import async_call_with_exception, async_with_exception
 
 logger = logging.getLogger(__name__)
 
@@ -23,8 +23,8 @@ def event_chain_separator(sep: str = '.'):
     def generator(event: str):
         while True:
             yield event
-            event, *sub_event = event.rsplit(sep, maxsplit=1) # 由下到上依次触发
-            if not sub_event: # 顶层事件触发完成
+            event, *sub_event = event.rsplit(sep, maxsplit=1)  # 由下到上依次触发
+            if not sub_event:  # 顶层事件触发完成
                 break
 
     return generator
@@ -80,7 +80,7 @@ class EventBus(object):
         try:
             self._subscribers[event].remove(func)
         except KeyError:
-            logger.warn(f'试图移除事件 `{event}` 的一个不存在的事件处理器 `{func}`。')
+            logger.warning(f'试图移除事件 `{event}` 的一个不存在的事件处理器 `{func}`。')
 
     def on(self, event: str) -> Callable:
         """以装饰器的方式注册事件处理器。
@@ -117,14 +117,14 @@ class EventBus(object):
             # 快速响应：如果事件处理器返回一个协程，那么立即运行这个协程。
             if inspect.isawaitable(result):
                 return async_with_exception(result)
-            else: # 当不使用快速响应时，返回值无意义。
+            else:  # 当不使用快速响应时，返回值无意义。
                 return None
 
         coros = []
         for m_event in self.event_chain_generator(event):
             coros += [(await call(f)) for f in self._subscribers[m_event]]
 
-        results = filter(None, coros) # 只保留快速响应的返回值。
+        results = filter(None, coros)  # 只保留快速响应的返回值。
         return [asyncio.create_task(coro) for coro in results]
 
     @classmethod

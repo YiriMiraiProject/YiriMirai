@@ -141,7 +141,8 @@ __all__ = [
     'GroupMember',
     'Permission',
     'Sender',
+    'Subject',
     'Config',
-    'GroupConfig',
-    'MemberInfo',
+    'GroupConfigModel',
+    'MemberInfoModel',
 ]

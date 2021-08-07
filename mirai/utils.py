@@ -14,7 +14,7 @@ def _with_exception(func):
         try:
             return await func(self, *args, **kwargs)
         except Exception as e:
-            exceptions.print_exception(e) # 打印异常信息，但不打断执行流程
+            exceptions.print_exception(e)  # 打印异常信息，但不打断执行流程
 
     return wrapper
 
@@ -83,9 +83,10 @@ def KMP(string, pattern, count: int = 1) -> List[int]:
 
 class SingletonMetaclass(type):
     """单例类元类。修改了单例类的 `__init__` 方法，使之只会被调用一次。"""
-    def __new__(cls, name, bases, attrs, **kwargs):
-        new_cls = super().__new__(cls, name, bases, attrs, **kwargs)
+    def __new__(mcs, name, bases, attrs, **kwargs):
+        new_cls = super().__new__(mcs, name, bases, attrs, **kwargs)
 
+        # noinspection PyTypeChecker
         __init__ = new_cls.__init__
 
         def __init__new(self, *args, **kwargs):
@@ -109,6 +110,7 @@ class Singleton(metaclass=SingletonMetaclass):
             cls._args = (args, kwargs)
 
             # 初始化
+            # noinspection PyArgumentList
             _instance.__init__(*args, **kwargs)
             cls._instance = _instance
             return _instance

@@ -7,6 +7,7 @@ from typing import (
     Any, Callable, Dict, Iterable, List, NoReturn, Optional, Type, Union
 )
 
+from mirai.asgi import ASGI
 from mirai.models.base import MiraiBaseModel
 
 try:
@@ -77,6 +78,7 @@ class SimpleMirai(ApiProvider, AdapterInterface):
 
 
 class MiraiRunner(Singleton):
+    _asgi: ASGI
     bots: Iterable[SimpleMirai]
 
     def __init__(self, *bots: SimpleMirai) -> NoReturn:
@@ -138,18 +140,22 @@ class Mirai(SimpleMirai):
     async def is_admin(self, group: Group) -> bool:
         ...
 
+    @property
     def about(self, ) -> ApiModel.Proxy[AboutResponse]:
-        ... # About
+        ...  # About
 
+    @property
     def bot_profile(self, ) -> ApiModel.Proxy[ProfileResponse]:
-        ... # BotProfile
+        ...  # BotProfile
 
+    @property
     def cmd_execute(
         self, command: Union[MessageChain, List[Union[MessageComponent, str]],
                              str]
     ) -> ApiModel.Proxy[Response]:
-        ... # CmdExecute
+        ...  # CmdExecute
 
+    @property
     def cmd_register(
         self,
         name: str,
@@ -157,110 +163,135 @@ class Mirai(SimpleMirai):
         usage: str = '',
         description: str = ''
     ) -> ApiModel.Proxy[Response]:
-        ... # CmdRegister
+        ...  # CmdRegister
 
+    @property
     def delete_friend(self, target: int) -> ApiModel.Proxy[Response]:
-        ... # DeleteFriend
+        ...  # DeleteFriend
 
+    @property
     def file_delete(self, id: str, target: int) -> ApiModel.Proxy[Response]:
-        ... # FileDelete
+        ...  # FileDelete
 
+    @property
     def file_info(self, id: str,
                   target: int) -> ApiModel.Proxy[FileInfoResponse]:
-        ... # FileInfo
+        ...  # FileInfo
 
+    @property
     def file_list(self, id: str,
                   target: int) -> ApiModel.Proxy[FileListResponse]:
-        ... # FileList
+        ...  # FileList
 
+    @property
     def file_mkdir(self, id: str, target: int,
                    directory_name: str) -> ApiModel.Proxy[FileMkdirResponse]:
-        ... # FileMkdir
+        ...  # FileMkdir
 
+    @property
     def file_move(self, id: str, target: int,
                   move_to: str) -> ApiModel.Proxy[Response]:
-        ... # FileMove
+        ...  # FileMove
 
+    @property
     def file_rename(self, id: str, target: int,
                     rename_to: str) -> ApiModel.Proxy[Response]:
-        ... # FileRename
+        ...  # FileRename
 
+    @property
     def file_upload(
         self, type: Literal['group'], target: int, file: Union[str, Path],
         path: str
     ) -> ApiModel.Proxy[File]:
-        ... # FileUpload
+        ...  # FileUpload
 
+    @property
     def friend_list(self, ) -> ApiModel.Proxy[FriendListResponse]:
-        ... # FriendList
+        ...  # FriendList
 
+    @property
     def friend_profile(self, target: int) -> ApiModel.Proxy[ProfileResponse]:
-        ... # FriendProfile
+        ...  # FriendProfile
 
+    @property
     def group_config(
         self,
         target: int,
         config: Optional[GroupConfigModel] = None
     ) -> ApiModel.Proxy[GroupConfigModel]:
-        ... # GroupConfig
+        ...  # GroupConfig
 
+    @property
     def group_list(self, ) -> ApiModel.Proxy[GroupListResponse]:
-        ... # GroupList
+        ...  # GroupList
 
+    @property
     def kick(self, target: int, memder_id: int,
              msg: str) -> ApiModel.Proxy[Response]:
-        ... # Kick
+        ...  # Kick
 
+    @property
     def member_info(
         self,
         target: int,
         member_id: int,
         info: Optional[MemberInfoModel] = None
     ) -> ApiModel.Proxy[MemberInfoModel]:
-        ... # MemberInfo
+        ...  # MemberInfo
 
+    @property
     def member_list(self, target: int) -> ApiModel.Proxy[MemberListResponse]:
-        ... # MemberList
+        ...  # MemberList
 
+    @property
     def member_profile(self, target: int,
                        member_id: int) -> ApiModel.Proxy[ProfileResponse]:
-        ... # MemberProfile
+        ...  # MemberProfile
 
+    @property
     def message_from_id(self,
                         id: int) -> ApiModel.Proxy[MessageFromIdResponse]:
-        ... # MessageFromId
+        ...  # MessageFromId
 
+    @property
     def mute(self, target: int, memder_id: int,
              time: int) -> ApiModel.Proxy[Response]:
-        ... # Mute
+        ...  # Mute
 
+    @property
     def mute_all(self, target: int) -> ApiModel.Proxy[Response]:
-        ... # MuteAll
+        ...  # MuteAll
 
+    @property
     def quit(self, target: int) -> ApiModel.Proxy[Response]:
-        ... # Quit
+        ...  # Quit
 
+    @property
     def recall(self, target: int) -> ApiModel.Proxy[Response]:
-        ... # Recall
+        ...  # Recall
 
+    @property
     def resp_bot_invited_join_group_request_event(
         self, event_id: int, from_id: int, group_id: int,
         operate: Union[int, RespOperate], message: str
     ) -> ApiModel.Proxy[MiraiBaseModel]:
-        ... # RespBotInvitedJoinGroupRequestEvent
+        ...  # RespBotInvitedJoinGroupRequestEvent
 
+    @property
     def resp_member_join_request_event(
         self, event_id: int, from_id: int, group_id: int,
         operate: Union[int, RespOperate], message: str
     ) -> ApiModel.Proxy[MiraiBaseModel]:
-        ... # RespMemberJoinRequestEvent
+        ...  # RespMemberJoinRequestEvent
 
+    @property
     def resp_new_friend_request_event(
         self, event_id: int, from_id: int, group_id: int,
         operate: Union[int, RespOperate], message: str
     ) -> ApiModel.Proxy[MiraiBaseModel]:
-        ... # RespNewFriendRequestEvent
+        ...  # RespNewFriendRequestEvent
 
+    @property
     def send_friend_message(
         self,
         target: int,
@@ -268,8 +299,9 @@ class Mirai(SimpleMirai):
                              str],
         quote: Optional[int] = None
     ) -> ApiModel.Proxy[MessageResponse]:
-        ... # SendFriendMessage
+        ...  # SendFriendMessage
 
+    @property
     def send_group_message(
         self,
         target: int,
@@ -277,14 +309,16 @@ class Mirai(SimpleMirai):
                              str],
         quote: Optional[int] = None
     ) -> ApiModel.Proxy[MessageResponse]:
-        ... # SendGroupMessage
+        ...  # SendGroupMessage
 
+    @property
     def send_nudge(
         self, target: int, subject: int, kind: Literal['Friend', 'Group',
                                                        'Stranger']
     ) -> ApiModel.Proxy[Response]:
-        ... # SendNudge
+        ...  # SendNudge
 
+    @property
     def send_temp_message(
         self,
         qq: int,
@@ -293,28 +327,34 @@ class Mirai(SimpleMirai):
                              str],
         quote: Optional[int] = None
     ) -> ApiModel.Proxy[MessageResponse]:
-        ... # SendTempMessage
+        ...  # SendTempMessage
 
+    @property
     def session_info(self, ) -> ApiModel.Proxy[SessionInfoResponse]:
-        ... # SessionInfo
+        ...  # SessionInfo
 
+    @property
     def set_essence(self, target: int) -> ApiModel.Proxy[Response]:
-        ... # SetEssence
+        ...  # SetEssence
 
+    @property
     def unmute(self, target: int, memder_id: int) -> ApiModel.Proxy[Response]:
-        ... # Unmute
+        ...  # Unmute
 
+    @property
     def unmute_all(self, target: int) -> ApiModel.Proxy[Response]:
-        ... # UnmuteAll
+        ...  # UnmuteAll
 
+    @property
     def upload_image(
         self, type: Literal['friend', 'group', 'temp'], img: Union[str, Path]
     ) -> ApiModel.Proxy[Image]:
-        ... # UploadImage
+        ...  # UploadImage
 
+    @property
     def upload_voice(self, type: Literal['group'],
                      voice: Union[str, Path]) -> ApiModel.Proxy[Voice]:
-        ... # UploadVoice
+        ...  # UploadVoice
 
 
 class LifeSpan(Event):

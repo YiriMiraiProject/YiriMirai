@@ -270,21 +270,21 @@ class MessageChain(MiraiBaseModel):
         raise TypeError(f"消息链索引需为 int 或 MessageComponent，当前类型：{type(index)}")
 
     def __contains__(self, sub) -> bool:
-        if isinstance(sub, type): # 检测消息链中是否有某种类型的对象
+        if isinstance(sub, type):  # 检测消息链中是否有某种类型的对象
             for i in self:
                 if type(i) == sub:
                     return True
             else:
                 return False
-        elif isinstance(sub, MessageComponent): # 检查消息链中是否有某个组件
+        elif isinstance(sub, MessageComponent):  # 检查消息链中是否有某个组件
             for i in self:
                 if i == sub:
                     return True
             else:
                 return False
-        elif isinstance(sub, MessageChain): # 检查消息链中是否有某个子消息链
+        elif isinstance(sub, MessageChain):  # 检查消息链中是否有某个子消息链
             return bool(KMP(self, sub))
-        elif isinstance(sub, str): # 检查消息中有无指定字符串子串
+        elif isinstance(sub, str):  # 检查消息中有无指定字符串子串
             return sub in deserialize(str(self))
         raise TypeError(f"类型不匹配，当前类型：{type(sub)}")
 
@@ -421,9 +421,9 @@ class Image(MessageComponent):
     @property
     def uuid(self):
         image_id = self.image_id
-        if image_id[0] == '{': # 群图片
+        if image_id[0] == '{':  # 群图片
             image_id = image_id[1:37]
-        elif image_id[0] == '/': # 好友图片
+        elif image_id[0] == '/':  # 好友图片
             image_id = image_id[1:]
         return image_id
 

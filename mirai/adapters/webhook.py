@@ -59,11 +59,11 @@ class WebHookAdapter(Adapter):
 
         async def endpoint(request: Request):
             # 鉴权（QQ 号和额外请求头）
-            if request.headers.get('bot') != self.session: # 验证 QQ 号
+            if request.headers.get('bot') != self.session:  # 验证 QQ 号
                 logger.debug(f"收到来自其他账号（{request.headers.get('bot')}）的事件。")
                 return
-            for key in self.extra_headers: # 验证请求头
-                key = key.lower() # HTTP headers 不区分大小写
+            for key in self.extra_headers:  # 验证请求头
+                key = key.lower()  # HTTP headers 不区分大小写
                 if request.headers.get(key).lower(
                 ) != self.extra_headers[key].lower():
                     logger.debug(

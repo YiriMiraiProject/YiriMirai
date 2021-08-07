@@ -2,7 +2,7 @@
 """此模块提供公共 ASGI 前端。"""
 
 import logging
-from typing import Callable, Dict, List, Optional, Tuple, Union
+from typing import Callable, Dict, List, Optional, Tuple
 
 from starlette.applications import Starlette
 from starlette.requests import Request
@@ -47,7 +47,7 @@ class ASGI(Singleton):
         """
         methods = methods or ['GET']
 
-        for method in methods: # 拆分不同的 method
+        for method in methods:  # 拆分不同的 method
             key = (path, method)
             if self._routes.get(key):
                 self._routes[key].append(endpoint)
@@ -88,6 +88,7 @@ class ASGI(Singleton):
         await self.app(scope, recv, send)
 
 
+# noinspection PyUnboundLocalVariable
 def asgi_serve(
     app,
     host: str = '127.0.0.1',
@@ -119,6 +120,11 @@ def asgi_serve(
                 asgi = 'none'
     else:
         asgi = asgi_server
+        if asgi_server == 'uvicorn':
+            from uvicorn import run
+        elif asgi_server == 'hypercorn':
+            from hypercorn.asyncio import serve
+            from hypercorn.config import Config
 
     if asgi == 'uvicorn':
         run(app, host=host, port=port, debug=True, **kwargs)

@@ -76,7 +76,7 @@ class WebSocketAdapter(Adapter):
 
         self.host_name = f'{host}:{port}/all'
 
-        self.sync_id = sync_id # 这个神奇的 sync_id，默认值 -1，居然是个字符串
+        self.sync_id = sync_id  # 这个神奇的 sync_id，默认值 -1，居然是个字符串
         # 既然这样不如把 sync_id 全改成字符串好了
 
         # 接收 WebSocket 数据的 Task
@@ -169,7 +169,7 @@ class WebSocketAdapter(Adapter):
     async def login(self, qq: int):
         headers = {
             'verifyKey': self.verify_key or
-                         '', # 关闭认证时，WebSocket 可传入任意 verify_key
+                         '',  # 关闭认证时，WebSocket 可传入任意 verify_key
             'qq': str(qq),
         }
         if self.session:
@@ -178,7 +178,7 @@ class WebSocketAdapter(Adapter):
         self.connection = await connect(self.host_name, extra_headers=headers)
         self._receiver_task = asyncio.create_task(self._receiver())
 
-        verify_response = await self._recv('') # 神奇现象：这里的 syncId 是个空字符串
+        verify_response = await self._recv('')  # 神奇现象：这里的 syncId 是个空字符串
         self.session = verify_response['session']
 
         self.qq = qq
@@ -200,7 +200,7 @@ class WebSocketAdapter(Adapter):
         self._tasks.create_task(self.emit(event['type'], event))
 
     async def call_api(self, api: str, method: Method = Method.GET, **params):
-        self._local_sync_id += 1 # 使用不同的 sync_id
+        self._local_sync_id += 1  # 使用不同的 sync_id
         sync_id = str(self._local_sync_id)
         content = {
             'syncId': sync_id,

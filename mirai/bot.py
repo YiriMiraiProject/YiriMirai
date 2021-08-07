@@ -178,7 +178,6 @@ class MiraiRunner(Singleton):
     runner.run(host='127.0.0.1', port=8000)
     ```
     """
-    _created = None
     bots: Iterable[SimpleMirai]
     """运行的 SimpleMirai 对象。"""
     def __init__(self, *bots: SimpleMirai):
@@ -346,20 +345,22 @@ class Mirai(SimpleMirai):
 
             if isinstance(target, Friend):
                 send_message = self.send_friend_message
-                id = target.id
+                id_ = target.id
             elif isinstance(target, Group):
                 send_message = self.send_group_message
-                id = target.id
+                id_ = target.id
             elif isinstance(target, GroupMember):
                 send_message = self.send_group_message
-                id = target.group.id
+                id_ = target.group.id
+            else:
+                raise ValueError(f"{target} 不是有效的消息发送对象。")
 
             return (
                 await
-                send_message(target=id, message_chain=message, quote=quoting)
+                send_message(target=id_, message_chain=message, quote=quoting)
             ).message_id
 
-    async def get_friend(self, id: int) -> Optional[Friend]:
+    async def get_friend(self, id_: int) -> Optional[Friend]:
         """获取好友对象。
 
         `id: int` 好友 ID。
@@ -368,11 +369,11 @@ class Mirai(SimpleMirai):
         if not friend_list:
             return None
         for friend in cast(List[Friend], friend_list):
-            if friend.id == id:
+            if friend.id == id_:
                 return friend
         return None
 
-    async def get_group(self, id: int) -> Optional[Group]:
+    async def get_group(self, id_: int) -> Optional[Group]:
         """获取群组对象。
 
         `id: int` 群组 ID。
@@ -381,12 +382,12 @@ class Mirai(SimpleMirai):
         if not group_list:
             return None
         for group in cast(List[Group], group_list):
-            if group.id == id:
+            if group.id == id_:
                 return group
         return None
 
     async def get_group_member(self, group: Union[Group, int],
-                               id: int) -> Optional[GroupMember]:
+                               id_: int) -> Optional[GroupMember]:
         """获取群成员对象。
 
         `group: Union[Group, int]` 群组对象或群组 ID。
@@ -399,7 +400,7 @@ class Mirai(SimpleMirai):
         if not member_list:
             return None
         for member in cast(List[GroupMember], member_list):
-            if member.id == id:
+            if member.id == id_:
                 return member
         return None
 

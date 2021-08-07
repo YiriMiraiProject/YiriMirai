@@ -16,7 +16,7 @@ from mirai.bus import EventBus
 logger = logging.getLogger(__name__)
 
 
-def _json_default(obj): # 支持 datetime
+def _json_default(obj):  # 支持 datetime
     if isinstance(obj, datetime):
         return int(obj.timestamp())
 

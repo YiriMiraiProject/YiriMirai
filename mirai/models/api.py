@@ -165,7 +165,7 @@ class File(MiraiBaseModel):
     """是否是文件夹。"""
 
 
-File.update_forward_refs() # 支持 model 引用自己的类型
+File.update_forward_refs()  # 支持 model 引用自己的类型
 
 
 class FileListResponse(Response):
@@ -198,7 +198,7 @@ class ApiMetaclass(MiraiIndexedMetaclass):
             new_cls.__indexes__ = {}
             return new_cls
 
-        if not cls.__apimodel__: # ApiBaseModel 构造时，ApiModel 还未构造
+        if not cls.__apimodel__:  # ApiBaseModel 构造时，ApiModel 还未构造
             return new_cls
 
         for base in bases:
@@ -777,7 +777,7 @@ class Mute(ApiPost):
     """禁言群成员。"""
     target: int
     """指定群的群号。"""
-    memder_id: int
+    member_id: int
     """指定群成员的 QQ 号。"""
     time: int
     """禁言时间，单位为秒，最多30天，默认为0。"""
@@ -791,7 +791,7 @@ class Unmute(ApiPost):
     """解除群成员禁言。"""
     target: int
     """指定群的群号。"""
-    memder_id: int
+    member_id: int
     """指定群成员的 QQ 号。"""
     class Info(ApiPost.Info):
         name = "unmute"
@@ -803,7 +803,7 @@ class Kick(ApiPost):
     """移出群成员。"""
     target: int
     """指定群的群号。"""
-    memder_id: int
+    member_id: int
     """指定群成员的 QQ 号。"""
     msg: str = ""
     """可选。信息。"""

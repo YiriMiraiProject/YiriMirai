@@ -83,7 +83,7 @@ class HTTPAdapter(Adapter):
         self.poll_interval = poll_interval
 
         self.qq = 0
-        self.headers = httpx.Headers() # 使用 headers 传递 session
+        self.headers = httpx.Headers()  # 使用 headers 传递 session
         self._tasks = Tasks()
 
     @property
