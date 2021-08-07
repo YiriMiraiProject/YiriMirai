@@ -1,0 +1,11 @@
+{
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "css.lint.validProperties": [
+        "composes"
+    ],
+    "css.lint.unknownAtRules": "ignore",
+    "python.formatting.provider": "yapf",
+    "python.linting.mypyEnabled": true,
+}
