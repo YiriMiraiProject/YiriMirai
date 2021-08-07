@@ -6,7 +6,9 @@ import asyncio
 import contextlib
 import logging
 import sys
-from typing import Callable, Iterable, List, Optional, Type, Union, cast
+from typing import (
+    Any, Callable, Dict, Iterable, List, Optional, Type, Union, cast
+)
 
 from mirai.adapters.base import Adapter, AdapterInterface, ApiProvider
 from mirai.asgi import ASGI, asgi_serve
@@ -51,6 +53,8 @@ class SimpleMirai(ApiProvider, AdapterInterface):
     )
     ```
     """
+    qq: int
+
     def __init__(self, qq: int, adapter: Adapter):
         """
         `qq: int` QQ 号。启用 Single Mode 时，可以随便传入，登陆后会自动获取正确的 QQ 号。
@@ -64,8 +68,6 @@ class SimpleMirai(ApiProvider, AdapterInterface):
         self._adapter = adapter
         self._bus = EventBus()
         self._adapter.register_event_bus(self._bus)
-
-        self.logger = logging.getLogger(__name__)
 
     async def call_api(self, api: str, *args, **kwargs):
         """调用 API。
@@ -91,7 +93,7 @@ class SimpleMirai(ApiProvider, AdapterInterface):
         return self._bus.on(event)
 
     @property
-    def adapter_info(self):
+    def adapter_info(self) -> Dict[str, Any]:
         return self._adapter.adapter_info
 
     @contextlib.asynccontextmanager
@@ -119,7 +121,7 @@ class SimpleMirai(ApiProvider, AdapterInterface):
 
         if self._adapter.single_mode:
             # Single Mode 下，QQ 号可以随便传入。这里从 session info 中获取正确的 QQ 号。
-            self.qq = (await self.session_info.get()).qq
+            self.qq = (await self.call_api('sessionInfo'))['data']['qq']['id']
 
         await self._adapter.emit("Startup", {'type': 'Startup'})
         self._adapter.start()
@@ -135,12 +137,12 @@ class SimpleMirai(ApiProvider, AdapterInterface):
         self._adapter.shutdown()
 
     @property
-    def session(self):
+    def session(self) -> str:
         """获取 session key，可用于调试。"""
         return self._adapter.session
 
     @property
-    def asgi(self):
+    def asgi(self) -> 'MiraiRunner':
         return MiraiRunner(self)
 
     def run(

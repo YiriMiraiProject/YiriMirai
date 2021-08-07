@@ -6,7 +6,9 @@ import abc
 import logging
 from enum import Enum, Flag
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, List, Optional, Type, Union, cast
+from typing import (
+    TYPE_CHECKING, Any, Generic, List, Optional, Type, TypeVar, Union, cast
+)
 
 import aiofiles
 
@@ -31,7 +33,7 @@ from mirai.models.events import (
     FriendMessage, GroupMessage, OtherClientMessage, RequestEvent,
     StrangerMessage, TempMessage
 )
-from mirai.models.message import Image, MessageChain, Voice
+from mirai.models.message import Image, MessageChain, MessageComponent, Voice
 from mirai.utils import async_
 
 logger = logging.getLogger(__name__)
@@ -202,9 +204,9 @@ class ApiMetaclass(MiraiIndexedMetaclass):
         for base in bases:
             if issubclass(base, cls.__apimodel__):
                 info = new_cls.Info
-                if hasattr(info, 'name'):
+                if hasattr(info, 'name') and info.name:
                     base.__indexes__[info.name] = new_cls
-                if hasattr(info, 'alias'):
+                if hasattr(info, 'alias') and info.alias:
                     base.__indexes__[info.alias] = new_cls
 
                 # 获取 API 参数名
@@ -223,6 +225,9 @@ class ApiBaseModel(MiraiIndexedModel, metaclass=ApiMetaclass):
     直接继承此类，不会被 ApiMetaclass 索引，也不会引起 metaclass 冲突。
     用于实现 API 类型之间的方法复用。
     """
+
+
+TModel = TypeVar('TModel', bound=MiraiBaseModel)
 
 
 class ApiModel(ApiBaseModel):
@@ -259,7 +264,7 @@ class ApiModel(ApiBaseModel):
         except ValueError as e:
             raise ValueError(f'`{name}` 不是可用的 API！') from e
 
-    class Proxy():
+    class Proxy(Generic[TModel]):
         """API 代理类。由 API 构造，提供对适配器的访问。
 
         `Proxy` 提供更加简便的调用 API 的写法。`Proxy` 对象一般由 `Mirai.__getattr__` 获得，
@@ -303,10 +308,10 @@ class ApiModel(ApiBaseModel):
         async def _call_api(
             self,
             method: Method = Method.GET,
-            response_type: Optional[Type[MiraiBaseModel]] = None,
+            response_type: Optional[Type[TModel]] = None,
             args: Optional[Union[list, tuple]] = None,
             kwargs: Optional[dict] = None
-        ) -> Optional[MiraiBaseModel]:
+        ) -> Optional[TModel]:
             """调用 API。
 
             将结果解析为 Model。
@@ -330,16 +335,18 @@ class ApiModel(ApiBaseModel):
             if not raw_response:
                 return None
             # 解析 API 返回数据
-            response_type = response_type or info.response_type
+            response_type = cast(
+                Type[TModel], response_type or info.response_type
+            )
             return response_type.parse_obj(raw_response)
 
-        async def get(self, *args, **kwargs) -> Optional[MiraiBaseModel]:
+        async def get(self, *args, **kwargs) -> Optional[TModel]:
             """获取。对于 GET 方法的 API，调用此方法。"""
             return await self._call_api(
                 method=Method.GET, args=args, kwargs=kwargs
             )
 
-        async def set(self, *args, **kwargs) -> Optional[MiraiBaseModel]:
+        async def set(self, *args, **kwargs) -> Optional[TModel]:
             """设置。对于 POST 方法的 API，可调用此方法。"""
             return await self._call_api(
                 method=Method.POST, args=args, kwargs=kwargs
@@ -357,7 +364,7 @@ class CustomApiModel(ApiBaseModel):
 
 
 class ApiGet(ApiModel):
-    class Proxy(ApiModel.Proxy):
+    class Proxy(ApiModel.Proxy[TModel]):
         async def set(self, *args, **kwargs):
             """GET 方法的 API 不具有 `set`。
 
@@ -365,9 +372,12 @@ class ApiGet(ApiModel):
             """
             raise TypeError(f'`{self.command}` 不支持 `set` 方法。')
 
+        async def __call__(self, *args, **kwargs) -> Optional[TModel]:
+            return await self.get(*args, **kwargs)
+
 
 class ApiPost(ApiModel):
-    class Proxy(ApiModel.Proxy):
+    class Proxy(ApiModel.Proxy[TModel]):
         """POST 方法的 API 代理对象。"""
         async def get(self, *args, **kwargs):
             """POST 方法的 API 不具有 `get`。
@@ -376,7 +386,7 @@ class ApiPost(ApiModel):
             """
             raise TypeError(f'`{self.command}` 不支持 `get` 方法。')
 
-        async def __call__(self, *args, **kwargs):
+        async def __call__(self, *args, **kwargs) -> Optional[TModel]:
             return await self.set(*args, **kwargs)
 
 
@@ -389,7 +399,7 @@ class ApiRest(ApiModel):
         response_type = MiraiBaseModel
         response_type_post = Response
 
-    class Proxy(ApiModel.Proxy):
+    class Proxy(ApiModel.Proxy[TModel]):
         """RESTful 的 API 代理对象。
 
         直接调用时，传入 GET 和 POST 的公共参数，返回一个 `ApiRest.Proxy.Partial` 对象，
@@ -401,7 +411,7 @@ class ApiRest(ApiModel):
                 kwargs
             )
 
-        class Partial(ApiModel.Proxy):
+        class Partial(ApiModel.Proxy[TModel]):
             """RESTful 的 API 代理对象（已传入公共参数）。"""
             def __init__(
                 self, api_provider: ApiProvider, api_type: Type['ApiRest'],
@@ -411,7 +421,7 @@ class ApiRest(ApiModel):
                 self.partial_args = partial_args
                 self.partial_kwargs = partial_kwargs
 
-            async def get(self, *args, **kwargs) -> Optional[MiraiBaseModel]:
+            async def get(self, *args, **kwargs) -> Optional[TModel]:
                 """获取。"""
                 return await self._call_api(
                     method=Method.RESTGET,
@@ -422,12 +432,15 @@ class ApiRest(ApiModel):
                     }
                 )
 
-            async def set(self, *args, **kwargs) -> Optional[MiraiBaseModel]:
+            async def set(self, *args, **kwargs) -> Optional[TModel]:
                 """设置。"""
                 return await self._call_api(
                     method=Method.RESTPOST,
-                    response_type=cast(Type[ApiRest],
-                                       self.api_type).Info.response_type_post,
+                    response_type=cast(
+                        Type[TModel],
+                        cast(Type[ApiRest],
+                             self.api_type).Info.response_type_post
+                    ),
                     args=[*self.partial_args, *args],
                     kwargs={
                         **self.partial_kwargs,
@@ -520,7 +533,7 @@ class MemberProfile(ApiGet):
 
 class SendMessage(ApiBaseModel):
     """发送消息的 API 的方法复用，不作为 API 使用。"""
-    # message_chain: Union[MessageChain, list]
+    # message_chain: Union[MessageChain, List[Union[MessageComponent, str]], str]
 
     @validator('message_chain', check_fields=False)
     def _validate_message_chain(cls, value: Union[MessageChain, list]):
@@ -534,7 +547,7 @@ class SendFriendMessage(ApiPost, SendMessage):
     """发送好友消息。"""
     target: int
     """发送消息目标好友的 QQ 号。"""
-    message_chain: Union[MessageChain, list]
+    message_chain: Union[MessageChain, List[Union[MessageComponent, str]], str]
     """消息链。"""
     quote: Optional[int] = None
     """可选。引用一条消息的 message_id 进行回复。"""
@@ -548,7 +561,7 @@ class SendGroupMessage(ApiPost, SendMessage):
     """发送群消息。"""
     target: int
     """发送消息目标群的群号。"""
-    message_chain: Union[MessageChain, list]
+    message_chain: Union[MessageChain, List[Union[MessageComponent, str]], str]
     """消息链。"""
     quote: Optional[int] = None
     """可选。引用一条消息的 message_id 进行回复。"""
@@ -564,7 +577,7 @@ class SendTempMessage(ApiPost, SendMessage):
     """临时会话对象 QQ 号。"""
     group: int
     """临时会话对象群号。"""
-    message_chain: Union[MessageChain, list]
+    message_chain: Union[MessageChain, List[Union[MessageComponent, str]], str]
     """消息链。"""
     quote: Optional[int] = None
     """可选。引用一条消息的 message_id 进行回复。"""
@@ -1014,7 +1027,7 @@ class RespBotInvitedJoinGroupRequestEvent(ApiPost):
 
 class CmdExecute(ApiPost):
     """执行命令。"""
-    command: Union[MessageChain, list]
+    command: Union[MessageChain, List[Union[MessageComponent, str]], str]
     """命令。"""
     @validator('command')
     def _validate_command(cls, value):

@@ -301,10 +301,10 @@ class MessageChain(MiraiBaseModel):
         return cast(list, source)[0] if source else None
 
     @property
-    def message_id(self) -> Optional[int]:
+    def message_id(self) -> int:
         """获取消息链的 message_id。"""
         source = self.source
-        return source.id if source else None
+        return source.id if source else -1
 
 
 class Source(MessageComponent):

@@ -2,7 +2,7 @@
 """
 此模块提供 YiriMirai 中使用的 pydantic 模型的基类。
 """
-from typing import Dict, List, Type
+from typing import Dict, List, Type, TypeVar
 
 import pydantic.main as pdm
 from pydantic import BaseModel
