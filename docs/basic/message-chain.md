@@ -174,8 +174,7 @@ await image.download(filename='./voices/1.silk')
 ```python
 from pathlib import Path
 message_chain = MessageChain([
-    # 传入 path 时，应使用绝对路径
-    Image(path=str(Path.cwd() / 'images/1.png')),
+    Image(path=str('./images/1.png')),
     Image(url='https://raw.githubusercontent.com/mamoe/mirai/dev/docs/mirai.png'),
     Image(base64='/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkS' \
         + 'Ew8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJ' \
@@ -196,13 +195,20 @@ message_chain = MessageChain([
 ])
 ```
 
+:::note 路径问题
+`Image` 组件的 `path` 属性中，相对路径的含义至今仍有不明确之处（[#409](https://github.com/project-mirai/mirai-api-http/pull/409)）。
+
+在 YiriMirai 0.2.0 之后，将 `path` 属性的含义改为相对路径基于 YiriMirai 的当前目录。**这一行为和 mirai-api-http 的行为有所不同，请注意**。
+
+同样地，下面说的 `Voice` 组件的 `path` 属性采用一样的处理方法。
+:::
+
 此外，还有几种发送图片的方法。
 
 使用 `Image.from_local`，将从本地读取图片，并以 base64 编码的形式发送。此方式可能会消耗较多内存。
 
 ```python
 message_chain = MessageChain([
-    # 此处可以使用相对路径或绝对路径
     await Image.from_local('./images/1.png')
 ])
 ```
@@ -234,8 +240,7 @@ async with bot.use_adapter(HTTPAdapter.via(bot)):
 ```python
 from pathlib import Path
 message_chain1 = MessageChain([
-    # 传入 path 时，应使用绝对路径
-    Voice(path=str(Path.cwd() / 'voices/1.silk'))
+    Voice(path=str('./voices/1.silk'))
 ])
 message_chain2 = MessageChain([Voice(url='...')])
 message_chain3 = MessageChain([Voice(base64='...')])
@@ -251,7 +256,6 @@ message_chain3 = MessageChain([Voice(base64='...')])
 
 ```python
 message_chain4 = MessageChain([
-    # 此处可以使用相对路径或绝对路径
     await Voice.from_local('./voices/1.silk')
 ])
 message_chain5 = MessageChain([
