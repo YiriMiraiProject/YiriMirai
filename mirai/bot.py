@@ -20,7 +20,7 @@ from mirai.models.entities import (
 )
 from mirai.models.events import Event, MessageEvent, TempMessage
 from mirai.models.message import MessageChain, MessageComponent
-from mirai.utils import Singleton, async_
+from mirai.utils import Singleton
 
 __all__ = [
     'Mirai', 'SimpleMirai', 'MiraiRunner', 'LifeSpan', 'Startup', 'Shutdown'
