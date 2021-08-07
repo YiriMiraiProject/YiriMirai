@@ -42,7 +42,7 @@ if __name__ == '__main__':
     @bot.on(FriendMessage)
     async def on_friend_message(event: FriendMessage):
         if str(event.message_chain) == '你好':
-            return bot.send_friend_message(event.sender.id, ['Hello World!'])
+            await bot.send(event, 'Hello World!')
 
     bot.run()
 ```
