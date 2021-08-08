@@ -344,9 +344,6 @@ class Mirai(SimpleMirai):
 
         返回值：int 发送的消息的 message_id。
         """
-        # 构造消息链
-        if isinstance(message, str):
-            message = [message]
         # 识别消息发送对象
         if isinstance(target, TempMessage):
             quoting = target.message_chain.message_id if quote else None
