@@ -11,7 +11,7 @@ import logging
 from collections import defaultdict
 from typing import Any, Awaitable, Callable, Dict, Iterable, List, Optional
 
-from mirai.utils import async_with_exception
+from mirai.utils import async_with_exception, PriorityDict
 
 logger = logging.getLogger(__name__)
 
@@ -42,12 +42,14 @@ class AbstractEventBus:
     事件总线的基类。
     """
     @abc.abstractmethod
-    def subscribe(self, event, func: Callable) -> None:
+    def subscribe(self, event, func: Callable, priority: int = 0) -> None:
         """注册事件处理器。
 
         `event` 事件名。
 
         `func: Callable` 事件处理器。
+
+        `priority: int = 0` 优先级，小者优先。
         """
 
     @abc.abstractmethod
@@ -60,10 +62,12 @@ class AbstractEventBus:
         """
 
     @abc.abstractmethod
-    def on(self, event) -> Callable:
+    def on(self, event, priority: int = 0) -> Callable:
         """以装饰器的方式注册事件处理器。
 
         `event` 事件名。
+
+        `priority: int = 0` 优先级，小者优先。
 
         例如：
         ```py
@@ -111,17 +115,19 @@ class EventBus(AbstractEventBus):
             一个函数，输入事件名，返回一个生成此事件所在事件链的全部事件的事件名的生成器，
             默认行为是事件链只包含单一事件。
         """
-        self._subscribers: Dict[str, set] = defaultdict(set)
+        self._subscribers: Dict[str, PriorityDict] = defaultdict(PriorityDict)
         self.event_chain_generator = event_chain_generator
 
-    def subscribe(self, event: str, func: Callable) -> None:
+    def subscribe(self, event: str, func: Callable, priority: int = 0) -> None:
         """注册事件处理器。
 
         `event: str` 事件名。
 
         `func: Callable` 事件处理器。
+
+        `priority: int = 0` 优先级，小者优先。
         """
-        self._subscribers[event].add(func)
+        self._subscribers[event].add(priority, func)
 
     def unsubscribe(self, event: str, func: Callable) -> None:
         """移除事件处理器。
@@ -135,10 +141,12 @@ class EventBus(AbstractEventBus):
         except KeyError:
             logger.warning(f'试图移除事件 `{event}` 的一个不存在的事件处理器 `{func}`。')
 
-    def on(self, event: str) -> Callable:
+    def on(self, event: str, priority: int = 0) -> Callable:
         """以装饰器的方式注册事件处理器。
 
         `event: str` 事件名。
+
+        `priority: int = 0` 优先级，小者优先。
 
         例如：
         ```py
@@ -148,7 +156,7 @@ class EventBus(AbstractEventBus):
         ```
         """
         def decorator(func: Callable) -> Callable:
-            self.subscribe(event, func)
+            self.subscribe(event, func, priority)
             return func
 
         return decorator
@@ -173,13 +181,15 @@ class EventBus(AbstractEventBus):
             else:  # 当不使用快速响应时，返回值无意义。
                 return None
 
-        coros = []
+        coros: List[Optional[Awaitable[Any]]] = []
         for m_event in self.event_chain_generator(event):
             # 使用 list 避免 _subscribers 被改变引起错误。
-            coros += [(await call(f)) for f in list(self._subscribers[m_event])]
+            for listeners in list(self._subscribers[m_event]):
+                callee = (call(f) for f in listeners)
+                coros += await asyncio.gather(*callee)
 
-        results = filter(None, coros)  # 只保留快速响应的返回值。
-        return [asyncio.create_task(coro) for coro in results]
+        # 只保留快速响应的返回值。
+        return [asyncio.create_task(coro) for coro in filter(None, coros)]
 
     @classmethod
     def get_default_bus(cls):

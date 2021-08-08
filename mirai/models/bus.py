@@ -41,13 +41,15 @@ class ModelEventBus(EventBus):
         self._middlewares = defaultdict(type(None))
 
     def subscribe(
-        self, event_type: Union[Type[Event], str], func: Callable
+        self, event_type: Union[Type[Event], str], func: Callable, priority: int = 0
     ) -> None:
         """注册事件处理器。
 
         `event: Type[Event]` 事件类型。
 
         `func: Callable` 事件处理器。
+
+        `priority: int = 0` 事件处理器的优先级。
         """
         if isinstance(event_type, str):
             event_type = cast(Type[Event], Event.get_subtype(event_type))
@@ -60,7 +62,7 @@ class ModelEventBus(EventBus):
             return await async_with_exception(func(event_model))
 
         self._middlewares[func] = middleware
-        self.base_bus.subscribe(event_type.__name__, middleware)
+        self.base_bus.subscribe(event_type.__name__, middleware, priority)
         logger.debug(f'注册事件 {event_type.__name__} at {func}。')
 
     def unsubscribe(
@@ -82,10 +84,13 @@ class ModelEventBus(EventBus):
     def on(
         self,
         event_type: Union[Type[Event], str],
+        priority: int = 0,
     ) -> Callable:
         """以装饰器的方式注册事件处理器。
 
         `event_type: Union[Type[Event], str]` 事件类型或事件名。
+
+        `priority: int = 0` 事件处理器的优先级。
 
         例如：
         ```py
@@ -95,7 +100,7 @@ class ModelEventBus(EventBus):
         ```
         """
         def decorator(func: Callable) -> Callable:
-            self.subscribe(event_type, func)
+            self.subscribe(event_type, func, priority)
             return func
 
         return decorator

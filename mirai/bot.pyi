@@ -38,7 +38,7 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
     def __init__(self, qq: int, adapter: Adapter) -> None:
         ...
 
-    def subscribe(self, event, func: Callable) -> None:
+    def subscribe(self, event, func: Callable, priority: int = 0) -> None:
         ...
 
     def unsubscribe(self, event, func: Callable) -> None:
@@ -50,7 +50,7 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
     async def call_api(self, api: str, *args, **kwargs):
         ...
 
-    def on(self, event: str) -> Callable:
+    def on(self, event: str, priority: int = 0) -> Callable:
         ...
 
     @property
@@ -117,7 +117,11 @@ class Mirai(SimpleMirai):
     def __init__(self, qq: int, adapter: Adapter) -> None:
         ...
 
-    def on(self, event_type: Union[Type[Event], str]) -> Callable:
+    def on(
+        self,
+        event_type: Union[Type[Event], str],
+        priority: int = 0
+    ) -> Callable:
         ...
 
     def api(self, api: str) -> ApiModel.Proxy:

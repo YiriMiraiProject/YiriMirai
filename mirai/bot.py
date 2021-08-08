@@ -73,8 +73,8 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
     def bus(self) -> EventBus:
         return self._bus
 
-    def subscribe(self, event, func: Callable) -> None:
-        self._bus.subscribe(event, func)
+    def subscribe(self, event, func: Callable, priority: int = 0) -> None:
+        self._bus.subscribe(event, func, priority)
 
     def unsubscribe(self, event, func: Callable) -> None:
         self._bus.unsubscribe(event, func)
@@ -91,10 +91,12 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
         """
         return await self._adapter.call_api(api, *args, **kwargs)
 
-    def on(self, event: str) -> Callable:
+    def on(self, event: str, priority: int = 0) -> Callable:
         """注册事件处理器。
 
         `event: str` 事件名。
+
+        `priority: int = 0` 优先级，小者优先。
 
         用法举例：
         ```py
@@ -136,7 +138,7 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
             # Single Mode 下，QQ 号可以随便传入。这里从 session info 中获取正确的 QQ 号。
             self.qq = (await self.call_api('sessionInfo'))['data']['qq']['id']
 
-        await self._adapter.emit("Startup", {'type': 'Startup'})
+        asyncio.create_task(self._adapter.emit("Startup", {'type': 'Startup'}))
         self._adapter.start()
 
     async def background(self):
@@ -145,8 +147,10 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
 
     async def shutdown(self):
         """结束运行机器人。"""
+        await asyncio.create_task(
+            self._adapter.emit("Shutdown", {'type': 'Shutdown'})
+        )
         await self._adapter.logout()
-        await self._adapter.emit("Shutdown", {'type': 'Shutdown'})
         self._adapter.shutdown()
 
     @property
@@ -292,6 +296,7 @@ class Mirai(SimpleMirai):
     def on(
         self,
         event_type: Union[Type[Event], str],
+        priority: int = 0,
     ) -> Callable:
         """注册事件处理器。
 
@@ -306,7 +311,7 @@ class Mirai(SimpleMirai):
             print(f"收到来自{event.sender.nickname}的消息。")
         ```
         """
-        return self._bus.on(event_type=event_type)
+        return self._bus.on(event_type, priority)
 
     def api(self, api: str) -> ApiModel.Proxy:
         """获取 API Proxy 对象。
