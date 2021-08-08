@@ -105,7 +105,7 @@ class HTTPAdapter(Adapter):
             **{
                 key: info[key]
                 for key in ['host', 'port', 'poll_interval', 'single_mode']
-                if info.get(key) is not None
+                if key in info
             }
         )
         adapter.session = cast(str, info.get('session'))

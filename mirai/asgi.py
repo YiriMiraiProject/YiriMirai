@@ -49,7 +49,7 @@ class ASGI(Singleton):
 
         for method in methods:  # 拆分不同的 method
             key = (path, method)
-            if self._routes.get(key):
+            if key in self._routes:
                 self._routes[key].append(endpoint)
             else:
                 self._routes[key] = [endpoint]

@@ -19,6 +19,9 @@ from mirai.bot import (
 )
 from mirai.bus import EventBus
 from mirai.colorlog import ColoredFormatter
+from mirai.exceptions import (
+    ApiError, NetworkError, SkipExecution, StopExecution, StopPropagation
+)
 from mirai.models import (
     At, AtAll, Dice, Event, Face, FriendMessage, GroupMessage, Image,
     MessageChain, MessageEvent, Plain, Poke, StrangerMessage, TempMessage,
@@ -31,7 +34,8 @@ __all__ = [
     'ComposeAdapter', 'EventBus', 'get_logger', 'Event', 'MessageEvent',
     'FriendMessage', 'GroupMessage', 'TempMessage', 'StrangerMessage',
     'MessageChain', 'Plain', 'At', 'AtAll', 'Dice', 'Face', 'Poke', 'Image',
-    'Voice', 'serialize', 'deserialize'
+    'Voice', 'serialize', 'deserialize', 'ApiError', 'NetworkError',
+    'SkipExecution', 'StopExecution', 'StopPropagation'
 ]
 
 logger = logging.getLogger(__name__)

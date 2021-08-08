@@ -106,7 +106,7 @@ class WebHookAdapter(Adapter):
                 for key in [
                     'route', 'extra_headers', 'enable_quick_response',
                     'single_mode'
-                ] if info.get(key) is not None
+                ] if key in info
             }
         )
         adapter.session = cast(str, info.get('session'))

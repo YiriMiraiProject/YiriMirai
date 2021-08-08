@@ -93,7 +93,7 @@ class MessageComponent(MiraiIndexedModel, metaclass=MessageComponentMetaclass):
                 f'`{self.type}`需要{len(parameter_names)}个参数，但传入了{len(args)}个。'
             )
         for name, value in zip(parameter_names, args):
-            if kwargs.get(name):
+            if name in kwargs:
                 raise TypeError(f'在 `{self.type}` 中，具名参数 `{name}` 与位置参数重复。')
             else:
                 kwargs[name] = value

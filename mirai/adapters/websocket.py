@@ -107,7 +107,7 @@ class WebSocketAdapter(Adapter):
             **{
                 key: info[key]
                 for key in ['host', 'port', 'sync_id', 'single_mode']
-                if info.get(key) is not None
+                if key in info
             }
         )
         adapter.session = cast(str, info.get('session'))
