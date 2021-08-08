@@ -3,9 +3,9 @@
 # YiriMirai
 一个轻量级、低耦合的基于 mirai-api-http 的 Python SDK。
 
-更多信息参看[文档](https://yiri-mirai.vercel.app/)
+更多信息请看[文档](https://yiri-mirai.vercel.app/)。
 """
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 __author__ = '忘忧北萱草'
 
 import logging
