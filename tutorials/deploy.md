@@ -135,7 +135,7 @@ adapterSettings:
     cors: [*]
   webhook:
     destinations:
-      - http://localhost:8081/
+      - 'http://localhost:8081/' # 注意这里要写上 http://，并且加引号
 
     # extraHeaders:
     #   Authorization: 'bearer SV*(&*(SH@ID^G'
