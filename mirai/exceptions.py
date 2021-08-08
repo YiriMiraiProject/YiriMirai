@@ -41,6 +41,18 @@ class ApiError(RuntimeError):
         )
 
 
+class StopPropagation(Exception):
+    """终止事件处理器执行，并停止事件向上传播。"""
+
+
+class StopExecution(Exception):
+    """终止事件处理器执行，但不阻止事件向上传播。"""
+
+
+class SkipExecution(Exception):
+    """跳过同优先度的事件处理器，进入下一优先度。"""
+
+
 def print_exception(e: Exception):
     """打印异常信息。
     """

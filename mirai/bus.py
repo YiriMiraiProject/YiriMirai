@@ -11,6 +11,7 @@ import logging
 from collections import defaultdict
 from typing import Any, Awaitable, Callable, Dict, Iterable, List, Optional
 
+from mirai.exceptions import StopPropagation, StopExecution, SkipExecution
 from mirai.utils import async_with_exception, PriorityDict
 
 logger = logging.getLogger(__name__)
@@ -182,11 +183,20 @@ class EventBus(AbstractEventBus):
                 return None
 
         coros: List[Optional[Awaitable[Any]]] = []
-        for m_event in self.event_chain_generator(event):
-            # 使用 list 避免 _subscribers 被改变引起错误。
-            for listeners in list(self._subscribers[m_event]):
-                callee = (call(f) for f in listeners)
-                coros += await asyncio.gather(*callee)
+        try:
+            for m_event in self.event_chain_generator(event):
+                try:
+                    # 使用 list 避免 _subscribers 被改变引起错误。
+                    for listeners in list(self._subscribers[m_event]):
+                        try:
+                            callee = (call(f) for f in listeners)
+                            coros += await asyncio.gather(*callee)
+                        except SkipExecution:
+                            continue
+                except StopExecution:
+                    continue
+        except StopPropagation:
+            pass
 
         # 只保留快速响应的返回值。
         return [asyncio.create_task(coro) for coro in filter(None, coros)]
