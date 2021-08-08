@@ -53,8 +53,8 @@ def handle_group_message_another(event: GroupMessage):
     print('After handle_group_message') # 这句话会在消息内容之后打印
 ```
 
-:::caution
-当定义异步事件处理器时，由于控制流切换，事件处理器并不一定严格地按照 `priority` 来执行。（这一特性可能会在之后版本更改。）
+:::note
+`priority` 参数曾经在 v0.1.3 被删除。v0.2.1 更新后，重新加入了 `priority` 功能。
 :::
 
 事件处理器接受唯一的一个参数 `event`，它是一个 `Event` 类型的对象，包含了事件的相关信息。
