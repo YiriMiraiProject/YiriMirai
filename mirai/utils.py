@@ -8,17 +8,6 @@ from typing import Callable, List
 from mirai import exceptions
 
 
-def _with_exception(func):
-    """处理调用中发生的异常。"""
-    async def wrapper(self, *args, **kwargs):
-        try:
-            return await func(self, *args, **kwargs)
-        except Exception as e:
-            exceptions.print_exception(e)  # 打印异常信息，但不打断执行流程
-
-    return wrapper
-
-
 async def async_(obj):
     """将一个对象包装为 `Awaitable`。
     """
@@ -28,18 +17,12 @@ async def async_(obj):
         return obj
 
 
-async_with_exception = _with_exception(async_)
-"""异步包装一个对象，同时处理调用中发生的异常。"""
-
-
-async def async_call(func: Callable, *args, **kwargs):
-    """以异步的方式调用一个函数，此函数可以是同步或异步的。"""
-    coro = func(*args, **kwargs)
-    return await async_(coro)
-
-
-async_call_with_exception = _with_exception(async_call)
-"""以异步的方式调用一个函数，此函数可以是同步或异步的，同时处理调用中发生的异常。"""
+async def async_with_exception(obj):
+    """异步包装一个对象，同时处理调用中发生的异常。"""
+    try:
+        return await async_(obj)
+    except Exception as e:
+        exceptions.print_exception(e)  # 打印异常信息，但不打断执行流程
 
 
 def KMP(string, pattern, count: int = 1) -> List[int]:

@@ -10,7 +10,7 @@ from typing import Any, Awaitable, Callable, List, Type, Union, cast
 
 from mirai.bus import EventBus
 from mirai.models.events import Event
-from mirai.utils import async_call_with_exception
+from mirai.utils import async_with_exception
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +57,7 @@ class ModelEventBus(EventBus):
             """
             event_model = cast(Event, Event.parse_obj(event))
             logger.debug(f'收到事件 {event_model.type}。')
-            return await async_call_with_exception(func, event_model)
+            return await async_with_exception(func(event_model))
 
         self._middlewares[func] = middleware
         self.base_bus.subscribe(event_type.__name__, middleware)
