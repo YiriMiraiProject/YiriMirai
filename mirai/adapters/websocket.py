@@ -151,14 +151,14 @@ class WebSocketAdapter(Adapter):
 
     async def _recv(self, sync_id: str = '-1') -> dict:
         """接收并解析 websocket 数据。"""
-        for _ in range(100):
+        for _ in range(600):
             if self._recv_dict[sync_id]:
                 return self._recv_dict[sync_id].popleft()
             else:
                 # 如果没有对应同步 ID 的数据，则等待 websocket 数据
                 # 目前存在问题：如果 mah 发回的数据不含 sync_id，
                 # 这里就会无限循环……
-                # 所以还是限制 100 次好了。
+                # 所以还是限制次数好了。
                 await asyncio.sleep(0.1)
         else:
             raise TimeoutError(
