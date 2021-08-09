@@ -331,7 +331,7 @@ class Mirai(SimpleMirai):
     async def send(
         self,
         target: Union[Entity, MessageEvent],
-        message: Union[MessageChain, List[Union[MessageComponent, str]], str],
+        message: Union[MessageChain, List[Union[MessageComponent, str]], MessageComponent, str],
         quote: bool = False
     ) -> int:
         """发送消息。可以从 `Friend` `Group` 等对象，或者从 `MessageEvent` 中自动识别消息发送对象。

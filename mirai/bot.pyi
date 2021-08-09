@@ -133,7 +133,8 @@ class Mirai(SimpleMirai):
     async def send(
         self,
         target: Union[Entity, MessageEvent],
-        message: Union[MessageChain, List[Union[MessageComponent, str]], str],
+        message: Union[MessageChain, List[Union[MessageComponent, str]],
+                       MessageComponent, str],
         quote: bool = ...
     ) -> int:
         ...
@@ -165,7 +166,7 @@ class Mirai(SimpleMirai):
     @property
     def cmd_execute(
         self, command: Union[MessageChain, List[Union[MessageComponent, str]],
-                             str]
+                             MessageComponent, str]
     ) -> ApiModel.Proxy[Response]:
         ...  # CmdExecute
 
@@ -188,13 +189,21 @@ class Mirai(SimpleMirai):
         ...  # FileDelete
 
     @property
-    def file_info(self, id: str,
-                  target: int) -> ApiModel.Proxy[FileInfoResponse]:
+    def file_info(
+        self,
+        id: str,
+        target: int,
+        with_download_info: bool = False
+    ) -> ApiModel.Proxy[FileInfoResponse]:
         ...  # FileInfo
 
     @property
-    def file_list(self, id: str,
-                  target: int) -> ApiModel.Proxy[FileListResponse]:
+    def file_list(
+        self,
+        id: str,
+        target: int,
+        with_download_info: bool = False
+    ) -> ApiModel.Proxy[FileListResponse]:
         ...  # FileList
 
     @property
@@ -310,7 +319,7 @@ class Mirai(SimpleMirai):
         self,
         target: int,
         message_chain: Union[MessageChain, List[Union[MessageComponent, str]],
-                             str],
+                             MessageComponent, str],
         quote: Optional[int] = None
     ) -> ApiModel.Proxy[MessageResponse]:
         ...  # SendFriendMessage
@@ -320,7 +329,7 @@ class Mirai(SimpleMirai):
         self,
         target: int,
         message_chain: Union[MessageChain, List[Union[MessageComponent, str]],
-                             str],
+                             MessageComponent, str],
         quote: Optional[int] = None
     ) -> ApiModel.Proxy[MessageResponse]:
         ...  # SendGroupMessage
@@ -338,7 +347,7 @@ class Mirai(SimpleMirai):
         qq: int,
         group: int,
         message_chain: Union[MessageChain, List[Union[MessageComponent, str]],
-                             str],
+                             MessageComponent, str],
         quote: Optional[int] = None
     ) -> ApiModel.Proxy[MessageResponse]:
         ...  # SendTempMessage

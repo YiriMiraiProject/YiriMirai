@@ -146,6 +146,15 @@ class MessageResponse(Response):
     message_id: int
     """消息的 message_id。"""
 
+class DownloadInfo(MiraiBaseModel):
+    """文件的下载信息。"""
+    sha1: str
+    """文件的 SHA1。"""
+    md5: str
+    """文件的 MD5。"""
+    url: str
+    """文件的下载地址。"""
+
 
 class File(MiraiBaseModel):
     """文件对象。"""
@@ -163,6 +172,8 @@ class File(MiraiBaseModel):
     """是否是文件。"""
     is_directory: bool
     """是否是文件夹。"""
+    download_info: Optional[DownloadInfo] = None
+    """文件的下载信息。"""
 
 
 File.update_forward_refs()  # 支持 model 引用自己的类型
@@ -617,6 +628,8 @@ class FileList(ApiGet):
     """文件夹 id，空串为根目录。"""
     target: int
     """群号或好友 QQ 号。"""
+    with_download_info: bool = False
+    """是否携带下载信息。"""
     class Info(ApiGet.Info):
         name = "file/list"
         alias = "file_list"
@@ -629,6 +642,8 @@ class FileInfo(ApiGet):
     """文件 id。"""
     target: int
     """群号或好友 QQ 号。"""
+    with_download_info: bool = False
+    """是否携带下载信息。"""
     class Info(ApiGet.Info):
         name = "file/info"
         alias = "file_info"

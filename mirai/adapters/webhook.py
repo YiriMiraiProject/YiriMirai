@@ -59,16 +59,19 @@ class WebHookAdapter(Adapter):
 
         async def endpoint(request: Request):
             # 鉴权（QQ 号和额外请求头）
+            print(request.headers)
             if request.headers.get('bot') != self.session:  # 验证 QQ 号
                 logger.debug(f"收到来自其他账号（{request.headers.get('bot')}）的事件。")
                 return
             for key in self.extra_headers:  # 验证请求头
                 key = key.lower()  # HTTP headers 不区分大小写
-                if request.headers.get(key).lower(
-                ) != self.extra_headers[key].lower():
-                    logger.debug(
-                        f"请求头验证失败：expect {self.extra_headers[key].lower()}, " +
-                        f"got {request.headers.get(key).lower()}。"
+                request_value = request.headers.get(key, '').lower()
+                expect_value = self.extra_headers[key].lower()
+                if (request_value != expect_value
+                    ) and (request_value != '[' + expect_value + ']'):
+                    logger.info(
+                        f"请求头验证失败：expect [{expect_value}], " +
+                        f"got {request_value}。"
                     )
                     return JSONResponse(
                         status_code=401, content={'error': 'Unauthorized'}

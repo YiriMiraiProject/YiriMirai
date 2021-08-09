@@ -219,7 +219,8 @@ class MessageChain(MiraiBaseModel):
 
     @validator('__root__', always=True, pre=True)
     def _parse_component(cls, msg_chain):
-        if isinstance(msg_chain, str):
+        if isinstance(msg_chain,
+                      str) or isinstance(msg_chain, MessageComponent):
             msg_chain = [msg_chain]
         if not msg_chain:
             msg_chain = []
@@ -327,7 +328,7 @@ class Plain(MessageComponent):
         return serialize(self.text)
 
     def __repr__(self):
-        return f'{self.__class__.__name__}({self.text!r})'
+        return f'Plain({self.text!r})'
 
 
 class Quote(MessageComponent):
@@ -767,6 +768,19 @@ class File(MessageComponent):
     """文件名称。"""
     size: int
     """文件大小。"""
+
+
+class MiraiCode(MessageComponent):
+    """Mirai 码。"""
+    type: str = "MiraiCode"
+    """消息组件类型。"""
+    code: str
+    """Mirai 码。"""
+    def __str__(self):
+        return serialize(self.code)
+
+    def __repr__(self):
+        return f'MiraiCode({self.code!r})'
 
 
 __all__ = [
