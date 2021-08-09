@@ -238,7 +238,7 @@ class MessageChain(MiraiBaseModel):
         super().__init__(__root__=__root__)
 
     def __str__(self):
-        return "".join((str(component) for component in self.__root__))
+        return "".join(str(component) for component in self.__root__)
 
     def __repr__(self):
         return f'{self.__class__.__name__}({self.__root__!r})'
