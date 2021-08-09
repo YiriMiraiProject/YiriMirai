@@ -628,7 +628,7 @@ class FileList(ApiGet):
     """文件夹 id，空串为根目录。"""
     target: int
     """群号或好友 QQ 号。"""
-    with_download_info: bool = False
+    with_download_info: Optional[bool] = None
     """是否携带下载信息。"""
     class Info(ApiGet.Info):
         name = "file/list"
@@ -642,7 +642,7 @@ class FileInfo(ApiGet):
     """文件 id。"""
     target: int
     """群号或好友 QQ 号。"""
-    with_download_info: bool = False
+    with_download_info: Optional[bool] = None
     """是否携带下载信息。"""
     class Info(ApiGet.Info):
         name = "file/info"
