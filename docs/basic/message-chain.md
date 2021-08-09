@@ -129,6 +129,15 @@ plain_list_first = message_chain[Plain: 1]
 '[Plain("Hello World!")]'
 ```
 
+## 使用 Mirai 码
+
+`MiraiCode` 消息组件表示 mirai 码，可以用于构建消息链。关于 mirai 码，请参阅 mirai 的[文档](https://github.com/mamoe/mirai/blob/dev/docs/Messages.md#mirai-%E7%A0%81)。
+
+```python
+from mirai import MiraiCode
+message_chain = MiraiCode('[mirai:at:123456789]')
+```
+
 ## 图片与语音
 
 ### 接收图片

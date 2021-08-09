@@ -4,6 +4,17 @@ sidebar_position: 6
 
 # 更新日志
 
+## v0.2.2.1
+
+发布日期：2021年8月9日
+
+本次更新适配了 mirai-api-http 2.2.0。
+
+新增功能：
+
+1. 新增 MiraiCode 消息组件。
+2. 新增 Mirai.file_info 的 with_download_info 参数。
+
 ## v0.2.1
 
 发布日期：2021年8月8日
