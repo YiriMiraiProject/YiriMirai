@@ -133,7 +133,7 @@ class Mirai(SimpleMirai):
     async def send(
         self,
         target: Union[Entity, MessageEvent],
-        message: Union[MessageChain, List[Union[MessageComponent, str]],
+        message: Union[MessageChain, Iterable[Union[MessageComponent, str]],
                        MessageComponent, str],
         quote: bool = ...
     ) -> int:
@@ -165,7 +165,7 @@ class Mirai(SimpleMirai):
 
     @property
     def cmd_execute(
-        self, command: Union[MessageChain, List[Union[MessageComponent, str]],
+        self, command: Union[MessageChain, Iterable[Union[MessageComponent, str]],
                              MessageComponent, str]
     ) -> ApiModel.Proxy[Response]:
         ...  # CmdExecute
@@ -318,7 +318,7 @@ class Mirai(SimpleMirai):
     def send_friend_message(
         self,
         target: int,
-        message_chain: Union[MessageChain, List[Union[MessageComponent, str]],
+        message_chain: Union[MessageChain, Iterable[Union[MessageComponent, str]],
                              MessageComponent, str],
         quote: Optional[int] = None
     ) -> ApiModel.Proxy[MessageResponse]:
@@ -328,7 +328,7 @@ class Mirai(SimpleMirai):
     def send_group_message(
         self,
         target: int,
-        message_chain: Union[MessageChain, List[Union[MessageComponent, str]],
+        message_chain: Union[MessageChain, Iterable[Union[MessageComponent, str]],
                              MessageComponent, str],
         quote: Optional[int] = None
     ) -> ApiModel.Proxy[MessageResponse]:
@@ -346,7 +346,7 @@ class Mirai(SimpleMirai):
         self,
         qq: int,
         group: int,
-        message_chain: Union[MessageChain, List[Union[MessageComponent, str]],
+        message_chain: Union[MessageChain, Iterable[Union[MessageComponent, str]],
                              MessageComponent, str],
         quote: Optional[int] = None
     ) -> ApiModel.Proxy[MessageResponse]:

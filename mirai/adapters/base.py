@@ -112,14 +112,14 @@ class Adapter(ApiProvider, AdapterInterface):
     def register_event_bus(self, *buses: AbstractEventBus):
         """注册事件总线。
 
-        `*buses: List[AbstractEventBus]` 一个或多个事件总线。
+        `*buses: AbstractEventBus` 一个或多个事件总线。
         """
         self.buses |= set(buses)
 
     def unregister_event_bus(self, *buses: AbstractEventBus):
         """解除注册事件总线。
 
-        `*buses: List[AbstractEventBus]` 一个或多个事件总线。
+        `*buses: AbstractEventBus` 一个或多个事件总线。
         """
         self.buses -= set(buses)
 

@@ -9,7 +9,7 @@ import re
 from datetime import datetime
 from json import loads as json_loads
 from pathlib import Path
-from typing import List, Optional, Union, cast
+from typing import Iterable, List, Optional, Union, cast
 
 import aiofiles
 import httpx
@@ -235,7 +235,7 @@ class MessageChain(MiraiBaseModel):
         result = cls._parse_message_chain(msg_chain)
         return cls(__root__=result)
 
-    def __init__(self, __root__: List[MessageComponent] = None):
+    def __init__(self, __root__: Iterable[MessageComponent] = None):
         super().__init__(__root__=__root__)
 
     def __str__(self):

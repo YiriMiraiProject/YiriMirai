@@ -331,14 +331,14 @@ class Mirai(SimpleMirai):
     async def send(
         self,
         target: Union[Entity, MessageEvent],
-        message: Union[MessageChain, List[Union[MessageComponent, str]], MessageComponent, str],
+        message: Union[MessageChain, Iterable[Union[MessageComponent, str]], MessageComponent, str],
         quote: bool = False
     ) -> int:
         """发送消息。可以从 `Friend` `Group` 等对象，或者从 `MessageEvent` 中自动识别消息发送对象。
 
         `target: Union[Entity, MessageEvent]` 目标对象。
 
-        `message: Union[MessageChain, List[Union[MessageComponent, str]], str]` 发送的消息。
+        `message: Union[MessageChain, Iterable[Union[MessageComponent, str]], str]` 发送的消息。
 
         `quote: bool = False` 是否以回复消息的形式发送。
 

@@ -7,7 +7,7 @@ import logging
 from enum import Enum, Flag
 from pathlib import Path
 from typing import (
-    TYPE_CHECKING, Any, Generic, List, Optional, Type, TypeVar, Union, cast
+    Iterable, TYPE_CHECKING, Any, Generic, List, Optional, Type, TypeVar, Union, cast
 )
 
 import aiofiles
@@ -544,7 +544,7 @@ class MemberProfile(ApiGet):
 
 class SendMessage(ApiBaseModel):
     """发送消息的 API 的方法复用，不作为 API 使用。"""
-    # message_chain: Union[MessageChain, List[Union[MessageComponent, str]], str]
+    # message_chain: Union[MessageChain, Iterable[Union[MessageComponent, str]], str]
 
     @validator('message_chain', check_fields=False)
     def _validate_message_chain(cls, value: Union[MessageChain, list]):
@@ -558,7 +558,7 @@ class SendFriendMessage(ApiPost, SendMessage):
     """发送好友消息。"""
     target: int
     """发送消息目标好友的 QQ 号。"""
-    message_chain: Union[MessageChain, List[Union[MessageComponent, str]], str]
+    message_chain: Union[MessageChain, Iterable[Union[MessageComponent, str]], str]
     """消息链。"""
     quote: Optional[int] = None
     """可选。引用一条消息的 message_id 进行回复。"""
@@ -572,7 +572,7 @@ class SendGroupMessage(ApiPost, SendMessage):
     """发送群消息。"""
     target: int
     """发送消息目标群的群号。"""
-    message_chain: Union[MessageChain, List[Union[MessageComponent, str]], str]
+    message_chain: Union[MessageChain, Iterable[Union[MessageComponent, str]], str]
     """消息链。"""
     quote: Optional[int] = None
     """可选。引用一条消息的 message_id 进行回复。"""
@@ -588,7 +588,7 @@ class SendTempMessage(ApiPost, SendMessage):
     """临时会话对象 QQ 号。"""
     group: int
     """临时会话对象群号。"""
-    message_chain: Union[MessageChain, List[Union[MessageComponent, str]], str]
+    message_chain: Union[MessageChain, Iterable[Union[MessageComponent, str]], str]
     """消息链。"""
     quote: Optional[int] = None
     """可选。引用一条消息的 message_id 进行回复。"""
@@ -1042,7 +1042,7 @@ class RespBotInvitedJoinGroupRequestEvent(ApiPost):
 
 class CmdExecute(ApiPost):
     """执行命令。"""
-    command: Union[MessageChain, List[Union[MessageComponent, str]], str]
+    command: Union[MessageChain, Iterable[Union[MessageComponent, str]], str]
     """命令。"""
     @validator('command')
     def _validate_command(cls, value):
