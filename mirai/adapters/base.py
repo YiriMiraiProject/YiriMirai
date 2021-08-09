@@ -7,11 +7,11 @@ import asyncio
 import logging
 from datetime import datetime
 from json import dumps
-from typing import Any, Dict, List, Optional, Set, cast
+from typing import Any, Dict, Optional, Set, cast
 
 from mirai import exceptions
 from mirai.api_provider import ApiProvider, Method
-from mirai.bus import EventBus
+from mirai.bus import AbstractEventBus
 
 logger = logging.getLogger(__name__)
 
@@ -73,7 +73,7 @@ class Adapter(ApiProvider, AdapterInterface):
     """是否开启 single_mode，开启后与 session 将无效。"""
     session: str
     """从 mirai-api-http 处获得的 session。"""
-    buses: Set[EventBus]
+    buses: Set[AbstractEventBus]
     """注册的事件总线集合。"""
     background: Optional[asyncio.Task]
     """背景事件循环任务。"""
@@ -109,17 +109,17 @@ class Adapter(ApiProvider, AdapterInterface):
         adapter.session = cast(str, info.get('session'))
         return adapter
 
-    def register_event_bus(self, *buses: EventBus):
+    def register_event_bus(self, *buses: AbstractEventBus):
         """注册事件总线。
 
-        `*buses: List[EventBus]` 一个或多个事件总线。
+        `*buses: List[AbstractEventBus]` 一个或多个事件总线。
         """
         self.buses |= set(buses)
 
-    def unregister_event_bus(self, *buses: EventBus):
+    def unregister_event_bus(self, *buses: AbstractEventBus):
         """解除注册事件总线。
 
-        `*buses: List[EventBus]` 一个或多个事件总线。
+        `*buses: List[AbstractEventBus]` 一个或多个事件总线。
         """
         self.buses -= set(buses)
 

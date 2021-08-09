@@ -11,8 +11,8 @@ import logging
 from collections import defaultdict
 from typing import Any, Awaitable, Callable, Dict, Iterable, List, Optional
 
-from mirai.exceptions import StopPropagation, StopExecution, SkipExecution
-from mirai.utils import async_with_exception, PriorityDict
+from mirai.exceptions import SkipExecution, StopExecution, StopPropagation
+from mirai.utils import PriorityDict, async_with_exception
 
 logger = logging.getLogger(__name__)
 
@@ -116,7 +116,8 @@ class EventBus(AbstractEventBus):
             一个函数，输入事件名，返回一个生成此事件所在事件链的全部事件的事件名的生成器，
             默认行为是事件链只包含单一事件。
         """
-        self._subscribers: Dict[str, PriorityDict] = defaultdict(PriorityDict)
+        self._subscribers: Dict[
+            str, PriorityDict[Callable]] = defaultdict(PriorityDict)
         self.event_chain_generator = event_chain_generator
 
     def subscribe(self, event: str, func: Callable, priority: int = 0) -> None:

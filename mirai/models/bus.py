@@ -41,7 +41,10 @@ class ModelEventBus(EventBus):
         self._middlewares = defaultdict(type(None))
 
     def subscribe(
-        self, event_type: Union[Type[Event], str], func: Callable, priority: int = 0
+        self,
+        event_type: Union[Type[Event], str],
+        func: Callable,
+        priority: int = 0
     ) -> None:
         """注册事件处理器。
 

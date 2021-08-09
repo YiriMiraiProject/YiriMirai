@@ -2,9 +2,9 @@
 """
 此模块提供一些实用的辅助方法。
 """
-from collections import UserDict, defaultdict
 import inspect
-from typing import Dict, Hashable, List
+from collections import defaultdict
+from typing import Dict, Generic, List, Set, TypeVar, cast
 
 from mirai import exceptions
 
@@ -26,18 +26,21 @@ async def async_with_exception(obj):
         exceptions.print_exception(e)  # 打印异常信息，但不打断执行流程
 
 
-class PriorityDict():
+T = TypeVar('T')
+
+
+class PriorityDict(Generic[T]):
     """以优先级为键的字典。"""
     def __init__(self):
-        self._data: Dict[int, set] = defaultdict(set)
+        self._data: Dict[int, Set[T]] = defaultdict(set)
         self._priorities = {}
 
-    def add(self, priority: int, value: Hashable) -> None:
+    def add(self, priority: int, value: T) -> None:
         """增加一个元素。"""
         self._data[priority].add(value)
         self._priorities[value] = priority
 
-    def remove(self, value: Hashable) -> None:
+    def remove(self, value: T) -> None:
         """移除一个元素。"""
         priority = self._priorities.get(value)
         if priority is None:
@@ -49,9 +52,9 @@ class PriorityDict():
     def __iter__(self):
         if self._data:
             _, data = zip(*sorted(self._data.items()))
-            yield from data
+            yield from cast(List[Set[T]], data)
         else:
-            yield from ()
+            yield from cast(List[Set[T]], ())
 
 
 def KMP(string, pattern, count: int = 1) -> List[int]:
