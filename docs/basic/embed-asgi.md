@@ -25,16 +25,17 @@ from fastapi import FastAPI
 from mirai.asgi import ASGI
 from mirai import Mirai
 
+bot = Mirai(...)
 app = FastAPI()
 
 @app.get('/')
-def test():
+async def test():
+    await bot.send_friend_message(...)
     return {'message': 'Hello, FastAPI!'}
 
 asgi = ASGI()
 asgi.mount('/fastapi', app)
 
-bot = Mirai(...)
 bot.run(host='127.0.0.1', port=8080)
 ```
 
