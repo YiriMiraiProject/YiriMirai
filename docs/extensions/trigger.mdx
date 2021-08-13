@@ -1,0 +1,308 @@
+---
+sidebar_position: 5.2
+---
+
+# 事件触发器
+
+本项目的 Github 页：[YiriMiraiProject/Trigger](https://github.com/YiriMiraiProject/Trigger)。
+
+## 事件触发器有什么用？
+
+如果大家用过 Graia Framework，那么应该知道一个非常实用的功能：中断。它可以实现这样的效果：
+
+import { ChatBox, ChatMessage } from "@site/src/components/ChatMessage.js";
+
+<ChatBox>
+  <ChatMessage name="忘忧北萱草" msg="执行命令 command" />
+  <ChatMessage name="Yiri" msg="发送 /confirm 以确认。" />
+  <ChatMessage name="忘忧北萱草" msg="/confirm" />
+  <ChatMessage name="Yiri" msg="命令 command 执行成功。" />
+</ChatBox>
+
+又或者，需要对接收到的事件进行过滤和解析，比如只接受斜杠开头的消息：
+
+<ChatBox>
+  <ChatMessage name="忘忧北萱草" msg="command" />
+  <ChatMessage name="忘忧北萱草" msg="/command" />
+  <ChatMessage name="Yiri" msg="命令 command 执行成功。" />
+</ChatBox>
+
+这些场景，事件触发器都可以满足你的需要。
+
+## 安装
+
+从 PyPI 安装：
+
+```shell
+pip install yiri-mirai-trigger
+# 或者使用 poetry
+poetry add yiri-mirai-trigger
+```
+
+安装之后，事件触发器将在模块 `mirai_extensions.trigger` 中。
+
+## 中断控制器
+
+我们的第一个场景使用中断控制器来实现。
+
+首先，我们需要定义一个中断控制器：
+
+```python
+from mirai import Mirai
+from mirai_extensions.trigger import InterruptControl
+
+bot = Mirai(...)
+inc = InterruptControl(bot)
+```
+
+接下来，在需要执行中断的地方定义触发器，并使用 `inc.wait` 等待触发器：
+
+```python
+from mirai_extensions.trigger import Trigger
+
+@bot.on(FriendMessage)
+async def on_friend_message(event: FriendMessage):
+    if str(event.message_chain).strip() == '你是谁':
+        await bot.send(event, '我是 Yiri。你呢？')
+
+        @Trigger(FriendMessage)
+        async def trigger(event_new: FriendMessage):
+            if event.sender.id == event_new.sender.id:
+                msg = str(event.message_chain)
+                if msg.startswith('我是'):
+                    return msg[2:]
+
+        name = await inc.wait(trigger)
+        await bot.send(event, f'你好，{name}。')
+```
+
+我们来分析一下这段代码的流程：
+
+首先，我们正常地定义了事件处理器，接受 `FriendMessage` 事件。在事件处理器中，我们简单地判断消息是否是“你是谁”，如果是，发送一条“我是 Yiri。你呢？”。
+
+```python
+@bot.on(FriendMessage)
+async def on_friend_message(event: FriendMessage):
+    if str(event.message_chain).strip() == '你是谁':
+        await bot.send(event, '我是 Yiri。你呢？')
+```
+
+接下来，我们定义了一个触发器，这个触发器监听另外一个 `FriendMessage` 事件。触发器定义时地函数体称为过滤器。在过滤器中，我们判断消息是否以“我是”开头，如果是，返回消息的剩余部分。
+
+```python
+@Trigger(FriendMessage)
+async def trigger(event_new: FriendMessage):
+    if event.sender.id == event_new.sender.id:
+        msg = str(event.message_chain)
+        if msg.startswith('我是'):
+            return msg[2:]
+```
+
+触发器定义后不会立即执行。我们使用 `inc.wait` 方法等待触发器。这个方法会打断当前的事件处理器，并且等待触发器的触发。
+
+当好友发送新的消息时，这个消息会传递给触发器的过滤器。过滤器负责检查消息是否符合条件，并对消息进行解析。在这里我们编写了这样的逻辑：
+
+- 如果好友发送的消息格式正确，过滤器返回消息的剩余部分。比如，好友发送“我是忘忧北萱草”，过滤器返回 `'忘忧北萱草'`。
+- 如果好友发送的消息格式不正确，或者不是与之前的 FriendMessage 是同一个好友，过滤器隐式地返回 `None`。
+
+当触发器返回的值不为 `None` 时，中断控制器会关闭这个触发器，然后将流程转回 `inc.wait`。`inc.wait` 会返回触发器返回的值。
+
+```python
+name = await inc.wait(trigger)
+await bot.send(event, f'你好，{name}。')
+```
+
+这时 `name` 变量就是好友输入的名字。
+
+最后，我们发送一条消息，向好友打个招呼。
+
+:::note 中断控制器会“卡住”吗？
+不会。这就是异步的作用所在，当你等待一个触发器时，可以切出控制流，继续处理其他的事件。所以，不要担心因为中断控制器让你的程序卡住。
+
+但是，从另外一个角度来说，中断控制器确实会“卡住”。按照事件总线的逻辑，只有当某个优先度的事件处理器调用完成后，才会执行下一优先度的事件处理器。所以，当等待触发器的时候，事件无法被传递到下一优先度的事件处理器。解决这个问题的办法是，**为带有中断的事件处理器分配较低的优先度**，比如：
+
+```python
+@bot.on(FriendMessage, priority=15)
+async def on_friend_message(event: FriendMessage):
+    ...
+    something = await inc.wait(trigger)
+    ...
+```
+
+:::
+
+总结一下，中断控制器的完整代码：
+
+```python
+from mirai import Mirai
+from mirai_extensions.trigger import InterruptControl, Trigger
+
+bot = Mirai(...)
+inc = InterruptControl(bot)
+
+@bot.on(FriendMessage)
+async def on_friend_message(event: FriendMessage):
+    if str(event.message_chain).strip() == '你是谁':
+        await bot.send(event, '我是 Yiri。你呢？')
+
+        @Trigger(FriendMessage)
+        async def trigger(event_new: FriendMessage):
+            if event.sender.id == event_new.sender.id:
+                msg = str(event.message_chain)
+                if msg.startswith('我是'):
+                    return msg[2:]
+
+        name = await inc.wait(trigger)
+        await bot.send(event, f'你好，{name}。')
+```
+
+### 等待超时
+
+`inc.wait` 有一个可选参数 `timeout`，表示等待的超时。如果超时，`inc.wait` 会返回 `None`。
+
+```python
+name = await inc.wait(trigger, timeout=60.)
+if name is not None:
+    await bot.send(event, f'你好，{name}。')
+```
+
+## 事件接收控制器
+
+与中断控制器不同，事件接收控制器面对的是另一种场景：对事件内容进行过滤和解析。
+
+同样，首先定义事件接收控制器。
+
+```python
+from mirai import Mirai
+from mirai_extensions.trigger import HandlerControl, Trigger
+
+bot = Mirai(...)
+hdc = HandlerControl(bot)
+```
+
+接下来，定义触发器，同样在触发器中对事件进行过滤和解析：
+
+```python
+@Trigger(FriendMessage)
+async def trigger(event: FriendMessage):
+    msg = str(event.message_chain)
+    if msg.startswith('/'):
+        return msg[1:]
+```
+
+触发器的函数体是过滤器，负责检查消息是否符合条件，并对消息进行解析。在这里我们编写了这样的逻辑：
+
+- 如果好友发送的消息格式正确，过滤器返回消息的剩余部分。比如，好友发送“/command”，过滤器返回 `'command'`。
+- 如果好友发送的消息格式不正确，过滤器隐式地返回 `None`。
+
+然后，使用 `hdc.on` 定义事件接收器。
+
+```python
+@hdc.on(trigger)
+async def handler(event: FriendMessage, payload: str):
+    await bot.send(event, f'命令 {payload} 执行成功。')
+```
+
+此处的事件接收器和使用 `bot.on` 定义的事件处理器有所不同，它接受两个参数 `event` 和 `payload`。`event` 是接收到的原始事件，`payload` 是触发器解析后的结果，也就是过滤器的返回值。
+
+总结一下，事件接收控制器的完整代码：
+
+```python
+from mirai import Mirai
+from mirai_extensions.trigger import Trigger, HandlerControl
+
+bot = Mirai(...)
+hdc = HandlerControl(bot)
+
+@Trigger(FriendMessage)
+async def trigger(event: FriendMessage):
+    msg = str(event.message_chain)
+    if msg.startswith('/'):
+        return msg[1:]
+
+@hdc.on(trigger)
+async def handler(event: FriendMessage, payload: str):
+    await bot.send(event, f'命令 {payload} 执行成功。')
+```
+
+## 详细说明
+
+### API 文档
+
+本项目的 API 文档见[这里](https://yirimiraiproject.github.io/Trigger)。
+
+### 触发器
+
+触发器（Trigger）定义在 `mirai_extensions.trigger.trigger` 模块中。
+
+触发器抽象了“等待符合条件的事件触发”的逻辑。为触发器指定过滤器后，可以根据过滤器的返回值来决定是否触发事件。
+
+为触发器指定过滤器有三种方式：
+
+```python
+# 方式一
+def filter_one(event: FriendMessage):
+    if event.sender.id == 12345678:
+        return event.sender.nickname or ''
+trigger_one = Trigger(FriendMessage, filter=filter_one)
+
+# 方式二
+trigger_two = Trigger(FriendMessage)
+@trigger_two.set_filter
+def filter_two(event: FriendMessage):
+    if event.sender.id == 12345678:
+        return event.sender.nickname or ''
+# 或者
+trigger_two.set_filter(filter_two)
+
+# 方式三
+@Trigger(FriendMessage)
+def trigger_three(event: FriendMessage):
+    if event.sender.id == 12345678:
+        return event.sender.nickname or ''
+```
+
+在之前的示例中，我们都是采用的第三种方式（类装饰器）指定过滤器。当使用类装饰器的方式创建触发器时，被装饰函数的名称将失效。比如上例中，**trigger_three 将不再是函数， 而是成为 Trigger 实例**。
+
+触发器会检查过滤器的返回值，如果返回值为 `None`，则不会触发。如果返回值不为 `None`，则事件触发，并把过滤器的返回值作为事件解析的结果。
+
+触发器的结果在中断控制器和事件接收控制器中都有使用。在前者中是 `inc.wait` 的返回值，在后者中是事件接收器中的第二个参数 `payload` 传入的值。
+
+:::tip 副作用与阻塞
+**请尽量不要在过滤器中执行有副作用（影响到外部）的代码，以及导致阻塞或长时间挂起的代码（包括异步等待）**。
+
+这是由事件触发器的原理决定的。收到新事件时，事件触发器是否被调用是不确定的（如果事件已经被某一个触发器拦截，那么就不会传递给其他触发器），而且，当一个事件触发器的过滤器被阻塞或挂起后，其他事件触发器也不会被调用，直到过滤器完成并返回一个值。
+
+我们推荐**在过滤器中只进行简单的判断**。
+:::
+
+### 优先级
+
+与事件触发器相关的优先级有三个：Trigger 的优先级，以及中断控制器的工作优先级和事件接收控制器的注册优先级。
+
+中断控制器的工作优先级在实例化时指定。此处的优先级和事件总线中使用的优先级相通。
+
+```python
+inc = InterruptControl(bot, priority=15)
+```
+
+事件接收控制器的 `on` 方法可以在调用时指定优先级。此处的优先级和事件总线中使用的优先级不相通，用于对同一个触发器多次监听时，区分事件接收器的执行顺序。
+
+```python
+@hdc.on(trigger, priority=3)
+async def handler(event: FriendMessage, payload: str):
+    await bot.send(event, f'命令 {payload} 执行成功。')
+```
+
+Trigger 的优先级在实例化 Trigger 时设置。在中断控制器中，此处的优先级用于区分同类型 Trigger 的执行顺序，与事件总线中使用的优先级不相通。在事件接收控制器中，此处的优先级和事件总线中使用的优先级相通。
+
+```python
+@Trigger(FriendMessage, priority=1)
+def trigger_three(event: FriendMessage):
+    if event.sender.id == 12345678:
+        return event.sender.nickname or ''
+```
+
+:::note 可能会在未来更改
+由于此处关于优先级的使用方式过于混乱，优先级的作用在未来可能会更改。
+:::

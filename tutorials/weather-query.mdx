@@ -112,7 +112,7 @@ async def weather_query(event: GroupMessage):
 
 ## 调用天气接口
 
-因为本篇教程的重点是 YiriMirai 的用法，所以天气接口的细节暂且略过。我们这里使用[心知天气](https://www.seniverse.com/)，具体的用法请查看官网。
+因为本篇教程的重点是 YiriMirai 的用法，所以天气接口的细节暂且略过。我们这里使用[心知天气](https://www.seniverse.com/)，具体的用法请查看官网。使用之前，请先注册心知天气的账号，按照[这里](https://seniverse.yuque.com/books/share/e52aa43f-8fe9-4ffa-860d-96c0f3cf1c49/gc03wk)的方式获取私钥。
 
 既然已经使用了异步的事件处理器，那么我们干脆把网络部分全部用异步实现，使用 httpx 发起异步的请求。
 
