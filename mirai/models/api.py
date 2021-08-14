@@ -7,7 +7,8 @@ import logging
 from enum import Enum, Flag
 from pathlib import Path
 from typing import (
-    TYPE_CHECKING, Any, Generic, List, Optional, Type, TypeVar, Union, cast
+    TYPE_CHECKING, Any, Generic, Iterable, List, Optional, Type, TypeVar,
+    Union, cast
 )
 
 import aiofiles
@@ -146,6 +147,7 @@ class MessageResponse(Response):
     message_id: int
     """消息的 message_id。"""
 
+
 class DownloadInfo(MiraiBaseModel):
     """文件的下载信息。"""
     sha1: str
@@ -156,7 +158,7 @@ class DownloadInfo(MiraiBaseModel):
     """文件的下载地址。"""
 
 
-class File(MiraiBaseModel):
+class FileProperties(MiraiBaseModel):
     """文件对象。"""
     name: str
     """文件名。"""
@@ -164,7 +166,7 @@ class File(MiraiBaseModel):
     """文件 ID。"""
     path: str
     """文件路径。"""
-    parent: Optional['File'] = None
+    parent: Optional['FileProperties'] = None
     """父文件对象，递归类型。None 为存在根目录。"""
     contact: Union[Group, Friend]
     """群信息或好友信息。"""
@@ -176,25 +178,33 @@ class File(MiraiBaseModel):
     """文件的下载信息。"""
 
 
-File.update_forward_refs()  # 支持 model 引用自己的类型
+FileProperties.update_forward_refs()  # 支持 model 引用自己的类型
 
 
 class FileListResponse(Response):
     """文件列表。"""
-    data: List[File]
+    data: List[FileProperties]
 
     def __iter__(self):
         yield from self.data
 
+    def files(self):
+        """返回文件列表。"""
+        return [item for item in self if item.is_file]
+
+    def directories(self):
+        """返回文件夹列表。"""
+        return [item for item in self if item.is_directory]
+
 
 class FileInfoResponse(Response):
     """文件信息。"""
-    data: File
+    data: FileProperties
 
 
 class FileMkdirResponse(Response):
     """创建文件夹的响应。"""
-    data: File
+    data: FileProperties
 
 
 class ApiMetaclass(MiraiIndexedMetaclass):
@@ -544,7 +554,7 @@ class MemberProfile(ApiGet):
 
 class SendMessage(ApiBaseModel):
     """发送消息的 API 的方法复用，不作为 API 使用。"""
-    # message_chain: Union[MessageChain, List[Union[MessageComponent, str]], str]
+    # message_chain: Union[MessageChain, Iterable[Union[MessageComponent, str]], str]
 
     @validator('message_chain', check_fields=False)
     def _validate_message_chain(cls, value: Union[MessageChain, list]):
@@ -558,7 +568,8 @@ class SendFriendMessage(ApiPost, SendMessage):
     """发送好友消息。"""
     target: int
     """发送消息目标好友的 QQ 号。"""
-    message_chain: Union[MessageChain, List[Union[MessageComponent, str]], str]
+    message_chain: Union[MessageChain, Iterable[Union[MessageComponent, str]],
+                         str]
     """消息链。"""
     quote: Optional[int] = None
     """可选。引用一条消息的 message_id 进行回复。"""
@@ -572,7 +583,8 @@ class SendGroupMessage(ApiPost, SendMessage):
     """发送群消息。"""
     target: int
     """发送消息目标群的群号。"""
-    message_chain: Union[MessageChain, List[Union[MessageComponent, str]], str]
+    message_chain: Union[MessageChain, Iterable[Union[MessageComponent, str]],
+                         str]
     """消息链。"""
     quote: Optional[int] = None
     """可选。引用一条消息的 message_id 进行回复。"""
@@ -588,7 +600,8 @@ class SendTempMessage(ApiPost, SendMessage):
     """临时会话对象 QQ 号。"""
     group: int
     """临时会话对象群号。"""
-    message_chain: Union[MessageChain, List[Union[MessageComponent, str]], str]
+    message_chain: Union[MessageChain, Iterable[Union[MessageComponent, str]],
+                         str]
     """消息链。"""
     quote: Optional[int] = None
     """可选。引用一条消息的 message_id 进行回复。"""
@@ -731,7 +744,7 @@ class FileUpload(ApiPost, CustomApiModel):
     class Info(ApiPost.Info):
         name = "file/upload"
         alias = "file_upload"
-        response_type = File
+        response_type = FileProperties
 
 
 class UploadImage(ApiPost, CustomApiModel):
@@ -1042,7 +1055,7 @@ class RespBotInvitedJoinGroupRequestEvent(ApiPost):
 
 class CmdExecute(ApiPost):
     """执行命令。"""
-    command: Union[MessageChain, List[Union[MessageComponent, str]], str]
+    command: Union[MessageChain, Iterable[Union[MessageComponent, str]], str]
     """命令。"""
     @validator('command')
     def _validate_command(cls, value):
@@ -1061,12 +1074,12 @@ class CmdRegister(ApiPost):
     """注册命令。"""
     name: str
     """命令名称。"""
-    alias: Optional[List[str]] = None
-    """可选。命令别名。"""
     usage: str
     """使用说明。"""
     description: str
     """命令描述。"""
+    alias: Optional[List[str]] = None
+    """可选。命令别名。"""
     class Info(ApiPost.Info):
         name = "cmd/register"
         alias = "cmd_register"

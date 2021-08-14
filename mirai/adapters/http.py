@@ -249,4 +249,4 @@ class HTTPAdapter(Adapter):
                 self._tasks.create_task(self.poll_event())
                 await asyncio.sleep(self.poll_interval)
         finally:
-            self._tasks.cancel_all()
+            await self._tasks.cancel_all()

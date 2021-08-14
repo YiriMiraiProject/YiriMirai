@@ -3,7 +3,7 @@
 此模块提供 HTTP 回调适配器，适用于 mirai-api-http 的 webhook adapter。
 """
 import logging
-from typing import Optional, cast
+from typing import Mapping, Optional, cast
 
 from starlette.requests import Request
 from starlette.responses import JSONResponse
@@ -28,7 +28,7 @@ class WebHookAdapter(Adapter):
     """WebHook 不需要 session，此处为机器人的 QQ 号。"""
     route: str
     """适配器的路由。"""
-    extra_headers: dict
+    extra_headers: Mapping[str, str]
     """额外请求头。"""
     enable_quick_response: bool
     """是否启用快速响应。"""
@@ -36,7 +36,7 @@ class WebHookAdapter(Adapter):
         self,
         verify_key: Optional[str],
         route: str = '/',
-        extra_headers: Optional[dict] = None,
+        extra_headers: Optional[Mapping[str, str]] = None,
         enable_quick_response: bool = True,
         single_mode: bool = False
     ):
@@ -45,7 +45,7 @@ class WebHookAdapter(Adapter):
 
         `route: str = '/'` 适配器的路由，默认在根目录上提供服务。
 
-        `extra_headers: Optional[dict] = None` 额外请求头，与 mirai-api-http 的配置一致。
+        `extra_headers: Optional[Mapping[str, str]] = None` 额外请求头，与 mirai-api-http 的配置一致。
 
         `enable_quick_response: bool = True` 是否启用快速响应，当与其他适配器混合使用时，
             禁用可以提高响应速度。
@@ -59,7 +59,6 @@ class WebHookAdapter(Adapter):
 
         async def endpoint(request: Request):
             # 鉴权（QQ 号和额外请求头）
-            print(request.headers)
             if request.headers.get('bot') != self.session:  # 验证 QQ 号
                 logger.debug(f"收到来自其他账号（{request.headers.get('bot')}）的事件。")
                 return
