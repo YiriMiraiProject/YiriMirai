@@ -24,8 +24,8 @@ from mirai.exceptions import (
 )
 from mirai.models import (
     At, AtAll, Dice, Event, Face, FriendMessage, GroupMessage, Image,
-    MessageChain, MessageEvent, Plain, Poke, StrangerMessage, TempMessage,
-    Voice, deserialize, serialize
+    MessageChain, MessageEvent, Plain, Poke, PokeNames, StrangerMessage,
+    TempMessage, Voice, deserialize, serialize
 )
 
 __all__ = [
@@ -33,9 +33,9 @@ __all__ = [
     'Adapter', 'Method', 'HTTPAdapter', 'WebSocketAdapter', 'WebHookAdapter',
     'ComposeAdapter', 'EventBus', 'get_logger', 'Event', 'MessageEvent',
     'FriendMessage', 'GroupMessage', 'TempMessage', 'StrangerMessage',
-    'MessageChain', 'Plain', 'At', 'AtAll', 'Dice', 'Face', 'Poke', 'Image',
-    'Voice', 'serialize', 'deserialize', 'ApiError', 'NetworkError',
-    'SkipExecution', 'StopExecution', 'StopPropagation'
+    'MessageChain', 'Plain', 'At', 'AtAll', 'Dice', 'Face', 'Poke',
+    'PokeNames', 'Image', 'Voice', 'serialize', 'deserialize', 'ApiError',
+    'NetworkError', 'SkipExecution', 'StopExecution', 'StopPropagation'
 ]
 
 logger = logging.getLogger(__name__)
