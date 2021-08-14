@@ -20,10 +20,15 @@ from mirai.models.base import MiraiBaseModel
 
 class Entity(MiraiBaseModel):
     """实体，表示一个用户或群。"""
+    id: int
+    """QQ 号或群号。"""
     @abc.abstractmethod
     def get_avatar_url(self) -> str:
-        """获取头像图片链接。"""
-        pass
+        """头像图片链接。"""
+
+    @abc.abstractmethod
+    def get_name(self) -> str:
+        """名称。"""
 
 
 class Friend(Entity):
@@ -36,6 +41,9 @@ class Friend(Entity):
     """备注。"""
     def get_avatar_url(self) -> str:
         return f'http://q4.qlogo.cn/g?b=qq&nk={self.id}&s=140'
+
+    def get_name(self) -> str:
+        return self.nickname or self.remark or ''
 
 
 class Permission(str, Enum):
@@ -61,6 +69,9 @@ class Group(Entity):
     def get_avatar_url(self) -> str:
         return f'https://p.qlogo.cn/gh/{self.id}/{self.id}/'
 
+    def get_name(self) -> str:
+        return self.name
+
 
 class GroupMember(Entity):
     """群成员。"""
@@ -83,6 +94,9 @@ class GroupMember(Entity):
     def get_avatar_url(self) -> str:
         return f'http://q4.qlogo.cn/g?b=qq&nk={self.id}&s=140'
 
+    def get_name(self) -> str:
+        return self.member_name
+
 
 class Sender(Entity):
     """来自其他客户端的用户。"""
@@ -92,6 +106,9 @@ class Sender(Entity):
     """来源平台。"""
     def get_avatar_url(self) -> str:
         return f'http://q4.qlogo.cn/g?b=qq&nk={self.id}&s=140'
+
+    def get_name(self) -> str:
+        return self.platform
 
 
 class Subject(MiraiBaseModel):

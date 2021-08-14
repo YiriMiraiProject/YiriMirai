@@ -156,7 +156,7 @@ class DownloadInfo(MiraiBaseModel):
     """文件的下载地址。"""
 
 
-class File(MiraiBaseModel):
+class FileProperties(MiraiBaseModel):
     """文件对象。"""
     name: str
     """文件名。"""
@@ -164,7 +164,7 @@ class File(MiraiBaseModel):
     """文件 ID。"""
     path: str
     """文件路径。"""
-    parent: Optional['File'] = None
+    parent: Optional['FileProperties'] = None
     """父文件对象，递归类型。None 为存在根目录。"""
     contact: Union[Group, Friend]
     """群信息或好友信息。"""
@@ -176,25 +176,33 @@ class File(MiraiBaseModel):
     """文件的下载信息。"""
 
 
-File.update_forward_refs()  # 支持 model 引用自己的类型
+FileProperties.update_forward_refs()  # 支持 model 引用自己的类型
 
 
 class FileListResponse(Response):
     """文件列表。"""
-    data: List[File]
+    data: List[FileProperties]
 
     def __iter__(self):
         yield from self.data
 
+    def files(self):
+        """返回文件列表。"""
+        return [item for item in self if item.is_file]
+
+    def directories(self):
+        """返回文件夹列表。"""
+        return [item for item in self if item.is_directory]
+
 
 class FileInfoResponse(Response):
     """文件信息。"""
-    data: File
+    data: FileProperties
 
 
 class FileMkdirResponse(Response):
     """创建文件夹的响应。"""
-    data: File
+    data: FileProperties
 
 
 class ApiMetaclass(MiraiIndexedMetaclass):
@@ -731,7 +739,7 @@ class FileUpload(ApiPost, CustomApiModel):
     class Info(ApiPost.Info):
         name = "file/upload"
         alias = "file_upload"
-        response_type = File
+        response_type = FileProperties
 
 
 class UploadImage(ApiPost, CustomApiModel):

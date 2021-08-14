@@ -18,7 +18,7 @@ except ImportError:
 from mirai.adapters.base import Adapter, AdapterInterface, ApiProvider
 from mirai.bus import AbstractEventBus
 from mirai.models.api import (
-    AboutResponse, ApiModel, File, FileInfoResponse, FileListResponse,
+    AboutResponse, ApiModel, FileProperties, FileInfoResponse, FileListResponse,
     FileMkdirResponse, FriendListResponse, GroupListResponse,
     MemberListResponse, MessageFromIdResponse, MessageResponse,
     ProfileResponse, Response, RespOperate, SessionInfoResponse
@@ -225,7 +225,7 @@ class Mirai(SimpleMirai):
     def file_upload(
         self, type: Literal['group'], target: int, file: Union[str, Path],
         path: str
-    ) -> ApiModel.Proxy[File]:
+    ) -> ApiModel.Proxy[FileProperties]:
         ...  # FileUpload
 
     @property

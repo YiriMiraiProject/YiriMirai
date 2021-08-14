@@ -30,8 +30,9 @@ from mirai.models.events import (
 )
 from mirai.models.message import (
     App, At, AtAll, Dice, Face, File, FlashImage, Forward, ForwardMessageNode,
-    Image, Json, MessageChain, MessageComponent, MiraiCode, MusicShare, Plain, Poke,
-    Quote, Source, Unknown, Voice, Xml, deserialize, serialize
+    Image, Json, MessageChain, MessageComponent, MiraiCode, MusicShareKind,
+    MusicShare, Plain, PokeNames, Poke, Quote, Source, Unknown, Voice, Xml,
+    deserialize, serialize
 )
 
 __all__ = [
@@ -102,8 +103,10 @@ __all__ = [
     'MessageChain',
     'MessageComponent',
     'MiraiCode',
+    'MusicShareKind',
     'MusicShare',
     'Plain',
+    'PokeNames',
     'Poke',
     'Quote',
     'Source',

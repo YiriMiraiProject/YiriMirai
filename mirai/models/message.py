@@ -2,7 +2,9 @@
 """
 此模块提供消息链相关。
 """
+import abc
 import base64
+from enum import Enum
 import imghdr
 import logging
 import re
@@ -18,6 +20,7 @@ from pydantic import HttpUrl, validator
 from mirai.models.base import (
     MiraiBaseModel, MiraiIndexedMetaclass, MiraiIndexedModel
 )
+from mirai.models.entities import Friend, GroupMember
 from mirai.utils import KMP
 
 logger = logging.getLogger(__name__)
@@ -58,11 +61,9 @@ class MessageComponentMetaclass(MiraiIndexedMetaclass):
         for base in bases:
             if issubclass(base, cls.__message_component__):
                 # 获取字段名
-                if hasattr(new_cls, '__annotations__'):
+                if hasattr(new_cls, '__fields__'):
                     # 忽略 type 字段
-                    new_cls.__parameter_names__ = list(
-                        new_cls.__annotations__
-                    )[1:]
+                    new_cls.__parameter_names__ = list(new_cls.__fields__)[1:]
                 else:
                     new_cls.__parameter_names__ = []
                 break
@@ -99,6 +100,13 @@ class MessageComponent(MiraiIndexedModel, metaclass=MessageComponentMetaclass):
                 kwargs[name] = value
 
         super().__init__(**kwargs)
+
+
+class MessagePart():
+    """消息的部分，可转化为消息组件。"""
+    @abc.abstractmethod
+    def as_component(self) -> MessageComponent:
+        """将消息组件化。"""
 
 
 class MessageChain(MiraiBaseModel):
@@ -209,6 +217,8 @@ class MessageChain(MiraiBaseModel):
                 result.append(MessageComponent.parse_obj(msg))
             elif isinstance(msg, MessageComponent):
                 result.append(msg)
+            elif isinstance(msg, MessagePart):
+                result.append(msg.as_component())
             elif isinstance(msg, str):
                 result.append(Plain(msg))
             else:
@@ -380,9 +390,19 @@ class Face(MessageComponent):
     face_id: Optional[int] = None
     """QQ 表情编号，可选，优先度高于 name。"""
     name: Optional[str] = None
-    """QQ表情拼音，可选。"""
+    """QQ表情名称，可选。"""
+    def __init__(self, *args, **kwargs):
+        if len(args) == 1:
+            if isinstance(args[0], str):
+                self.name = args[0]
+            elif isinstance(args[0], int):
+                self.face_id = args[0]
+            super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)
+
     def __eq__(self, other):
-        return isinstance(other, Face) and self.face_id == other.face_id
+        return isinstance(other, Face) and \
+            (self.face_id == other.face_id or self.name == other.name)
 
     def __str__(self):
         return f"[mirai:face:{self.face_id}]"
@@ -528,7 +548,7 @@ class Json(MessageComponent):
     """JSON。"""
     type: str = "Json"
     """消息组件类型。"""
-    json_: dict
+    json_: str
     """JSON 文本。"""
 
 
@@ -583,11 +603,33 @@ POKE_ID = {
 }
 
 
+class PokeNames(str, MessagePart, Enum):
+    ChuoYiChuo = "ChuoYiChuo"
+    BiXin = "BiXin"
+    DianZan = "DianZan"
+    XinSui = "XinSui"
+    LiuLiuLiu = "LiuLiuLiu"
+    FangDaZhao = "FangDaZhao"
+    BaoBeiQiu = "BaoBeiQiu"
+    Rose = "Rose"
+    ZhaoHuanShu = "ZhaoHuanShu"
+    RangNiPi = "RangNiPi"
+    JeiYin = "JeiYin"
+    ShouLei = "ShouLei"
+    GouYin = "GouYin"
+    ZhuaYiXia = "ZhuaYiXia"
+    SuiPing = "SuiPing"
+    QiaoMen = "QiaoMen"
+
+    def as_component(self) -> 'Poke':
+        return Poke(name=self.value)
+
+
 class Poke(MessageComponent):
     """戳一戳。"""
     type: str = "Poke"
     """消息组件类型。"""
-    name: str
+    name: PokeNames
     """名称。"""
     @property
     def poke_type(self):
@@ -716,38 +758,63 @@ class Dice(MessageComponent):
         return f'[mirai:dice:{self.value}]'
 
 
+class MusicShareKind(str, Enum):
+    """音乐分享的来源。"""
+    NeteaseCloudMusic = "NeteaseCloudMusic"
+    QQMusic = "QQMusic"
+    MiguMusic = "MiguMusic"
+    KugouMusic = "KugouMusic"
+    KuwoMusic = "KuwoMusic"
+
+
 class MusicShare(MessageComponent):
     """音乐分享。"""
     type: str = "MusicShare"
     """消息组件类型。"""
-    kind: str
-    """类型。"""
+    kind: MusicShareKind
+    """音乐分享的来源。"""
     title: str
     """标题。"""
     summary: str
-    """概括。"""
+    """歌手。"""
     jump_url: HttpUrl
     """跳转路径。"""
     picture_url: HttpUrl
     """封面路径。"""
     music_url: HttpUrl
     """音源路径。"""
-    brief: str
-    """简介。"""
+    brief: str = ""
+    """在消息列表中显示的内容。"""
 
 
 class ForwardMessageNode(MiraiBaseModel):
     """合并转发中的一条消息。"""
     sender_id: int
     """发送人QQ号。"""
-    time: datetime
-    """发送时间。"""
     sender_name: str
     """显示名称。"""
-    source_id: Optional[int]
-    """消息的 message_id，可以只使用此属性，从缓存中读取消息内容。"""
     message_chain: MessageChain
     """消息内容。"""
+    source_id: Optional[int] = None
+    """消息的 message_id，可以只使用此属性，从缓存中读取消息内容。"""
+    time: Optional[datetime] = None
+    """发送时间。"""
+    @validator('message_chain', check_fields=False)
+    def _validate_message_chain(cls, value: Union[MessageChain, list]):
+        if isinstance(value, list):
+            return MessageChain.parse_obj(value)
+        elif isinstance(value, MessageChain):
+            return value
+
+    @classmethod
+    def create(
+        cls, sender: Union[Friend, GroupMember], message: MessageChain
+    ) -> 'ForwardMessageNode':
+        return ForwardMessageNode(
+            sender_id=sender.id,
+            sender_name=sender.get_name(),
+            message_chain=message
+        )
 
 
 class Forward(MessageComponent):
@@ -756,6 +823,11 @@ class Forward(MessageComponent):
     """消息组件类型。"""
     node_list: List[ForwardMessageNode]
     """转发消息节点列表。"""
+    def __init__(self, *args, **kwargs):
+        if len(args) == 1:
+            self.node_list = args[0]
+            super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class File(MessageComponent):
@@ -797,8 +869,10 @@ __all__ = [
     'Json',
     'MessageChain',
     'MessageComponent',
+    'MusicShareKind',
     'MusicShare',
     'Plain',
+    'PokeNames',
     'Poke',
     'Quote',
     'Source',
