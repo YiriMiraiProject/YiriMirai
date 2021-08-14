@@ -4,12 +4,12 @@
 """
 
 import asyncio
-from itertools import repeat
-import time
 import json
 import logging
 import random
+import time
 from collections import defaultdict, deque
+from itertools import repeat
 from typing import Dict, Optional, cast
 
 from websockets.client import WebSocketClientProtocol, connect

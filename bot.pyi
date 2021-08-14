@@ -2,12 +2,14 @@
 """
 `mirai.bot` 模块的存根文件，用于补全代码提示。
 """
-from pathlib import Path
+import pathlib
+import typing
 from typing import (
     Any, Awaitable, Callable, Dict, Iterable, List, Optional, Type, Union,
     overload
 )
 
+import mirai
 from mirai.asgi import ASGI
 from mirai.models.base import MiraiBaseModel
 
@@ -19,8 +21,8 @@ except ImportError:
 from mirai.adapters.base import Adapter, AdapterInterface, ApiProvider
 from mirai.bus import AbstractEventBus
 from mirai.models.api import (
-    AboutResponse, ApiModel, FileInfoResponse, FileListResponse,
-    FileMkdirResponse, FileProperties, FriendListResponse, GroupListResponse,
+    AboutResponse, ApiModel, FileProperties, FileInfoResponse,
+    FileListResponse, FileMkdirResponse, FriendListResponse, GroupListResponse,
     MemberListResponse, MessageFromIdResponse, MessageResponse,
     ProfileResponse, Response, RespOperate, SessionInfoResponse
 )
@@ -172,45 +174,61 @@ class Mirai(SimpleMirai):
     async def is_admin(self, group: Group) -> bool:
         ...
 
-    ### 以下为自动生成 ###
+### 以下为自动生成 ###
+
     # About
 
-    class __AboutProxy():
-        async def get(self) -> AboutResponse:
-            """获取插件信息。"""
+    class __AboutProxy(ApiModel.Proxy[AboutResponse]):
+        async def get(self, ) -> AboutResponse:
+            """获取插件信息。
+
+
+            """
 
     @overload
     def about(self) -> __AboutProxy:
         """获取插件信息。"""
 
     @overload
-    async def about(self) -> AboutResponse:
-        """获取插件信息。"""
+    async def about(self, ) -> AboutResponse:
+        """获取插件信息。
+
+
+        """
 
     # BotProfile
 
-    class __BotProfileProxy():
-        async def get(self) -> ProfileResponse:
-            """获取 Bot 资料。"""
+    class __BotProfileProxy(ApiModel.Proxy[ProfileResponse]):
+        async def get(self, ) -> ProfileResponse:
+            """获取 Bot 资料。
+
+
+            """
 
     @overload
     def bot_profile(self) -> __BotProfileProxy:
         """获取 Bot 资料。"""
 
     @overload
-    async def bot_profile(self) -> ProfileResponse:
-        """获取 Bot 资料。"""
+    async def bot_profile(self, ) -> ProfileResponse:
+        """获取 Bot 资料。
+
+
+        """
 
     # CmdExecute
 
-    class __CmdExecuteProxy():
+    class __CmdExecuteProxy(ApiModel.Proxy[Response]):
         async def set(
-            self, command: Union[MessageChain, Iterable[Union[MessageComponent,
-                                                              str]], str]
+            self,
+            command: typing.Union[mirai.models.message.MessageChain,
+                                  typing.Iterable[typing.Union[
+                                      mirai.models.message.MessageComponent,
+                                      str]], str]
         ) -> Response:
             """执行命令。
 
-            `command: Union[MessageChain,Iterable[Union[MessageComponent,str]],str]` 命令。
+            `command: typing.Union[mirai.models.message.MessageChain, typing.Iterable[typing.Union[mirai.models.message.MessageComponent, str]], str]` 命令。
             """
 
     @overload
@@ -219,33 +237,32 @@ class Mirai(SimpleMirai):
 
     @overload
     async def cmd_execute(
-        self, command: Union[MessageChain, Iterable[Union[MessageComponent,
-                                                          str]], str]
+        self, command: typing.Union[mirai.models.message.MessageChain,
+                                    typing.Iterable[typing.Union[
+                                        mirai.models.message.MessageComponent,
+                                        str]], str]
     ) -> Response:
         """执行命令。
 
-        `command: Union[MessageChain,Iterable[Union[MessageComponent,str]],str]` 命令。
+        `command: typing.Union[mirai.models.message.MessageChain, typing.Iterable[typing.Union[mirai.models.message.MessageComponent, str]], str]` 命令。
         """
 
     # CmdRegister
 
-    class __CmdRegisterProxy():
+    class __CmdRegisterProxy(ApiModel.Proxy[Response]):
         async def set(
-            self,
-            name: str,
-            usage: str,
-            description: str,
-            alias: Union[List[str], None] = None
+            self, name: str, alias: typing.Union[typing.List[str], NoneType],
+            usage: str, description: str
         ) -> Response:
             """注册命令。
 
             `name: str` 命令名称。
 
+            `alias: typing.Union[typing.List[str], NoneType]` 可选。命令别名。
+
             `usage: str` 使用说明。
 
             `description: str` 命令描述。
-
-            `alias: Union[List[str],None] = None` 可选。命令别名。
             """
 
     @overload
@@ -254,26 +271,23 @@ class Mirai(SimpleMirai):
 
     @overload
     async def cmd_register(
-        self,
-        name: str,
-        usage: str,
-        description: str,
-        alias: Union[List[str], None] = None
+        self, name: str, alias: typing.Union[typing.List[str], NoneType],
+        usage: str, description: str
     ) -> Response:
         """注册命令。
 
         `name: str` 命令名称。
 
+        `alias: typing.Union[typing.List[str], NoneType]` 可选。命令别名。
+
         `usage: str` 使用说明。
 
         `description: str` 命令描述。
-
-        `alias: Union[List[str],None] = None` 可选。命令别名。
         """
 
     # DeleteFriend
 
-    class __DeleteFriendProxy():
+    class __DeleteFriendProxy(ApiModel.Proxy[Response]):
         async def set(self, target: int) -> Response:
             """删除好友。
 
@@ -293,7 +307,7 @@ class Mirai(SimpleMirai):
 
     # FileDelete
 
-    class __FileDeleteProxy():
+    class __FileDeleteProxy(ApiModel.Proxy[Response]):
         async def set(self, id: str, target: int) -> Response:
             """删除文件。
 
@@ -317,12 +331,10 @@ class Mirai(SimpleMirai):
 
     # FileInfo
 
-    class __FileInfoProxy():
+    class __FileInfoProxy(ApiModel.Proxy[FileInfoResponse]):
         async def get(
-            self,
-            id: str,
-            target: int,
-            with_download_info: Union[bool, None] = None
+            self, id: str, target: int,
+            with_download_info: typing.Union[bool, NoneType]
         ) -> FileInfoResponse:
             """查看文件信息。
 
@@ -330,7 +342,7 @@ class Mirai(SimpleMirai):
 
             `target: int` 群号或好友 QQ 号。
 
-            `with_download_info: Union[bool,None] = None` 是否携带下载信息。
+            `with_download_info: typing.Union[bool, NoneType]` 是否携带下载信息。
             """
 
     @overload
@@ -339,10 +351,8 @@ class Mirai(SimpleMirai):
 
     @overload
     async def file_info(
-        self,
-        id: str,
-        target: int,
-        with_download_info: Union[bool, None] = None
+        self, id: str, target: int, with_download_info: typing.Union[bool,
+                                                                     NoneType]
     ) -> FileInfoResponse:
         """查看文件信息。
 
@@ -350,17 +360,15 @@ class Mirai(SimpleMirai):
 
         `target: int` 群号或好友 QQ 号。
 
-        `with_download_info: Union[bool,None] = None` 是否携带下载信息。
+        `with_download_info: typing.Union[bool, NoneType]` 是否携带下载信息。
         """
 
     # FileList
 
-    class __FileListProxy():
+    class __FileListProxy(ApiModel.Proxy[FileListResponse]):
         async def get(
-            self,
-            id: str,
-            target: int,
-            with_download_info: Union[bool, None] = None
+            self, id: str, target: int,
+            with_download_info: typing.Union[bool, NoneType]
         ) -> FileListResponse:
             """查看文件列表。
 
@@ -368,7 +376,7 @@ class Mirai(SimpleMirai):
 
             `target: int` 群号或好友 QQ 号。
 
-            `with_download_info: Union[bool,None] = None` 是否携带下载信息。
+            `with_download_info: typing.Union[bool, NoneType]` 是否携带下载信息。
             """
 
     @overload
@@ -377,10 +385,8 @@ class Mirai(SimpleMirai):
 
     @overload
     async def file_list(
-        self,
-        id: str,
-        target: int,
-        with_download_info: Union[bool, None] = None
+        self, id: str, target: int, with_download_info: typing.Union[bool,
+                                                                     NoneType]
     ) -> FileListResponse:
         """查看文件列表。
 
@@ -388,12 +394,12 @@ class Mirai(SimpleMirai):
 
         `target: int` 群号或好友 QQ 号。
 
-        `with_download_info: Union[bool,None] = None` 是否携带下载信息。
+        `with_download_info: typing.Union[bool, NoneType]` 是否携带下载信息。
         """
 
     # FileMkdir
 
-    class __FileMkdirProxy():
+    class __FileMkdirProxy(ApiModel.Proxy[FileMkdirResponse]):
         async def set(
             self, id: str, target: int, directory_name: str
         ) -> FileMkdirResponse:
@@ -425,7 +431,7 @@ class Mirai(SimpleMirai):
 
     # FileMove
 
-    class __FileMoveProxy():
+    class __FileMoveProxy(ApiModel.Proxy[Response]):
         async def set(self, id: str, target: int, move_to: str) -> Response:
             """移动文件。
 
@@ -453,7 +459,7 @@ class Mirai(SimpleMirai):
 
     # FileRename
 
-    class __FileRenameProxy():
+    class __FileRenameProxy(ApiModel.Proxy[Response]):
         async def set(self, id: str, target: int, rename_to: str) -> Response:
             """重命名文件。
 
@@ -483,23 +489,20 @@ class Mirai(SimpleMirai):
 
     # FileUpload
 
-    class __FileUploadProxy():
+    class __FileUploadProxy(ApiModel.Proxy[FileProperties]):
         async def set(
-            self,
-            type: Literal['group'],
-            target: int,
-            file: Union[str, Path],
-            path: str = ''
+            self, type: typing.Literal['group'], target: int,
+            file: typing.Union[str, pathlib.Path], path: str
         ) -> FileProperties:
             """文件上传。（暂时不可用）
 
-            `type: Literal['group']` 上传的文件类型。
+            `type: typing.Literal['group']` 上传的文件类型。
 
             `target: int` 群号。
 
-            `file: Union[str,Path]` 上传的文件的本地路径。
+            `file: typing.Union[str, pathlib.Path]` 上传的文件的本地路径。
 
-            `path: str = ''` 上传目录的 id，空串为上传到根目录。
+            `path: str` 上传目录的 id，空串为上传到根目录。
             """
 
     @overload
@@ -508,40 +511,43 @@ class Mirai(SimpleMirai):
 
     @overload
     async def file_upload(
-        self,
-        type: Literal['group'],
-        target: int,
-        file: Union[str, Path],
-        path: str = ''
+        self, type: typing.Literal['group'], target: int,
+        file: typing.Union[str, pathlib.Path], path: str
     ) -> FileProperties:
         """文件上传。（暂时不可用）
 
-        `type: Literal['group']` 上传的文件类型。
+        `type: typing.Literal['group']` 上传的文件类型。
 
         `target: int` 群号。
 
-        `file: Union[str,Path]` 上传的文件的本地路径。
+        `file: typing.Union[str, pathlib.Path]` 上传的文件的本地路径。
 
-        `path: str = ''` 上传目录的 id，空串为上传到根目录。
+        `path: str` 上传目录的 id，空串为上传到根目录。
         """
 
     # FriendList
 
-    class __FriendListProxy():
-        async def get(self) -> FriendListResponse:
-            """获取好友列表。"""
+    class __FriendListProxy(ApiModel.Proxy[FriendListResponse]):
+        async def get(self, ) -> FriendListResponse:
+            """获取好友列表。
+
+
+            """
 
     @overload
     def friend_list(self) -> __FriendListProxy:
         """获取好友列表。"""
 
     @overload
-    async def friend_list(self) -> FriendListResponse:
-        """获取好友列表。"""
+    async def friend_list(self, ) -> FriendListResponse:
+        """获取好友列表。
+
+
+        """
 
     # FriendProfile
 
-    class __FriendProfileProxy():
+    class __FriendProfileProxy(ApiModel.Proxy[ProfileResponse]):
         async def get(self, target: int) -> ProfileResponse:
             """获取好友资料。
 
@@ -561,29 +567,29 @@ class Mirai(SimpleMirai):
 
     # GroupConfig
 
-    class __GroupConfigProxy():
+    class __GroupConfigProxy(ApiModel.Proxy[GroupConfigModel]):
         async def get(
-            self,
-            target: int,
-            config: Union[GroupConfigModel, None] = None
+            self, target: int,
+            config: typing.Union[mirai.models.entities.GroupConfigModel,
+                                 NoneType]
         ) -> GroupConfigModel:
             """获取或修改群设置。
 
             `target: int` 群号。
 
-            `config: Union[GroupConfigModel,None] = None` 仅修改时可用。群设置。
+            `config: typing.Union[mirai.models.entities.GroupConfigModel, NoneType]` 仅修改时可用。群设置。
             """
 
         async def set(
-            self,
-            target: int,
-            config: Union[GroupConfigModel, None] = None
+            self, target: int,
+            config: typing.Union[mirai.models.entities.GroupConfigModel,
+                                 NoneType]
         ) -> Response:
             """获取或修改群设置。
 
             `target: int` 群号。
 
-            `config: Union[GroupConfigModel,None] = None` 仅修改时可用。群设置。
+            `config: typing.Union[mirai.models.entities.GroupConfigModel, NoneType]` 仅修改时可用。群设置。
             """
 
     @overload
@@ -592,44 +598,47 @@ class Mirai(SimpleMirai):
 
     @overload
     async def group_config(
-        self,
-        target: int,
-        config: Union[GroupConfigModel, None] = None
+        self, target: int,
+        config: typing.Union[mirai.models.entities.GroupConfigModel, NoneType]
     ) -> GroupConfigModel:
         """获取或修改群设置。
 
         `target: int` 群号。
 
-        `config: Union[GroupConfigModel,None] = None` 仅修改时可用。群设置。
+        `config: typing.Union[mirai.models.entities.GroupConfigModel, NoneType]` 仅修改时可用。群设置。
         """
 
     # GroupList
 
-    class __GroupListProxy():
-        async def get(self) -> GroupListResponse:
-            """获取群列表。"""
+    class __GroupListProxy(ApiModel.Proxy[GroupListResponse]):
+        async def get(self, ) -> GroupListResponse:
+            """获取群列表。
+
+
+            """
 
     @overload
     def group_list(self) -> __GroupListProxy:
         """获取群列表。"""
 
     @overload
-    async def group_list(self) -> GroupListResponse:
-        """获取群列表。"""
+    async def group_list(self, ) -> GroupListResponse:
+        """获取群列表。
+
+
+        """
 
     # Kick
 
-    class __KickProxy():
-        async def set(
-            self, target: int, member_id: int, msg: str = ''
-        ) -> Response:
+    class __KickProxy(ApiModel.Proxy[Response]):
+        async def set(self, target: int, member_id: int, msg: str) -> Response:
             """移出群成员。
 
             `target: int` 指定群的群号。
 
             `member_id: int` 指定群成员的 QQ 号。
 
-            `msg: str = ''` 可选。信息。
+            `msg: str` 可选。信息。
             """
 
     @overload
@@ -637,26 +646,22 @@ class Mirai(SimpleMirai):
         """移出群成员。"""
 
     @overload
-    async def kick(
-        self, target: int, member_id: int, msg: str = ''
-    ) -> Response:
+    async def kick(self, target: int, member_id: int, msg: str) -> Response:
         """移出群成员。
 
         `target: int` 指定群的群号。
 
         `member_id: int` 指定群成员的 QQ 号。
 
-        `msg: str = ''` 可选。信息。
+        `msg: str` 可选。信息。
         """
 
     # MemberInfo
 
-    class __MemberInfoProxy():
+    class __MemberInfoProxy(ApiModel.Proxy[MemberInfoModel]):
         async def get(
-            self,
-            target: int,
-            member_id: int,
-            info: Union[MemberInfoModel, None] = None
+            self, target: int, member_id: int,
+            info: typing.Union[mirai.models.entities.MemberInfoModel, NoneType]
         ) -> MemberInfoModel:
             """获取或修改群成员资料。
 
@@ -664,14 +669,12 @@ class Mirai(SimpleMirai):
 
             `member_id: int` 指定群成员的 QQ 号。
 
-            `info: Union[MemberInfoModel,None] = None` 仅修改时可用。群成员资料。
+            `info: typing.Union[mirai.models.entities.MemberInfoModel, NoneType]` 仅修改时可用。群成员资料。
             """
 
         async def set(
-            self,
-            target: int,
-            member_id: int,
-            info: Union[MemberInfoModel, None] = None
+            self, target: int, member_id: int,
+            info: typing.Union[mirai.models.entities.MemberInfoModel, NoneType]
         ) -> Response:
             """获取或修改群成员资料。
 
@@ -679,7 +682,7 @@ class Mirai(SimpleMirai):
 
             `member_id: int` 指定群成员的 QQ 号。
 
-            `info: Union[MemberInfoModel,None] = None` 仅修改时可用。群成员资料。
+            `info: typing.Union[mirai.models.entities.MemberInfoModel, NoneType]` 仅修改时可用。群成员资料。
             """
 
     @overload
@@ -688,10 +691,8 @@ class Mirai(SimpleMirai):
 
     @overload
     async def member_info(
-        self,
-        target: int,
-        member_id: int,
-        info: Union[MemberInfoModel, None] = None
+        self, target: int, member_id: int,
+        info: typing.Union[mirai.models.entities.MemberInfoModel, NoneType]
     ) -> MemberInfoModel:
         """获取或修改群成员资料。
 
@@ -699,12 +700,12 @@ class Mirai(SimpleMirai):
 
         `member_id: int` 指定群成员的 QQ 号。
 
-        `info: Union[MemberInfoModel,None] = None` 仅修改时可用。群成员资料。
+        `info: typing.Union[mirai.models.entities.MemberInfoModel, NoneType]` 仅修改时可用。群成员资料。
         """
 
     # MemberList
 
-    class __MemberListProxy():
+    class __MemberListProxy(ApiModel.Proxy[MemberListResponse]):
         async def get(self, target: int) -> MemberListResponse:
             """获取群成员列表。
 
@@ -724,7 +725,7 @@ class Mirai(SimpleMirai):
 
     # MemberProfile
 
-    class __MemberProfileProxy():
+    class __MemberProfileProxy(ApiModel.Proxy[ProfileResponse]):
         async def get(self, target: int, member_id: int) -> ProfileResponse:
             """获取群成员资料。
 
@@ -750,7 +751,7 @@ class Mirai(SimpleMirai):
 
     # MessageFromId
 
-    class __MessageFromIdProxy():
+    class __MessageFromIdProxy(ApiModel.Proxy[MessageFromIdResponse]):
         async def get(self, id: int) -> MessageFromIdResponse:
             """通过 message_id 获取消息。
 
@@ -770,7 +771,7 @@ class Mirai(SimpleMirai):
 
     # Mute
 
-    class __MuteProxy():
+    class __MuteProxy(ApiModel.Proxy[Response]):
         async def set(
             self, target: int, member_id: int, time: int
         ) -> Response:
@@ -800,7 +801,7 @@ class Mirai(SimpleMirai):
 
     # MuteAll
 
-    class __MuteAllProxy():
+    class __MuteAllProxy(ApiModel.Proxy[Response]):
         async def set(self, target: int) -> Response:
             """全体禁言。
 
@@ -820,7 +821,7 @@ class Mirai(SimpleMirai):
 
     # Quit
 
-    class __QuitProxy():
+    class __QuitProxy(ApiModel.Proxy[Response]):
         async def set(self, target: int) -> Response:
             """退出群聊。
 
@@ -840,7 +841,7 @@ class Mirai(SimpleMirai):
 
     # Recall
 
-    class __RecallProxy():
+    class __RecallProxy(ApiModel.Proxy[Response]):
         async def set(self, target: int) -> Response:
             """撤回消息。
 
@@ -860,10 +861,13 @@ class Mirai(SimpleMirai):
 
     # RespBotInvitedJoinGroupRequestEvent
 
-    class __RespBotInvitedJoinGroupRequestEventProxy():
+    class __RespBotInvitedJoinGroupRequestEventProxy(
+        ApiModel.Proxy[MiraiBaseModel]
+    ):
         async def set(
             self, event_id: int, from_id: int, group_id: int,
-            operate: Union[int, RespOperate], message: str
+            operate: typing.Union[int,
+                                  mirai.models.api.RespOperate], message: str
         ) -> MiraiBaseModel:
             """响应被邀请入群申请。
 
@@ -873,7 +877,7 @@ class Mirai(SimpleMirai):
 
             `group_id: int` 事件对应申请人的群号，可能为0。
 
-            `operate: Union[int,RespOperate]` 响应的操作类型。
+            `operate: typing.Union[int, mirai.models.api.RespOperate]` 响应的操作类型。
 
             `message: str` 回复的信息。
             """
@@ -887,7 +891,7 @@ class Mirai(SimpleMirai):
     @overload
     async def resp_bot_invited_join_group_request_event(
         self, event_id: int, from_id: int, group_id: int,
-        operate: Union[int, RespOperate], message: str
+        operate: typing.Union[int, mirai.models.api.RespOperate], message: str
     ) -> MiraiBaseModel:
         """响应被邀请入群申请。
 
@@ -897,17 +901,18 @@ class Mirai(SimpleMirai):
 
         `group_id: int` 事件对应申请人的群号，可能为0。
 
-        `operate: Union[int,RespOperate]` 响应的操作类型。
+        `operate: typing.Union[int, mirai.models.api.RespOperate]` 响应的操作类型。
 
         `message: str` 回复的信息。
         """
 
     # RespMemberJoinRequestEvent
 
-    class __RespMemberJoinRequestEventProxy():
+    class __RespMemberJoinRequestEventProxy(ApiModel.Proxy[MiraiBaseModel]):
         async def set(
             self, event_id: int, from_id: int, group_id: int,
-            operate: Union[int, RespOperate], message: str
+            operate: typing.Union[int,
+                                  mirai.models.api.RespOperate], message: str
         ) -> MiraiBaseModel:
             """响应用户入群申请。
 
@@ -917,7 +922,7 @@ class Mirai(SimpleMirai):
 
             `group_id: int` 事件对应申请人的群号。
 
-            `operate: Union[int,RespOperate]` 响应的操作类型。
+            `operate: typing.Union[int, mirai.models.api.RespOperate]` 响应的操作类型。
 
             `message: str` 回复的信息。
             """
@@ -931,7 +936,7 @@ class Mirai(SimpleMirai):
     @overload
     async def resp_member_join_request_event(
         self, event_id: int, from_id: int, group_id: int,
-        operate: Union[int, RespOperate], message: str
+        operate: typing.Union[int, mirai.models.api.RespOperate], message: str
     ) -> MiraiBaseModel:
         """响应用户入群申请。
 
@@ -941,17 +946,18 @@ class Mirai(SimpleMirai):
 
         `group_id: int` 事件对应申请人的群号。
 
-        `operate: Union[int,RespOperate]` 响应的操作类型。
+        `operate: typing.Union[int, mirai.models.api.RespOperate]` 响应的操作类型。
 
         `message: str` 回复的信息。
         """
 
     # RespNewFriendRequestEvent
 
-    class __RespNewFriendRequestEventProxy():
+    class __RespNewFriendRequestEventProxy(ApiModel.Proxy[MiraiBaseModel]):
         async def set(
             self, event_id: int, from_id: int, group_id: int,
-            operate: Union[int, RespOperate], message: str
+            operate: typing.Union[int,
+                                  mirai.models.api.RespOperate], message: str
         ) -> MiraiBaseModel:
             """响应添加好友申请。
 
@@ -961,7 +967,7 @@ class Mirai(SimpleMirai):
 
             `group_id: int` 事件对应申请人的群号，可能为0。
 
-            `operate: Union[int,RespOperate]` 响应的操作类型。
+            `operate: typing.Union[int, mirai.models.api.RespOperate]` 响应的操作类型。
 
             `message: str` 回复的信息。
             """
@@ -975,7 +981,7 @@ class Mirai(SimpleMirai):
     @overload
     async def resp_new_friend_request_event(
         self, event_id: int, from_id: int, group_id: int,
-        operate: Union[int, RespOperate], message: str
+        operate: typing.Union[int, mirai.models.api.RespOperate], message: str
     ) -> MiraiBaseModel:
         """响应添加好友申请。
 
@@ -985,28 +991,28 @@ class Mirai(SimpleMirai):
 
         `group_id: int` 事件对应申请人的群号，可能为0。
 
-        `operate: Union[int,RespOperate]` 响应的操作类型。
+        `operate: typing.Union[int, mirai.models.api.RespOperate]` 响应的操作类型。
 
         `message: str` 回复的信息。
         """
 
     # SendFriendMessage
 
-    class __SendFriendMessageProxy():
+    class __SendFriendMessageProxy(ApiModel.Proxy[MessageResponse]):
         async def set(
-            self,
-            target: int,
-            message_chain: Union[MessageChain, Iterable[Union[MessageComponent,
-                                                              str]], str],
-            quote: Union[int, None] = None
+            self, target: int, message_chain: typing.Union[
+                mirai.models.message.MessageChain,
+                typing.Iterable[typing.Union[
+                    mirai.models.message.MessageComponent, str]], str],
+            quote: typing.Union[int, NoneType]
         ) -> MessageResponse:
             """发送好友消息。
 
             `target: int` 发送消息目标好友的 QQ 号。
 
-            `message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],str]` 消息链。
+            `message_chain: typing.Union[mirai.models.message.MessageChain, typing.Iterable[typing.Union[mirai.models.message.MessageComponent, str]], str]` 消息链。
 
-            `quote: Union[int,None] = None` 可选。引用一条消息的 message_id 进行回复。
+            `quote: typing.Union[int, NoneType]` 可选。引用一条消息的 message_id 进行回复。
             """
 
     @overload
@@ -1015,38 +1021,38 @@ class Mirai(SimpleMirai):
 
     @overload
     async def send_friend_message(
-        self,
-        target: int,
-        message_chain: Union[MessageChain, Iterable[Union[MessageComponent,
-                                                          str]], str],
-        quote: Union[int, None] = None
+        self, target: int, message_chain: typing.Union[
+            mirai.models.message.MessageChain,
+            typing.Iterable[typing.Union[mirai.models.message.MessageComponent,
+                                         str]], str],
+        quote: typing.Union[int, NoneType]
     ) -> MessageResponse:
         """发送好友消息。
 
         `target: int` 发送消息目标好友的 QQ 号。
 
-        `message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],str]` 消息链。
+        `message_chain: typing.Union[mirai.models.message.MessageChain, typing.Iterable[typing.Union[mirai.models.message.MessageComponent, str]], str]` 消息链。
 
-        `quote: Union[int,None] = None` 可选。引用一条消息的 message_id 进行回复。
+        `quote: typing.Union[int, NoneType]` 可选。引用一条消息的 message_id 进行回复。
         """
 
     # SendGroupMessage
 
-    class __SendGroupMessageProxy():
+    class __SendGroupMessageProxy(ApiModel.Proxy[MessageResponse]):
         async def set(
-            self,
-            target: int,
-            message_chain: Union[MessageChain, Iterable[Union[MessageComponent,
-                                                              str]], str],
-            quote: Union[int, None] = None
+            self, target: int, message_chain: typing.Union[
+                mirai.models.message.MessageChain,
+                typing.Iterable[typing.Union[
+                    mirai.models.message.MessageComponent, str]], str],
+            quote: typing.Union[int, NoneType]
         ) -> MessageResponse:
             """发送群消息。
 
             `target: int` 发送消息目标群的群号。
 
-            `message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],str]` 消息链。
+            `message_chain: typing.Union[mirai.models.message.MessageChain, typing.Iterable[typing.Union[mirai.models.message.MessageComponent, str]], str]` 消息链。
 
-            `quote: Union[int,None] = None` 可选。引用一条消息的 message_id 进行回复。
+            `quote: typing.Union[int, NoneType]` 可选。引用一条消息的 message_id 进行回复。
             """
 
     @overload
@@ -1055,27 +1061,27 @@ class Mirai(SimpleMirai):
 
     @overload
     async def send_group_message(
-        self,
-        target: int,
-        message_chain: Union[MessageChain, Iterable[Union[MessageComponent,
-                                                          str]], str],
-        quote: Union[int, None] = None
+        self, target: int, message_chain: typing.Union[
+            mirai.models.message.MessageChain,
+            typing.Iterable[typing.Union[mirai.models.message.MessageComponent,
+                                         str]], str],
+        quote: typing.Union[int, NoneType]
     ) -> MessageResponse:
         """发送群消息。
 
         `target: int` 发送消息目标群的群号。
 
-        `message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],str]` 消息链。
+        `message_chain: typing.Union[mirai.models.message.MessageChain, typing.Iterable[typing.Union[mirai.models.message.MessageComponent, str]], str]` 消息链。
 
-        `quote: Union[int,None] = None` 可选。引用一条消息的 message_id 进行回复。
+        `quote: typing.Union[int, NoneType]` 可选。引用一条消息的 message_id 进行回复。
         """
 
     # SendNudge
 
-    class __SendNudgeProxy():
+    class __SendNudgeProxy(ApiModel.Proxy[Response]):
         async def set(
-            self, target: int, subject: int, kind: Literal['Friend', 'Group',
-                                                           'Stranger']
+            self, target: int, subject: int,
+            kind: typing.Literal['Friend', 'Group', 'Stranger']
         ) -> Response:
             """发送头像戳一戳消息。
 
@@ -1083,7 +1089,7 @@ class Mirai(SimpleMirai):
 
             `subject: int` 戳一戳接受主体（上下文），戳一戳信息会发送至该主体，为群号或好友 QQ 号。
 
-            `kind: Literal['Friend','Group','Stranger']` 上下文类型，可选值 `Friend`, `Group`, `Stranger`。
+            `kind: typing.Literal['Friend', 'Group', 'Stranger']` 上下文类型，可选值 `Friend`, `Group`, `Stranger`。
             """
 
     @overload
@@ -1092,8 +1098,8 @@ class Mirai(SimpleMirai):
 
     @overload
     async def send_nudge(
-        self, target: int, subject: int, kind: Literal['Friend', 'Group',
-                                                       'Stranger']
+        self, target: int, subject: int,
+        kind: typing.Literal['Friend', 'Group', 'Stranger']
     ) -> Response:
         """发送头像戳一戳消息。
 
@@ -1101,19 +1107,18 @@ class Mirai(SimpleMirai):
 
         `subject: int` 戳一戳接受主体（上下文），戳一戳信息会发送至该主体，为群号或好友 QQ 号。
 
-        `kind: Literal['Friend','Group','Stranger']` 上下文类型，可选值 `Friend`, `Group`, `Stranger`。
+        `kind: typing.Literal['Friend', 'Group', 'Stranger']` 上下文类型，可选值 `Friend`, `Group`, `Stranger`。
         """
 
     # SendTempMessage
 
-    class __SendTempMessageProxy():
+    class __SendTempMessageProxy(ApiModel.Proxy[MessageResponse]):
         async def set(
-            self,
-            qq: int,
-            group: int,
-            message_chain: Union[MessageChain, Iterable[Union[MessageComponent,
-                                                              str]], str],
-            quote: Union[int, None] = None
+            self, qq: int, group: int, message_chain: typing.Union[
+                mirai.models.message.MessageChain,
+                typing.Iterable[typing.Union[
+                    mirai.models.message.MessageComponent, str]], str],
+            quote: typing.Union[int, NoneType]
         ) -> MessageResponse:
             """发送临时消息。
 
@@ -1121,9 +1126,9 @@ class Mirai(SimpleMirai):
 
             `group: int` 临时会话对象群号。
 
-            `message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],str]` 消息链。
+            `message_chain: typing.Union[mirai.models.message.MessageChain, typing.Iterable[typing.Union[mirai.models.message.MessageComponent, str]], str]` 消息链。
 
-            `quote: Union[int,None] = None` 可选。引用一条消息的 message_id 进行回复。
+            `quote: typing.Union[int, NoneType]` 可选。引用一条消息的 message_id 进行回复。
             """
 
     @overload
@@ -1132,12 +1137,11 @@ class Mirai(SimpleMirai):
 
     @overload
     async def send_temp_message(
-        self,
-        qq: int,
-        group: int,
-        message_chain: Union[MessageChain, Iterable[Union[MessageComponent,
-                                                          str]], str],
-        quote: Union[int, None] = None
+        self, qq: int, group: int, message_chain: typing.Union[
+            mirai.models.message.MessageChain,
+            typing.Iterable[typing.Union[mirai.models.message.MessageComponent,
+                                         str]], str],
+        quote: typing.Union[int, NoneType]
     ) -> MessageResponse:
         """发送临时消息。
 
@@ -1145,28 +1149,34 @@ class Mirai(SimpleMirai):
 
         `group: int` 临时会话对象群号。
 
-        `message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],str]` 消息链。
+        `message_chain: typing.Union[mirai.models.message.MessageChain, typing.Iterable[typing.Union[mirai.models.message.MessageComponent, str]], str]` 消息链。
 
-        `quote: Union[int,None] = None` 可选。引用一条消息的 message_id 进行回复。
+        `quote: typing.Union[int, NoneType]` 可选。引用一条消息的 message_id 进行回复。
         """
 
     # SessionInfo
 
-    class __SessionInfoProxy():
-        async def get(self) -> SessionInfoResponse:
-            """获取机器人信息。"""
+    class __SessionInfoProxy(ApiModel.Proxy[SessionInfoResponse]):
+        async def get(self, ) -> SessionInfoResponse:
+            """获取机器人信息。
+
+
+            """
 
     @overload
     def session_info(self) -> __SessionInfoProxy:
         """获取机器人信息。"""
 
     @overload
-    async def session_info(self) -> SessionInfoResponse:
-        """获取机器人信息。"""
+    async def session_info(self, ) -> SessionInfoResponse:
+        """获取机器人信息。
+
+
+        """
 
     # SetEssence
 
-    class __SetEssenceProxy():
+    class __SetEssenceProxy(ApiModel.Proxy[Response]):
         async def set(self, target: int) -> Response:
             """设置群精华消息。
 
@@ -1186,7 +1196,7 @@ class Mirai(SimpleMirai):
 
     # Unmute
 
-    class __UnmuteProxy():
+    class __UnmuteProxy(ApiModel.Proxy[Response]):
         async def set(self, target: int, member_id: int) -> Response:
             """解除群成员禁言。
 
@@ -1210,7 +1220,7 @@ class Mirai(SimpleMirai):
 
     # UnmuteAll
 
-    class __UnmuteAllProxy():
+    class __UnmuteAllProxy(ApiModel.Proxy[Response]):
         async def set(self, target: int) -> Response:
             """解除全体禁言。
 
@@ -1230,16 +1240,16 @@ class Mirai(SimpleMirai):
 
     # UploadImage
 
-    class __UploadImageProxy():
+    class __UploadImageProxy(ApiModel.Proxy[Image]):
         async def set(
-            self, type: Literal['friend', 'group', 'temp'], img: Union[str,
-                                                                       Path]
+            self, type: typing.Literal['friend', 'group', 'temp'],
+            img: typing.Union[str, pathlib.Path]
         ) -> Image:
             """图片文件上传。
 
-            `type: Literal['friend','group','temp']` 上传的图片类型。
+            `type: typing.Literal['friend', 'group', 'temp']` 上传的图片类型。
 
-            `img: Union[str,Path]` 上传的图片的本地路径。
+            `img: typing.Union[str, pathlib.Path]` 上传的图片的本地路径。
             """
 
     @overload
@@ -1248,26 +1258,28 @@ class Mirai(SimpleMirai):
 
     @overload
     async def upload_image(
-        self, type: Literal['friend', 'group', 'temp'], img: Union[str, Path]
+        self, type: typing.Literal['friend', 'group', 'temp'],
+        img: typing.Union[str, pathlib.Path]
     ) -> Image:
         """图片文件上传。
 
-        `type: Literal['friend','group','temp']` 上传的图片类型。
+        `type: typing.Literal['friend', 'group', 'temp']` 上传的图片类型。
 
-        `img: Union[str,Path]` 上传的图片的本地路径。
+        `img: typing.Union[str, pathlib.Path]` 上传的图片的本地路径。
         """
 
     # UploadVoice
 
-    class __UploadVoiceProxy():
+    class __UploadVoiceProxy(ApiModel.Proxy[Voice]):
         async def set(
-            self, type: Literal['group'], voice: Union[str, Path]
+            self, type: typing.Literal['group'],
+            voice: typing.Union[str, pathlib.Path]
         ) -> Voice:
             """语音文件上传。
 
-            `type: Literal['group']` 上传的语音类型。
+            `type: typing.Literal['group']` 上传的语音类型。
 
-            `voice: Union[str,Path]` 上传的语音的本地路径。
+            `voice: typing.Union[str, pathlib.Path]` 上传的语音的本地路径。
             """
 
     @overload
@@ -1276,11 +1288,12 @@ class Mirai(SimpleMirai):
 
     @overload
     async def upload_voice(
-        self, type: Literal['group'], voice: Union[str, Path]
+        self, type: typing.Literal['group'], voice: typing.Union[str,
+                                                                 pathlib.Path]
     ) -> Voice:
         """语音文件上传。
 
-        `type: Literal['group']` 上传的语音类型。
+        `type: typing.Literal['group']` 上传的语音类型。
 
-        `voice: Union[str,Path]` 上传的语音的本地路径。
+        `voice: typing.Union[str, pathlib.Path]` 上传的语音的本地路径。
         """

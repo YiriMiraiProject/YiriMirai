@@ -7,7 +7,8 @@ import logging
 from enum import Enum, Flag
 from pathlib import Path
 from typing import (
-    Iterable, TYPE_CHECKING, Any, Generic, List, Optional, Type, TypeVar, Union, cast
+    TYPE_CHECKING, Any, Generic, Iterable, List, Optional, Type, TypeVar,
+    Union, cast
 )
 
 import aiofiles
@@ -145,6 +146,7 @@ class MessageResponse(Response):
     """发送消息的响应。"""
     message_id: int
     """消息的 message_id。"""
+
 
 class DownloadInfo(MiraiBaseModel):
     """文件的下载信息。"""
@@ -566,7 +568,8 @@ class SendFriendMessage(ApiPost, SendMessage):
     """发送好友消息。"""
     target: int
     """发送消息目标好友的 QQ 号。"""
-    message_chain: Union[MessageChain, Iterable[Union[MessageComponent, str]], str]
+    message_chain: Union[MessageChain, Iterable[Union[MessageComponent, str]],
+                         str]
     """消息链。"""
     quote: Optional[int] = None
     """可选。引用一条消息的 message_id 进行回复。"""
@@ -580,7 +583,8 @@ class SendGroupMessage(ApiPost, SendMessage):
     """发送群消息。"""
     target: int
     """发送消息目标群的群号。"""
-    message_chain: Union[MessageChain, Iterable[Union[MessageComponent, str]], str]
+    message_chain: Union[MessageChain, Iterable[Union[MessageComponent, str]],
+                         str]
     """消息链。"""
     quote: Optional[int] = None
     """可选。引用一条消息的 message_id 进行回复。"""
@@ -596,7 +600,8 @@ class SendTempMessage(ApiPost, SendMessage):
     """临时会话对象 QQ 号。"""
     group: int
     """临时会话对象群号。"""
-    message_chain: Union[MessageChain, Iterable[Union[MessageComponent, str]], str]
+    message_chain: Union[MessageChain, Iterable[Union[MessageComponent, str]],
+                         str]
     """消息链。"""
     quote: Optional[int] = None
     """可选。引用一条消息的 message_id 进行回复。"""
@@ -1069,12 +1074,12 @@ class CmdRegister(ApiPost):
     """注册命令。"""
     name: str
     """命令名称。"""
-    alias: Optional[List[str]] = None
-    """可选。命令别名。"""
     usage: str
     """使用说明。"""
     description: str
     """命令描述。"""
+    alias: Optional[List[str]] = None
+    """可选。命令别名。"""
     class Info(ApiPost.Info):
         name = "cmd/register"
         alias = "cmd_register"

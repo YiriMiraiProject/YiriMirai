@@ -4,11 +4,11 @@
 """
 import abc
 import base64
-from enum import Enum
 import imghdr
 import logging
 import re
 from datetime import datetime
+from enum import Enum
 from json import loads as json_loads
 from pathlib import Path
 from typing import Iterable, List, Optional, Union, cast

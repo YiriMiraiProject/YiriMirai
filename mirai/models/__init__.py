@@ -30,8 +30,8 @@ from mirai.models.events import (
 )
 from mirai.models.message import (
     App, At, AtAll, Dice, Face, File, FlashImage, Forward, ForwardMessageNode,
-    Image, Json, MessageChain, MessageComponent, MiraiCode, MusicShareKind,
-    MusicShare, Plain, PokeNames, Poke, Quote, Source, Unknown, Voice, Xml,
+    Image, Json, MessageChain, MessageComponent, MiraiCode, MusicShare,
+    MusicShareKind, Plain, Poke, PokeNames, Quote, Source, Unknown, Voice, Xml,
     deserialize, serialize
 )
 
