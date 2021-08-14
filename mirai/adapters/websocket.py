@@ -4,6 +4,8 @@
 """
 
 import asyncio
+from itertools import repeat
+import time
 import json
 import logging
 import random
@@ -40,13 +42,16 @@ class WebSocketAdapter(Adapter):
     """机器人的 QQ 号。"""
     connection: WebSocketClientProtocol
     """WebSocket 客户端连接。"""
+    heartbeat_interval: float
+    """每隔多久发送心跳包，单位：秒。"""
     def __init__(
         self,
         verify_key: Optional[str],
         host: str,
         port: int,
         sync_id: str = '-1',
-        single_mode: bool = False
+        single_mode: bool = False,
+        heartbeat_interval: float = 60.,
     ):
         """
         `verify_key: str` mirai-api-http 配置的认证 key，关闭认证时为 None。
@@ -58,6 +63,8 @@ class WebSocketAdapter(Adapter):
         `sync_id: int` mirai-api-http 配置的同步 ID。
 
         `single_mode: bool = False` 是否启用单例模式。
+
+        `heartbeat_interval: float = 60.` 每隔多久发送心跳包，单位：秒。
         """
         super().__init__(verify_key=verify_key, single_mode=single_mode)
 
@@ -79,6 +86,8 @@ class WebSocketAdapter(Adapter):
         self.sync_id = sync_id  # 这个神奇的 sync_id，默认值 -1，居然是个字符串
         # 既然这样不如把 sync_id 全改成字符串好了
 
+        self.heartbeat_interval = heartbeat_interval
+
         # 接收 WebSocket 数据的 Task
         self._receiver_task: Optional[asyncio.Task] = None
         # 用于临时保存接收到的数据，以便根据 sync_id 进行同步识别
@@ -87,6 +96,8 @@ class WebSocketAdapter(Adapter):
         self._local_sync_id = random.randint(1, 1024) * 1024
         # 事件处理任务管理器
         self._tasks = Tasks()
+        # 心跳机制（Keep-Alive）：上次发送数据包的时间
+        self._last_send_time: float = 0.
 
     @property
     def adapter_info(self):
@@ -116,11 +127,11 @@ class WebSocketAdapter(Adapter):
     @_error_handler_async_local
     async def _receiver(self):
         """开始接收 websocket 数据。"""
-        if not self.connect:
+        if not self.connection:
             raise exceptions.NetworkError(
                 f'WebSocket 通道 {self.host_name} 未连接！'
             )
-        while self._started:
+        while True:
             try:
                 # 数据格式：
                 # {
@@ -149,9 +160,10 @@ class WebSocketAdapter(Adapter):
                 )
                 return
 
-    async def _recv(self, sync_id: str = '-1') -> dict:
+    async def _recv(self, sync_id: str = '-1', timeout: int = 600) -> dict:
         """接收并解析 websocket 数据。"""
-        for _ in range(600):
+        timer = range(timeout) if timeout > 0 else repeat(0)
+        for _ in timer:
             if self._recv_dict[sync_id]:
                 return self._recv_dict[sync_id].popleft()
             else:
@@ -195,7 +207,7 @@ class WebSocketAdapter(Adapter):
 
     async def poll_event(self):
         """获取并处理事件。"""
-        event = await self._recv(self.sync_id)
+        event = await self._recv(self.sync_id, -1)
 
         self._tasks.create_task(self.emit(event['type'], event))
 
@@ -217,18 +229,29 @@ class WebSocketAdapter(Adapter):
             )
 
         await self.connection.send(json_dumps(content))
+        self._last_send_time = time.time()
         logger.debug(f"[WebSocket] 发送 WebSocket 数据，同步 ID：{sync_id}。")
         try:
             return await self._recv(sync_id)
         except TimeoutError as e:
             logger.debug(e)
 
+    async def _heartbeat(self):
+        while True:
+            await asyncio.sleep(self.heartbeat_interval)
+            if time.time() - self._last_send_time > self.heartbeat_interval:
+                await self.call_api('about')
+                self._last_send_time = time.time()
+                logger.debug("[WebSocket] 发送心跳包。")
+
     async def _background(self):
         """开始接收事件。"""
         logger.info('[WebSocket] 机器人开始运行。按 Ctrl + C 停止。')
 
         try:
+            heartbeat = asyncio.create_task(self._heartbeat())
             while True:
                 await self.poll_event()
         finally:
-            self._tasks.cancel_all()
+            await Tasks.cancel(heartbeat)
+            await self._tasks.cancel_all()

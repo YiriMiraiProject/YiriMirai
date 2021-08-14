@@ -12,6 +12,7 @@ from typing import Any, Dict, Optional, Set, cast
 from mirai import exceptions
 from mirai.api_provider import ApiProvider, Method
 from mirai.bus import AbstractEventBus
+from mirai.tasks import Tasks
 
 logger = logging.getLogger(__name__)
 
@@ -146,7 +147,7 @@ class Adapter(ApiProvider, AdapterInterface):
     async def _background(self):
         """背景事件循环，用于接收事件。"""
 
-    def start(self):
+    async def start(self):
         """运行背景事件循环。"""
         if not self.buses:
             raise RuntimeError('事件总线未指定！')
@@ -155,10 +156,10 @@ class Adapter(ApiProvider, AdapterInterface):
 
         self.background = asyncio.create_task(self._background())
 
-    def shutdown(self):
+    async def shutdown(self):
         """停止背景事件循环。"""
         if self.background:
-            self.background.cancel()
+            await Tasks.cancel(self.background)
 
     async def emit(self, event: str, *args, **kwargs):
         """向事件总线发送一个事件。"""
