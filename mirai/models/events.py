@@ -3,7 +3,7 @@
 此模块提供事件模型。
 """
 from datetime import datetime
-from typing import Any, Optional, Union, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Optional, Union
 
 if TYPE_CHECKING:
     from typing import Literal

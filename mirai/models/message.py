@@ -9,7 +9,9 @@ from datetime import datetime
 from enum import Enum
 from json import loads as json_loads
 from pathlib import Path
-from typing import Iterable, List, Optional, Tuple, Type, TypeVar, Union, overload
+from typing import (
+    Iterable, List, Optional, Tuple, Type, TypeVar, Union, overload
+)
 
 import httpx
 from pydantic import HttpUrl, validator
@@ -105,13 +107,6 @@ class MessageComponent(MiraiIndexedModel, metaclass=MessageComponentMetaclass):
                 kwargs[name] = value
 
         super().__init__(**kwargs)
-
-
-class MessagePart():
-    """消息的部分，可转化为消息组件。"""
-    @abc.abstractmethod
-    def as_component(self) -> MessageComponent:
-        """将消息组件化。"""
 
 
 TMessageComponent = TypeVar('TMessageComponent', bound=MessageComponent)
@@ -225,8 +220,6 @@ class MessageChain(MiraiBaseModel):
                 result.append(MessageComponent.parse_obj(msg))
             elif isinstance(msg, MessageComponent):
                 result.append(msg)
-            elif isinstance(msg, MessagePart):
-                result.append(msg.as_component())
             elif isinstance(msg, str):
                 result.append(Plain(msg))
             else:
@@ -341,9 +334,8 @@ class MessageChain(MiraiBaseModel):
         return source.id if source else -1
 
 
-TMessage = Union[MessageChain, Iterable[Union[MessageComponent, MessagePart,
-                                              str]], MessageComponent,
-                 MessagePart, str]
+TMessage = Union[MessageChain, Iterable[Union[MessageComponent, str]],
+                 MessageComponent, str]
 """可以转化为 MessageChain 的类型。"""
 
 
@@ -643,7 +635,7 @@ POKE_ID = {
 }
 
 
-class PokeNames(str, MessagePart, Enum):
+class PokeNames(str, Enum):
     """戳一戳名称。"""
     ChuoYiChuo = "ChuoYiChuo"
     BiXin = "BiXin"

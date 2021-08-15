@@ -34,7 +34,9 @@ from mirai.models.events import (
     FriendMessage, GroupMessage, OtherClientMessage, RequestEvent,
     StrangerMessage, TempMessage
 )
-from mirai.models.message import Image, MessageChain, MessageComponent, TMessage, Voice
+from mirai.models.message import (
+    Image, MessageChain, MessageComponent, TMessage, Voice
+)
 from mirai.utils import async_
 
 logger = logging.getLogger(__name__)
