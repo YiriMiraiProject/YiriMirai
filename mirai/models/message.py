@@ -3,17 +3,14 @@
 此模块提供消息链相关。
 """
 import abc
-import base64
-import imghdr
 import logging
 import re
 from datetime import datetime
 from enum import Enum
 from json import loads as json_loads
 from pathlib import Path
-from typing import Iterable, List, Optional, Tuple, Type, TypeVar, Union, cast, overload
+from typing import Iterable, List, Optional, Tuple, Type, TypeVar, Union, overload
 
-import aiofiles
 import httpx
 from pydantic import HttpUrl, validator
 
@@ -29,7 +26,11 @@ logger = logging.getLogger(__name__)
 def serialize(s: str) -> str:
     """mirai 码转义。
 
+    Args:
         s (`str`): 待转义的字符串。
+
+    Returns:
+        `str`: 去转义后的字符串。
     """
     return re.sub(r'[\[\]:,\\]', lambda match: '\\' + match.group(0),
                   s).replace('\n', '\\n').replace('\r', '\\r')
@@ -38,7 +39,11 @@ def serialize(s: str) -> str:
 def deserialize(s: str) -> str:
     """mirai 码去转义。
 
+    Args:
         s (`str`): 待去转义的字符串。
+
+    Returns:
+        `str`: 去转义后的字符串。
     """
     return re.sub(
         r'\\([\[\]:,\\])', lambda match: match.group(1),
@@ -243,6 +248,7 @@ class MessageChain(MiraiBaseModel):
     def parse_obj(cls, msg_chain: list):
         """通过列表形式的消息链，构造对应的 `MessageChain` 对象。
 
+        Args:
             msg_chain (`list`): 列表形式的消息链。
         """
         result = cls._parse_message_chain(msg_chain)
@@ -390,7 +396,7 @@ class At(MessageComponent):
     target: int
     """群员 QQ 号。"""
     display: Optional[str] = None
-    """At时显示的文字，发送消息时无效，自动使用群名片"""
+    """At时显示的文字，发送消息时无效，自动使用群名片。"""
     def __eq__(self, other):
         return isinstance(other, At) and self.target == other.target
 
@@ -493,11 +499,10 @@ class Image(MessageComponent):
     ):
         """下载图片到本地。
 
-            filename (`Union[str, Path, None] = None` 下载到本地的文件路径。与 `directory`): 二选一。
-
-            directory (`Union[str, Path, None] = None` 下载到本地的文件夹路径。与 `filename`): 二选一。
-
-            determine_type (`bool = True`): 是否自动根据图片类型确定拓展名。
+        Args:
+            filename (`Union[str, Path, None]`): 下载到本地的文件路径。与 `directory` 二选一。
+            directory (`Union[str, Path, None]`): 下载到本地的文件夹路径。与 `filename` 二选一。
+            determine_type (`bool`): 是否自动根据图片类型确定拓展名，默认为 True。
         """
         if not self.url:
             logger.warning(f'图片 `{self.uuid}` 无 url 参数，下载失败。')
@@ -511,17 +516,20 @@ class Image(MessageComponent):
             if filename:
                 path = Path(filename)
                 if determine_type:
+                    import imghdr
                     path = path.with_suffix(
                         '.' + str(imghdr.what(None, content))
                     )
                 path.parent.mkdir(parents=True, exist_ok=True)
             elif directory:
+                import imghdr
                 path = Path(directory)
                 path.mkdir(parents=True, exist_ok=True)
                 path = path / f'{self.uuid}.{imghdr.what(None, content)}'
             else:
                 raise ValueError("请指定文件路径或文件夹路径！")
 
+            import aiofiles
             async with aiofiles.open(path, 'wb') as f:
                 await f.write(content)
 
@@ -532,29 +540,38 @@ class Image(MessageComponent):
         cls,
         filename: Union[str, Path, None] = None,
         content: Optional[bytes] = None,
-    ):
+    ) -> "Image":
         """从本地文件路径加载图片，以 base64 的形式传递。
 
-            filename (`Union[str, Path, None] = None` 从本地文件路径加载图片，与 `content`): 二选一。
+        Args:
+            filename (`Union[str, Path, None]`): 从本地文件路径加载图片，与 `content` 二选一。
+            content (`Optional[bytes]`): 从本地文件内容加载图片，与 `filename` 二选一。
 
-            content (`Optional[bytes] = None` 从本地文件内容加载图片，与 `filename`): 二选一。
+        Returns:
+            `Image`: 图片对象。
         """
         if content:
             pass
         if filename:
             path = Path(filename)
+            import aiofiles
             async with aiofiles.open(path, 'rb') as f:
                 content = await f.read()
         else:
             raise ValueError("请指定图片路径或图片内容！")
+        import base64
         img = cls(base64=base64.b64encode(content).decode())
         return img
 
     @classmethod
-    def from_unsafe_path(cls, path: Union[str, Path]):
+    def from_unsafe_path(cls, path: Union[str, Path]) -> "Image":
         """从不安全的路径加载图片。
 
+        Args:
             path (`Union[str, Path]`): 从不安全的路径加载图片。
+
+        Returns:
+            `Image`: 图片对象。
         """
         return cls.construct(path=str(path))
 
@@ -627,6 +644,7 @@ POKE_ID = {
 
 
 class PokeNames(str, MessagePart, Enum):
+    """戳一戳名称。"""
     ChuoYiChuo = "ChuoYiChuo"
     BiXin = "BiXin"
     DianZan = "DianZan"
@@ -716,14 +734,18 @@ class Voice(MessageComponent):
         else:
             return path
 
-    async def download(self, filename=None, directory=None):
+    async def download(
+        self,
+        filename: Union[str, Path, None] = None,
+        directory: Union[str, Path, None] = None
+    ):
         """下载语音到本地。
 
         语音采用 silk v3 格式，silk 格式的编码解码请使用 [graiax-silkcoder](https://pypi.org/project/graiax-silkcoder/)。
 
-        `filename = None` 下载到本地的文件路径。与 `directory` 二选一。
-
-        `directory = None` 下载到本地的文件夹路径。与 `filename` 二选一。
+        Args:
+            filename (`Union[str, Path, None]`): 下载到本地的文件路径。与 `directory` 二选一。
+            directory (`Union[str, Path, None]`): 下载到本地的文件夹路径。与 `filename` 二选一。
         """
         if not self.url:
             logger.warning(f'语音 `{self.voice_id}` 无 url 参数，下载失败。')
@@ -744,6 +766,7 @@ class Voice(MessageComponent):
             else:
                 raise ValueError("请指定文件路径或文件夹路径！")
 
+            import aiofiles
             async with aiofiles.open(path, 'wb') as f:
                 await f.write(content)
 
@@ -755,18 +778,20 @@ class Voice(MessageComponent):
     ) -> "Voice":
         """从本地文件路径加载语音，以 base64 的形式传递。
 
-            filename (`Union[str, Path, None] = None` 从本地文件路径加载图片，与 `content`): 二选一。
-
-            content (`Optional[bytes] = None` 从本地文件内容加载图片，与 `filename`): 二选一。
+        Args:
+            filename (`Union[str, Path, None]`): 从本地文件路径加载语音，与 `content` 二选一。
+            content (`Optional[bytes]`): 从本地文件内容加载语音，与 `filename` 二选一。
         """
         if content:
             pass
         if filename:
             path = Path(filename)
+            import aiofiles
             async with aiofiles.open(path, 'rb') as f:
                 content = await f.read()
         else:
             raise ValueError("请指定语音路径或语音内容！")
+        import base64
         img = cls(base64=base64.b64encode(content).decode())
         return img
 
@@ -833,6 +858,15 @@ class ForwardMessageNode(MiraiBaseModel):
     def create(
         cls, sender: Union[Friend, GroupMember], message: MessageChain
     ) -> 'ForwardMessageNode':
+        """从生成转发消息。
+
+        Args:
+            sender (`Union[Friend, GroupMember]`): 发送人。
+            message (`MessageChain`): 消息内容。
+
+        Returns:
+            `ForwardMessageNode`: 生成的一条消息。
+        """
         return ForwardMessageNode(
             sender_id=sender.id,
             sender_name=sender.get_name(),

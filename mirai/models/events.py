@@ -25,6 +25,7 @@ from mirai.models.message import MessageChain
 class Event(MiraiIndexedModel):
     """事件基类。
 
+    Args:
         type (`str`): 事件名。
     """
     type: str
@@ -43,8 +44,8 @@ class Event(MiraiIndexedModel):
 class BotEvent(Event):
     """Bot 自身事件。
 
+    Args:
         type (`str`): 事件名。
-
         qq (`int`): Bot 的 QQ 号。
     """
     type: str
@@ -56,8 +57,8 @@ class BotEvent(Event):
 class BotOnlineEvent(BotEvent):
     """Bot 登陆成功。
 
+    Args:
         type (`str`): 事件名。
-
         qq (`int`): 登陆成功的 Bot 的 QQ 号。
     """
     type: str = 'BotOnlineEvent'
@@ -69,8 +70,8 @@ class BotOnlineEvent(BotEvent):
 class BotOfflineEventActive(BotEvent):
     """Bot 主动离线。
 
+    Args:
         type (`str`): 事件名。
-
         qq (`int`): 主动离线的 Bot 的 QQ 号。
     """
     type: str = 'BotOfflineEventActive'
@@ -82,8 +83,8 @@ class BotOfflineEventActive(BotEvent):
 class BotOfflineEventForce(BotEvent):
     """Bot被挤下线。
 
+    Args:
         type (`str`): 事件名。
-
         qq (`int`): 被挤下线的 Bot 的 QQ 号。
     """
     type: str = 'BotOfflineEventForce'
@@ -95,8 +96,8 @@ class BotOfflineEventForce(BotEvent):
 class BotOfflineEventDropped(BotEvent):
     """Bot 被服务器断开或因网络问题而掉线。
 
+    Args:
         type (`str`): 事件名。
-
         qq (`int`): 被服务器断开或因网络问题而掉线的 Bot 的 QQ 号。
     """
     type: str = 'BotOfflineEventDropped'
@@ -108,8 +109,8 @@ class BotOfflineEventDropped(BotEvent):
 class BotReloginEvent(BotEvent):
     """Bot 主动重新登录。
 
+    Args:
         type (`str`): 事件名。
-
         qq (`int`): 主动重新登录的 Bot 的 QQ 号。
     """
     type: str = 'BotReloginEvent'
@@ -125,8 +126,8 @@ class BotReloginEvent(BotEvent):
 class FriendEvent(Event):
     """好友事件。
 
+    Args:
         type (`str`): 事件名。
-
         friend (`Friend`): 事件对应的好友。
     """
     type: str
@@ -138,10 +139,9 @@ class FriendEvent(Event):
 class FriendInputStatusChangedEvent(FriendEvent):
     """好友输入状态改变。
 
+    Args:
         type (`str`): 事件名。
-
         friend (`Friend`): 事件对应的好友。
-
         inputting (`bool`): 是否正在输入。
     """
     type: str = 'FriendInputStatusChangedEvent'
@@ -155,12 +155,10 @@ class FriendInputStatusChangedEvent(FriendEvent):
 class FriendNickChangedEvent(FriendEvent):
     """好友昵称改变。
 
+    Args:
         type (`str`): 事件名。
-
         friend (`Friend`): 事件对应的好友。
-
         from_ (`str`): 原昵称。
-
         to (`str`): 新昵称。
     """
     type: str = 'FriendNickChangedEvent'
@@ -180,8 +178,8 @@ class FriendNickChangedEvent(FriendEvent):
 class GroupEvent(Event):
     """群事件。
 
+    Args:
         type (`str`): 事件名。
-
         group (`Group`): 事件对应的群。
     """
     # group: Group
@@ -201,12 +199,10 @@ class GroupEvent(Event):
 class BotGroupPermissionChangeEvent(GroupEvent):
     """ Bot在群里的权限被改变。
 
+    Args:
         type (`str`): 事件名。
-
         origin (`Permission`): 原权限。
-
-    `current : Permission` 新权限。
-
+        current (`Permission`): 新权限。
         group (`Group`): 事件对应的群。
     """
     type: str = 'BotGroupPermissionChangeEvent'
@@ -222,10 +218,9 @@ class BotGroupPermissionChangeEvent(GroupEvent):
 class BotMuteEvent(GroupEvent):
     """Bot 被禁言。
 
+    Args:
         type (`str`): 事件名。
-
         duration_seconds (`int`): 禁言时间，单位秒。
-
         operator (`Optional[GroupMember]`): 禁言的操作者。
     """
     type: str = 'BotMuteEvent'
@@ -239,8 +234,8 @@ class BotMuteEvent(GroupEvent):
 class BotUnmuteEvent(GroupEvent):
     """Bot 被取消禁言。
 
+    Args:
         type (`str`): 事件名。
-
         operator (`Optional[GroupMember]`): 取消禁言的操作者。
     """
     type: str = 'BotUnmuteEvent'
@@ -252,8 +247,8 @@ class BotUnmuteEvent(GroupEvent):
 class BotJoinGroupEvent(GroupEvent):
     """Bot 加入了一个新群。
 
+    Args:
         type (`str`): 事件名。
-
         group (`Group`): Bot 加入的群。
     """
     type: str = 'BotJoinGroupEvent'
@@ -265,8 +260,8 @@ class BotJoinGroupEvent(GroupEvent):
 class BotLeaveEventActive(GroupEvent):
     """Bot 主动退出一个群。
 
+    Args:
         type (`str`): 事件名。
-
         group (`Group`): Bot 退出的群。
     """
     type: str = 'BotLeaveEventActive'
@@ -278,8 +273,8 @@ class BotLeaveEventActive(GroupEvent):
 class BotLeaveEventKick(GroupEvent):
     """Bot 被踢出一个群。
 
+    Args:
         type (`str`): 事件名。
-
         group (`Group`): Bot 被踢出的群。
     """
     type: str = 'BotLeaveEventKick'
@@ -291,16 +286,12 @@ class BotLeaveEventKick(GroupEvent):
 class GroupRecallEvent(GroupEvent):
     """群消息撤回。
 
+    Args:
         type (`str`): 事件名。
-
         author_id (`int`): 原消息发送者的 QQ 号。
-
         message_id (`int`): 原消息 message_id。
-
         time (`datetime`): 原消息发送时间。
-
         group (`Group`): 消息撤回所在的群。
-
         operator (`Optional[GroupMember]`): 消息撤回的操作者，为 None 表示 Bot 操作。
     """
     type: str = 'GroupRecallEvent'
@@ -320,14 +311,11 @@ class GroupRecallEvent(GroupEvent):
 class FriendRecallEvent(Event):
     """好友消息撤回。
 
+    Args:
         type (`str`): 事件名。
-
         author_id (`int`): 原消息发送者的 QQ 号。
-
         message_id (`int`): 原消息 message_id。
-
         time (`datetime`): 原消息发送时间。
-
         operator (`int`): 好友 QQ 号或 Bot QQ 号。
     """
     type: str = 'FriendRecallEvent'
@@ -347,14 +335,11 @@ class FriendRecallEvent(Event):
 class GroupNameChangeEvent(GroupEvent):
     """某个群名改变。
 
+    Args:
         type (`str`): 事件名。
-
         origin (`str`): 原群名。
-
         current (`str`): 新群名。
-
         group (`Group`): 群名改名的群。
-
         operator (`Optional[GroupMember]`): 操作者，为 None 表示 Bot 操作。
     """
     type: str = 'GroupNameChangeEvent'
@@ -372,14 +357,11 @@ class GroupNameChangeEvent(GroupEvent):
 class GroupEntranceAnnouncementChangeEvent(GroupEvent):
     """某群入群公告改变。
 
+    Args:
         type (`str`): 事件名。
-
         origin (`str`): 原公告。
-
         current (`str`): 新公告。
-
         group (`Group`): 群公告改变的群。
-
         operator (`Optional[GroupMember]`): 操作者，为 None 表示 Bot 操作。
     """
     type: str = 'GroupEntranceAnnouncementChangeEvent'
@@ -397,14 +379,11 @@ class GroupEntranceAnnouncementChangeEvent(GroupEvent):
 class GroupMuteAllEvent(GroupEvent):
     """全员禁言。
 
+    Args:
         type (`str`): 事件名。
-
         origin (`bool`): 原本是否处于全员禁言。
-
         current (`bool`): 现在是否处于全员禁言。
-
         group (`Group`): 全员禁言的群。
-
         operator (`Optional[GroupMember]`): 操作者，为 None 表示 Bot 操作。
     """
     type: str = 'GroupMuteAllEvent'
@@ -422,15 +401,12 @@ class GroupMuteAllEvent(GroupEvent):
 class GroupAllowAnonymousChatEvent(GroupEvent):
     """匿名聊天。
 
+    Args:
         type (`str`): 事件名。
-
         origin (`bool`): 原本是否允许匿名聊天。
-
         current (`bool`): 现在是否允许匿名聊天。
-
         group (`Group`): 匿名聊天状态改变的群。
-
-        operator (`Optional[GroupMember]`): 操作者，为 None 表示 Bot 操作。
+        operator (`Optional[GroupMember]`): 操作者，为 None 表示 Bot 操作。
     """
     type: str = 'GroupAllowAnonymousChatEvent'
     """事件名。"""
@@ -447,14 +423,11 @@ class GroupAllowAnonymousChatEvent(GroupEvent):
 class GroupAllowConfessTalkEvent(GroupEvent):
     """坦白说。
 
+    Args:
         type (`str`): 事件名。
-
         origin (`bool`): 原本是否允许坦白说。
-
         current (`bool`): 现在是否允许坦白说。
-
         group (`Group`): 坦白说状态改变的群。
-
         is_by_bot (`bool`): 是否 Bot 进行该操作。
     """
     type: str = 'GroupAllowConfessTalkEvent'
@@ -472,14 +445,11 @@ class GroupAllowConfessTalkEvent(GroupEvent):
 class GroupAllowMemberInviteEvent(GroupEvent):
     """允许群员邀请好友加群。
 
+    Args:
         type (`str`): 事件名。
-
         origin (`bool`): 原本是否允许群员邀请好友加群。
-
         current (`bool`): 现在是否允许群员邀请好友加群。
-
         group (`Group`): 允许群员邀请好友加群状态改变的群。
-
         operator (`Optional[GroupMember]`): 操作者，为 None 表示 Bot 操作。
     """
     type: str = 'GroupAllowMemberInviteEvent'
@@ -497,10 +467,9 @@ class GroupAllowMemberInviteEvent(GroupEvent):
 class MemberJoinEvent(GroupEvent):
     """新人入群。
 
+    Args:
         type (`str`): 事件名。
-
         member (`GroupMember`): 加入的群成员。
-
         group (`Group`): 加入的群。
     """
     type: str = 'MemberJoinEvent'
@@ -512,12 +481,10 @@ class MemberJoinEvent(GroupEvent):
 class MemberLeaveEventKick(GroupEvent):
     """成员被踢出群（该成员不是Bot）。
 
+    Args:
         type (`str`): 事件名。
-
         member (`GroupMember`): 被踢出的群成员。
-
         group (`Group`): 事件发生的群。
-
         operator (`Optional[GroupMember]`): 被踢出的群的管理员。
     """
     type: str = 'MemberLeaveEventKick'
@@ -531,10 +498,9 @@ class MemberLeaveEventKick(GroupEvent):
 class MemberLeaveEventQuit(GroupEvent):
     """成员主动离群（该成员不是Bot）。
 
+    Args:
         type (`str`): 事件名。
-
         member (`GroupMember`): 离群的群成员。
-
         group (`Group`): 事件发生的群。
     """
     type: str = 'MemberLeaveEventQuit'
@@ -546,14 +512,11 @@ class MemberLeaveEventQuit(GroupEvent):
 class MemberCardChangeEvent(GroupEvent):
     """群名片改动。
 
+    Args:
         type (`str`): 事件名。
-
         origin (`str`): 原本名片。
-
         current (`str`): 现在名片。
-
         member (`GroupMember`): 改动的群成员。
-
         group (`Group`): 事件发生的群。
     """
     type: str = 'MemberCardChangeEvent'
@@ -569,14 +532,11 @@ class MemberCardChangeEvent(GroupEvent):
 class MemberSpecialTitleChangeEvent(GroupEvent):
     """群头衔改动（只有群主有操作权限）。
 
+    Args:
         type (`str`): 事件名。
-
         origin (`str`): 原本头衔。
-
         current (`str`): 现在头衔。
-
         member (`GroupMember`): 头衔改动的群成员。
-
         group (`Group`): 事件发生的群。
     """
     type: str = 'MemberSpecialTitleChangeEvent'
@@ -592,14 +552,11 @@ class MemberSpecialTitleChangeEvent(GroupEvent):
 class MemberPermissionChangeEvent(GroupEvent):
     """成员权限改变（该成员不是Bot）。
 
+    Args:
         type (`str`): 事件名。
-
         origin (`Permission`): 原本权限。
-
         current (`Permission`): 现在权限。
-
         member (`GroupMember`): 权限改变的群成员。
-
         group (`Group`): 事件发生的群。
     """
     type: str = 'MemberPermissionChangeEvent'
@@ -615,8 +572,8 @@ class MemberPermissionChangeEvent(GroupEvent):
 class MemberMuteEvent(GroupEvent):
     """群成员被禁言（该成员不是Bot）。
 
+    Args:
         type (`str`): 事件名。
-
         duration_seconds (`int`): 禁言时间，单位为秒。
     """
     type: str = 'MemberMuteEvent'
@@ -628,10 +585,9 @@ class MemberMuteEvent(GroupEvent):
 class MemberUnmuteEvent(GroupEvent):
     """群成员被取消禁言（该成员不是Bot）。
 
+    Args:
         type (`str`): 事件名。
-
         member (`GroupMember`): 被取消禁言的群成员。
-
         group (`Group`): 事件发生的群。
     """
     type: str = 'MemberUnmuteEvent'
@@ -645,14 +601,11 @@ class MemberUnmuteEvent(GroupEvent):
 class MemberHonorChangeEvent(GroupEvent):
     """群员称号改变。
 
+    Args:
         type (`str`): 事件名。
-
         member (`GroupMember`): 称号改变的群成员。
-
         action (`Literal['achieve', 'lose']`): 称号变化行为：achieve 获得称号，lose 失去称号。
-
         group (`Group`): 事件发生的群。
-
         honor (`str`): 称号名称。
     """
     type: str = 'MemberHonorChangeEvent'
@@ -672,8 +625,8 @@ class MemberHonorChangeEvent(GroupEvent):
 class RequestEvent(Event):
     """申请事件。
 
+    Args:
         type (`str`): 事件名。
-
         event_id (`int`): 事件标识，响应该事件时的标识。
     """
     type: str
@@ -689,16 +642,12 @@ class RequestEvent(Event):
 class NewFriendRequestEvent(RequestEvent):
     """添加好友申请。
 
+    Args:
         type (`str`): 事件名。
-
         event_id (`int`): 事件标识，响应该事件时的标识。
-
         from_id (`int`): 申请人 QQ 号。
-
         group_id (`int`): 申请人如果通过某个群添加好友，该项为该群群号；否则为0。
-
         nick (`str`): 申请人的昵称或群名片。
-
         message (`str`): 申请消息。
     """
     type: str = 'NewFriendRequestEvent'
@@ -718,18 +667,13 @@ class NewFriendRequestEvent(RequestEvent):
 class MemberJoinRequestEvent(RequestEvent):
     """用户入群申请（Bot需要有管理员权限）。
 
+    Args:
         type (`str`): 事件名。
-
         event_id (`int`): 事件标识，响应该事件时的标识。
-
         from_id (`int`): 申请人 QQ 号。
-
         group_id (`int`): 申请人申请入群的群号。
-
         group_name (`str`): 申请人申请入群的群名称。
-
         nick (`str`): 申请人的昵称或群名片。
-
         message (`str`): 申请消息。
     """
     type: str = 'MemberJoinRequestEvent'
@@ -751,18 +695,13 @@ class MemberJoinRequestEvent(RequestEvent):
 class BotInvitedJoinGroupRequestEvent(RequestEvent):
     """Bot 被邀请入群申请。
 
+    Args:
         type (`str`): 事件名。
-
         event_id (`int`): 事件标识，响应该事件时的标识。
-
         from_id (`int`): 邀请人 QQ 号。
-
         group_id (`int`): 被邀请进入群的群号。
-
         group_name (`str`): 被邀请进入群的群名称。
-
         nick (`str`): 邀请人（好友）的昵称。
-
         message (`str`): 邀请消息。
     """
     type: str = 'BotInvitedJoinGroupRequestEvent'
@@ -782,7 +721,16 @@ class BotInvitedJoinGroupRequestEvent(RequestEvent):
 
 
 class NudgeEvent(Event):
-    """头像戳一戳事件。"""
+    """头像戳一戳事件。
+
+    Args:
+        type (`str`): 事件名。
+        from_id (`int`): 动作发出者的 QQ 号。
+        target (`int`): 动作目标的 QQ 号。
+        subject (`Subject`): 来源。
+        action (`str`): 戳一戳类型。
+        suffix (`str`): 自定义戳一戳内容。
+    """
     type: str = "NudgeEvent"
     """事件名。"""
     from_id: int
@@ -804,6 +752,7 @@ class NudgeEvent(Event):
 class CommandEvent(Event):
     """命令事件。
 
+    Args:
         type (`str`): 事件名。
     """
     type: str
@@ -813,14 +762,11 @@ class CommandEvent(Event):
 class CommandExecutedEvent(CommandEvent):
     """命令被执行。
 
+    Args:
         type (`str`): 事件名。
-
         name (`str`): 命令名称。
-
         friend (`Optional[Friend]`): 发送命令的好友, 从控制台发送为 None。
-
         member (`Optional[GroupMember]`): 发送命令的群成员, 从控制台发送为 None。
-
         args (`MessageChain`): 命令执行时的参数。
     """
     type: str = 'CommandExecutedEvent'
@@ -840,8 +786,8 @@ class CommandExecutedEvent(CommandEvent):
 class MessageEvent(Event):
     """消息事件。
 
+    Args:
         type (`str`): 事件名。
-
         message_chain (`MessageChain`): 消息内容。
     """
     type: str
@@ -855,10 +801,9 @@ class MessageEvent(Event):
 class FriendMessage(MessageEvent):
     """好友消息。
 
+    Args:
         type (`str`): 事件名。
-
         sender (`Friend`): 发送消息的好友。
-
         message_chain (`MessageChain`): 消息内容。
     """
     type: str = 'FriendMessage'
@@ -872,10 +817,9 @@ class FriendMessage(MessageEvent):
 class GroupMessage(MessageEvent):
     """群消息。
 
+    Args:
         type (`str`): 事件名。
-
         sender (`GroupMember`): 发送消息的群成员。
-
         message_chain (`MessageChain`): 消息内容。
     """
     type: str = 'GroupMessage'
@@ -892,10 +836,9 @@ class GroupMessage(MessageEvent):
 class TempMessage(MessageEvent):
     """群临时消息。
 
+    Args:
         type (`str`): 事件名。
-
         sender (`GroupMember`): 发送消息的群成员。
-
         message_chain (`MessageChain`): 消息内容。
     """
     type: str = 'TempMessage'
@@ -912,10 +855,9 @@ class TempMessage(MessageEvent):
 class StrangerMessage(MessageEvent):
     """陌生人消息。
 
+    Args:
         type (`str`): 事件名。
-
         sender (`Friend`): 发送消息的人。
-
         message_chain (`MessageChain`): 消息内容。
     """
     type: str = 'StrangerMessage'
@@ -929,10 +871,9 @@ class StrangerMessage(MessageEvent):
 class OtherClientMessage(MessageEvent):
     """其他客户端消息。
 
+    Args:
         type (`str`): 事件名。
-
         sender (`Sender`): 发送消息的人。
-
         message_chain (`MessageChain`): 消息内容。
     """
     type: str = 'OtherClientMessage'

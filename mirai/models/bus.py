@@ -29,7 +29,7 @@ def event_chain_parents(event: str):
 class ModelEventBus(EventBus):
     """模型事件总线，实现底层事件总线上的事件再分发，以将事件解析到 Event 对象。
 
-        ModelEventBus: 在注册事件处理器时，可使用 `Event` 类或事件名。关于可用的 `Event` 类，
+    `ModelEventBus` 在注册事件处理器时，可使用 `Event` 类或事件名。关于可用的 `Event` 类，
     参见模块 `mirai.models.events`。
 
     模型事件总线支持的事件处理器接受唯一的参数`event`，该参数是一个 `Event` 对象，包含触发的事件的信息。
@@ -48,18 +48,16 @@ class ModelEventBus(EventBus):
     ) -> None:
         """注册事件处理器。
 
+        Args:
             event (`Type[Event]`): 事件类型。
-
             func (`Callable`): 事件处理器。
-
-            priority (`int = 0`): 事件处理器的优先级。
+            priority (`int`): 优先级，小者优先。
         """
         if isinstance(event_type, str):
             event_type = cast(Type[Event], Event.get_subtype(event_type))
 
         async def middleware(event: dict):
-            """中间件。负责与底层 bus 沟通，将 event dict 解析为 Event 对象。
-            """
+            """中间件。负责与底层 bus 沟通，将 event dict 解析为 Event 对象。"""
             event_model = cast(Event, Event.parse_obj(event))
             logger.debug(f'收到事件 {event_model.type}。')
             return await async_with_exception(func(event_model))
@@ -73,8 +71,8 @@ class ModelEventBus(EventBus):
     ) -> None:
         """移除事件处理器。
 
+        Args:
             event_type (`Type[Event]`): 事件类型。
-
             func (`Callable`): 事件处理器。
         """
         if isinstance(event_type, str):
@@ -91,16 +89,16 @@ class ModelEventBus(EventBus):
     ) -> Callable:
         """以装饰器的方式注册事件处理器。
 
-            event_type (`Union[Type[Event], str]`): 事件类型或事件名。
-
-            priority (`int = 0`): 事件处理器的优先级。
-
         例如：
         ```py
         @bus.on(FriendMessage)
         def my_event_handler(event: FriendMessage):
             print(event.sender.id)
         ```
+
+        Args:
+            event_type (`Union[Type[Event], str]`): 事件类型或事件名。
+            priority (`int`): 优先级，小者优先。
         """
         def decorator(func: Callable) -> Callable:
             self.subscribe(event_type, func, priority)
@@ -112,7 +110,9 @@ class ModelEventBus(EventBus):
                    **kwargs) -> List[Awaitable[Any]]:
         """触发一个事件。
 
+        Args:
             event (`Event`): 要触发的事件。
+            *args, **kwargs: 参数。
         """
         if isinstance(event, str):
             return await super().emit(event, *args, **kwargs)

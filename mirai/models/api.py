@@ -69,7 +69,7 @@ class SessionInfoResponse(Response):
 
     class Data(MiraiBaseModel):
         session_key: str = 'SINGLE_SESSION'
-        """session_key，不知道干啥用的。"""
+        """session_key。"""
         qq: Friend
         """机器人信息。"""
 
@@ -307,7 +307,7 @@ class ApiModel(ApiBaseModel):
         await bot.send_friend_message(12345678, [Plain('Hello World!')])
         ```
 
-            set: 方法也可用，但由于语义不准确，不推荐使用。
+        `set` 方法也可用，但由于语义不准确，不推荐使用。
 
         对于 RESTful 的 API，首先应直接调用，传入基本参数，然后使用 `get` 或 `set`：
         ```py
@@ -315,7 +315,7 @@ class ApiModel(ApiBaseModel):
         await bot.group_config(12345678).set(config.modify(announcement='测试'))
         ```
 
-            ApiProxy: 同时提供位置参数支持。比如上面的例子中，没有使用具名参数，而是使用位置参数，
+        `ApiProxy` 同时提供位置参数支持。比如上面的例子中，没有使用具名参数，而是使用位置参数，
         这可以让 API 调用更简洁。参数的顺序可参照 mirai-api-http
         的[文档](https://project-mirai.github.io/mirai-api-http/api/API.html)。
         除去`sessionKey`由适配器自动指定外，其余参数可按顺序传入。具名参数仍然可用，适当地使用具名参数可增强代码的可读性。

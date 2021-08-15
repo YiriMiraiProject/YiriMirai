@@ -78,7 +78,11 @@ class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):
     def get_subtype(cls, name: str) -> Type['MiraiIndexedModel']:
         """根据类名称，获取相应的子类类型。
 
+        Args:
             name: 类名称。
+
+        Returns:
+            `Type['MiraiIndexedModel']`: 子类类型。
         """
         try:
             type_ = cls.__indexes__.get(name)
@@ -89,10 +93,14 @@ class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):
             raise ValueError(f'`{name}` 不是 `{cls.__name__}` 的子类！') from None
 
     @classmethod
-    def parse_obj(cls, obj: dict):
+    def parse_obj(cls, obj: dict) -> 'MiraiIndexedModel':
         """通过字典，构造对应的模型对象。
 
-            obj (`dict`):
+        Args:
+            obj (`dict`): 一个字典，包含了模型对象的属性。
+
+        Returns:
+            `MiraiIndexedModel`: 构造的对象。
         """
         if cls in MiraiIndexedModel.__subclasses__():
             ModelType = cls.get_subtype(obj['type'])
