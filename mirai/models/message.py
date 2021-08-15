@@ -11,7 +11,7 @@ from datetime import datetime
 from enum import Enum
 from json import loads as json_loads
 from pathlib import Path
-from typing import Iterable, List, Optional, Union, cast
+from typing import Iterable, List, Optional, Tuple, Type, TypeVar, Union, cast, overload
 
 import aiofiles
 import httpx
@@ -109,6 +109,9 @@ class MessagePart():
         """将消息组件化。"""
 
 
+TMessageComponent = TypeVar('TMessageComponent', bound=MessageComponent)
+
+
 class MessageChain(MiraiBaseModel):
     """消息链。
 
@@ -201,9 +204,9 @@ class MessageChain(MiraiBaseModel):
     '[Plain("Hello World!")]'
     ```
 
-    以 `类型: 数量` 为索引，获取前至多多少个该类型的消息组件。
+    以 `类型, 数量` 为索引，获取前至多多少个该类型的消息组件。
     ```py
-    plain_list_first = message_chain[Plain: 1]
+    plain_list_first = message_chain[Plain, 1]
     '[Plain("Hello World!")]'
     ```
     """
@@ -257,26 +260,40 @@ class MessageChain(MiraiBaseModel):
     def __iter__(self):
         yield from self.__root__
 
+    @overload
+    def __getitem__(self, index: int) -> MessageComponent:
+        ...
+
+    @overload
     def __getitem__(self,
-                    index) -> Union[MessageComponent, List[MessageComponent]]:
+                    index: Type[TMessageComponent]) -> List[TMessageComponent]:
+        ...
+
+    @overload
+    def __getitem__(
+        self, index: Tuple[Type[TMessageComponent], int]
+    ) -> List[TMessageComponent]:
+        ...
+
+    def __getitem__(
+        self, index: Union[int, Type[TMessageComponent],
+                           Tuple[Type[TMessageComponent], int]]
+    ) -> Union[MessageComponent, List[TMessageComponent]]:
         # 正常索引
         if isinstance(index, int):
             return self.__root__[index]
         # 索引对象为 MessageComponent 类，返回所有对应 component
         elif isinstance(index, type):
             return [
-                cast(MessageComponent, component) for component in self
-                if type(component) == index
+                component for component in self if type(component) == index
             ]
-        # 索引对象为 MessageComponent 和 int 构成的 slice， 返回指定数量的 component
-        elif isinstance(index, slice):
+        # 索引对象为 MessageComponent 和 int 构成的 tuple， 返回指定数量的 component
+        elif isinstance(index, tuple):
             components = (
-                component for component in self
-                if type(component) == index.start
+                component for component in self if type(component) == index[0]
             )
             return [
-                component
-                for component, _ in zip(components, range(index.stop))
+                component for component, _ in zip(components, range(index[1]))
             ]
         raise TypeError(f"消息链索引需为 int 或 MessageComponent，当前类型：{type(index)}")
 
@@ -306,10 +323,10 @@ class MessageChain(MiraiBaseModel):
         return len(self.__root__)
 
     @property
-    def source(self) -> 'Source':
+    def source(self) -> Optional['Source']:
         """获取消息链中的 `Source` 对象。"""
-        source = self[Source:1]
-        return cast(list, source)[0] if source else None
+        source = self[Source, 1]
+        return source[0] if source else None
 
     @property
     def message_id(self) -> int:
