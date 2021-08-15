@@ -10,8 +10,7 @@ from mirai import exceptions
 
 
 async def async_(obj):
-    """将一个对象包装为 `Awaitable`。
-    """
+    """将一个对象包装为 `Awaitable`。"""
     if inspect.isawaitable(obj):
         return await obj
     else:
@@ -36,12 +35,21 @@ class PriorityDict(Generic[T]):
         self._priorities = {}
 
     def add(self, priority: int, value: T) -> None:
-        """增加一个元素。"""
+        """增加一个元素。
+
+        Args:
+            priority (`int`): 优先级，小者优先。
+            value: 元素。
+        """
         self._data[priority].add(value)
         self._priorities[value] = priority
 
     def remove(self, value: T) -> None:
-        """移除一个元素。"""
+        """移除一个元素。
+
+        Args:
+            value: 元素。
+        """
         priority = self._priorities.get(value)
         if priority is None:
             raise KeyError(value)
@@ -60,11 +68,10 @@ class PriorityDict(Generic[T]):
 def KMP(string, pattern, count: int = 1) -> List[int]:
     """KMP算法。
 
-    `string` 待匹配字符串。
-
-    `pattern` 模式字符串。
-
-    `count` 至多匹配的次数。
+    Args:
+        string: 待匹配字符串。
+        pattern: 模式字符串。
+        count (int): 至多匹配的次数。
     """
     if len(string) < len(pattern) or count < 1:
         return []

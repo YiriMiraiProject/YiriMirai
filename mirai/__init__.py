@@ -56,5 +56,8 @@ def get_logger() -> logging.Logger:
     """获取 YiriMirai 的模块 Logger。
 
     所有的模块的 Logger 都是此 Logger 的子 Logger，修改此 Logger 的属性以应用到 YiriMirai 全局。
+
+    Returns:
+        `logging.Logger`: 模块 Logger。
     """
     return logger

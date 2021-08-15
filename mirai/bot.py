@@ -19,7 +19,7 @@ from mirai.models.entities import (
     Entity, Friend, Group, GroupMember, Permission, Subject
 )
 from mirai.models.events import Event, MessageEvent, TempMessage
-from mirai.models.message import MessageChain, MessageComponent
+from mirai.models.message import MessageChain, MessageComponent, TMessage
 from mirai.utils import Singleton
 
 __all__ = [
@@ -57,11 +57,9 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
 
     def __init__(self, qq: int, adapter: Adapter):
         """
-        `qq: int` QQ 号。启用 Single Mode 时，可以随便传入，登陆后会自动获取正确的 QQ 号。
-
-        `adapter: Adapter` 适配器，负责与 mirai-api-http 沟通，详见模块`mirai.adapters`。
-
-        `name: str = ''` 机器人名称，此名称将用作。
+        Args:
+            qq (`int`): QQ 号。启用 Single Mode 时，可以随便传入，登陆后会自动获取正确的 QQ 号。
+            adapter (`Adapter`): 适配器，负责与 mirai-api-http 沟通，详见模块`mirai.adapters。
         """
         self.qq = qq
 
@@ -85,18 +83,14 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
     async def call_api(self, api: str, *args, **kwargs):
         """调用 API。
 
-        `api: str` API 名称。
-
-        `*args, **kwargs` 参数。
+        Args:
+            api (`str`): API 名称。
+            *args, **kwargs: 参数。
         """
         return await self._adapter.call_api(api, *args, **kwargs)
 
     def on(self, event: str, priority: int = 0) -> Callable:
         """注册事件处理器。
-
-        `event: str` 事件名。
-
-        `priority: int = 0` 优先级，小者优先。
 
         用法举例：
         ```py
@@ -104,8 +98,12 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
         async def on_friend_message(event: dict):
             print(f"收到来自{event['sender']['nickname']}的消息。")
         ```
+
+        Args:
+            event (`str`): 事件名。
+            priority (`int`): 优先级，小者优先。
         """
-        return self._bus.on(event)
+        return self._bus.on(event, priority=priority)
 
     @property
     def adapter_info(self) -> Dict[str, Any]:
@@ -115,13 +113,14 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
     async def use_adapter(self, adapter: Adapter):
         """临时使用另一个适配器。
 
-        `adapter: Adapter` 使用的适配器。
-
         用法：
         ```py
         async with bot.use_adapter(HTTPAdapter.via(bot)):
             ...
         ```
+
+        Args:
+            adapter (`Adapter`): 使用的适配器。
         """
         origin_adapter = self._adapter
         await adapter.login(self.qq)
@@ -155,11 +154,16 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
 
     @property
     def session(self) -> str:
-        """获取 session key，可用于调试。"""
+        """获取 session key，可用于调试。
+
+        Returns:
+            `str`: session key。
+        """
         return self._adapter.session
 
     @property
     def asgi(self) -> 'MiraiRunner':
+        """ASGI 对象，用于使用 uvicorn 等启动。"""
         return MiraiRunner(self)
 
     def run(
@@ -173,13 +177,11 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
 
         一般情况下，此函数会进入主循环，不再返回。
 
-        `host: str = '127.0.0.1'` YiriMirai 作为服务器的地址。
-
-        `port: int = 8000` YiriMirai 作为服务器的端口。
-
-        `asgi_server: str = 'auto'` ASGI 服务器类型，可选项有 `'uvicorn'` `'hypercorn'` 和 `'auto'`。
-
-        `**kwargs` 可选参数。多余的参数将传递给 `uvicorn.run` 和 `hypercorn.run`。
+        Args:
+            host (`str`): YiriMirai 作为服务器的地址，默认为 127.0.0.1。
+            port (`int`): YiriMirai 作为服务器的端口，默认为 8000。
+            asgi_server (`str`): ASGI 服务器类型，可选项有 `'uvicorn'` `'hypercorn'` 和 `'auto'`。
+            **kwargs: 可选参数。多余的参数将传递给 `uvicorn.run` 和 `hypercorn.run`。
         """
         MiraiRunner(self).run(host, port, asgi_server, **kwargs)
 
@@ -199,7 +201,8 @@ class MiraiRunner(Singleton):
     """运行的 SimpleMirai 对象。"""
     def __init__(self, *bots: SimpleMirai):
         """
-        `*bots: SimpleMirai` 要运行的机器人。
+        Args:
+            *bots (`SimpleMirai`): 要运行的机器人。
         """
         self.bots = bots
         self._asgi = ASGI()
@@ -268,7 +271,7 @@ class Mirai(SimpleMirai):
 
     使用了 `__getattr__` 魔术方法，可以直接在对象上调用 API。
 
-    `Mirai` 类包含 model 层封装，API 名称经过转写以符合命名规范，所有的 API 全部使用小写字母及下划线命名。
+        Mirai: 类包含 model 层封装，API 名称经过转写以符合命名规范，所有的 API 全部使用小写字母及下划线命名。
     （API 名称也可使用原名。）
     API 参数可以使用具名参数，也可以使用位置参数，关于 API 参数的更多信息请参见模块 `mirai.models.api`。
 
@@ -300,27 +303,31 @@ class Mirai(SimpleMirai):
     ) -> Callable:
         """注册事件处理器。
 
-        `event_type: Union[Type[Event], str]` 事件类或事件名。
-
-        `priority: int = 0` 优先级，较小者优先。
-
         用法举例：
         ```python
         @bot.on(FriendMessage)
         async def on_friend_message(event: FriendMessage):
             print(f"收到来自{event.sender.nickname}的消息。")
         ```
+
+        Args:
+            event_type (`Union[Type[Event], str]`): 事件类或事件名。
+            priority (`int`): 优先级，较小者优先。
         """
         return self._bus.on(event_type, priority)
 
     def api(self, api: str) -> ApiModel.Proxy:
         """获取 API Proxy 对象。
 
-        API Proxy 提供更加简便的调用 API 的写法，详见`mirai.models.api`。
+        API Proxy 提供更加简便的调用 API 的写法，详见 `mirai.models.api`。
 
         `Mirai` 的 `__getattr__` 与此方法完全相同，可支持直接在对象上调用 API。
 
-        `api: str` API 名称。
+        Args:
+            api (`str`): API 名称。
+
+        Returns:
+            `ApiModel.Proxy`: API Proxy 对象。
         """
         api_type = ApiModel.get_subtype(api)
         return api_type.Proxy(self, api_type)
@@ -331,19 +338,18 @@ class Mirai(SimpleMirai):
     async def send(
         self,
         target: Union[Entity, MessageEvent],
-        message: Union[MessageChain, Iterable[Union[MessageComponent, str]],
-                       MessageComponent, str],
+        message: TMessage,
         quote: bool = False
     ) -> int:
         """发送消息。可以从 `Friend` `Group` 等对象，或者从 `MessageEvent` 中自动识别消息发送对象。
 
-        `target: Union[Entity, MessageEvent]` 目标对象。
+        Args:
+            target (`Union[Entity, MessageEvent]`): 目标对象。
+            message (`TMessage`): 发送的消息。
+            quote (`bool`): 是否以回复消息的形式发送，默认为 False。
 
-        `message: Union[MessageChain, Iterable[Union[MessageComponent, str]], str]` 发送的消息。
-
-        `quote: bool = False` 是否以回复消息的形式发送。
-
-        返回值：int 发送的消息的 message_id。
+        Returns:
+            int: 发送的消息的 message_id。
         """
         # 识别消息发送对象
         if isinstance(target, TempMessage):
@@ -383,7 +389,12 @@ class Mirai(SimpleMirai):
     async def get_friend(self, id_: int) -> Optional[Friend]:
         """获取好友对象。
 
-        `id: int` 好友 ID。
+        Args:
+            id (`int`): 好友 QQ 号。
+
+        Returns:
+            `Friend`: 好友对象。
+            `None`: 好友不存在。
         """
         friend_list = await self.friend_list.get()
         if not friend_list:
@@ -396,7 +407,12 @@ class Mirai(SimpleMirai):
     async def get_group(self, id_: int) -> Optional[Group]:
         """获取群组对象。
 
-        `id: int` 群组 ID。
+        Args:
+            id (`int`): 群号。
+
+        Returns:
+            `Group`: 群组对象。
+            `None`: 群组不存在或 bot 未入群。
         """
         group_list = await self.group_list.get()
         if not group_list:
@@ -410,9 +426,13 @@ class Mirai(SimpleMirai):
                                id_: int) -> Optional[GroupMember]:
         """获取群成员对象。
 
-        `group: Union[Group, int]` 群组对象或群组 ID。
+        Args:
+            group (`Union[Group, int]`): 群组对象或群号。
+            id (`int`): 群成员 QQ 号。
 
-        `id: int` 群成员 ID。
+        Returns:
+            `GroupMember`: 群成员对象。
+            `None`: 群成员不存在。
         """
         if isinstance(group, Group):
             group = group.id
@@ -427,7 +447,12 @@ class Mirai(SimpleMirai):
     async def get_entity(self, subject: Subject) -> Optional[Entity]:
         """获取实体对象。
 
-        `subject: Subject` 实体对象。
+        Args:
+            subject (`Subject`): 以 `Subject` 表示的实体对象。
+
+        Returns:
+            `Entity`: 实体对象。
+            `None`: 实体不存在。
         """
         if subject.kind == 'Friend':
             return await self.get_friend(subject.id)
@@ -439,7 +464,11 @@ class Mirai(SimpleMirai):
     async def is_admin(self, group: Group) -> bool:
         """判断机器人在群组中是否是管理员。
 
-        `group: Group` 群组对象。
+        Args:
+            group (`Group`): 群组对象。
+
+        Returns:
+            `bool`: 是否是管理员。
         """
         return group.permission in (Permission.Administrator, Permission.Owner)
 

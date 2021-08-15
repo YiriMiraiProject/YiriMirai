@@ -6,9 +6,7 @@ import traceback
 
 
 class NetworkError(RuntimeError):
-    """网络连接出错。
-    """
-    pass
+    """网络连接出错。"""
 
 
 API_ERROR_FMT = {
@@ -30,7 +28,8 @@ API_ERROR_FMT = {
 class ApiError(RuntimeError):
     """调用 API 出错。
 
-    `code: int` mirai-api-http 的 API 状态码。
+    Args:
+        code (`int`): mirai-api-http 的 API 状态码。
     """
     def __init__(self, response: dict):
         code = response['code']
@@ -54,9 +53,11 @@ class SkipExecution(Exception):
 
 
 def print_exception(e: Exception):
-    """打印异常信息。
-    """
+    """打印异常信息。"""
     traceback.print_exception(type(e), e, e.__traceback__)
 
 
-__all__ = ['NetworkError', 'ApiError', 'print_exception']
+__all__ = [
+    'NetworkError', 'ApiError', 'StopPropagation', 'StopExecution',
+    'SkipExecution', 'print_exception'
+]

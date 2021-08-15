@@ -46,29 +46,24 @@ class AbstractEventBus:
     def subscribe(self, event, func: Callable, priority: int = 0) -> None:
         """注册事件处理器。
 
-        `event` 事件名。
-
-        `func: Callable` 事件处理器。
-
-        `priority: int = 0` 优先级，小者优先。
+        Args:
+            event: 事件名。
+            func (`Callable`): 事件处理器。
+            priority (`int`): 优先级，小者优先。
         """
 
     @abc.abstractmethod
     def unsubscribe(self, event, func: Callable) -> None:
         """移除事件处理器。
 
-        `event` 事件名。
-
-        `func: Callable` 事件处理器。
+        Args:
+            event: 事件名。
+            func (`Callable`): 事件处理器。
         """
 
     @abc.abstractmethod
     def on(self, event, priority: int = 0) -> Callable:
         """以装饰器的方式注册事件处理器。
-
-        `event` 事件名。
-
-        `priority: int = 0` 优先级，小者优先。
 
         例如：
         ```py
@@ -76,6 +71,10 @@ class AbstractEventBus:
         def my_event_handler(event):
             print(event)
         ```
+
+        Args:
+            event: 事件名。
+            priority (`int`): 优先级，小者优先。
         """
 
     @abc.abstractmethod
@@ -84,12 +83,12 @@ class AbstractEventBus:
 
         异步执行说明：`await emit` 时执行事件处理器，所有事件处理器执行完后，并行运行所有快速响应。
 
-        `event` 要触发的事件名称。
+        Args:
+            event: 要触发的事件名称。
+            *args, **kwargs: 传递给事件处理器的参数。
 
-        `*args, **kwargs` 传递给事件处理器的参数。
-
-        Returns: `List[Awaitable[Any]]`
-            所有事件处理器的快速响应协程的 Task。
+        Returns:
+            `List[Awaitable[Any]]`: 所有事件处理器的快速响应协程的 Task。
         """
 
 
@@ -104,17 +103,16 @@ class EventBus(AbstractEventBus):
     事件总线的构造函数中的 `event_chain_generator` 参数规定了生成事件链的方式。
     此模块中的 `event_chain_single` 和 `event_chain_separator` 可应用于此参数，分别生成单一事件的事件链和按照分隔符划分的事件链。
     """
-    _default_bus = None
-
     def __init__(
         self,
         event_chain_generator: Callable[[str],
                                         Iterable[str]] = event_chain_single,
     ):
         """
-        `event_chain_generator: Callable[[str], Iterable[str]]`
-            一个函数，输入事件名，返回一个生成此事件所在事件链的全部事件的事件名的生成器，
-            默认行为是事件链只包含单一事件。
+        Args:
+            event_chain_generator (`Callable[[str], Iterable[str]]`): 一个函数，
+                输入事件名，返回一个生成此事件所在事件链的全部事件的事件名的生成器，
+                默认行为是事件链只包含单一事件。
         """
         self._subscribers: Dict[
             str, PriorityDict[Callable]] = defaultdict(PriorityDict)
@@ -123,20 +121,19 @@ class EventBus(AbstractEventBus):
     def subscribe(self, event: str, func: Callable, priority: int = 0) -> None:
         """注册事件处理器。
 
-        `event: str` 事件名。
-
-        `func: Callable` 事件处理器。
-
-        `priority: int = 0` 优先级，小者优先。
+        Args:
+            event (`str`): 事件名。
+            func (`Callable`): 事件处理器。
+            priority (`int`): 优先级，小者优先。
         """
         self._subscribers[event].add(priority, func)
 
     def unsubscribe(self, event: str, func: Callable) -> None:
         """移除事件处理器。
 
-        `event: str` 事件名。
-
-        `func: Callable` 事件处理器。
+        Args:
+            event (`str`): 事件名。
+            func (`Callable`): 事件处理器。
         """
         try:
             self._subscribers[event].remove(func)
@@ -146,16 +143,16 @@ class EventBus(AbstractEventBus):
     def on(self, event: str, priority: int = 0) -> Callable:
         """以装饰器的方式注册事件处理器。
 
-        `event: str` 事件名。
-
-        `priority: int = 0` 优先级，小者优先。
-
         例如：
         ```py
         @bus.on('Event.MyEvent')
         def my_event_handler(event):
             print(event)
         ```
+
+        Args:
+            event (`str`): 事件名。
+            priority (`int`): 优先级，小者优先。
         """
         def decorator(func: Callable) -> Callable:
             self.subscribe(event, func, priority)
@@ -168,12 +165,12 @@ class EventBus(AbstractEventBus):
 
         异步执行说明：`await emit` 时执行事件处理器，所有事件处理器执行完后，并行运行所有快速响应。
 
-        `event: str` 要触发的事件名称。
+        Args:
+            event (`str`): 要触发的事件名称。
+            *args, **kwargs: 传递给事件处理器的参数。
 
-        `*args, **kwargs` 传递给事件处理器的参数。
-
-        Returns: `List[Awaitable[Any]]`
-            所有事件处理器的快速响应协程的 Task。
+        Returns:
+            `List[Awaitable[Any]]`: 所有事件处理器的快速响应协程的 Task。
         """
         async def call(f) -> Optional[Awaitable[Any]]:
             result = await async_with_exception(f(*args, **kwargs))
@@ -201,13 +198,6 @@ class EventBus(AbstractEventBus):
 
         # 只保留快速响应的返回值。
         return [asyncio.create_task(coro) for coro in filter(None, coros)]
-
-    @classmethod
-    def get_default_bus(cls):
-        """获取默认事件总线。"""
-        if not cls._default_bus:
-            cls._default_bus = cls()
-        return cls._default_bus
 
 
 __all__ = ['EventBus', 'event_chain_separator', 'event_chain_single']

@@ -36,14 +36,16 @@ class ASGI(Singleton):
         path: str,
         endpoint: Callable,
         methods: Optional[List[str]] = None
-    ):
+    ) -> 'ASGI':
         """添加路由。
 
-        `path: str` 路由的路径。
+        Args:
+            path (`str`): 路由的路径。
+            endpoint (`Callable`): 路由的处理函数。
+            methods (`Optional[List[str]]`): 路由的请求方法。默认为 `['GET']`。
 
-        `endpoint: Callable` 路由的处理函数。
-
-        `methods: Optional[List[str]] = None` 路由的请求方法。默认为 `['GET']`。
+        Returns:
+            `ASGI`: 返回自身。
         """
         methods = methods or ['GET']
 
@@ -73,12 +75,15 @@ class ASGI(Singleton):
         self.app.add_event_handler(event_type, handler)
         return self
 
-    def mount(self, path: str, app: Callable):
+    def mount(self, path: str, app: Callable) -> 'ASGI':
         """挂载另一个 ASGI 服务器。通过这个方法，可以同时运行 FastAPI 之类的服务。
 
-        `path: str` 要挂载的路径。
+        Args:
+            path (`str`): 要挂载的路径。
+            app (`Callable`): 要挂载的 ASGI 服务器。
 
-        `app: Callable` 要挂载的 ASGI 服务器。
+        Returns:
+            `ASGI`: 返回自身。
         """
         self.app.mount(path, app)
         logger.debug(f'向 {path} 挂载 {app}。')
@@ -98,14 +103,12 @@ def asgi_serve(
 ):
     """运行一个 ASGI 服务器。
 
-    `app` ASGI 应用程序。
-
-    `host: str = '127.0.0.1'` 服务器地址。
-
-    `port: int = 8000` 服务器端口。
-
-    `asgi_server='auto'` ASGI 服务器，可选的有 `hypercorn` `uvicorn` 和 `auto`。
-        如果设置为 `auto`，自动寻找是否已安装可用的 ASGI 服务（`unicorn` 或 `hypercorn`），并运行。
+    Args:
+        app: ASGI 应用程序。
+        host (`str`): 服务器地址，默认为 127.0.0.1。
+        port (`int`): 服务器端口，默认为 8000。
+        asgi_server (`str`): ASGI 服务器，可选的有 `hypercorn` `uvicorn` 和 `auto`。
+            如果设置为 `auto`，自动寻找是否已安装可用的 ASGI 服务（`unicorn` 或 `hypercorn`），并运行。
     """
     if asgi_server == 'auto':
         try:

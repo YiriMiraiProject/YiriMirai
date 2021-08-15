@@ -34,7 +34,7 @@ from mirai.models.events import (
     FriendMessage, GroupMessage, OtherClientMessage, RequestEvent,
     StrangerMessage, TempMessage
 )
-from mirai.models.message import Image, MessageChain, MessageComponent, Voice
+from mirai.models.message import Image, MessageChain, MessageComponent, TMessage, Voice
 from mirai.utils import async_
 
 logger = logging.getLogger(__name__)
@@ -288,7 +288,7 @@ class ApiModel(ApiBaseModel):
     class Proxy(Generic[TModel]):
         """API 代理类。由 API 构造，提供对适配器的访问。
 
-        `Proxy` 提供更加简便的调用 API 的写法。`Proxy` 对象一般由 `Mirai.__getattr__` 获得，
+            Proxy: 提供更加简便的调用 API 的写法。`Proxy` 对象一般由 `Mirai.__getattr__` 获得，
         这个方法依托于 `MiraiIndexedModel` 的子类获取机制，支持按照命名规范转写的 API，
         所有的 API 全部使用小写字母及下划线命名。
 
@@ -307,7 +307,7 @@ class ApiModel(ApiBaseModel):
         await bot.send_friend_message(12345678, [Plain('Hello World!')])
         ```
 
-        `set` 方法也可用，但由于语义不准确，不推荐使用。
+            set: 方法也可用，但由于语义不准确，不推荐使用。
 
         对于 RESTful 的 API，首先应直接调用，传入基本参数，然后使用 `get` 或 `set`：
         ```py
@@ -315,7 +315,7 @@ class ApiModel(ApiBaseModel):
         await bot.group_config(12345678).set(config.modify(announcement='测试'))
         ```
 
-        `ApiProxy` 同时提供位置参数支持。比如上面的例子中，没有使用具名参数，而是使用位置参数，
+            ApiProxy: 同时提供位置参数支持。比如上面的例子中，没有使用具名参数，而是使用位置参数，
         这可以让 API 调用更简洁。参数的顺序可参照 mirai-api-http
         的[文档](https://project-mirai.github.io/mirai-api-http/api/API.html)。
         除去`sessionKey`由适配器自动指定外，其余参数可按顺序传入。具名参数仍然可用，适当地使用具名参数可增强代码的可读性。
@@ -330,7 +330,7 @@ class ApiModel(ApiBaseModel):
             self,
             method: Method = Method.GET,
             response_type: Optional[Type[TModel]] = None,
-            args: Optional[Union[list, tuple]] = None,
+            args: Union[list, tuple, None] = None,
             kwargs: Optional[dict] = None
         ) -> Optional[TModel]:
             """调用 API。
@@ -554,7 +554,7 @@ class MemberProfile(ApiGet):
 
 class SendMessage(ApiBaseModel):
     """发送消息的 API 的方法复用，不作为 API 使用。"""
-    # message_chain: Union[MessageChain, Iterable[Union[MessageComponent, str]], str]
+    # message_chain: TMessage
 
     @validator('message_chain', check_fields=False)
     def _validate_message_chain(cls, value: Union[MessageChain, list]):
@@ -568,8 +568,7 @@ class SendFriendMessage(ApiPost, SendMessage):
     """发送好友消息。"""
     target: int
     """发送消息目标好友的 QQ 号。"""
-    message_chain: Union[MessageChain, Iterable[Union[MessageComponent, str]],
-                         str]
+    message_chain: TMessage
     """消息链。"""
     quote: Optional[int] = None
     """可选。引用一条消息的 message_id 进行回复。"""
@@ -583,8 +582,7 @@ class SendGroupMessage(ApiPost, SendMessage):
     """发送群消息。"""
     target: int
     """发送消息目标群的群号。"""
-    message_chain: Union[MessageChain, Iterable[Union[MessageComponent, str]],
-                         str]
+    message_chain: TMessage
     """消息链。"""
     quote: Optional[int] = None
     """可选。引用一条消息的 message_id 进行回复。"""
@@ -600,8 +598,7 @@ class SendTempMessage(ApiPost, SendMessage):
     """临时会话对象 QQ 号。"""
     group: int
     """临时会话对象群号。"""
-    message_chain: Union[MessageChain, Iterable[Union[MessageComponent, str]],
-                         str]
+    message_chain: TMessage
     """消息链。"""
     quote: Optional[int] = None
     """可选。引用一条消息的 message_id 进行回复。"""

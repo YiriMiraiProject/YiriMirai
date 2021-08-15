@@ -29,7 +29,7 @@ def event_chain_parents(event: str):
 class ModelEventBus(EventBus):
     """模型事件总线，实现底层事件总线上的事件再分发，以将事件解析到 Event 对象。
 
-    `ModelEventBus` 在注册事件处理器时，可使用 `Event` 类或事件名。关于可用的 `Event` 类，
+        ModelEventBus: 在注册事件处理器时，可使用 `Event` 类或事件名。关于可用的 `Event` 类，
     参见模块 `mirai.models.events`。
 
     模型事件总线支持的事件处理器接受唯一的参数`event`，该参数是一个 `Event` 对象，包含触发的事件的信息。
@@ -48,11 +48,11 @@ class ModelEventBus(EventBus):
     ) -> None:
         """注册事件处理器。
 
-        `event: Type[Event]` 事件类型。
+            event (`Type[Event]`): 事件类型。
 
-        `func: Callable` 事件处理器。
+            func (`Callable`): 事件处理器。
 
-        `priority: int = 0` 事件处理器的优先级。
+            priority (`int = 0`): 事件处理器的优先级。
         """
         if isinstance(event_type, str):
             event_type = cast(Type[Event], Event.get_subtype(event_type))
@@ -73,9 +73,9 @@ class ModelEventBus(EventBus):
     ) -> None:
         """移除事件处理器。
 
-        `event_type: Type[Event]` 事件类型。
+            event_type (`Type[Event]`): 事件类型。
 
-        `func: Callable` 事件处理器。
+            func (`Callable`): 事件处理器。
         """
         if isinstance(event_type, str):
             event_type = cast(Type[Event], Event.get_subtype(event_type))
@@ -91,9 +91,9 @@ class ModelEventBus(EventBus):
     ) -> Callable:
         """以装饰器的方式注册事件处理器。
 
-        `event_type: Union[Type[Event], str]` 事件类型或事件名。
+            event_type (`Union[Type[Event], str]`): 事件类型或事件名。
 
-        `priority: int = 0` 事件处理器的优先级。
+            priority (`int = 0`): 事件处理器的优先级。
 
         例如：
         ```py
@@ -112,7 +112,7 @@ class ModelEventBus(EventBus):
                    **kwargs) -> List[Awaitable[Any]]:
         """触发一个事件。
 
-        `event: Event` 要触发的事件。
+            event (`Event`): 要触发的事件。
         """
         if isinstance(event, str):
             return await super().emit(event, *args, **kwargs)

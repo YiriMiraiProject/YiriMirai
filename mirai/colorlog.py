@@ -6,6 +6,7 @@
 """
 import logging
 from enum import IntEnum
+from typing import Dict
 
 __all__ = ['ConsoleColor', 'ColoredFormatter']
 
@@ -33,9 +34,12 @@ COLORS = {
 
 class ColoredFormatter(logging.Formatter):
     """带颜色的日志格式化器。"""
-    def __init__(self, *args, colors: dict = COLORS, **kwargs):
+    def __init__(
+        self, *args, colors: Dict[str, ConsoleColor] = COLORS, **kwargs
+    ):
         """
-        `colors` 一个字典，键是日志级别名称，值是颜色。
+        Args:
+            colors (`Dict[str, ConsoleColor]`): 一个字典，键是日志级别名称，值是颜色。
         """
         super().__init__(*args, **kwargs)
         self.colors = colors

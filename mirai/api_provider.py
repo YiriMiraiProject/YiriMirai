@@ -32,11 +32,10 @@ class ApiProvider(abc.ABC):
     async def call_api(self, api: str, method: Method = Method.GET, **params):
         """调用 API。此处为抽象方法，具体实现由子类决定。
 
-        `api`: API 名称。
-
-        `method`: 调用方法。默认为 GET。
-
-        `params`: 参数。
+        Args:
+            api: API 名称。
+            method: 调用方法。默认为 GET。
+            **params: 参数。
         """
 
     def __getattr__(self,

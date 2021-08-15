@@ -15,8 +15,15 @@ class Tasks:
         # 完成时，移除任务。
         self._tasks.remove(task)
 
-    def create_task(self, coro):
-        """创建一个异步任务。"""
+    def create_task(self, coro) -> asyncio.Task:
+        """创建一个异步任务。
+
+        Args:
+            coro: 异步任务的coroutine。
+
+        Returns:
+            `asyncio.Task`: 创建的任务。
+        """
         task = asyncio.create_task(coro)
         self._tasks.add(task)
 
@@ -29,7 +36,11 @@ class Tasks:
 
     @staticmethod
     async def cancel(task: asyncio.Task):
-        """取消一个任务。"""
+        """取消一个任务。此方法会等待到任务取消成功。
+
+        Args:
+            task (`asyncio.Task`): 任务。
+        """
         task.cancel()
         try:
             await task
@@ -37,6 +48,6 @@ class Tasks:
             pass
 
     async def cancel_all(self):
-        """取消所有任务。"""
+        """取消所有任务。此方法会等待到所有任务取消成功。"""
         for task in self._tasks:
             await self.cancel(task)

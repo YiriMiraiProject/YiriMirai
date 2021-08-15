@@ -78,7 +78,7 @@ class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):
     def get_subtype(cls, name: str) -> Type['MiraiIndexedModel']:
         """根据类名称，获取相应的子类类型。
 
-        `name` 类名称。
+            name: 类名称。
         """
         try:
             type_ = cls.__indexes__.get(name)
@@ -92,7 +92,7 @@ class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):
     def parse_obj(cls, obj: dict):
         """通过字典，构造对应的模型对象。
 
-        `obj: dict`
+            obj (`dict`):
         """
         if cls in MiraiIndexedModel.__subclasses__():
             ModelType = cls.get_subtype(obj['type'])

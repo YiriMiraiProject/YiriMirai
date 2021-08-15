@@ -80,7 +80,7 @@ class Adapter(ApiProvider, AdapterInterface):
     """背景事件循环任务。"""
     def __init__(self, verify_key: Optional[str], single_mode: bool = False):
         """
-        `verify_key: str` mirai-api-http 配置的认证 key，关闭认证时为 None。
+            verify_key (`str`): mirai-api-http 配置的认证 key，关闭认证时为 None。
         """
         self.verify_key = verify_key
         self.single_mode = single_mode
@@ -136,11 +136,11 @@ class Adapter(ApiProvider, AdapterInterface):
     async def call_api(self, api: str, method: Method = Method.GET, **params):
         """调用 API。
 
-        `api`: API 名称，需与 mirai-api-http 中的定义一致。
+            api: API 名称，需与 mirai-api-http 中的定义一致。
 
-        `method`: 调用方法。默认为 GET。
+            method: 调用方法。默认为 GET。
 
-        `params`: 参数。
+            params: 参数。
         """
 
     @abc.abstractmethod

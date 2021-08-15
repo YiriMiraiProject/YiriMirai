@@ -210,7 +210,7 @@ class Mirai(SimpleMirai):
         ) -> Response:
             """执行命令。
 
-            `command: Union[MessageChain,Iterable[Union[MessageComponent,str]],str]` 命令。
+                command (`Union[MessageChain,Iterable[Union[MessageComponent,str]],str]`): 命令。
             """
 
     @overload
@@ -224,7 +224,7 @@ class Mirai(SimpleMirai):
     ) -> Response:
         """执行命令。
 
-        `command: Union[MessageChain,Iterable[Union[MessageComponent,str]],str]` 命令。
+            command (`Union[MessageChain,Iterable[Union[MessageComponent,str]],str]`): 命令。
         """
 
     # CmdRegister
@@ -239,13 +239,13 @@ class Mirai(SimpleMirai):
         ) -> Response:
             """注册命令。
 
-            `name: str` 命令名称。
+                name (`str`): 命令名称。
 
-            `usage: str` 使用说明。
+                usage (`str`): 使用说明。
 
-            `description: str` 命令描述。
+                description (`str`): 命令描述。
 
-            `alias: Union[List[str],None] = None` 可选。命令别名。
+                alias (`Union[List[str],None] = None`): 可选。命令别名。
             """
 
     @overload
@@ -262,13 +262,13 @@ class Mirai(SimpleMirai):
     ) -> Response:
         """注册命令。
 
-        `name: str` 命令名称。
+            name (`str`): 命令名称。
 
-        `usage: str` 使用说明。
+            usage (`str`): 使用说明。
 
-        `description: str` 命令描述。
+            description (`str`): 命令描述。
 
-        `alias: Union[List[str],None] = None` 可选。命令别名。
+            alias (`Union[List[str],None] = None`): 可选。命令别名。
         """
 
     # DeleteFriend
@@ -277,7 +277,7 @@ class Mirai(SimpleMirai):
         async def set(self, target: int) -> Response:
             """删除好友。
 
-            `target: int` 需要删除的好友 QQ 号。
+                target (`int`): 需要删除的好友 QQ 号。
             """
 
     @overload
@@ -288,7 +288,7 @@ class Mirai(SimpleMirai):
     async def delete_friend(self, target: int) -> Response:
         """删除好友。
 
-        `target: int` 需要删除的好友 QQ 号。
+            target (`int`): 需要删除的好友 QQ 号。
         """
 
     # FileDelete
@@ -297,9 +297,9 @@ class Mirai(SimpleMirai):
         async def set(self, id: str, target: int) -> Response:
             """删除文件。
 
-            `id: str` 欲删除的文件 id。
+                id (`str`): 欲删除的文件 id。
 
-            `target: int` 群号或好友 QQ 号。
+                target (`int`): 群号或好友 QQ 号。
             """
 
     @overload
@@ -310,9 +310,9 @@ class Mirai(SimpleMirai):
     async def file_delete(self, id: str, target: int) -> Response:
         """删除文件。
 
-        `id: str` 欲删除的文件 id。
+            id (`str`): 欲删除的文件 id。
 
-        `target: int` 群号或好友 QQ 号。
+            target (`int`): 群号或好友 QQ 号。
         """
 
     # FileInfo
@@ -326,11 +326,11 @@ class Mirai(SimpleMirai):
         ) -> FileInfoResponse:
             """查看文件信息。
 
-            `id: str` 文件 id。
+                id (`str`): 文件 id。
 
-            `target: int` 群号或好友 QQ 号。
+                target (`int`): 群号或好友 QQ 号。
 
-            `with_download_info: Union[bool,None] = None` 是否携带下载信息。
+                with_download_info (`Union[bool,None] = None`): 是否携带下载信息。
             """
 
     @overload
@@ -346,11 +346,11 @@ class Mirai(SimpleMirai):
     ) -> FileInfoResponse:
         """查看文件信息。
 
-        `id: str` 文件 id。
+            id (`str`): 文件 id。
 
-        `target: int` 群号或好友 QQ 号。
+            target (`int`): 群号或好友 QQ 号。
 
-        `with_download_info: Union[bool,None] = None` 是否携带下载信息。
+            with_download_info (`Union[bool,None] = None`): 是否携带下载信息。
         """
 
     # FileList
@@ -364,11 +364,11 @@ class Mirai(SimpleMirai):
         ) -> FileListResponse:
             """查看文件列表。
 
-            `id: str` 文件夹 id，空串为根目录。
+                id (`str`): 文件夹 id，空串为根目录。
 
-            `target: int` 群号或好友 QQ 号。
+                target (`int`): 群号或好友 QQ 号。
 
-            `with_download_info: Union[bool,None] = None` 是否携带下载信息。
+                with_download_info (`Union[bool,None] = None`): 是否携带下载信息。
             """
 
     @overload
@@ -384,11 +384,11 @@ class Mirai(SimpleMirai):
     ) -> FileListResponse:
         """查看文件列表。
 
-        `id: str` 文件夹 id，空串为根目录。
+            id (`str`): 文件夹 id，空串为根目录。
 
-        `target: int` 群号或好友 QQ 号。
+            target (`int`): 群号或好友 QQ 号。
 
-        `with_download_info: Union[bool,None] = None` 是否携带下载信息。
+            with_download_info (`Union[bool,None] = None`): 是否携带下载信息。
         """
 
     # FileMkdir
@@ -399,11 +399,11 @@ class Mirai(SimpleMirai):
         ) -> FileMkdirResponse:
             """创建文件夹。
 
-            `id: str` 父目录 id。
+                id (`str`): 父目录 id。
 
-            `target: int` 群号或好友 QQ 号。
+                target (`int`): 群号或好友 QQ 号。
 
-            `directory_name: str` 新建文件夹名。
+                directory_name (`str`): 新建文件夹名。
             """
 
     @overload
@@ -416,11 +416,11 @@ class Mirai(SimpleMirai):
     ) -> FileMkdirResponse:
         """创建文件夹。
 
-        `id: str` 父目录 id。
+            id (`str`): 父目录 id。
 
-        `target: int` 群号或好友 QQ 号。
+            target (`int`): 群号或好友 QQ 号。
 
-        `directory_name: str` 新建文件夹名。
+            directory_name (`str`): 新建文件夹名。
         """
 
     # FileMove
@@ -429,11 +429,11 @@ class Mirai(SimpleMirai):
         async def set(self, id: str, target: int, move_to: str) -> Response:
             """移动文件。
 
-            `id: str` 欲移动的文件 id。
+                id (`str`): 欲移动的文件 id。
 
-            `target: int` 群号或好友 QQ 号。
+                target (`int`): 群号或好友 QQ 号。
 
-            `move_to: str` 移动目标文件夹 id。
+                move_to (`str`): 移动目标文件夹 id。
             """
 
     @overload
@@ -444,11 +444,11 @@ class Mirai(SimpleMirai):
     async def file_move(self, id: str, target: int, move_to: str) -> Response:
         """移动文件。
 
-        `id: str` 欲移动的文件 id。
+            id (`str`): 欲移动的文件 id。
 
-        `target: int` 群号或好友 QQ 号。
+            target (`int`): 群号或好友 QQ 号。
 
-        `move_to: str` 移动目标文件夹 id。
+            move_to (`str`): 移动目标文件夹 id。
         """
 
     # FileRename
@@ -457,11 +457,11 @@ class Mirai(SimpleMirai):
         async def set(self, id: str, target: int, rename_to: str) -> Response:
             """重命名文件。
 
-            `id: str` 欲重命名的文件 id。
+                id (`str`): 欲重命名的文件 id。
 
-            `target: int` 群号或好友 QQ 号。
+                target (`int`): 群号或好友 QQ 号。
 
-            `rename_to: str` 新文件名。
+                rename_to (`str`): 新文件名。
             """
 
     @overload
@@ -474,11 +474,11 @@ class Mirai(SimpleMirai):
     ) -> Response:
         """重命名文件。
 
-        `id: str` 欲重命名的文件 id。
+            id (`str`): 欲重命名的文件 id。
 
-        `target: int` 群号或好友 QQ 号。
+            target (`int`): 群号或好友 QQ 号。
 
-        `rename_to: str` 新文件名。
+            rename_to (`str`): 新文件名。
         """
 
     # FileUpload
@@ -493,13 +493,13 @@ class Mirai(SimpleMirai):
         ) -> FileProperties:
             """文件上传。（暂时不可用）
 
-            `type: Literal['group']` 上传的文件类型。
+                type (`Literal['group']`): 上传的文件类型。
 
-            `target: int` 群号。
+                target (`int`): 群号。
 
-            `file: Union[str,Path]` 上传的文件的本地路径。
+                file (`Union[str,Path]`): 上传的文件的本地路径。
 
-            `path: str = ''` 上传目录的 id，空串为上传到根目录。
+                path (`str = ''`): 上传目录的 id，空串为上传到根目录。
             """
 
     @overload
@@ -516,13 +516,13 @@ class Mirai(SimpleMirai):
     ) -> FileProperties:
         """文件上传。（暂时不可用）
 
-        `type: Literal['group']` 上传的文件类型。
+            type (`Literal['group']`): 上传的文件类型。
 
-        `target: int` 群号。
+            target (`int`): 群号。
 
-        `file: Union[str,Path]` 上传的文件的本地路径。
+            file (`Union[str,Path]`): 上传的文件的本地路径。
 
-        `path: str = ''` 上传目录的 id，空串为上传到根目录。
+            path (`str = ''`): 上传目录的 id，空串为上传到根目录。
         """
 
     # FriendList
@@ -545,7 +545,7 @@ class Mirai(SimpleMirai):
         async def get(self, target: int) -> ProfileResponse:
             """获取好友资料。
 
-            `target: int` 好友 QQ 号。
+                target (`int`): 好友 QQ 号。
             """
 
     @overload
@@ -556,7 +556,7 @@ class Mirai(SimpleMirai):
     async def friend_profile(self, target: int) -> ProfileResponse:
         """获取好友资料。
 
-        `target: int` 好友 QQ 号。
+            target (`int`): 好友 QQ 号。
         """
 
     # GroupConfig
@@ -569,9 +569,9 @@ class Mirai(SimpleMirai):
         ) -> GroupConfigModel:
             """获取或修改群设置。
 
-            `target: int` 群号。
+                target (`int`): 群号。
 
-            `config: Union[GroupConfigModel,None] = None` 仅修改时可用。群设置。
+                config (`Union[GroupConfigModel,None] = None`): 仅修改时可用。群设置。
             """
 
         async def set(
@@ -581,9 +581,9 @@ class Mirai(SimpleMirai):
         ) -> Response:
             """获取或修改群设置。
 
-            `target: int` 群号。
+                target (`int`): 群号。
 
-            `config: Union[GroupConfigModel,None] = None` 仅修改时可用。群设置。
+                config (`Union[GroupConfigModel,None] = None`): 仅修改时可用。群设置。
             """
 
     @overload
@@ -598,9 +598,9 @@ class Mirai(SimpleMirai):
     ) -> GroupConfigModel:
         """获取或修改群设置。
 
-        `target: int` 群号。
+            target (`int`): 群号。
 
-        `config: Union[GroupConfigModel,None] = None` 仅修改时可用。群设置。
+            config (`Union[GroupConfigModel,None] = None`): 仅修改时可用。群设置。
         """
 
     # GroupList
@@ -625,11 +625,11 @@ class Mirai(SimpleMirai):
         ) -> Response:
             """移出群成员。
 
-            `target: int` 指定群的群号。
+                target (`int`): 指定群的群号。
 
-            `member_id: int` 指定群成员的 QQ 号。
+                member_id (`int`): 指定群成员的 QQ 号。
 
-            `msg: str = ''` 可选。信息。
+                msg (`str = ''`): 可选。信息。
             """
 
     @overload
@@ -642,11 +642,11 @@ class Mirai(SimpleMirai):
     ) -> Response:
         """移出群成员。
 
-        `target: int` 指定群的群号。
+            target (`int`): 指定群的群号。
 
-        `member_id: int` 指定群成员的 QQ 号。
+            member_id (`int`): 指定群成员的 QQ 号。
 
-        `msg: str = ''` 可选。信息。
+            msg (`str = ''`): 可选。信息。
         """
 
     # MemberInfo
@@ -660,11 +660,11 @@ class Mirai(SimpleMirai):
         ) -> MemberInfoModel:
             """获取或修改群成员资料。
 
-            `target: int` 群号。
+                target (`int`): 群号。
 
-            `member_id: int` 指定群成员的 QQ 号。
+                member_id (`int`): 指定群成员的 QQ 号。
 
-            `info: Union[MemberInfoModel,None] = None` 仅修改时可用。群成员资料。
+                info (`Union[MemberInfoModel,None] = None`): 仅修改时可用。群成员资料。
             """
 
         async def set(
@@ -675,11 +675,11 @@ class Mirai(SimpleMirai):
         ) -> Response:
             """获取或修改群成员资料。
 
-            `target: int` 群号。
+                target (`int`): 群号。
 
-            `member_id: int` 指定群成员的 QQ 号。
+                member_id (`int`): 指定群成员的 QQ 号。
 
-            `info: Union[MemberInfoModel,None] = None` 仅修改时可用。群成员资料。
+                info (`Union[MemberInfoModel,None] = None`): 仅修改时可用。群成员资料。
             """
 
     @overload
@@ -695,11 +695,11 @@ class Mirai(SimpleMirai):
     ) -> MemberInfoModel:
         """获取或修改群成员资料。
 
-        `target: int` 群号。
+            target (`int`): 群号。
 
-        `member_id: int` 指定群成员的 QQ 号。
+            member_id (`int`): 指定群成员的 QQ 号。
 
-        `info: Union[MemberInfoModel,None] = None` 仅修改时可用。群成员资料。
+            info (`Union[MemberInfoModel,None] = None`): 仅修改时可用。群成员资料。
         """
 
     # MemberList
@@ -708,7 +708,7 @@ class Mirai(SimpleMirai):
         async def get(self, target: int) -> MemberListResponse:
             """获取群成员列表。
 
-            `target: int` 指定群的群号。
+                target (`int`): 指定群的群号。
             """
 
     @overload
@@ -719,7 +719,7 @@ class Mirai(SimpleMirai):
     async def member_list(self, target: int) -> MemberListResponse:
         """获取群成员列表。
 
-        `target: int` 指定群的群号。
+            target (`int`): 指定群的群号。
         """
 
     # MemberProfile
@@ -728,9 +728,9 @@ class Mirai(SimpleMirai):
         async def get(self, target: int, member_id: int) -> ProfileResponse:
             """获取群成员资料。
 
-            `target: int` 指定群的群号。
+                target (`int`): 指定群的群号。
 
-            `member_id: int` 指定群成员的 QQ 号。
+                member_id (`int`): 指定群成员的 QQ 号。
             """
 
     @overload
@@ -743,9 +743,9 @@ class Mirai(SimpleMirai):
     ) -> ProfileResponse:
         """获取群成员资料。
 
-        `target: int` 指定群的群号。
+            target (`int`): 指定群的群号。
 
-        `member_id: int` 指定群成员的 QQ 号。
+            member_id (`int`): 指定群成员的 QQ 号。
         """
 
     # MessageFromId
@@ -754,7 +754,7 @@ class Mirai(SimpleMirai):
         async def get(self, id: int) -> MessageFromIdResponse:
             """通过 message_id 获取消息。
 
-            `id: int` 获取消息的 message_id。
+                id (`int`): 获取消息的 message_id。
             """
 
     @overload
@@ -765,7 +765,7 @@ class Mirai(SimpleMirai):
     async def message_from_id(self, id: int) -> MessageFromIdResponse:
         """通过 message_id 获取消息。
 
-        `id: int` 获取消息的 message_id。
+            id (`int`): 获取消息的 message_id。
         """
 
     # Mute
@@ -776,11 +776,11 @@ class Mirai(SimpleMirai):
         ) -> Response:
             """禁言群成员。
 
-            `target: int` 指定群的群号。
+                target (`int`): 指定群的群号。
 
-            `member_id: int` 指定群成员的 QQ 号。
+                member_id (`int`): 指定群成员的 QQ 号。
 
-            `time: int` 禁言时间，单位为秒，最多30天，默认为0。
+                time (`int`): 禁言时间，单位为秒，最多30天，默认为0。
             """
 
     @overload
@@ -791,11 +791,11 @@ class Mirai(SimpleMirai):
     async def mute(self, target: int, member_id: int, time: int) -> Response:
         """禁言群成员。
 
-        `target: int` 指定群的群号。
+            target (`int`): 指定群的群号。
 
-        `member_id: int` 指定群成员的 QQ 号。
+            member_id (`int`): 指定群成员的 QQ 号。
 
-        `time: int` 禁言时间，单位为秒，最多30天，默认为0。
+            time (`int`): 禁言时间，单位为秒，最多30天，默认为0。
         """
 
     # MuteAll
@@ -804,7 +804,7 @@ class Mirai(SimpleMirai):
         async def set(self, target: int) -> Response:
             """全体禁言。
 
-            `target: int` 指定群的群号。
+                target (`int`): 指定群的群号。
             """
 
     @overload
@@ -815,7 +815,7 @@ class Mirai(SimpleMirai):
     async def mute_all(self, target: int) -> Response:
         """全体禁言。
 
-        `target: int` 指定群的群号。
+            target (`int`): 指定群的群号。
         """
 
     # Quit
@@ -824,7 +824,7 @@ class Mirai(SimpleMirai):
         async def set(self, target: int) -> Response:
             """退出群聊。
 
-            `target: int` 指定群的群号。
+                target (`int`): 指定群的群号。
             """
 
     @overload
@@ -835,7 +835,7 @@ class Mirai(SimpleMirai):
     async def quit(self, target: int) -> Response:
         """退出群聊。
 
-        `target: int` 指定群的群号。
+            target (`int`): 指定群的群号。
         """
 
     # Recall
@@ -844,7 +844,7 @@ class Mirai(SimpleMirai):
         async def set(self, target: int) -> Response:
             """撤回消息。
 
-            `target: int` 需要撤回的消息的 message_id。
+                target (`int`): 需要撤回的消息的 message_id。
             """
 
     @overload
@@ -855,7 +855,7 @@ class Mirai(SimpleMirai):
     async def recall(self, target: int) -> Response:
         """撤回消息。
 
-        `target: int` 需要撤回的消息的 message_id。
+            target (`int`): 需要撤回的消息的 message_id。
         """
 
     # RespBotInvitedJoinGroupRequestEvent
@@ -867,15 +867,15 @@ class Mirai(SimpleMirai):
         ) -> MiraiBaseModel:
             """响应被邀请入群申请。
 
-            `event_id: int` 响应申请事件的标识。
+                event_id (`int`): 响应申请事件的标识。
 
-            `from_id: int` 事件对应申请人 QQ 号。
+                from_id (`int`): 事件对应申请人 QQ 号。
 
-            `group_id: int` 事件对应申请人的群号，可能为0。
+                group_id (`int`): 事件对应申请人的群号，可能为0。
 
-            `operate: Union[int,RespOperate]` 响应的操作类型。
+                operate (`Union[int,RespOperate]`): 响应的操作类型。
 
-            `message: str` 回复的信息。
+                message (`str`): 回复的信息。
             """
 
     @overload
@@ -891,15 +891,15 @@ class Mirai(SimpleMirai):
     ) -> MiraiBaseModel:
         """响应被邀请入群申请。
 
-        `event_id: int` 响应申请事件的标识。
+            event_id (`int`): 响应申请事件的标识。
 
-        `from_id: int` 事件对应申请人 QQ 号。
+            from_id (`int`): 事件对应申请人 QQ 号。
 
-        `group_id: int` 事件对应申请人的群号，可能为0。
+            group_id (`int`): 事件对应申请人的群号，可能为0。
 
-        `operate: Union[int,RespOperate]` 响应的操作类型。
+            operate (`Union[int,RespOperate]`): 响应的操作类型。
 
-        `message: str` 回复的信息。
+            message (`str`): 回复的信息。
         """
 
     # RespMemberJoinRequestEvent
@@ -911,15 +911,15 @@ class Mirai(SimpleMirai):
         ) -> MiraiBaseModel:
             """响应用户入群申请。
 
-            `event_id: int` 响应申请事件的标识。
+                event_id (`int`): 响应申请事件的标识。
 
-            `from_id: int` 事件对应申请人 QQ 号。
+                from_id (`int`): 事件对应申请人 QQ 号。
 
-            `group_id: int` 事件对应申请人的群号。
+                group_id (`int`): 事件对应申请人的群号。
 
-            `operate: Union[int,RespOperate]` 响应的操作类型。
+                operate (`Union[int,RespOperate]`): 响应的操作类型。
 
-            `message: str` 回复的信息。
+                message (`str`): 回复的信息。
             """
 
     @overload
@@ -935,15 +935,15 @@ class Mirai(SimpleMirai):
     ) -> MiraiBaseModel:
         """响应用户入群申请。
 
-        `event_id: int` 响应申请事件的标识。
+            event_id (`int`): 响应申请事件的标识。
 
-        `from_id: int` 事件对应申请人 QQ 号。
+            from_id (`int`): 事件对应申请人 QQ 号。
 
-        `group_id: int` 事件对应申请人的群号。
+            group_id (`int`): 事件对应申请人的群号。
 
-        `operate: Union[int,RespOperate]` 响应的操作类型。
+            operate (`Union[int,RespOperate]`): 响应的操作类型。
 
-        `message: str` 回复的信息。
+            message (`str`): 回复的信息。
         """
 
     # RespNewFriendRequestEvent
@@ -955,15 +955,15 @@ class Mirai(SimpleMirai):
         ) -> MiraiBaseModel:
             """响应添加好友申请。
 
-            `event_id: int` 响应申请事件的标识。
+                event_id (`int`): 响应申请事件的标识。
 
-            `from_id: int` 事件对应申请人 QQ 号。
+                from_id (`int`): 事件对应申请人 QQ 号。
 
-            `group_id: int` 事件对应申请人的群号，可能为0。
+                group_id (`int`): 事件对应申请人的群号，可能为0。
 
-            `operate: Union[int,RespOperate]` 响应的操作类型。
+                operate (`Union[int,RespOperate]`): 响应的操作类型。
 
-            `message: str` 回复的信息。
+                message (`str`): 回复的信息。
             """
 
     @overload
@@ -979,15 +979,15 @@ class Mirai(SimpleMirai):
     ) -> MiraiBaseModel:
         """响应添加好友申请。
 
-        `event_id: int` 响应申请事件的标识。
+            event_id (`int`): 响应申请事件的标识。
 
-        `from_id: int` 事件对应申请人 QQ 号。
+            from_id (`int`): 事件对应申请人 QQ 号。
 
-        `group_id: int` 事件对应申请人的群号，可能为0。
+            group_id (`int`): 事件对应申请人的群号，可能为0。
 
-        `operate: Union[int,RespOperate]` 响应的操作类型。
+            operate (`Union[int,RespOperate]`): 响应的操作类型。
 
-        `message: str` 回复的信息。
+            message (`str`): 回复的信息。
         """
 
     # SendFriendMessage
@@ -1002,11 +1002,11 @@ class Mirai(SimpleMirai):
         ) -> MessageResponse:
             """发送好友消息。
 
-            `target: int` 发送消息目标好友的 QQ 号。
+                target (`int`): 发送消息目标好友的 QQ 号。
 
-            `message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],str]` 消息链。
+                message_chain (`Union[MessageChain,Iterable[Union[MessageComponent,str]],str]`): 消息链。
 
-            `quote: Union[int,None] = None` 可选。引用一条消息的 message_id 进行回复。
+                quote (`Union[int,None] = None`): 可选。引用一条消息的 message_id 进行回复。
             """
 
     @overload
@@ -1023,11 +1023,11 @@ class Mirai(SimpleMirai):
     ) -> MessageResponse:
         """发送好友消息。
 
-        `target: int` 发送消息目标好友的 QQ 号。
+            target (`int`): 发送消息目标好友的 QQ 号。
 
-        `message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],str]` 消息链。
+            message_chain (`Union[MessageChain,Iterable[Union[MessageComponent,str]],str]`): 消息链。
 
-        `quote: Union[int,None] = None` 可选。引用一条消息的 message_id 进行回复。
+            quote (`Union[int,None] = None`): 可选。引用一条消息的 message_id 进行回复。
         """
 
     # SendGroupMessage
@@ -1042,11 +1042,11 @@ class Mirai(SimpleMirai):
         ) -> MessageResponse:
             """发送群消息。
 
-            `target: int` 发送消息目标群的群号。
+                target (`int`): 发送消息目标群的群号。
 
-            `message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],str]` 消息链。
+                message_chain (`Union[MessageChain,Iterable[Union[MessageComponent,str]],str]`): 消息链。
 
-            `quote: Union[int,None] = None` 可选。引用一条消息的 message_id 进行回复。
+                quote (`Union[int,None] = None`): 可选。引用一条消息的 message_id 进行回复。
             """
 
     @overload
@@ -1063,11 +1063,11 @@ class Mirai(SimpleMirai):
     ) -> MessageResponse:
         """发送群消息。
 
-        `target: int` 发送消息目标群的群号。
+            target (`int`): 发送消息目标群的群号。
 
-        `message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],str]` 消息链。
+            message_chain (`Union[MessageChain,Iterable[Union[MessageComponent,str]],str]`): 消息链。
 
-        `quote: Union[int,None] = None` 可选。引用一条消息的 message_id 进行回复。
+            quote (`Union[int,None] = None`): 可选。引用一条消息的 message_id 进行回复。
         """
 
     # SendNudge
@@ -1079,11 +1079,11 @@ class Mirai(SimpleMirai):
         ) -> Response:
             """发送头像戳一戳消息。
 
-            `target: int` 戳一戳的目标 QQ 号，可以为 bot QQ 号。
+                target (`int`): 戳一戳的目标 QQ 号，可以为 bot QQ 号。
 
-            `subject: int` 戳一戳接受主体（上下文），戳一戳信息会发送至该主体，为群号或好友 QQ 号。
+                subject (`int`): 戳一戳接受主体（上下文），戳一戳信息会发送至该主体，为群号或好友 QQ 号。
 
-            `kind: Literal['Friend','Group','Stranger']` 上下文类型，可选值 `Friend`, `Group`, `Stranger`。
+                kind (`Literal['Friend','Group','Stranger']` 上下文类型，可选值 `Friend`, `Group`, `Stranger`):。
             """
 
     @overload
@@ -1097,11 +1097,11 @@ class Mirai(SimpleMirai):
     ) -> Response:
         """发送头像戳一戳消息。
 
-        `target: int` 戳一戳的目标 QQ 号，可以为 bot QQ 号。
+            target (`int`): 戳一戳的目标 QQ 号，可以为 bot QQ 号。
 
-        `subject: int` 戳一戳接受主体（上下文），戳一戳信息会发送至该主体，为群号或好友 QQ 号。
+            subject (`int`): 戳一戳接受主体（上下文），戳一戳信息会发送至该主体，为群号或好友 QQ 号。
 
-        `kind: Literal['Friend','Group','Stranger']` 上下文类型，可选值 `Friend`, `Group`, `Stranger`。
+            kind (`Literal['Friend','Group','Stranger']` 上下文类型，可选值 `Friend`, `Group`, `Stranger`):。
         """
 
     # SendTempMessage
@@ -1117,13 +1117,13 @@ class Mirai(SimpleMirai):
         ) -> MessageResponse:
             """发送临时消息。
 
-            `qq: int` 临时会话对象 QQ 号。
+                qq (`int`): 临时会话对象 QQ 号。
 
-            `group: int` 临时会话对象群号。
+                group (`int`): 临时会话对象群号。
 
-            `message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],str]` 消息链。
+                message_chain (`Union[MessageChain,Iterable[Union[MessageComponent,str]],str]`): 消息链。
 
-            `quote: Union[int,None] = None` 可选。引用一条消息的 message_id 进行回复。
+                quote (`Union[int,None] = None`): 可选。引用一条消息的 message_id 进行回复。
             """
 
     @overload
@@ -1141,13 +1141,13 @@ class Mirai(SimpleMirai):
     ) -> MessageResponse:
         """发送临时消息。
 
-        `qq: int` 临时会话对象 QQ 号。
+            qq (`int`): 临时会话对象 QQ 号。
 
-        `group: int` 临时会话对象群号。
+            group (`int`): 临时会话对象群号。
 
-        `message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],str]` 消息链。
+            message_chain (`Union[MessageChain,Iterable[Union[MessageComponent,str]],str]`): 消息链。
 
-        `quote: Union[int,None] = None` 可选。引用一条消息的 message_id 进行回复。
+            quote (`Union[int,None] = None`): 可选。引用一条消息的 message_id 进行回复。
         """
 
     # SessionInfo
@@ -1170,7 +1170,7 @@ class Mirai(SimpleMirai):
         async def set(self, target: int) -> Response:
             """设置群精华消息。
 
-            `target: int` 精华消息的 message_id。
+                target (`int`): 精华消息的 message_id。
             """
 
     @overload
@@ -1181,7 +1181,7 @@ class Mirai(SimpleMirai):
     async def set_essence(self, target: int) -> Response:
         """设置群精华消息。
 
-        `target: int` 精华消息的 message_id。
+            target (`int`): 精华消息的 message_id。
         """
 
     # Unmute
@@ -1190,9 +1190,9 @@ class Mirai(SimpleMirai):
         async def set(self, target: int, member_id: int) -> Response:
             """解除群成员禁言。
 
-            `target: int` 指定群的群号。
+                target (`int`): 指定群的群号。
 
-            `member_id: int` 指定群成员的 QQ 号。
+                member_id (`int`): 指定群成员的 QQ 号。
             """
 
     @overload
@@ -1203,9 +1203,9 @@ class Mirai(SimpleMirai):
     async def unmute(self, target: int, member_id: int) -> Response:
         """解除群成员禁言。
 
-        `target: int` 指定群的群号。
+            target (`int`): 指定群的群号。
 
-        `member_id: int` 指定群成员的 QQ 号。
+            member_id (`int`): 指定群成员的 QQ 号。
         """
 
     # UnmuteAll
@@ -1214,7 +1214,7 @@ class Mirai(SimpleMirai):
         async def set(self, target: int) -> Response:
             """解除全体禁言。
 
-            `target: int` 指定群的群号。
+                target (`int`): 指定群的群号。
             """
 
     @overload
@@ -1225,7 +1225,7 @@ class Mirai(SimpleMirai):
     async def unmute_all(self, target: int) -> Response:
         """解除全体禁言。
 
-        `target: int` 指定群的群号。
+            target (`int`): 指定群的群号。
         """
 
     # UploadImage
@@ -1237,9 +1237,9 @@ class Mirai(SimpleMirai):
         ) -> Image:
             """图片文件上传。
 
-            `type: Literal['friend','group','temp']` 上传的图片类型。
+                type (`Literal['friend','group','temp']`): 上传的图片类型。
 
-            `img: Union[str,Path]` 上传的图片的本地路径。
+                img (`Union[str,Path]`): 上传的图片的本地路径。
             """
 
     @overload
@@ -1252,9 +1252,9 @@ class Mirai(SimpleMirai):
     ) -> Image:
         """图片文件上传。
 
-        `type: Literal['friend','group','temp']` 上传的图片类型。
+            type (`Literal['friend','group','temp']`): 上传的图片类型。
 
-        `img: Union[str,Path]` 上传的图片的本地路径。
+            img (`Union[str,Path]`): 上传的图片的本地路径。
         """
 
     # UploadVoice
@@ -1265,9 +1265,9 @@ class Mirai(SimpleMirai):
         ) -> Voice:
             """语音文件上传。
 
-            `type: Literal['group']` 上传的语音类型。
+                type (`Literal['group']`): 上传的语音类型。
 
-            `voice: Union[str,Path]` 上传的语音的本地路径。
+                voice (`Union[str,Path]`): 上传的语音的本地路径。
             """
 
     @overload
@@ -1280,7 +1280,7 @@ class Mirai(SimpleMirai):
     ) -> Voice:
         """语音文件上传。
 
-        `type: Literal['group']` 上传的语音类型。
+            type (`Literal['group']`): 上传的语音类型。
 
-        `voice: Union[str,Path]` 上传的语音的本地路径。
+            voice (`Union[str,Path]`): 上传的语音的本地路径。
         """

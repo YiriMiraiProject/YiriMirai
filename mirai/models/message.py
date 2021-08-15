@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 def serialize(s: str) -> str:
     """mirai 码转义。
 
-    `s: str` 待转义的字符串。
+        s (`str`): 待转义的字符串。
     """
     return re.sub(r'[\[\]:,\\]', lambda match: '\\' + match.group(0),
                   s).replace('\n', '\\n').replace('\r', '\\r')
@@ -38,7 +38,7 @@ def serialize(s: str) -> str:
 def deserialize(s: str) -> str:
     """mirai 码去转义。
 
-    `s: str` 待去转义的字符串。
+        s (`str`): 待去转义的字符串。
     """
     return re.sub(
         r'\\([\[\]:,\\])', lambda match: match.group(1),
@@ -123,7 +123,7 @@ class MessageChain(MiraiBaseModel):
     ])
     ```
 
-    `Plain` 可以省略。
+        Plain: 可以省略。
     ```py
     message_chain = MessageChain([
         AtAll(),
@@ -243,7 +243,7 @@ class MessageChain(MiraiBaseModel):
     def parse_obj(cls, msg_chain: list):
         """通过列表形式的消息链，构造对应的 `MessageChain` 对象。
 
-        `msg_chain: list` 列表形式的消息链。
+            msg_chain (`list`): 列表形式的消息链。
         """
         result = cls._parse_message_chain(msg_chain)
         return cls(__root__=result)
@@ -333,6 +333,12 @@ class MessageChain(MiraiBaseModel):
         """获取消息链的 message_id。"""
         source = self.source
         return source.id if source else -1
+
+
+TMessage = Union[MessageChain, Iterable[Union[MessageComponent, MessagePart,
+                                              str]], MessageComponent,
+                 MessagePart, str]
+"""可以转化为 MessageChain 的类型。"""
 
 
 class Source(MessageComponent):
@@ -433,7 +439,7 @@ class Image(MessageComponent):
     """图片的 image_id，群图片与好友图片格式不同。不为空时将忽略 url 属性。"""
     url: Optional[HttpUrl] = None
     """图片的 URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载。"""
-    path: Optional[Union[str, Path]] = None
+    path: Union[str, Path, None] = None
     """图片的路径，发送本地图片。"""
     base64: Optional[str] = None
     """图片的 Base64 编码。"""
@@ -446,7 +452,7 @@ class Image(MessageComponent):
         return f"[mirai:image:{self.image_id}]"
 
     @validator('path')
-    def validate_path(cls, path: Optional[Union[str, Path]]):
+    def validate_path(cls, path: Union[str, Path, None]):
         """修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。"""
         if path:
             try:
@@ -481,17 +487,17 @@ class Image(MessageComponent):
 
     async def download(
         self,
-        filename: Optional[Union[str, Path]] = None,
-        directory: Optional[Union[str, Path]] = None,
+        filename: Union[str, Path, None] = None,
+        directory: Union[str, Path, None] = None,
         determine_type: bool = True
     ):
         """下载图片到本地。
 
-        `filename: Optional[Union[str, Path]] = None` 下载到本地的文件路径。与 `directory` 二选一。
+            filename (`Union[str, Path, None] = None` 下载到本地的文件路径。与 `directory`): 二选一。
 
-        `directory: Optional[Union[str, Path]] = None` 下载到本地的文件夹路径。与 `filename` 二选一。
+            directory (`Union[str, Path, None] = None` 下载到本地的文件夹路径。与 `filename`): 二选一。
 
-        `determine_type: bool = True` 是否自动根据图片类型确定拓展名。
+            determine_type (`bool = True`): 是否自动根据图片类型确定拓展名。
         """
         if not self.url:
             logger.warning(f'图片 `{self.uuid}` 无 url 参数，下载失败。')
@@ -524,14 +530,14 @@ class Image(MessageComponent):
     @classmethod
     async def from_local(
         cls,
-        filename: Optional[Union[str, Path]] = None,
+        filename: Union[str, Path, None] = None,
         content: Optional[bytes] = None,
     ):
         """从本地文件路径加载图片，以 base64 的形式传递。
 
-        `filename: Optional[Union[str, Path]] = None` 从本地文件路径加载图片，与 `content` 二选一。
+            filename (`Union[str, Path, None] = None` 从本地文件路径加载图片，与 `content`): 二选一。
 
-        `content: Optional[bytes] = None` 从本地文件内容加载图片，与 `filename` 二选一。
+            content (`Optional[bytes] = None` 从本地文件内容加载图片，与 `filename`): 二选一。
         """
         if content:
             pass
@@ -548,7 +554,7 @@ class Image(MessageComponent):
     def from_unsafe_path(cls, path: Union[str, Path]):
         """从不安全的路径加载图片。
 
-        `path: Union[str, Path]` 从不安全的路径加载图片。
+            path (`Union[str, Path]`): 从不安全的路径加载图片。
         """
         return cls.construct(path=str(path))
 
@@ -744,14 +750,14 @@ class Voice(MessageComponent):
     @classmethod
     async def from_local(
         cls,
-        filename: Optional[Union[str, Path]] = None,
+        filename: Union[str, Path, None] = None,
         content: Optional[bytes] = None,
     ) -> "Voice":
         """从本地文件路径加载语音，以 base64 的形式传递。
 
-        `filename: Optional[Union[str, Path]] = None` 从本地文件路径加载图片，与 `content` 二选一。
+            filename (`Union[str, Path, None] = None` 从本地文件路径加载图片，与 `content`): 二选一。
 
-        `content: Optional[bytes] = None` 从本地文件内容加载图片，与 `filename` 二选一。
+            content (`Optional[bytes] = None` 从本地文件内容加载图片，与 `filename`): 二选一。
         """
         if content:
             pass
@@ -898,4 +904,5 @@ __all__ = [
     'Xml',
     'serialize',
     'deserialize',
+    'TMessage',
 ]

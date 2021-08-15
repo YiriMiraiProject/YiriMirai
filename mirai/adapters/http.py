@@ -53,15 +53,15 @@ class HTTPAdapter(Adapter):
         single_mode: bool = False
     ):
         """
-        `verify_key: str` mirai-api-http 配置的认证 key，关闭认证时为 None。
+            verify_key (`str`): mirai-api-http 配置的认证 key，关闭认证时为 None。
 
-        `host: str` HTTP Server 的地址。
+            host (`str`): HTTP Server 的地址。
 
-        `port: int` HTTP Server 的端口。
+            port (`int`): HTTP Server 的端口。
 
-        `poll_interval: float = 1.` 轮询时间间隔，单位秒。
+            poll_interval (`float = 1.`): 轮询时间间隔，单位秒。
 
-        `single_mode: bool = False` 是否为单例模式。
+            single_mode (`bool = False`): 是否为单例模式。
         """
         super().__init__(verify_key=verify_key, single_mode=single_mode)
 
