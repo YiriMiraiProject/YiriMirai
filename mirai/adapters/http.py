@@ -34,8 +34,7 @@ _error_handler_async_local = error_handler_async(
 
 
 class HTTPAdapter(Adapter):
-    """HTTP 轮询适配器。使用 HTTP 轮询的方式与 mirai-api-http 沟通。
-    """
+    """HTTP 轮询适配器。使用 HTTP 轮询的方式与 mirai-api-http 沟通。"""
     host_name: str
     """mirai-api-http 的 HTTPAdapter Server 主机名。"""
     poll_interval: float
@@ -53,15 +52,12 @@ class HTTPAdapter(Adapter):
         single_mode: bool = False
     ):
         """
-            verify_key (`str`): mirai-api-http 配置的认证 key，关闭认证时为 None。
-
+        Args:
+            verify_key (`Optional[str]`): mirai-api-http 配置的认证 key，关闭认证时为 None。
             host (`str`): HTTP Server 的地址。
-
             port (`int`): HTTP Server 的端口。
-
-            poll_interval (`float = 1.`): 轮询时间间隔，单位秒。
-
-            single_mode (`bool = False`): 是否为单例模式。
+            poll_interval (`float`): 轮询时间间隔，单位秒。
+            single_mode (`bool`): 是否为单例模式。
         """
         super().__init__(verify_key=verify_key, single_mode=single_mode)
 

@@ -80,7 +80,9 @@ class Adapter(ApiProvider, AdapterInterface):
     """背景事件循环任务。"""
     def __init__(self, verify_key: Optional[str], single_mode: bool = False):
         """
-            verify_key (`str`): mirai-api-http 配置的认证 key，关闭认证时为 None。
+        Args:
+            verify_key (`Optional[str]`): mirai-api-http 配置的认证 key，关闭认证时为 None。
+            single_mode (`bool`): 是否开启 single_mode，开启后与 session 将无效。
         """
         self.verify_key = verify_key
         self.single_mode = single_mode
@@ -98,7 +100,14 @@ class Adapter(ApiProvider, AdapterInterface):
 
     @classmethod
     def via(cls, adapter_interface: AdapterInterface) -> "Adapter":
-        """从适配器接口创建适配器。"""
+        """从适配器接口创建适配器。
+
+        Args:
+            adapter_interface (`AdapterInterface`): 适配器接口。
+
+        Returns:
+            `Adapter`: 创建的适配器。
+        """
         info = adapter_interface.adapter_info
         adapter = cls(
             verify_key=info['verify_key'],
@@ -113,14 +122,16 @@ class Adapter(ApiProvider, AdapterInterface):
     def register_event_bus(self, *buses: AbstractEventBus):
         """注册事件总线。
 
-        `*buses: AbstractEventBus` 一个或多个事件总线。
+        Args:
+            *buses (`AbstractEventBus`): 一个或多个事件总线。
         """
         self.buses |= set(buses)
 
     def unregister_event_bus(self, *buses: AbstractEventBus):
         """解除注册事件总线。
 
-        `*buses: AbstractEventBus` 一个或多个事件总线。
+        Args:
+            *buses (`AbstractEventBus`): 一个或多个事件总线。
         """
         self.buses -= set(buses)
 
@@ -136,11 +147,10 @@ class Adapter(ApiProvider, AdapterInterface):
     async def call_api(self, api: str, method: Method = Method.GET, **params):
         """调用 API。
 
-            api: API 名称，需与 mirai-api-http 中的定义一致。
-
-            method: 调用方法。默认为 GET。
-
-            params: 参数。
+        Args:
+            api (`str`): API 名称，需与 mirai-api-http 中的定义一致。
+            method (`Method`): 调用方法。默认为 GET。
+            **params: 参数。
         """
 
     @abc.abstractmethod
@@ -162,6 +172,11 @@ class Adapter(ApiProvider, AdapterInterface):
             await Tasks.cancel(self.background)
 
     async def emit(self, event: str, *args, **kwargs):
-        """向事件总线发送一个事件。"""
+        """向事件总线发送一个事件。
+
+        Args:
+            event (`str`): 事件名称。
+            *args, **kwargs: 事件参数。
+        """
         coros = [bus.emit(event, *args, **kwargs) for bus in self.buses]
         await asyncio.gather(*coros)

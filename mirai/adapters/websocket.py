@@ -32,8 +32,7 @@ _error_handler_async_local = error_handler_async(
 
 
 class WebSocketAdapter(Adapter):
-    """WebSocket 适配器。作为 WebSocket 客户端与 mirai-api-http 沟通。
-    """
+    """WebSocket 适配器。作为 WebSocket 客户端与 mirai-api-http 沟通。"""
     host_name: str
     """WebSocket Server 的地址。"""
     sync_id: str
@@ -54,17 +53,13 @@ class WebSocketAdapter(Adapter):
         heartbeat_interval: float = 60.,
     ):
         """
+        Args:
             verify_key (`str`): mirai-api-http 配置的认证 key，关闭认证时为 None。
-
             host (`str`): WebSocket Server 的地址。
-
             port (`int`): WebSocket Server 的端口。
-
             sync_id (`int`): mirai-api-http 配置的同步 ID。
-
-            single_mode (`bool = False`): 是否启用单例模式。
-
-            heartbeat_interval (`float = 60.`): 每隔多久发送心跳包，单位：秒。
+            single_mode (`bool`): 是否启用单例模式。
+            heartbeat_interval (`float`): 每隔多久发送心跳包，单位秒。
         """
         super().__init__(verify_key=verify_key, single_mode=single_mode)
 

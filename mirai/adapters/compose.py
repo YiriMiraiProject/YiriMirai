@@ -8,16 +8,15 @@ from mirai.api_provider import Method
 
 
 class ComposeAdapter(Adapter):
-    """组合适配器。使用一个适配器提供 API 调用，另一个适配器提供事件处理。
-    """
+    """组合适配器。使用一个适配器提供 API 调用，另一个适配器提供事件处理。"""
     api_channel: Adapter
     """提供 API 调用的适配器。"""
     event_channel: Adapter
     """提供事件处理的适配器。"""
     def __init__(self, api_channel: Adapter, event_channel: Adapter):
         """
+        Args:
             api_channel (`Adapter`): 提供 API 调用的适配器。
-
             event_channel (`Adapter`): 提供事件处理的适配器。
         """
         super().__init__(
