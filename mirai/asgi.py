@@ -37,10 +37,9 @@ class ASGI(Singleton):
             result = await endpoint(request)
             if result:
                 return result
-        else:
-            return RedirectResponse(
-                'https://yiri-mirai.vercel.app', status_code=301
-            )
+        return RedirectResponse(
+            'https://yiri-mirai.vercel.app', status_code=301
+        )
 
     def add_route(
         self,

@@ -11,10 +11,7 @@ from mirai import exceptions
 
 async def async_(obj):
     """将一个对象包装为 `Awaitable`。"""
-    if inspect.isawaitable(obj):
-        return await obj
-    else:
-        return obj
+    return (await obj) if inspect.isawaitable(obj) else obj
 
 
 async def async_with_exception(obj):
@@ -53,9 +50,9 @@ class PriorityDict(Generic[T]):
         priority = self._priorities.get(value)
         if priority is None:
             raise KeyError(value)
-        else:
-            self._data[priority].remove(value)
-            del self._priorities[value]
+
+        self._data[priority].remove(value)
+        del self._priorities[value]
 
     def __iter__(self):
         if self._data:
@@ -90,10 +87,10 @@ def KMP(string, pattern, count: int = 1) -> List[int]:
     # 开始匹配。
     matches = []
     j = 0
-    for i in range(0, len(string)):
-        while j > 0 and pattern[j] != string[i]:
+    for i, current in enumerate(string):
+        while j > 0 and pattern[j] != current:
             j = next_array[j - 1]
-        if pattern[j] == string[i]:
+        if pattern[j] == current:
             j += 1
         if j == len(pattern):
             matches.append(i - j + 1)
@@ -136,7 +133,6 @@ class Singleton(metaclass=SingletonMetaclass):
             _instance.__init__(*args, **kwargs)
             cls._instance = _instance
             return _instance
-        elif cls._args == (args, kwargs):
+        if cls._args == (args, kwargs):
             return cls._instance
-        else:
-            raise RuntimeError(f"只能创建 {cls.__name__} 的一个实例！")
+        raise RuntimeError(f"只能创建 {cls.__name__} 的一个实例！")
