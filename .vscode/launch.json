@@ -19,8 +19,7 @@
             "console": "integratedTerminal",
             "env": {
                 "PYTHONDEVMODE": "1",
-                "PYTHONWARNINGS": "always",
-                "PYTHONPROFILEIMPORTTIME": "1"
+                "PYTHONWARNINGS": "always"
             }
         }
     ]
