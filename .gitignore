@@ -132,7 +132,7 @@ dmypy.json
 /.vscode
 
 # test cases
-/test.py
+/*.py
 
 # doc
 /node_modules

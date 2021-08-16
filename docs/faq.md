@@ -61,6 +61,10 @@ pip install uvicorn
 pip install hypercorn
 ```
 
+## AttributeError: 'coroutine' object has no attribute XXX
+
+你忘了 `await`。**所有**的 API 调用都需要 `await`，就像这样： `await bot.xxx()`。
+
 ## 提问的艺术
 
 :::warning
