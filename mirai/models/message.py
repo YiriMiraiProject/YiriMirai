@@ -2,18 +2,15 @@
 """
 此模块提供消息链相关。
 """
-import abc
 import logging
 import re
 from datetime import datetime
 from enum import Enum
-from json import loads as json_loads
 from pathlib import Path
 from typing import (
     Iterable, List, Optional, Tuple, Type, TypeVar, Union, overload
 )
 
-import httpx
 from pydantic import HttpUrl, validator
 
 from mirai.models.base import (
@@ -500,6 +497,7 @@ class Image(MessageComponent):
             logger.warning(f'图片 `{self.uuid}` 无 url 参数，下载失败。')
             return
 
+        import httpx
         async with httpx.AsyncClient() as client:
             response = await client.get(self.url)
             response.raise_for_status()
@@ -591,6 +589,7 @@ class App(MessageComponent):
     content: str
     """内容。"""
     def as_json(self):
+        from json import loads as json_loads
         return json_loads(self.content)
 
     def __str__(self):
@@ -743,6 +742,7 @@ class Voice(MessageComponent):
             logger.warning(f'语音 `{self.voice_id}` 无 url 参数，下载失败。')
             return
 
+        import httpx
         async with httpx.AsyncClient() as client:
             response = await client.get(self.url)
             response.raise_for_status()

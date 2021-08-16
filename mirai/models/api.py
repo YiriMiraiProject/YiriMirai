@@ -11,8 +11,6 @@ from typing import (
     Union, cast
 )
 
-import aiofiles
-
 if TYPE_CHECKING:
     from typing import Literal
 else:
@@ -727,6 +725,7 @@ class FileUpload(ApiPost, CustomApiModel):
     path: str = ''
     """上传目录的 id，空串为上传到根目录。"""
     async def call(self, api_provider: ApiProvider):
+        import aiofiles
         async with aiofiles.open(self.file, 'rb') as f:
             file = await f.read()
         return await api_provider.call_api(
@@ -753,6 +752,7 @@ class UploadImage(ApiPost, CustomApiModel):
     img: Union[str, Path]
     """上传的图片的本地路径。"""
     async def call(self, api_provider: ApiProvider):
+        import aiofiles
         async with aiofiles.open(self.img, 'rb') as f:
             img = await f.read()
         return await api_provider.call_api(
@@ -775,6 +775,7 @@ class UploadVoice(ApiPost, CustomApiModel):
     voice: Union[str, Path]
     """上传的语音的本地路径。"""
     async def call(self, api_provider: ApiProvider):
+        import aiofiles
         async with aiofiles.open(self.voice, 'rb') as f:
             voice = await f.read()
         return await api_provider.call_api(

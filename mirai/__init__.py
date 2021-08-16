@@ -9,10 +9,14 @@ __version__ = '0.2.3'
 __author__ = '忘忧北萱草'
 
 import logging
+from typing import TYPE_CHECKING
 
-from mirai.adapters import (
-    Adapter, ComposeAdapter, HTTPAdapter, WebHookAdapter, WebSocketAdapter
-)
+if TYPE_CHECKING:
+    from mirai.adapters import (
+        Adapter, ComposeAdapter, HTTPAdapter, WebHookAdapter, WebSocketAdapter
+    )
+else:
+    from mirai.adapters import Adapter
 from mirai.api_provider import Method
 from mirai.bot import (
     LifeSpan, Mirai, MiraiRunner, Shutdown, SimpleMirai, Startup
@@ -61,3 +65,33 @@ def get_logger() -> logging.Logger:
         `logging.Logger`: 模块 Logger。
     """
     return logger
+
+
+def __getattr__(name):
+    """支持直接从 mirai 命名空间导入 mirai_extensions 拓展模块。
+
+    可以使用这样的语法：
+    ```python
+    import mirai
+    Trigger = mirai.trigger.Trigger
+    # 或者
+    from mirai import trigger
+    Trigger = trigger.Trigger
+    ```
+
+    以下语法是不允许的（这是 Python 解释器的限制）：
+    ```python
+    import mirai.trigger
+    # 或者
+    from mirai.trigger import Trigger
+    ```
+    """
+    import importlib
+    if name in (
+        'HTTPAdapter', 'WebSocketAdapter', 'WebHookAdapter', 'ComposeAdapter'
+    ):
+        import mirai.adapters
+        return getattr(mirai.adapters, name)
+    else:
+        name = 'mirai_extensions.' + name
+        return importlib.import_module(name, __name__)

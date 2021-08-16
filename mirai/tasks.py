@@ -49,5 +49,5 @@ class Tasks:
 
     async def cancel_all(self):
         """取消所有任务。此方法会等待到所有任务取消成功。"""
-        for task in self._tasks:
+        for task in list(self._tasks):
             await self.cancel(task)
