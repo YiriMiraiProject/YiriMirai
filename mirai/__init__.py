@@ -87,11 +87,12 @@ def __getattr__(name):
     ```
     """
     import importlib
+
     if name in (
         'HTTPAdapter', 'WebSocketAdapter', 'WebHookAdapter', 'ComposeAdapter'
     ):
         import mirai.adapters
         return getattr(mirai.adapters, name)
-    else:
-        name = 'mirai_extensions.' + name
-        return importlib.import_module(name, __name__)
+
+    name = 'mirai_extensions.' + name
+    return importlib.import_module(name, __name__)

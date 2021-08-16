@@ -279,12 +279,12 @@ class MessageChain(MiraiBaseModel):
         # 索引对象为 MessageComponent 类，返回所有对应 component
         if isinstance(index, type):
             return [
-                component for component in self if type(component) == index
+                component for component in self if isinstance(component, index)
             ]
         # 索引对象为 MessageComponent 和 int 构成的 tuple， 返回指定数量的 component
         if isinstance(index, tuple):
             components = (
-                component for component in self if type(component) == index[0]
+                component for component in self if isinstance(component, index[0])
             )
             return [
                 component for component, _ in zip(components, range(index[1]))

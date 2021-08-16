@@ -273,8 +273,7 @@ class ApiModel(ApiBaseModel):
                 raise TypeError(
                     f'在 `{self.Info.alias}` 中，具名参数 `{name}` 与位置参数重复。'
                 )
-            else:
-                kwargs[name] = value
+            kwargs[name] = value
 
         super().__init__(**kwargs)
 
@@ -976,8 +975,7 @@ class RespNewFriendRequestEvent(ApiPost):
             if v == RespOperate.DECLINE & RespOperate.BAN:
                 return 2
             raise ValueError(f'无效操作{v}。')
-        else:
-            return v
+        return v
 
     class Info(ApiPost.Info):
         name = "resp/newFriendRequestEvent"
@@ -1011,8 +1009,7 @@ class RespMemberJoinRequestEvent(ApiPost):
             if v == RespOperate.IGNORE & RespOperate.BAN:
                 return 4
             raise ValueError(f'无效操作{v}。')
-        else:
-            return v
+        return v
 
     class Info(ApiPost.Info):
         name = "resp/memberJoinRequestEvent"
@@ -1040,8 +1037,7 @@ class RespBotInvitedJoinGroupRequestEvent(ApiPost):
             if v == RespOperate.DECLINE:
                 return 1
             raise ValueError(f'无效操作{v}。')
-        else:
-            return v
+        return v
 
     class Info(ApiPost.Info):
         name = "resp/botInvitedJoinGroupRequestEvent"
