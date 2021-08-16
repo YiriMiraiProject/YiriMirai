@@ -227,14 +227,13 @@ class HTTPAdapter(Adapter):
         ) as client:
             if method == Method.GET or method == Method.RESTGET:
                 return await self._get(client, f'/{api}', params)
-            elif method == Method.POST or method == Method.RESTPOST:
+            if method == Method.POST or method == Method.RESTPOST:
                 return await self._post(client, f'/{api}', params)
-            elif method == Method.MULTIPART:
+            if method == Method.MULTIPART:
                 return await self._post_multipart(
                     client, f'/{api}', params['data'], params['files']
                 )
-            else:
-                return None
+            return None
 
     async def _background(self):
         """开始轮询。"""

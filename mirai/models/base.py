@@ -105,5 +105,4 @@ class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):
         if cls in MiraiIndexedModel.__subclasses__():
             ModelType = cls.get_subtype(obj['type'])
             return ModelType.parse_obj(obj)
-        else:
-            return super().parse_obj(obj)
+        return super().parse_obj(obj)

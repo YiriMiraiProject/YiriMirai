@@ -3,9 +3,9 @@ name: pdoc
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
   workflow_dispatch:
 
 jobs:
@@ -19,8 +19,8 @@ jobs:
 
       - uses: actions/setup-python@v2
         with:
-          python-version: '3.7.10'
-          
+          python-version: "3.7.10"
+
       - name: poetry install
         run: |
           pip install poetry
@@ -31,18 +31,18 @@ jobs:
         run: |
           pdoc --version
           pdoc --html -o ./docs mirai
-        
+
       - name: prepare vercel project
         run: |
           mv ./docs/mirai ./docs/yiri-mirai-api
-          
+
       - uses: actions/setup-node@v1
         with:
-         node-version: '14.x'
-      
+          node-version: "14.x"
+
       - name: install vercel cli
         run: npm i vercel
-          
+
       - name: deploy
         run: |
           vercel link "$PWD/docs/yiri-mirai-api" --confirm --token=${{ secrets.VERCEL_TOKEN }}

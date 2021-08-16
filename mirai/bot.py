@@ -362,29 +362,29 @@ class Mirai(SimpleMirai):
                     quote=quoting
                 )
             ).message_id
+
+        if isinstance(target, MessageEvent):
+            quoting = target.message_chain.message_id if quote else None
+            target = target.sender
         else:
-            if isinstance(target, MessageEvent):
-                quoting = target.message_chain.message_id if quote else None
-                target = target.sender
-            else:
-                quoting = None
+            quoting = None
 
-            if isinstance(target, Friend):
-                send_message = self.send_friend_message
-                id_ = target.id
-            elif isinstance(target, Group):
-                send_message = self.send_group_message
-                id_ = target.id
-            elif isinstance(target, GroupMember):
-                send_message = self.send_group_message
-                id_ = target.group.id
-            else:
-                raise ValueError(f"{target} 不是有效的消息发送对象。")
+        if isinstance(target, Friend):
+            send_message = self.send_friend_message
+            id_ = target.id
+        elif isinstance(target, Group):
+            send_message = self.send_group_message
+            id_ = target.id
+        elif isinstance(target, GroupMember):
+            send_message = self.send_group_message
+            id_ = target.group.id
+        else:
+            raise ValueError(f"{target} 不是有效的消息发送对象。")
 
-            return (
-                await
-                send_message(target=id_, message_chain=message, quote=quoting)
-            ).message_id
+        return (
+            await
+            send_message(target=id_, message_chain=message, quote=quoting)
+        ).message_id
 
     async def get_friend(self, id_: int) -> Optional[Friend]:
         """获取好友对象。
@@ -456,10 +456,9 @@ class Mirai(SimpleMirai):
         """
         if subject.kind == 'Friend':
             return await self.get_friend(subject.id)
-        elif subject.kind == 'Group':
+        if subject.kind == 'Group':
             return await self.get_group(subject.id)
-        else:
-            return None
+        return None
 
     async def is_admin(self, group: Group) -> bool:
         """判断机器人在群组中是否是管理员。

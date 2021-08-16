@@ -560,8 +560,7 @@ class SendMessage(ApiBaseModel):
     def _validate_message_chain(cls, value: Union[MessageChain, list]):
         if isinstance(value, list):
             return MessageChain.parse_obj(value)
-        elif isinstance(value, MessageChain):
-            return value
+        return value
 
 
 class SendFriendMessage(ApiPost, SendMessage):
@@ -972,12 +971,11 @@ class RespNewFriendRequestEvent(ApiPost):
         if isinstance(v, RespOperate):
             if v == RespOperate.ALLOW:
                 return 0
-            elif v == RespOperate.DECLINE:
+            if v == RespOperate.DECLINE:
                 return 1
-            elif v == RespOperate.DECLINE & RespOperate.BAN:
+            if v == RespOperate.DECLINE & RespOperate.BAN:
                 return 2
-            else:
-                raise ValueError(f'无效操作{v}。')
+            raise ValueError(f'无效操作{v}。')
         else:
             return v
 
@@ -1004,16 +1002,15 @@ class RespMemberJoinRequestEvent(ApiPost):
         if isinstance(v, RespOperate):
             if v == RespOperate.ALLOW:
                 return 0
-            elif v == RespOperate.DECLINE:
+            if v == RespOperate.DECLINE:
                 return 1
-            elif v == RespOperate.IGNORE:
+            if v == RespOperate.IGNORE:
                 return 2
-            elif v == RespOperate.DECLINE & RespOperate.BAN:
+            if v == RespOperate.DECLINE & RespOperate.BAN:
                 return 3
-            elif v == RespOperate.IGNORE & RespOperate.BAN:
+            if v == RespOperate.IGNORE & RespOperate.BAN:
                 return 4
-            else:
-                raise ValueError(f'无效操作{v}。')
+            raise ValueError(f'无效操作{v}。')
         else:
             return v
 
@@ -1040,10 +1037,9 @@ class RespBotInvitedJoinGroupRequestEvent(ApiPost):
         if isinstance(v, RespOperate):
             if v == RespOperate.ALLOW:
                 return 0
-            elif v == RespOperate.DECLINE:
+            if v == RespOperate.DECLINE:
                 return 1
-            else:
-                raise ValueError(f'无效操作{v}。')
+            raise ValueError(f'无效操作{v}。')
         else:
             return v
 
@@ -1061,8 +1057,7 @@ class CmdExecute(ApiPost):
     def _validate_command(cls, value):
         if isinstance(value, list):
             return MessageChain.parse_obj(value)
-        elif isinstance(value, MessageChain):
-            return value
+        return value
 
     class Info(ApiPost.Info):
         name = "cmd/execute"

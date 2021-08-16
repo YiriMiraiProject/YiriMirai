@@ -100,8 +100,7 @@ class MessageComponent(MiraiIndexedModel, metaclass=MessageComponentMetaclass):
         for name, value in zip(parameter_names, args):
             if name in kwargs:
                 raise TypeError(f'在 `{self.type}` 中，具名参数 `{name}` 与位置参数重复。')
-            else:
-                kwargs[name] = value
+            kwargs[name] = value
 
         super().__init__(**kwargs)
 
@@ -227,8 +226,7 @@ class MessageChain(MiraiBaseModel):
 
     @validator('__root__', always=True, pre=True)
     def _parse_component(cls, msg_chain):
-        if isinstance(msg_chain,
-                      str) or isinstance(msg_chain, MessageComponent):
+        if isinstance(msg_chain, (str, MessageComponent)):
             msg_chain = [msg_chain]
         if not msg_chain:
             msg_chain = []
@@ -279,12 +277,12 @@ class MessageChain(MiraiBaseModel):
         if isinstance(index, int):
             return self.__root__[index]
         # 索引对象为 MessageComponent 类，返回所有对应 component
-        elif isinstance(index, type):
+        if isinstance(index, type):
             return [
                 component for component in self if type(component) == index
             ]
         # 索引对象为 MessageComponent 和 int 构成的 tuple， 返回指定数量的 component
-        elif isinstance(index, tuple):
+        if isinstance(index, tuple):
             components = (
                 component for component in self if type(component) == index[0]
             )
@@ -296,19 +294,17 @@ class MessageChain(MiraiBaseModel):
     def __contains__(self, sub) -> bool:
         if isinstance(sub, type):  # 检测消息链中是否有某种类型的对象
             for i in self:
-                if type(i) == sub:
+                if isinstance(i, sub):
                     return True
-            else:
-                return False
-        elif isinstance(sub, MessageComponent):  # 检查消息链中是否有某个组件
+            return False
+        if isinstance(sub, MessageComponent):  # 检查消息链中是否有某个组件
             for i in self:
                 if i == sub:
                     return True
-            else:
-                return False
-        elif isinstance(sub, MessageChain):  # 检查消息链中是否有某个子消息链
+            return False
+        if isinstance(sub, MessageChain):  # 检查消息链中是否有某个子消息链
             return bool(KMP(self, sub))
-        elif isinstance(sub, str):  # 检查消息中有无指定字符串子串
+        if isinstance(sub, str):  # 检查消息中有无指定字符串子串
             return sub in deserialize(str(self))
         raise TypeError(f"类型不匹配，当前类型：{type(sub)}")
 
@@ -843,8 +839,7 @@ class ForwardMessageNode(MiraiBaseModel):
     def _validate_message_chain(cls, value: Union[MessageChain, list]):
         if isinstance(value, list):
             return MessageChain.parse_obj(value)
-        elif isinstance(value, MessageChain):
-            return value
+        return value
 
     @classmethod
     def create(

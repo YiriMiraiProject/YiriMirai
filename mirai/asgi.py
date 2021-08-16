@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """此模块提供公共 ASGI 前端。"""
 
+import functools
 import logging
 from typing import Callable, Dict, List, Optional, Tuple
 
@@ -31,6 +32,16 @@ class ASGI(Singleton):
 
         self.add_route('/', default_endpoint)
 
+    async def _global_endpoint(self, key, request: Request):
+        for endpoint in self._routes[key]:
+            result = await endpoint(request)
+            if result:
+                return result
+        else:
+            return RedirectResponse(
+                'https://yiri-mirai.vercel.app', status_code=301
+            )
+
     def add_route(
         self,
         path: str,
@@ -55,18 +66,11 @@ class ASGI(Singleton):
                 self._routes[key].append(endpoint)
             else:
                 self._routes[key] = [endpoint]
-
-                async def global_endpoint(request: Request):
-                    for endpoint in self._routes[key]:
-                        result = await endpoint(request)
-                        if result:
-                            return result
-                    else:
-                        return RedirectResponse(
-                            'https://yiri-mirai.vercel.app', status_code=301
-                        )
-
-                self.app.add_route(path, global_endpoint, methods=[method])
+                self.app.add_route(
+                    path,
+                    functools.partial(self._global_endpoint, key),
+                    methods=[method]
+                )
 
         return self
 
@@ -132,10 +136,9 @@ def asgi_serve(
     if asgi == 'uvicorn':
         run(app, host=host, port=port, debug=True, **kwargs)
         return True
-    elif asgi == 'hypercorn':
+    if asgi == 'hypercorn':
         import asyncio
         config = Config().from_mapping(bind=f'{host}:{port}', **kwargs)
         asyncio.run(serve(app, config), debug=True)
         return True
-    else:
-        return False
+    return False

@@ -177,8 +177,8 @@ class EventBus(AbstractEventBus):
             # 快速响应：如果事件处理器返回一个协程，那么立即运行这个协程。
             if inspect.isawaitable(result):
                 return async_with_exception(result)
-            else:  # 当不使用快速响应时，返回值无意义。
-                return None
+            # 当不使用快速响应时，返回值无意义。
+            return None
 
         coros: List[Optional[Awaitable[Any]]] = []
         try:
