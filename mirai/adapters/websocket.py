@@ -138,9 +138,6 @@ class WebSocketAdapter(Adapter):
                 response = json.loads(await self.connection.recv())
                 data = response['data']
 
-                if data.get('code', 0) != 0:
-                    raise exceptions.ApiError(data)
-
                 logger.debug(
                     f"[WebSocket] 收到 WebSocket 数据，同步 ID：{response['syncId']}。"
                 )
@@ -160,7 +157,12 @@ class WebSocketAdapter(Adapter):
         timer = range(timeout) if timeout > 0 else repeat(0)
         for _ in timer:
             if self._recv_dict[sync_id]:
-                return self._recv_dict[sync_id].popleft()
+                data = self._recv_dict[sync_id].popleft()
+
+                if data.get('code', 0) != 0:
+                    raise exceptions.ApiError(data)
+
+                return data
                 # 如果没有对应同步 ID 的数据，则等待 websocket 数据
                 # 目前存在问题：如果 mah 发回的数据不含 sync_id，
                 # 这里就会无限循环……
