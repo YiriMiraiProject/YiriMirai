@@ -2,12 +2,13 @@
 
 [![Licence](https://img.shields.io/github/license/YiriMiraiProject/YiriMirai)](https://github.com/YiriMiraiProject/YiriMirai/blob/master/LICENSE)
 [![PyPI](https://img.shields.io/pypi/v/yiri-mirai)](https://pypi.org/project/yiri-mirai/)
-![Python Version](https://img.shields.io/pypi/pyversions/yiri-mirai)
+[![Python Version](https://img.shields.io/pypi/pyversions/yiri-mirai)](https://docs.python.org/zh-cn/3.7/)
 [![Document](https://img.shields.io/badge/document-vercel-brightgreen)](https://yiri-mirai.vercel.app)
+[![CodeFactor](https://www.codefactor.io/repository/github/yirimiraiproject/yirimirai/badge/dev)](https://www.codefactor.io/repository/github/yirimiraiproject/yirimirai/overview/dev)
 
 一个轻量级、低耦合度的基于 mirai-api-http 的 Python SDK。
 
-**本项目适用于 mirai-api-http 2.X 版本**。
+**本项目适用于 mirai-api-http 2.0 以上版本**。
 
 目前仍处于开发阶段，各种内容可能会有较大的变化。
 
