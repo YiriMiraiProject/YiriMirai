@@ -262,7 +262,7 @@ class MiraiRunner(Singleton):
             try:
                 asyncio.run(self._run())
             except KeyboardInterrupt:
-                pass
+                exit()
 
 
 class Mirai(SimpleMirai):

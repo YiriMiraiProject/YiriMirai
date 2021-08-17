@@ -2,13 +2,16 @@
 """
 此模块提供消息链相关。
 """
+import functools
+import itertools
 import logging
 import re
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import (
-    Iterable, List, Optional, Tuple, Type, TypeVar, Union, overload
+    Iterable, List, Optional, Tuple, Type, TypeVar, Union, cast,
+    overload
 )
 
 from pydantic import HttpUrl, validator
@@ -17,7 +20,7 @@ from mirai.models.base import (
     MiraiBaseModel, MiraiIndexedMetaclass, MiraiIndexedModel
 )
 from mirai.models.entities import Friend, GroupMember
-from mirai.utils import KMP
+from mirai.utils import kmp
 
 logger = logging.getLogger(__name__)
 
@@ -119,7 +122,7 @@ class MessageChain(MiraiBaseModel):
     ])
     ```
 
-        Plain: 可以省略。
+    `Plain` 可以省略。
     ```py
     message_chain = MessageChain([
         AtAll(),
@@ -185,6 +188,12 @@ class MessageChain(MiraiBaseModel):
         print('Hi!')
     ```
 
+    消息链的 `has` 方法和 `in` 等价。
+    ```py
+    if message_chain.has(AtAll):
+        print('AtAll')
+    ```
+
     也可以使用 `>=` 和 `<= `运算符：
     ```py
     if MessageChain([At(bot.qq), Plain('Hello!')]) <= message_chain:
@@ -205,11 +214,50 @@ class MessageChain(MiraiBaseModel):
     plain_list_first = message_chain[Plain, 1]
     '[Plain("Hello World!")]'
     ```
+
+    消息链的 `get` 方法和索引操作等价。
+    ```py
+    plain_list_first = message_chain.get(Plain)
+    '[Plain("Hello World!")]'
+    ```
+
+    消息链的 `get` 方法还可指定第二个参数 `count`，这相当于以 `类型, 数量` 为索引。
+    ```py
+    plain_list_first = message_chain.get(Plain, 1)
+    # 这等价于
+    plain_list_first = message_chain[Plain, 1]
+    ```
+
+    可以用加号连接两个消息链。
+    ```py
+    MessageChain(['Hello World!']) + MessageChain(['Goodbye World!'])
+    # 返回 MessageChain([Plain("Hello World!"), Plain("Goodbye World!")])
+    ```
+
+    可以用 `*` 运算符复制消息链。
+    ```py
+    MessageChain(['Hello World!']) * 2
+    # 返回 MessageChain([Plain("Hello World!"), Plain("Hello World!")])
+    ```
+
+    除此之外，消息链还支持很多 list 拥有的操作，比如 `index` 和 `count`。
+    ```py
+    message_chain = MessageChain([
+        AtAll(),
+        "Hello World!",
+    ])
+    message_chain.index(Plain)
+    # 返回 0
+    message_chain.count(Plain)
+    # 返回 1
+    ```
+
+    消息链对这些操作进行了拓展。在传入元素的地方，一般都可以传入元素的类型。
     """
     __root__: List[MessageComponent]
 
     @staticmethod
-    def _parse_message_chain(msg_chain: list):
+    def _parse_message_chain(msg_chain: Iterable):
         result = []
         for msg in msg_chain:
             if isinstance(msg, dict):
@@ -233,11 +281,11 @@ class MessageChain(MiraiBaseModel):
         return cls._parse_message_chain(msg_chain)
 
     @classmethod
-    def parse_obj(cls, msg_chain: list):
+    def parse_obj(cls, msg_chain: Iterable):
         """通过列表形式的消息链，构造对应的 `MessageChain` 对象。
 
         Args:
-            msg_chain (`list`): 列表形式的消息链。
+            msg_chain (`Iterable`): 列表形式的消息链。
         """
         result = cls._parse_message_chain(msg_chain)
         return cls(__root__=result)
@@ -255,7 +303,89 @@ class MessageChain(MiraiBaseModel):
         yield from self.__root__
 
     @overload
+    def get(self, index: int) -> MessageComponent:
+        ...
+
+    @overload
+    def get(self, index: slice) -> List[MessageComponent]:
+        ...
+
+    @overload
+    def get(self, index: Type[TMessageComponent]) -> List[TMessageComponent]:
+        ...
+
+    @overload
+    def get(
+        self, index: Tuple[Type[TMessageComponent], int]
+    ) -> List[TMessageComponent]:
+        ...
+
+    def get(
+        self,
+        index: Union[int, slice, Type[TMessageComponent],
+                     Tuple[Type[TMessageComponent], int]],
+        count: Optional[int] = None
+    ) -> Union[MessageComponent, List[MessageComponent],
+               List[TMessageComponent]]:
+        """获取消息链中的某个（某些）消息组件，或某类型的消息组件。
+
+        Args:
+            index (`Union[int, slice, Type[TMessageComponent], Tuple[Type[TMessageComponent], int]]`):
+                如果为 `int`，则返回该索引处的消息组件。
+                如果为 `slice`，则返回该索引范围处的消息组件。
+                如果为 `Type[TMessageComponent]`，则返回该类型的全部消息组件。
+                如果为 `Tuple[Type[TMessageComponent], int]`，则返回该类型的至多 `index[1]` 个消息组件。
+
+            count (`Optional[int]`): 如果为 `int`，则返回至多 `count` 个消息组件。
+
+        Returns:
+            `MessageComponent`: 返回指定索引处的消息组件。
+            `List[MessageComponent]`: 返回指定索引范围的消息组件。
+            `List[TMessageComponent]`: 返回指定类型的消息组件构成的列表。
+        """
+        # 正常索引
+        if isinstance(index, int):
+            return self.__root__[index]
+        # 切片索引
+        if isinstance(index, slice):
+            return self.__root__[index]
+        # 指定 count
+        if count:
+            if isinstance(index, type):
+                index = (index, count)
+            elif isinstance(index, tuple):
+                index = (index[0], count if count < index[1] else index[1])
+        # 索引对象为 MessageComponent 类，返回所有对应 component
+        if isinstance(index, type):
+            return [
+                component for component in self
+                if isinstance(component, index)
+            ]
+        # 索引对象为 MessageComponent 和 int 构成的 tuple， 返回指定数量的 component
+        if isinstance(index, tuple):
+            components = (
+                component for component in self
+                if isinstance(component, index[0])
+            )
+            return [
+                component for component, _ in zip(components, range(index[1]))
+            ]
+        raise TypeError(f"消息链索引需为 int 或 MessageComponent，当前类型：{type(index)}")
+
+    def get_first(self,
+                  t: Type[TMessageComponent]) -> Optional[TMessageComponent]:
+        """获取消息链中第一个符合类型的消息组件。"""
+        for component in self:
+            if isinstance(component, t):
+                return component
+        return None
+
+    @overload
     def __getitem__(self, index: int) -> MessageComponent:
+        ...
+
+    @overload
+    def __getitem__(self, index: slice) -> List[MessageComponent]:
         ...
 
     @overload
@@ -270,28 +400,49 @@ class MessageChain(MiraiBaseModel):
         ...
 
     def __getitem__(
-        self, index: Union[int, Type[TMessageComponent],
+        self, index: Union[int, slice, Type[TMessageComponent],
                            Tuple[Type[TMessageComponent], int]]
-    ) -> Union[MessageComponent, List[TMessageComponent]]:
-        # 正常索引
-        if isinstance(index, int):
-            return self.__root__[index]
-        # 索引对象为 MessageComponent 类，返回所有对应 component
-        if isinstance(index, type):
-            return [
-                component for component in self if isinstance(component, index)
-            ]
-        # 索引对象为 MessageComponent 和 int 构成的 tuple， 返回指定数量的 component
-        if isinstance(index, tuple):
-            components = (
-                component for component in self if isinstance(component, index[0])
-            )
-            return [
-                component for component, _ in zip(components, range(index[1]))
-            ]
-        raise TypeError(f"消息链索引需为 int 或 MessageComponent，当前类型：{type(index)}")
+    ) -> Union[MessageComponent, List[MessageComponent],
+               List[TMessageComponent]]:
+        return self.get(index)
 
-    def __contains__(self, sub) -> bool:
+    def __setitem__(
+        self, key: Union[int, slice],
+        value: Union[MessageComponent, str, Iterable[Union[MessageComponent,
+                                                           str]]]
+    ):
+        if isinstance(value, str):
+            value = Plain(value)
+        if isinstance(value, Iterable):
+            value = (Plain(c) if isinstance(c, str) else c for c in value)
+        self.__root__[key] = value  # type: ignore
+
+    def __delitem__(self, key: Union[int, slice]):
+        del self.__root__[key]
+
+    def __reversed__(self) -> Iterable[MessageComponent]:
+        return reversed(self.__root__)
+
+    def has(
+        self, sub: Union[MessageComponent, Type[MessageComponent],
+                         'MessageChain', str]
+    ) -> bool:
+        """判断消息链中：
+        1. 是否有某个消息组件。
+        2. 是否有某个类型的消息组件。
+        3. 是否有某个子消息链。
+        4. 对应的 mirai 码中是否有某子字符串。
+
+        Args:
+            sub (`Union[MessageComponent, Type[MessageComponent], 'MessageChain', str]`):
+                若为 `MessageComponent`，则判断该组件是否在消息链中。
+                若为 `Type[MessageComponent]`，则判断该组件类型是否在消息链中。
+                若为 `MessageChain`，则判断该子消息链是否在消息链中。
+                若为 `str`，则判断对应的 mirai 码中是否有某子字符串。
+
+        Returns:
+            bool: 是否找到。
+        """
         if isinstance(sub, type):  # 检测消息链中是否有某种类型的对象
             for i in self:
                 if isinstance(i, sub):
@@ -303,10 +454,13 @@ class MessageChain(MiraiBaseModel):
                     return True
             return False
         if isinstance(sub, MessageChain):  # 检查消息链中是否有某个子消息链
-            return bool(KMP(self, sub))
+            return bool(kmp(self, sub))
         if isinstance(sub, str):  # 检查消息中有无指定字符串子串
             return sub in deserialize(str(self))
         raise TypeError(f"类型不匹配，当前类型：{type(sub)}")
+
+    def __contains__(self, sub) -> bool:
+        return self.has(sub)
 
     def __ge__(self, other):
         return other in self
@@ -314,15 +468,188 @@ class MessageChain(MiraiBaseModel):
     def __len__(self) -> int:
         return len(self.__root__)
 
+    def __add__(
+        self, other: Union['MessageChain', MessageComponent, str]
+    ) -> 'MessageChain':
+        if isinstance(other, MessageChain):
+            return self.__class__(self.__root__ + other.__root__)
+        if isinstance(other, str):
+            return self.__class__(self.__root__ + [Plain(other)])
+        if isinstance(other, MessageComponent):
+            return self.__class__(self.__root__ + [other])
+        return NotImplemented
+
+    def __radd__(self, other: Union[MessageComponent, str]) -> 'MessageChain':
+        if isinstance(other, MessageComponent):
+            return self.__class__([other] + self.__root__)
+        if isinstance(other, str):
+            return self.__class__(
+                [cast(MessageComponent, Plain(other))] + self.__root__
+            )
+        return NotImplemented
+
+    def __mul__(self, other: int):
+        if isinstance(other, int):
+            return self.__class__(self.__root__ * other)
+        return NotImplemented
+
+    def __rmul__(self, other: int):
+        return self.__mul__(other)
+
+    def __iadd__(self, other: Iterable[Union[MessageComponent, str]]):
+        self.extend(other)
+
+    def __imul__(self, other: int):
+        if isinstance(other, int):
+            self.__root__ *= other
+        return NotImplemented
+
+    def index(
+        self,
+        x: Union[MessageComponent, Type[MessageComponent]],
+        i: int = 0,
+        j: int = -1
+    ) -> int:
+        """返回 x 在消息链中首次出现项的索引号（索引号在 i 或其后且在 j 之前）。
+
+        Args:
+            x (`Union[MessageComponent, Type[MessageComponent]]`):
+                要查找的消息元素或消息元素类型。
+            i (`int`): 从哪个位置开始查找。
+            j (`int`): 查找到哪个位置结束。
+
+        Returns:
+            int: 如果找到，则返回索引号。
+
+        Raises:
+            ValueError: 没有找到。
+            TypeError: 类型不匹配。
+        """
+        if isinstance(x, type):
+            l = len(self)
+            if i < 0:
+                i += l
+            if i < 0:
+                i = 0
+            if j < 0:
+                j += l
+            if j > l:
+                j = l
+            for index in range(i, j):
+                if isinstance(self[index], x):
+                    return index
+            raise ValueError("消息链中不存在该类型的组件。")
+        if isinstance(x, MessageComponent):
+            return self.__root__.index(x, i, j)
+        raise TypeError(f"类型不匹配，当前类型：{type(x)}")
+
+    def count(self, x: Union[MessageComponent, Type[MessageComponent]]) -> int:
+        """返回消息链中 x 出现的次数。
+
+        Args:
+            x (`Union[MessageComponent, Type[MessageComponent]]`):
+                要查找的消息元素或消息元素类型。
+
+        Returns:
+            int: 次数。
+        """
+        if isinstance(x, type):
+            return sum(1 for i in self if isinstance(i, x))
+        if isinstance(x, MessageComponent):
+            return self.__root__.count(x)
+        raise TypeError(f"类型不匹配，当前类型：{type(x)}")
+
+    def extend(self, x: Iterable[Union[MessageComponent, str]]):
+        """将另一个消息链中的元素添加到消息链末尾。
+
+        Args:
+            x (`Iterable[Union[MessageComponent, str]]`): 另一个消息链，也可为消息元素或字符串元素的序列。
+        """
+        self.__root__.extend(Plain(c) if isinstance(c, str) else c for c in x)
+
+    def append(self, x: Union[MessageComponent, str]):
+        """将一个消息元素或字符串元素添加到消息链末尾。
+
+        Args:
+            x (`Union[MessageComponent, str]`): 消息元素或字符串元素。
+        """
+        self.__root__.append(Plain(x) if isinstance(x, str) else x)
+
+    def insert(self, i: int, x: Union[MessageComponent, str]):
+        """将一个消息元素或字符串添加到消息链中指定位置。
+
+        Args:
+            i (`int`): 插入位置。
+            x (`Union[MessageComponent, str]`): 消息元素或字符串元素。
+        """
+        self.__root__.insert(i, Plain(x) if isinstance(x, str) else x)
+
+    def pop(self, i: int = -1) -> MessageComponent:
+        """从消息链中移除并返回指定位置的元素。
+
+        Args:
+            i (`int`): 移除位置。默认为末尾。
+
+        Returns:
+            MessageComponent: 移除的元素。
+        """
+        return self.__root__.pop(i)
+
+    def remove(self, x: Union[MessageComponent, Type[MessageComponent]]):
+        """从消息链中移除指定元素或指定类型的一个元素。
+
+        Args:
+            x (`Union[MessageComponent, Type[MessageComponent]]`): 指定的元素或元素类型。
+        """
+        if isinstance(x, type):
+            self.pop(self.index(x))
+        if isinstance(x, MessageComponent):
+            self.__root__.remove(x)
+
+    def exclude(
+        self,
+        x: Union[MessageComponent, Type[MessageComponent]],
+        count: int = -1
+    ) -> 'MessageChain':
+        """返回移除指定元素或指定类型的元素后剩余的消息链。
+
+        Args:
+            x (`Union[MessageComponent, Type[MessageComponent]]`): 指定的元素或元素类型。
+            count (`int`): 至多移除的数量。默认为全部移除。
+
+        Returns:
+            MessageChain: 剩余的消息链。
+        """
+        def _exclude():
+            nonlocal count
+            x_is_type = isinstance(x, type)
+            for c in self:
+                if count > 0 and ((x_is_type and isinstance(c, x)) or c == x):
+                    count -= 1
+                    continue
+                yield c
+
+        return self.__class__(_exclude())
+
+    def reverse(self):
+        """将消息链原地翻转。"""
+        self.__root__.reverse()
+
+    @classmethod
+    def join(cls, *args: Iterable[Union[str, MessageComponent]]):
+        return cls(
+            Plain(c) if isinstance(c, str) else c
+            for c in itertools.chain(*args)
+        )
+
     @property
     def source(self) -> Optional['Source']:
         """获取消息链中的 `Source` 对象。"""
-        source = self[Source, 1]
-        return source[0] if source else None
+        return self.get_first(Source)
 
     @property
     def message_id(self) -> int:
-        """获取消息链的 message_id。"""
+        """获取消息链的 message_id，若无法获取，返回 -1。"""
         source = self.source
         return source.id if source else -1
 

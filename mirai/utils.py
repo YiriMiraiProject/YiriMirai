@@ -62,7 +62,7 @@ class PriorityDict(Generic[T]):
             yield from cast(List[Set[T]], ())
 
 
-def KMP(string, pattern, count: int = 1) -> List[int]:
+def kmp(string, pattern, count: int = 1) -> List[int]:
     """KMP算法。
 
     Args:
