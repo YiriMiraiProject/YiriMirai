@@ -284,6 +284,28 @@ class ApiModel(ApiBaseModel):
         except ValueError as e:
             raise ValueError(f'`{name}` 不是可用的 API！') from e
 
+    async def call(
+        self,
+        api_provider: ApiProvider,
+        method: Method = Method.GET,
+        response_type: Optional[Type[TModel]] = None,
+    ) -> Optional[TModel]:
+        """调用 API。"""
+        info = self.Info
+        logger.debug(f'调用 API：{repr(self)}')
+        raw_response = await api_provider.call_api(
+            api=info.name,
+            method=method,
+            **self.dict(by_alias=True, exclude_none=True)
+        )
+
+        # 如果 API 无法调用，raw_response 为空
+        if not raw_response:
+            return None
+        # 解析 API 返回数据
+        response_type = cast(Type[TModel], response_type or info.response_type)
+        return response_type.parse_obj(raw_response)
+
     class Proxy(Generic[TModel]):
         """API 代理类。由 API 构造，提供对适配器的访问。
 
@@ -340,25 +362,7 @@ class ApiModel(ApiBaseModel):
             kwargs = kwargs or {}
 
             api = self.api_type(*args, **kwargs)
-            info = self.api_type.Info
-            logger.debug(f'调用 API：{repr(api)}')
-            if isinstance(api, CustomApiModel):
-                raw_response = await api.call(self.api_provider)
-            else:
-                raw_response = await self.api_provider.call_api(
-                    api=info.name,
-                    method=method,
-                    **api.dict(by_alias=True, exclude_none=True)
-                )
-
-            # 如果 API 无法调用，raw_response 为空
-            if not raw_response:
-                return None
-            # 解析 API 返回数据
-            response_type = cast(
-                Type[TModel], response_type or info.response_type
-            )
-            return response_type.parse_obj(raw_response)
+            return await api.call(self.api_provider, method, response_type)
 
         async def get(self, *args, **kwargs) -> Optional[TModel]:
             """获取。对于 GET 方法的 API，调用此方法。"""
@@ -374,13 +378,6 @@ class ApiModel(ApiBaseModel):
 
         async def __call__(self, *args, **kwargs):
             return await self.get(*args, **kwargs)
-
-
-class CustomApiModel(ApiBaseModel):
-    """自定义调用方式的 API。"""
-    @abc.abstractmethod
-    async def call(self, api_provider: ApiProvider):
-        """调用 API。"""
 
 
 class ApiGet(ApiModel):
@@ -712,7 +709,7 @@ class FileRename(ApiPost):
         response_type = Response
 
 
-class FileUpload(ApiPost, CustomApiModel):
+class FileUpload(ApiPost):
     """文件上传。（暂时不可用）"""
     type: Literal["group"]
     """上传的文件类型。"""
@@ -722,7 +719,12 @@ class FileUpload(ApiPost, CustomApiModel):
     """上传的文件的本地路径。"""
     path: str = ''
     """上传目录的 id，空串为上传到根目录。"""
-    async def call(self, api_provider: ApiProvider):
+    async def call(
+        self,
+        api_provider: ApiProvider,
+        method: Method = Method.GET,
+        response_type: Optional[Type[TModel]] = None,
+    ):
         import aiofiles
         async with aiofiles.open(self.file, 'rb') as f:
             file = await f.read()
@@ -743,13 +745,18 @@ class FileUpload(ApiPost, CustomApiModel):
         response_type = FileProperties
 
 
-class UploadImage(ApiPost, CustomApiModel):
+class UploadImage(ApiPost):
     """图片文件上传。"""
     type: Literal["friend", "group", "temp"]
     """上传的图片类型。"""
     img: Union[str, Path]
     """上传的图片的本地路径。"""
-    async def call(self, api_provider: ApiProvider):
+    async def call(
+        self,
+        api_provider: ApiProvider,
+        method: Method = Method.GET,
+        response_type: Optional[Type[TModel]] = None,
+    ):
         import aiofiles
         async with aiofiles.open(self.img, 'rb') as f:
             img = await f.read()
@@ -766,13 +773,18 @@ class UploadImage(ApiPost, CustomApiModel):
         response_type = Image
 
 
-class UploadVoice(ApiPost, CustomApiModel):
+class UploadVoice(ApiPost):
     """语音文件上传。"""
     type: Literal["group"]
     """上传的语音类型。"""
     voice: Union[str, Path]
     """上传的语音的本地路径。"""
-    async def call(self, api_provider: ApiProvider):
+    async def call(
+        self,
+        api_provider: ApiProvider,
+        method: Method = Method.GET,
+        response_type: Optional[Type[TModel]] = None,
+    ):
         import aiofiles
         async with aiofiles.open(self.voice, 'rb') as f:
             voice = await f.read()
@@ -953,7 +965,7 @@ class RespEvent(ApiBaseModel):
         )
 
 
-class RespNewFriendRequestEvent(ApiPost):
+class RespNewFriendRequestEvent(ApiPost, RespEvent):
     """响应添加好友申请。"""
     event_id: int
     """响应申请事件的标识。"""
@@ -983,7 +995,7 @@ class RespNewFriendRequestEvent(ApiPost):
         response_type = MiraiBaseModel
 
 
-class RespMemberJoinRequestEvent(ApiPost):
+class RespMemberJoinRequestEvent(ApiPost, RespEvent):
     """响应用户入群申请。"""
     event_id: int
     """响应申请事件的标识。"""
@@ -1017,7 +1029,7 @@ class RespMemberJoinRequestEvent(ApiPost):
         response_type = MiraiBaseModel
 
 
-class RespBotInvitedJoinGroupRequestEvent(ApiPost):
+class RespBotInvitedJoinGroupRequestEvent(ApiPost, RespEvent):
     """响应被邀请入群申请。"""
     event_id: int
     """响应申请事件的标识。"""

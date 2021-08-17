@@ -28,7 +28,7 @@ from mirai.models.entities import (
     Entity, Friend, Group, GroupConfigModel, GroupMember, MemberInfoModel,
     Subject
 )
-from mirai.models.events import Event, MessageEvent
+from mirai.models.events import Event, MessageEvent, RequestEvent
 from mirai.models.message import Image, MessageChain, MessageComponent, Voice
 from mirai.utils import Singleton
 
@@ -170,6 +170,27 @@ class Mirai(SimpleMirai):
         ...
 
     async def is_admin(self, group: Group) -> bool:
+        ...
+
+    async def process_request(
+        self,
+        event: RequestEvent,
+        operate: Union[int, RespOperate],
+        message: str = ''
+    ):
+        ...
+
+    async def allow(self, event: RequestEvent, message: str = ''):
+        ...
+
+    async def decline(
+        self, event: RequestEvent, message: str = '', ban: bool = False
+    ):
+        ...
+
+    async def ignore(
+        self, event: RequestEvent, message: str = '', ban: bool = False
+    ):
         ...
 
     ### 以下为自动生成 ###

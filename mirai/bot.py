@@ -5,21 +5,21 @@
 import asyncio
 import contextlib
 import logging
-import sys
 from typing import (
     Any, Awaitable, Callable, Dict, Iterable, List, Optional, Type, Union, cast
 )
 
+import mirai.models.api
 from mirai.adapters.base import Adapter, AdapterInterface, ApiProvider
 from mirai.asgi import ASGI, asgi_serve
 from mirai.bus import AbstractEventBus, EventBus
-from mirai.models.api import ApiModel
+from mirai.models.api import ApiModel, RespEvent, RespOperate
 from mirai.models.bus import ModelEventBus
 from mirai.models.entities import (
     Entity, Friend, Group, GroupMember, Permission, Subject
 )
-from mirai.models.events import Event, MessageEvent, TempMessage
-from mirai.models.message import MessageChain, MessageComponent, TMessage
+from mirai.models.events import Event, MessageEvent, RequestEvent, TempMessage
+from mirai.models.message import TMessage
 from mirai.utils import Singleton
 
 __all__ = [
@@ -470,6 +470,62 @@ class Mirai(SimpleMirai):
             `bool`: 是否是管理员。
         """
         return group.permission in (Permission.Administrator, Permission.Owner)
+
+    async def process_request(
+        self,
+        event: RequestEvent,
+        operate: Union[int, RespOperate],
+        message: str = ''
+    ):
+        """处理申请。
+
+        Args:
+            event (`RequestEvent`): 申请事件。
+            operate (`Union[int, RespOperate]`): 处理操作。
+            message (`str`): 回复的信息。
+        """
+        api_type = cast(
+            Type[RespEvent], getattr(mirai.models.api, 'Resp' + event.type)
+        )
+        api = api_type.from_event(event, operate, message)
+        await api.call(self, 'POST')
+
+    async def allow(self, event: RequestEvent, message: str = ''):
+        """允许申请。
+
+        Args:
+            event (`RequestEvent`): 申请事件。
+            message (`str`): 回复的信息。
+        """
+        await self.process_request(event, RespOperate.ALLOW, message)
+
+    async def decline(
+        self, event: RequestEvent, message: str = '', ban: bool = False
+    ):
+        """拒绝申请。
+
+        Args:
+            event (`RequestEvent`): 申请事件。
+            message (`str`): 回复的信息。
+        """
+        await self.process_request(
+            event, RespOperate.DECLINE
+            & RespOperate.BAN if ban else RespOperate.DECLINE, message
+        )
+
+    async def ignore(
+        self, event: RequestEvent, message: str = '', ban: bool = False
+    ):
+        """忽略申请。
+
+        Args:
+            event (`RequestEvent`): 申请事件。
+            message (`str`): 回复的信息。
+        """
+        await self.process_request(
+            event, RespOperate.IGNORE
+            & RespOperate.BAN if ban else RespOperate.DECLINE, message
+        )
 
 
 class LifeSpan(Event):
