@@ -179,4 +179,4 @@ class Adapter(ApiProvider, AdapterInterface):
             *args, **kwargs: 事件参数。
         """
         coros = [bus.emit(event, *args, **kwargs) for bus in self.buses]
-        await asyncio.gather(*coros)
+        return sum(await asyncio.gather(*coros), [])

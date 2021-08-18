@@ -381,10 +381,11 @@ class Mirai(SimpleMirai):
         else:
             raise ValueError(f"{target} 不是有效的消息发送对象。")
 
-        return (
-            await
-            send_message(target=id_, message_chain=message, quote=quoting)
-        ).message_id
+        response = await send_message(
+            target=id_, message_chain=message, quote=quoting
+        )
+
+        return response.message_id if response else -1
 
     async def get_friend(self, id_: int) -> Optional[Friend]:
         """获取好友对象。

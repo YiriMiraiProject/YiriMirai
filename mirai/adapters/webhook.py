@@ -2,6 +2,7 @@
 """
 此模块提供 HTTP 回调适配器，适用于 mirai-api-http 的 webhook adapter。
 """
+import asyncio
 import logging
 from typing import Mapping, Optional, cast
 
@@ -140,7 +141,8 @@ class WebHookAdapter(Adapter):
 
     async def handle_event(self, event):
         try:
-            await self.emit(event['type'], event)
+            tasks = await self.emit(event['type'], event)
+            await asyncio.gather(*tasks)
         except WebHookAdapter.QuickResponse as response:
             # 快速响应，直接返回。
             return response.data
