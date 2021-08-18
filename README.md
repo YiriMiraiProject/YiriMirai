@@ -1,5 +1,7 @@
 # YiriMirai 文档
 
+**此分支已弃用。文档迁移至 [YiriMiraiProject/Document](https://github.com/YiriMiraiProject/Document)。**
+
 文档采用 [Docusaurus 2](https://docusaurus.io/) 构建。
 
 文档地址：https://yiri-mirai.vercel.app
