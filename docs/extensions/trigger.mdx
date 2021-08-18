@@ -225,6 +225,54 @@ async def handler(event: FriendMessage, payload: str):
     await bot.send(event, f'命令 {payload} 执行成功。')
 ```
 
+## 更多触发器
+
+`mirai_extensions.trigger.message` 模块提供了更多便于使用的触发器。它们都是基于 `Trigger` 略加包装的子类，包括 `FriendMessageTrigger` `GroupMessageTrigge` 和 `TempMessageTrigger`。
+
+`FriendMessageTrigger` 可以预检查是否是对应好友发送的消息：
+
+```python
+from mirai_extensions.trigger.message import FriendMessageTrigger
+
+@bot.on(FriendMessage)
+async def on_friend_message(event: FriendMessage):
+    if str(event.message_chain).strip() == '你是谁':
+        await bot.send(event, '我是 Yiri。你呢？')
+
+        @FriendMessageTrigger(friend=event.sender)  # 只接受与 event.sender 相同的好友
+        async def trigger(event_new: FriendMessage):            
+            msg = str(event.message_chain)
+            if msg.startswith('我是'):
+                return msg[2:]
+
+        name = await inc.wait(trigger)
+        await bot.send(event, f'你好，{name}。')
+```
+
+`friend` 参数也可传入好友的 QQ 号。
+
+`GroupMessageTrigger` 可以预检查是否是对应群中某个群成员发送的消息：
+
+```python
+from mirai_extensions.trigger.message import GroupMessageTrigger
+
+@bot.on(GroupMessage)
+async def on_friend_message(event: GroupMessage):
+    if str(event.message_chain).strip() == '你是谁':
+        await bot.send(event, '我是 Yiri。你呢？')
+
+        @GroupMessageTrigger(group_member=event.sender)  # 只接受与 event.sender 相同的群成员
+        async def trigger(event_new: GroupMessage):            
+            msg = str(event.message_chain)
+            if msg.startswith('我是'):
+                return msg[2:]
+
+        name = await inc.wait(trigger)
+        await bot.send(event, f'你好，{name}。')
+```
+
+除去 `group_member` 参数外，`GroupMessageTrigger` 还支持 `group` 和 `quote` 两个参数，前者用于指定群，后者用于指定必须回复某条消息。
+
 ## 详细说明
 
 ### API 文档
