@@ -39,7 +39,7 @@ class WebSocketAdapter(Adapter):
     """mirai-api-http 配置的同步 ID。"""
     qq: int
     """机器人的 QQ 号。"""
-    connection: WebSocketClientProtocol
+    connection: Optional[WebSocketClientProtocol]
     """WebSocket 客户端连接。"""
     heartbeat_interval: float
     """每隔多久发送心跳包，单位：秒。"""
@@ -80,6 +80,9 @@ class WebSocketAdapter(Adapter):
 
         self.sync_id = sync_id  # 这个神奇的 sync_id，默认值 -1，居然是个字符串
         # 既然这样不如把 sync_id 全改成字符串好了
+
+        self.qq = 0
+        self.connection = None
 
         self.heartbeat_interval = heartbeat_interval
 
@@ -207,6 +210,10 @@ class WebSocketAdapter(Adapter):
         self._tasks.create_task(self.emit(event['type'], event))
 
     async def call_api(self, api: str, method: Method = Method.GET, **params):
+        if not self.connection:
+            raise exceptions.NetworkError(
+                f'WebSocket 通道 {self.host_name} 未连接！'
+            )
         self._local_sync_id += 1  # 使用不同的 sync_id
         sync_id = str(self._local_sync_id)
         content = {
