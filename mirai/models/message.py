@@ -2,7 +2,6 @@
 """
 此模块提供消息链相关。
 """
-import functools
 import itertools
 import logging
 import re
@@ -10,8 +9,7 @@ from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import (
-    Iterable, List, Optional, Tuple, Type, TypeVar, Union, cast,
-    overload
+    Iterable, List, Optional, Tuple, Type, TypeVar, Union, cast, overload
 )
 
 from pydantic import HttpUrl, validator
@@ -358,14 +356,12 @@ class MessageChain(MiraiBaseModel):
         # 索引对象为 MessageComponent 类，返回所有对应 component
         if isinstance(index, type):
             return [
-                component for component in self
-                if isinstance(component, index)
+                component for component in self if type(component) is index
             ]
         # 索引对象为 MessageComponent 和 int 构成的 tuple， 返回指定数量的 component
         if isinstance(index, tuple):
             components = (
-                component for component in self
-                if isinstance(component, index[0])
+                component for component in self if type(component) is index[0]
             )
             return [
                 component for component, _ in zip(components, range(index[1]))
@@ -445,7 +441,7 @@ class MessageChain(MiraiBaseModel):
         """
         if isinstance(sub, type):  # 检测消息链中是否有某种类型的对象
             for i in self:
-                if isinstance(i, sub):
+                if type(i) is sub:
                     return True
             return False
         if isinstance(sub, MessageComponent):  # 检查消息链中是否有某个组件
@@ -536,7 +532,7 @@ class MessageChain(MiraiBaseModel):
             if j > l:
                 j = l
             for index in range(i, j):
-                if isinstance(self[index], x):
+                if type(self[index]) is x:
                     return index
             raise ValueError("消息链中不存在该类型的组件。")
         if isinstance(x, MessageComponent):
@@ -554,7 +550,7 @@ class MessageChain(MiraiBaseModel):
             int: 次数。
         """
         if isinstance(x, type):
-            return sum(1 for i in self if isinstance(i, x))
+            return sum(1 for i in self if type(i) is x)
         if isinstance(x, MessageComponent):
             return self.__root__.count(x)
         raise TypeError(f"类型不匹配，当前类型：{type(x)}")
@@ -624,7 +620,7 @@ class MessageChain(MiraiBaseModel):
             nonlocal count
             x_is_type = isinstance(x, type)
             for c in self:
-                if count > 0 and ((x_is_type and isinstance(c, x)) or c == x):
+                if count > 0 and ((x_is_type and type(c) is x) or c == x):
                     count -= 1
                     continue
                 yield c

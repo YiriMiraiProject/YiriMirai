@@ -5,7 +5,9 @@
 网络适配器负责与 mirai-api-http 沟通，详见各子模块。
 """
 from typing import TYPE_CHECKING
+
 from .base import Adapter
+
 if TYPE_CHECKING:
     from .compose import ComposeAdapter
     from .http import HTTPAdapter

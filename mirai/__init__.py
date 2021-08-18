@@ -17,6 +17,7 @@ if TYPE_CHECKING:
     )
 else:
     from mirai.adapters import Adapter
+
 from mirai.api_provider import Method
 from mirai.bot import (
     LifeSpan, Mirai, MiraiRunner, Shutdown, SimpleMirai, Startup
