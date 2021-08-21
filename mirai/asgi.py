@@ -88,6 +88,8 @@ class ASGI(Singleton):
         Returns:
             `ASGI`: 返回自身。
         """
+        if not path.startswith('/'):
+            path = '/' + path
         self.app.mount(path, app)
         logger.debug(f'向 {path} 挂载 {app}。')
         return self
