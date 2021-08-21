@@ -1,0 +1,4777 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>mirai.models.message API documentation</title>
+<meta name="description" content="此模块提供消息链相关。" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>mirai.models.message</code></h1>
+</header>
+<section id="section-intro">
+<p>此模块提供消息链相关。</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># -*- coding: utf-8 -*-
+&#34;&#34;&#34;
+此模块提供消息链相关。
+&#34;&#34;&#34;
+import itertools
+import logging
+import re
+from datetime import datetime
+from enum import Enum
+from pathlib import Path
+from typing import (
+    Iterable, List, Optional, Tuple, Type, TypeVar, Union, cast, overload
+)
+
+from pydantic import HttpUrl, validator
+
+from mirai.models.base import (
+    MiraiBaseModel, MiraiIndexedMetaclass, MiraiIndexedModel
+)
+from mirai.models.entities import Friend, GroupMember
+from mirai.utils import kmp
+
+logger = logging.getLogger(__name__)
+
+
+def serialize(s: str) -&gt; str:
+    &#34;&#34;&#34;mirai 码转义。
+
+    Args:
+        s: 待转义的字符串。
+
+    Returns:
+        str: 去转义后的字符串。
+    &#34;&#34;&#34;
+    return re.sub(r&#39;[\[\]:,\\]&#39;, lambda match: &#39;\\&#39; + match.group(0),
+                  s).replace(&#39;\n&#39;, &#39;\\n&#39;).replace(&#39;\r&#39;, &#39;\\r&#39;)
+
+
+def deserialize(s: str) -&gt; str:
+    &#34;&#34;&#34;mirai 码去转义。
+
+    Args:
+        s: 待去转义的字符串。
+
+    Returns:
+        str: 去转义后的字符串。
+    &#34;&#34;&#34;
+    return re.sub(
+        r&#39;\\([\[\]:,\\])&#39;, lambda match: match.group(1),
+        s.replace(&#39;\\n&#39;, &#39;\n&#39;).replace(&#39;\\r&#39;, &#39;\r&#39;)
+    )
+
+
+class MessageComponentMetaclass(MiraiIndexedMetaclass):
+    &#34;&#34;&#34;消息组件元类。&#34;&#34;&#34;
+    __message_component__ = None
+
+    def __new__(cls, name, bases, attrs, **kwargs):
+        new_cls = super().__new__(cls, name, bases, attrs, **kwargs)
+        if name == &#39;MessageComponent&#39;:
+            cls.__message_component__ = new_cls
+
+        if not cls.__message_component__:
+            return new_cls
+
+        for base in bases:
+            if issubclass(base, cls.__message_component__):
+                # 获取字段名
+                if hasattr(new_cls, &#39;__fields__&#39;):
+                    # 忽略 type 字段
+                    new_cls.__parameter_names__ = list(new_cls.__fields__)[1:]
+                else:
+                    new_cls.__parameter_names__ = []
+                break
+
+        return new_cls
+
+
+class MessageComponent(MiraiIndexedModel, metaclass=MessageComponentMetaclass):
+    &#34;&#34;&#34;消息组件。&#34;&#34;&#34;
+    type: str
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    def __str__(self):
+        return &#39;&#39;
+
+    def __repr__(self):
+        return self.__class__.__name__ + &#39;(&#39; + &#39;, &#39;.join(
+            (
+                f&#39;{k}={repr(v)}&#39;
+                for k, v in self.__dict__.items() if k != &#39;type&#39; and v
+            )
+        ) + &#39;)&#39;
+
+    def __init__(self, *args, **kwargs):
+        # 解析参数列表，将位置参数转化为具名参数
+        parameter_names = self.__parameter_names__
+        if len(args) &gt; len(parameter_names):
+            raise TypeError(
+                f&#39;`{self.type}`需要{len(parameter_names)}个参数，但传入了{len(args)}个。&#39;
+            )
+        for name, value in zip(parameter_names, args):
+            if name in kwargs:
+                raise TypeError(f&#39;在 `{self.type}` 中，具名参数 `{name}` 与位置参数重复。&#39;)
+            kwargs[name] = value
+
+        super().__init__(**kwargs)
+
+
+TMessageComponent = TypeVar(&#39;TMessageComponent&#39;, bound=MessageComponent)
+
+
+class MessageChain(MiraiBaseModel):
+    &#34;&#34;&#34;消息链。
+
+    一个构造消息链的例子：
+    ```py
+    message_chain = MessageChain([
+        AtAll(),
+        Plain(&#34;Hello World!&#34;),
+    ])
+    ```
+
+    `Plain` 可以省略。
+    ```py
+    message_chain = MessageChain([
+        AtAll(),
+        &#34;Hello World!&#34;,
+    ])
+    ```
+
+    在调用 API 时，参数中需要 MessageChain 的，也可以使用 `List[MessageComponent]` 代替。
+    例如，以下两种写法是等价的：
+    ```py
+    await bot.send_friend_message(12345678, [
+        Plain(&#34;Hello World!&#34;)
+    ])
+    ```
+    ```py
+    await bot.send_friend_message(12345678, MessageChain([
+        Plain(&#34;Hello World!&#34;)
+    ]))
+    ```
+
+    使用`str(message_chain)`获取消息链的字符串表示，字符串采用 mirai 码格式，
+    并自动按照 mirai 码的规定转义。
+    参看 mirai 的[文档](https://github.com/mamoe/mirai/blob/dev/docs/Messages.md#mirai-%E7%A0%81)。
+    获取未转义的消息链字符串，可以使用`deserialize(str(message_chain))`。
+
+    可以使用 for 循环遍历消息链中的消息组件。
+    ```py
+    for component in message_chain:
+        print(repr(component))
+    ```
+
+    可以使用 `==` 运算符比较两个消息链是否相同。
+    ```py
+    another_msg_chain = MessageChain([
+        {
+            &#34;type&#34;: &#34;AtAll&#34;
+        }, {
+            &#34;type&#34;: &#34;Plain&#34;,
+            &#34;text&#34;: &#34;Hello World!&#34;
+        },
+    ])
+    print(message_chain == another_msg_chain)
+    &#39;True&#39;
+    ```
+
+    可以使用 `in` 运算检查消息链中：
+    1. 是否有某个消息组件。
+    2. 是否有某个类型的消息组件。
+    3. 是否有某个子消息链。
+    4. 对应的 mirai 码中是否有某子字符串。
+
+    ```py
+    if AtAll in message_chain:
+        print(&#39;AtAll&#39;)
+
+    if At(bot.qq) in message_chain:
+        print(&#39;At Me&#39;)
+
+    if MessageChain([At(bot.qq), Plain(&#39;Hello!&#39;)]) in message_chain:
+        print(&#39;Hello!&#39;)
+
+    if &#39;Hello&#39; in message_chain:
+        print(&#39;Hi!&#39;)
+    ```
+
+    消息链的 `has` 方法和 `in` 等价。
+    ```py
+    if message_chain.has(AtAll):
+        print(&#39;AtAll&#39;)
+    ```
+
+    也可以使用 `&gt;=` 和 `&lt;= `运算符：
+    ```py
+    if MessageChain([At(bot.qq), Plain(&#39;Hello!&#39;)]) &lt;= message_chain:
+        print(&#39;Hello!&#39;)
+    ```
+
+    需注意，此处的子消息链匹配会把 Plain 看成一个整体，而不是匹配其文本的一部分。
+    如需对文本进行部分匹配，请采用 mirai 码字符串匹配的方式。
+
+    消息链对索引操作进行了增强。以消息组件类型为索引，获取消息链中的全部该类型的消息组件。
+    ```py
+    plain_list = message_chain[Plain]
+    &#39;[Plain(&#34;Hello World!&#34;)]&#39;
+    ```
+
+    以 `类型, 数量` 为索引，获取前至多多少个该类型的消息组件。
+    ```py
+    plain_list_first = message_chain[Plain, 1]
+    &#39;[Plain(&#34;Hello World!&#34;)]&#39;
+    ```
+
+    消息链的 `get` 方法和索引操作等价。
+    ```py
+    plain_list_first = message_chain.get(Plain)
+    &#39;[Plain(&#34;Hello World!&#34;)]&#39;
+    ```
+
+    消息链的 `get` 方法还可指定第二个参数 `count`，这相当于以 `类型, 数量` 为索引。
+    ```py
+    plain_list_first = message_chain.get(Plain, 1)
+    # 这等价于
+    plain_list_first = message_chain[Plain, 1]
+    ```
+
+    可以用加号连接两个消息链。
+    ```py
+    MessageChain([&#39;Hello World!&#39;]) + MessageChain([&#39;Goodbye World!&#39;])
+    # 返回 MessageChain([Plain(&#34;Hello World!&#34;), Plain(&#34;Goodbye World!&#34;)])
+    ```
+
+    可以用 `*` 运算符复制消息链。
+    ```py
+    MessageChain([&#39;Hello World!&#39;]) * 2
+    # 返回 MessageChain([Plain(&#34;Hello World!&#34;), Plain(&#34;Hello World!&#34;)])
+    ```
+
+    除此之外，消息链还支持很多 list 拥有的操作，比如 `index` 和 `count`。
+    ```py
+    message_chain = MessageChain([
+        AtAll(),
+        &#34;Hello World!&#34;,
+    ])
+    message_chain.index(Plain)
+    # 返回 0
+    message_chain.count(Plain)
+    # 返回 1
+    ```
+
+    消息链对这些操作进行了拓展。在传入元素的地方，一般都可以传入元素的类型。
+    &#34;&#34;&#34;
+    __root__: List[MessageComponent]
+
+    @staticmethod
+    def _parse_message_chain(msg_chain: Iterable):
+        result = []
+        for msg in msg_chain:
+            if isinstance(msg, dict):
+                result.append(MessageComponent.parse_obj(msg))
+            elif isinstance(msg, MessageComponent):
+                result.append(msg)
+            elif isinstance(msg, str):
+                result.append(Plain(msg))
+            else:
+                raise TypeError(
+                    f&#34;消息链中元素需为 dict 或 str 或 MessageComponent，当前类型：{type(msg)}&#34;
+                )
+        return result
+
+    @validator(&#39;__root__&#39;, always=True, pre=True)
+    def _parse_component(cls, msg_chain):
+        if isinstance(msg_chain, (str, MessageComponent)):
+            msg_chain = [msg_chain]
+        if not msg_chain:
+            msg_chain = []
+        return cls._parse_message_chain(msg_chain)
+
+    @classmethod
+    def parse_obj(cls, msg_chain: Iterable):
+        &#34;&#34;&#34;通过列表形式的消息链，构造对应的 `MessageChain` 对象。
+
+        Args:
+            msg_chain: 列表形式的消息链。
+        &#34;&#34;&#34;
+        result = cls._parse_message_chain(msg_chain)
+        return cls(__root__=result)
+
+    def __init__(self, __root__: Iterable[MessageComponent] = None):
+        super().__init__(__root__=__root__)
+
+    def __str__(self):
+        return &#34;&#34;.join(str(component) for component in self.__root__)
+
+    def __repr__(self):
+        return f&#39;{self.__class__.__name__}({self.__root__!r})&#39;
+
+    def __iter__(self):
+        yield from self.__root__
+
+    @overload
+    def get(self, index: int) -&gt; MessageComponent:
+        ...
+
+    @overload
+    def get(self, index: slice) -&gt; List[MessageComponent]:
+        ...
+
+    @overload
+    def get(self, index: Type[TMessageComponent]) -&gt; List[TMessageComponent]:
+        ...
+
+    @overload
+    def get(
+        self, index: Tuple[Type[TMessageComponent], int]
+    ) -&gt; List[TMessageComponent]:
+        ...
+
+    def get(
+        self,
+        index: Union[int, slice, Type[TMessageComponent],
+                     Tuple[Type[TMessageComponent], int]],
+        count: Optional[int] = None
+    ) -&gt; Union[MessageComponent, List[MessageComponent],
+               List[TMessageComponent]]:
+        &#34;&#34;&#34;获取消息链中的某个（某些）消息组件，或某类型的消息组件。
+
+        Args:
+            index (`Union[int, slice, Type[TMessageComponent], Tuple[Type[TMessageComponent], int]]`):
+                如果为 `int`，则返回该索引处的消息组件。
+                如果为 `slice`，则返回该索引范围处的消息组件。
+                如果为 `Type[TMessageComponent]`，则返回该类型的全部消息组件。
+                如果为 `Tuple[Type[TMessageComponent], int]`，则返回该类型的至多 `index[1]` 个消息组件。
+
+            count: 如果为 `int`，则返回至多 `count` 个消息组件。
+
+        Returns:
+            MessageComponent: 返回指定索引处的消息组件。
+            List[MessageComponent]: 返回指定索引范围的消息组件。
+            List[TMessageComponent]: 返回指定类型的消息组件构成的列表。
+        &#34;&#34;&#34;
+        # 正常索引
+        if isinstance(index, int):
+            return self.__root__[index]
+        # 切片索引
+        if isinstance(index, slice):
+            return self.__root__[index]
+        # 指定 count
+        if count:
+            if isinstance(index, type):
+                index = (index, count)
+            elif isinstance(index, tuple):
+                index = (index[0], count if count &lt; index[1] else index[1])
+        # 索引对象为 MessageComponent 类，返回所有对应 component
+        if isinstance(index, type):
+            return [
+                component for component in self if type(component) is index
+            ]
+        # 索引对象为 MessageComponent 和 int 构成的 tuple， 返回指定数量的 component
+        if isinstance(index, tuple):
+            components = (
+                component for component in self if type(component) is index[0]
+            )
+            return [
+                component for component, _ in zip(components, range(index[1]))
+            ]
+        raise TypeError(f&#34;消息链索引需为 int 或 MessageComponent，当前类型：{type(index)}&#34;)
+
+    def get_first(self,
+                  t: Type[TMessageComponent]) -&gt; Optional[TMessageComponent]:
+        &#34;&#34;&#34;获取消息链中第一个符合类型的消息组件。&#34;&#34;&#34;
+        for component in self:
+            if isinstance(component, t):
+                return component
+        return None
+
+    @overload
+    def __getitem__(self, index: int) -&gt; MessageComponent:
+        ...
+
+    @overload
+    def __getitem__(self, index: slice) -&gt; List[MessageComponent]:
+        ...
+
+    @overload
+    def __getitem__(self,
+                    index: Type[TMessageComponent]) -&gt; List[TMessageComponent]:
+        ...
+
+    @overload
+    def __getitem__(
+        self, index: Tuple[Type[TMessageComponent], int]
+    ) -&gt; List[TMessageComponent]:
+        ...
+
+    def __getitem__(
+        self, index: Union[int, slice, Type[TMessageComponent],
+                           Tuple[Type[TMessageComponent], int]]
+    ) -&gt; Union[MessageComponent, List[MessageComponent],
+               List[TMessageComponent]]:
+        return self.get(index)
+
+    def __setitem__(
+        self, key: Union[int, slice],
+        value: Union[MessageComponent, str, Iterable[Union[MessageComponent,
+                                                           str]]]
+    ):
+        if isinstance(value, str):
+            value = Plain(value)
+        if isinstance(value, Iterable):
+            value = (Plain(c) if isinstance(c, str) else c for c in value)
+        self.__root__[key] = value  # type: ignore
+
+    def __delitem__(self, key: Union[int, slice]):
+        del self.__root__[key]
+
+    def __reversed__(self) -&gt; Iterable[MessageComponent]:
+        return reversed(self.__root__)
+
+    def has(
+        self, sub: Union[MessageComponent, Type[MessageComponent],
+                         &#39;MessageChain&#39;, str]
+    ) -&gt; bool:
+        &#34;&#34;&#34;判断消息链中：
+        1. 是否有某个消息组件。
+        2. 是否有某个类型的消息组件。
+        3. 是否有某个子消息链。
+        4. 对应的 mirai 码中是否有某子字符串。
+
+        Args:
+            sub (`Union[MessageComponent, Type[MessageComponent], &#39;MessageChain&#39;, str]`):
+                若为 `MessageComponent`，则判断该组件是否在消息链中。
+                若为 `Type[MessageComponent]`，则判断该组件类型是否在消息链中。
+                若为 `MessageChain`，则判断该子消息链是否在消息链中。
+                若为 `str`，则判断对应的 mirai 码中是否有某子字符串。
+
+        Returns:
+            bool: 是否找到。
+        &#34;&#34;&#34;
+        if isinstance(sub, type):  # 检测消息链中是否有某种类型的对象
+            for i in self:
+                if type(i) is sub:
+                    return True
+            return False
+        if isinstance(sub, MessageComponent):  # 检查消息链中是否有某个组件
+            for i in self:
+                if i == sub:
+                    return True
+            return False
+        if isinstance(sub, MessageChain):  # 检查消息链中是否有某个子消息链
+            return bool(kmp(self, sub))
+        if isinstance(sub, str):  # 检查消息中有无指定字符串子串
+            return sub in deserialize(str(self))
+        raise TypeError(f&#34;类型不匹配，当前类型：{type(sub)}&#34;)
+
+    def __contains__(self, sub) -&gt; bool:
+        return self.has(sub)
+
+    def __ge__(self, other):
+        return other in self
+
+    def __len__(self) -&gt; int:
+        return len(self.__root__)
+
+    def __add__(
+        self, other: Union[&#39;MessageChain&#39;, MessageComponent, str]
+    ) -&gt; &#39;MessageChain&#39;:
+        if isinstance(other, MessageChain):
+            return self.__class__(self.__root__ + other.__root__)
+        if isinstance(other, str):
+            return self.__class__(self.__root__ + [Plain(other)])
+        if isinstance(other, MessageComponent):
+            return self.__class__(self.__root__ + [other])
+        return NotImplemented
+
+    def __radd__(self, other: Union[MessageComponent, str]) -&gt; &#39;MessageChain&#39;:
+        if isinstance(other, MessageComponent):
+            return self.__class__([other] + self.__root__)
+        if isinstance(other, str):
+            return self.__class__(
+                [cast(MessageComponent, Plain(other))] + self.__root__
+            )
+        return NotImplemented
+
+    def __mul__(self, other: int):
+        if isinstance(other, int):
+            return self.__class__(self.__root__ * other)
+        return NotImplemented
+
+    def __rmul__(self, other: int):
+        return self.__mul__(other)
+
+    def __iadd__(self, other: Iterable[Union[MessageComponent, str]]):
+        self.extend(other)
+
+    def __imul__(self, other: int):
+        if isinstance(other, int):
+            self.__root__ *= other
+        return NotImplemented
+
+    def index(
+        self,
+        x: Union[MessageComponent, Type[MessageComponent]],
+        i: int = 0,
+        j: int = -1
+    ) -&gt; int:
+        &#34;&#34;&#34;返回 x 在消息链中首次出现项的索引号（索引号在 i 或其后且在 j 之前）。
+
+        Args:
+            x (`Union[MessageComponent, Type[MessageComponent]]`):
+                要查找的消息元素或消息元素类型。
+            i: 从哪个位置开始查找。
+            j: 查找到哪个位置结束。
+
+        Returns:
+            int: 如果找到，则返回索引号。
+
+        Raises:
+            ValueError: 没有找到。
+            TypeError: 类型不匹配。
+        &#34;&#34;&#34;
+        if isinstance(x, type):
+            l = len(self)
+            if i &lt; 0:
+                i += l
+            if i &lt; 0:
+                i = 0
+            if j &lt; 0:
+                j += l
+            if j &gt; l:
+                j = l
+            for index in range(i, j):
+                if type(self[index]) is x:
+                    return index
+            raise ValueError(&#34;消息链中不存在该类型的组件。&#34;)
+        if isinstance(x, MessageComponent):
+            return self.__root__.index(x, i, j)
+        raise TypeError(f&#34;类型不匹配，当前类型：{type(x)}&#34;)
+
+    def count(self, x: Union[MessageComponent, Type[MessageComponent]]) -&gt; int:
+        &#34;&#34;&#34;返回消息链中 x 出现的次数。
+
+        Args:
+            x (`Union[MessageComponent, Type[MessageComponent]]`):
+                要查找的消息元素或消息元素类型。
+
+        Returns:
+            int: 次数。
+        &#34;&#34;&#34;
+        if isinstance(x, type):
+            return sum(1 for i in self if type(i) is x)
+        if isinstance(x, MessageComponent):
+            return self.__root__.count(x)
+        raise TypeError(f&#34;类型不匹配，当前类型：{type(x)}&#34;)
+
+    def extend(self, x: Iterable[Union[MessageComponent, str]]):
+        &#34;&#34;&#34;将另一个消息链中的元素添加到消息链末尾。
+
+        Args:
+            x: 另一个消息链，也可为消息元素或字符串元素的序列。
+        &#34;&#34;&#34;
+        self.__root__.extend(Plain(c) if isinstance(c, str) else c for c in x)
+
+    def append(self, x: Union[MessageComponent, str]):
+        &#34;&#34;&#34;将一个消息元素或字符串元素添加到消息链末尾。
+
+        Args:
+            x: 消息元素或字符串元素。
+        &#34;&#34;&#34;
+        self.__root__.append(Plain(x) if isinstance(x, str) else x)
+
+    def insert(self, i: int, x: Union[MessageComponent, str]):
+        &#34;&#34;&#34;将一个消息元素或字符串添加到消息链中指定位置。
+
+        Args:
+            i: 插入位置。
+            x: 消息元素或字符串元素。
+        &#34;&#34;&#34;
+        self.__root__.insert(i, Plain(x) if isinstance(x, str) else x)
+
+    def pop(self, i: int = -1) -&gt; MessageComponent:
+        &#34;&#34;&#34;从消息链中移除并返回指定位置的元素。
+
+        Args:
+            i: 移除位置。默认为末尾。
+
+        Returns:
+            MessageComponent: 移除的元素。
+        &#34;&#34;&#34;
+        return self.__root__.pop(i)
+
+    def remove(self, x: Union[MessageComponent, Type[MessageComponent]]):
+        &#34;&#34;&#34;从消息链中移除指定元素或指定类型的一个元素。
+
+        Args:
+            x: 指定的元素或元素类型。
+        &#34;&#34;&#34;
+        if isinstance(x, type):
+            self.pop(self.index(x))
+        if isinstance(x, MessageComponent):
+            self.__root__.remove(x)
+
+    def exclude(
+        self,
+        x: Union[MessageComponent, Type[MessageComponent]],
+        count: int = -1
+    ) -&gt; &#39;MessageChain&#39;:
+        &#34;&#34;&#34;返回移除指定元素或指定类型的元素后剩余的消息链。
+
+        Args:
+            x: 指定的元素或元素类型。
+            count: 至多移除的数量。默认为全部移除。
+
+        Returns:
+            MessageChain: 剩余的消息链。
+        &#34;&#34;&#34;
+        def _exclude():
+            nonlocal count
+            x_is_type = isinstance(x, type)
+            for c in self:
+                if count &gt; 0 and ((x_is_type and type(c) is x) or c == x):
+                    count -= 1
+                    continue
+                yield c
+
+        return self.__class__(_exclude())
+
+    def reverse(self):
+        &#34;&#34;&#34;将消息链原地翻转。&#34;&#34;&#34;
+        self.__root__.reverse()
+
+    @classmethod
+    def join(cls, *args: Iterable[Union[str, MessageComponent]]):
+        return cls(
+            Plain(c) if isinstance(c, str) else c
+            for c in itertools.chain(*args)
+        )
+
+    @property
+    def source(self) -&gt; Optional[&#39;Source&#39;]:
+        &#34;&#34;&#34;获取消息链中的 `Source` 对象。&#34;&#34;&#34;
+        return self.get_first(Source)
+
+    @property
+    def message_id(self) -&gt; int:
+        &#34;&#34;&#34;获取消息链的 message_id，若无法获取，返回 -1。&#34;&#34;&#34;
+        source = self.source
+        return source.id if source else -1
+
+
+TMessage = Union[MessageChain, Iterable[Union[MessageComponent, str]],
+                 MessageComponent, str]
+&#34;&#34;&#34;可以转化为 MessageChain 的类型。&#34;&#34;&#34;
+
+
+class Source(MessageComponent):
+    &#34;&#34;&#34;源。包含消息的基本信息。&#34;&#34;&#34;
+    type: str = &#34;Source&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    id: int
+    &#34;&#34;&#34;消息的识别号，用于引用回复（Source 类型永远为 MessageChain 的第一个元素）。&#34;&#34;&#34;
+    time: datetime
+    &#34;&#34;&#34;消息时间。&#34;&#34;&#34;
+
+
+class Plain(MessageComponent):
+    &#34;&#34;&#34;纯文本。&#34;&#34;&#34;
+    type: str = &#34;Plain&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    text: str
+    &#34;&#34;&#34;文字消息。&#34;&#34;&#34;
+    def __str__(self):
+        return serialize(self.text)
+
+    def __repr__(self):
+        return f&#39;Plain({self.text!r})&#39;
+
+
+class Quote(MessageComponent):
+    &#34;&#34;&#34;引用。&#34;&#34;&#34;
+    type: str = &#34;Quote&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    id: Optional[int] = None
+    &#34;&#34;&#34;被引用回复的原消息的 message_id。&#34;&#34;&#34;
+    group_id: Optional[int] = None
+    &#34;&#34;&#34;被引用回复的原消息所接收的群号，当为好友消息时为0。&#34;&#34;&#34;
+    sender_id: Optional[int] = None
+    &#34;&#34;&#34;被引用回复的原消息的发送者的QQ号。&#34;&#34;&#34;
+    target_id: Optional[int] = None
+    &#34;&#34;&#34;被引用回复的原消息的接收者者的QQ号（或群号）。&#34;&#34;&#34;
+    origin: MessageChain
+    &#34;&#34;&#34;被引用回复的原消息的消息链对象。&#34;&#34;&#34;
+    @validator(&#34;origin&#34;, always=True, pre=True)
+    def origin_formater(cls, v):
+        return MessageChain.parse_obj(v)
+
+
+class At(MessageComponent):
+    &#34;&#34;&#34;At某人。&#34;&#34;&#34;
+    type: str = &#34;At&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    target: int
+    &#34;&#34;&#34;群员 QQ 号。&#34;&#34;&#34;
+    display: Optional[str] = None
+    &#34;&#34;&#34;At时显示的文字，发送消息时无效，自动使用群名片。&#34;&#34;&#34;
+    def __eq__(self, other):
+        return isinstance(other, At) and self.target == other.target
+
+    def __str__(self):
+        return f&#34;[mirai:at:{self.target}]&#34;
+
+
+class AtAll(MessageComponent):
+    &#34;&#34;&#34;At全体。&#34;&#34;&#34;
+    type: str = &#34;AtAll&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    def __str__(self):
+        return f&#34;[mirai:atall]&#34;
+
+
+class Face(MessageComponent):
+    &#34;&#34;&#34;表情。&#34;&#34;&#34;
+    type: str = &#34;Face&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    face_id: Optional[int] = None
+    &#34;&#34;&#34;QQ 表情编号，可选，优先度高于 name。&#34;&#34;&#34;
+    name: Optional[str] = None
+    &#34;&#34;&#34;QQ表情名称，可选。&#34;&#34;&#34;
+    def __init__(self, *args, **kwargs):
+        if len(args) == 1:
+            if isinstance(args[0], str):
+                self.name = args[0]
+            elif isinstance(args[0], int):
+                self.face_id = args[0]
+            super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)
+
+    def __eq__(self, other):
+        return isinstance(other, Face) and \
+            (self.face_id == other.face_id or self.name == other.name)
+
+    def __str__(self):
+        return f&#34;[mirai:face:{self.face_id}]&#34;
+
+
+class Image(MessageComponent):
+    &#34;&#34;&#34;图片。&#34;&#34;&#34;
+    type: str = &#34;Image&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    image_id: Optional[str] = None
+    &#34;&#34;&#34;图片的 image_id，群图片与好友图片格式不同。不为空时将忽略 url 属性。&#34;&#34;&#34;
+    url: Optional[HttpUrl] = None
+    &#34;&#34;&#34;图片的 URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载。&#34;&#34;&#34;
+    path: Union[str, Path, None] = None
+    &#34;&#34;&#34;图片的路径，发送本地图片。&#34;&#34;&#34;
+    base64: Optional[str] = None
+    &#34;&#34;&#34;图片的 Base64 编码。&#34;&#34;&#34;
+    def __eq__(self, other):
+        return isinstance(
+            other, Image
+        ) and self.type == other.type and self.uuid == other.uuid
+
+    def __str__(self):
+        return f&#34;[mirai:image:{self.image_id}]&#34;
+
+    @validator(&#39;path&#39;)
+    def validate_path(cls, path: Union[str, Path, None]):
+        &#34;&#34;&#34;修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。&#34;&#34;&#34;
+        if path:
+            try:
+                return str(Path(path).resolve(strict=True))
+            except FileNotFoundError:
+                raise ValueError(f&#34;无效路径：{path}&#34;)
+        else:
+            return path
+
+    @property
+    def uuid(self):
+        image_id = self.image_id
+        if image_id[0] == &#39;{&#39;:  # 群图片
+            image_id = image_id[1:37]
+        elif image_id[0] == &#39;/&#39;:  # 好友图片
+            image_id = image_id[1:]
+        return image_id
+
+    def as_group_image(self) -&gt; str:
+        return f&#34;{{{self.uuid.upper()}}}.jpg&#34;
+
+    def as_friend_image(self) -&gt; str:
+        return f&#34;/{self.uuid.lower()}&#34;
+
+    def as_flash_image(self) -&gt; &#34;FlashImage&#34;:
+        return FlashImage(
+            image_id=self.image_id,
+            url=self.url,
+            path=self.path,
+            base64=self.base64
+        )
+
+    async def download(
+        self,
+        filename: Union[str, Path, None] = None,
+        directory: Union[str, Path, None] = None,
+        determine_type: bool = True
+    ):
+        &#34;&#34;&#34;下载图片到本地。
+
+        Args:
+            filename: 下载到本地的文件路径。与 `directory` 二选一。
+            directory: 下载到本地的文件夹路径。与 `filename` 二选一。
+            determine_type: 是否自动根据图片类型确定拓展名，默认为 True。
+        &#34;&#34;&#34;
+        if not self.url:
+            logger.warning(f&#39;图片 `{self.uuid}` 无 url 参数，下载失败。&#39;)
+            return
+
+        import httpx
+        async with httpx.AsyncClient() as client:
+            response = await client.get(self.url)
+            response.raise_for_status()
+            content = response.content
+
+            if filename:
+                path = Path(filename)
+                if determine_type:
+                    import imghdr
+                    path = path.with_suffix(
+                        &#39;.&#39; + str(imghdr.what(None, content))
+                    )
+                path.parent.mkdir(parents=True, exist_ok=True)
+            elif directory:
+                import imghdr
+                path = Path(directory)
+                path.mkdir(parents=True, exist_ok=True)
+                path = path / f&#39;{self.uuid}.{imghdr.what(None, content)}&#39;
+            else:
+                raise ValueError(&#34;请指定文件路径或文件夹路径！&#34;)
+
+            import aiofiles
+            async with aiofiles.open(path, &#39;wb&#39;) as f:
+                await f.write(content)
+
+            return path
+
+    @classmethod
+    async def from_local(
+        cls,
+        filename: Union[str, Path, None] = None,
+        content: Optional[bytes] = None,
+    ) -&gt; &#34;Image&#34;:
+        &#34;&#34;&#34;从本地文件路径加载图片，以 base64 的形式传递。
+
+        Args:
+            filename: 从本地文件路径加载图片，与 `content` 二选一。
+            content: 从本地文件内容加载图片，与 `filename` 二选一。
+
+        Returns:
+            Image: 图片对象。
+        &#34;&#34;&#34;
+        if content:
+            pass
+        if filename:
+            path = Path(filename)
+            import aiofiles
+            async with aiofiles.open(path, &#39;rb&#39;) as f:
+                content = await f.read()
+        else:
+            raise ValueError(&#34;请指定图片路径或图片内容！&#34;)
+        import base64
+        img = cls(base64=base64.b64encode(content).decode())
+        return img
+
+    @classmethod
+    def from_unsafe_path(cls, path: Union[str, Path]) -&gt; &#34;Image&#34;:
+        &#34;&#34;&#34;从不安全的路径加载图片。
+
+        Args:
+            path: 从不安全的路径加载图片。
+
+        Returns:
+            Image: 图片对象。
+        &#34;&#34;&#34;
+        return cls.construct(path=str(path))
+
+
+class Xml(MessageComponent):
+    &#34;&#34;&#34;XML。&#34;&#34;&#34;
+    type: str = &#34;Xml&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    xml: str
+    &#34;&#34;&#34;XML文本。&#34;&#34;&#34;
+
+
+class Json(MessageComponent):
+    &#34;&#34;&#34;JSON。&#34;&#34;&#34;
+    type: str = &#34;Json&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    json_: str
+    &#34;&#34;&#34;JSON 文本。&#34;&#34;&#34;
+
+
+class App(MessageComponent):
+    &#34;&#34;&#34;应用。&#34;&#34;&#34;
+    type: str = &#34;App&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    content: str
+    &#34;&#34;&#34;内容。&#34;&#34;&#34;
+    def as_json(self):
+        from json import loads as json_loads
+        return json_loads(self.content)
+
+    def __str__(self):
+        return f&#39;[mirai:app:{serialize(self.content)}]&#39;
+
+
+POKE_TYPE = {
+    &#34;ChuoYiChuo&#34;: 1,
+    &#34;BiXin&#34;: 2,
+    &#34;DianZan&#34;: 3,
+    &#34;XinSui&#34;: 4,
+    &#34;LiuLiuLiu&#34;: 5,
+    &#34;FangDaZhao&#34;: 6,
+    &#34;BaoBeiQiu&#34;: 126,
+    &#34;Rose&#34;: 126,
+    &#34;ZhaoHuanShu&#34;: 126,
+    &#34;RangNiPi&#34;: 126,
+    &#34;JeiYin&#34;: 126,
+    &#34;ShouLei&#34;: 126,
+    &#34;GouYin&#34;: 126,
+    &#34;ZhuaYiXia&#34;: 126,
+    &#34;SuiPing&#34;: 126,
+    &#34;QiaoMen&#34;: 126,
+}
+POKE_ID = {
+    &#34;ChuoYiChuo&#34;: -1,
+    &#34;BiXin&#34;: -1,
+    &#34;DianZan&#34;: -1,
+    &#34;XinSui&#34;: -1,
+    &#34;LiuLiuLiu&#34;: -1,
+    &#34;FangDaZhao&#34;: -1,
+    &#34;BaoBeiQiu&#34;: 2011,
+    &#34;Rose&#34;: 2007,
+    &#34;ZhaoHuanShu&#34;: 2006,
+    &#34;RangNiPi&#34;: 2009,
+    &#34;JeiYin&#34;: 2005,
+    &#34;ShouLei&#34;: 2004,
+    &#34;GouYin&#34;: 2003,
+    &#34;ZhuaYiXia&#34;: 2001,
+    &#34;SuiPing&#34;: 2002,
+    &#34;QiaoMen&#34;: 2002,
+}
+
+
+class PokeNames(str, Enum):
+    &#34;&#34;&#34;戳一戳名称。&#34;&#34;&#34;
+    ChuoYiChuo = &#34;ChuoYiChuo&#34;
+    BiXin = &#34;BiXin&#34;
+    DianZan = &#34;DianZan&#34;
+    XinSui = &#34;XinSui&#34;
+    LiuLiuLiu = &#34;LiuLiuLiu&#34;
+    FangDaZhao = &#34;FangDaZhao&#34;
+    BaoBeiQiu = &#34;BaoBeiQiu&#34;
+    Rose = &#34;Rose&#34;
+    ZhaoHuanShu = &#34;ZhaoHuanShu&#34;
+    RangNiPi = &#34;RangNiPi&#34;
+    JeiYin = &#34;JeiYin&#34;
+    ShouLei = &#34;ShouLei&#34;
+    GouYin = &#34;GouYin&#34;
+    ZhuaYiXia = &#34;ZhuaYiXia&#34;
+    SuiPing = &#34;SuiPing&#34;
+    QiaoMen = &#34;QiaoMen&#34;
+
+    def as_component(self) -&gt; &#39;Poke&#39;:
+        return Poke(name=self.value)
+
+
+class Poke(MessageComponent):
+    &#34;&#34;&#34;戳一戳。&#34;&#34;&#34;
+    type: str = &#34;Poke&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    name: PokeNames
+    &#34;&#34;&#34;名称。&#34;&#34;&#34;
+    @property
+    def poke_type(self):
+        return POKE_TYPE[self.name]
+
+    @property
+    def poke_id(self):
+        return POKE_ID[self.name]
+
+    def __str__(self):
+        return f&#39;[mirai:poke:{self.name},{self.poke_type},{self.poke_id}]&#39;
+
+
+class Unknown(MessageComponent):
+    &#34;&#34;&#34;未知。&#34;&#34;&#34;
+    type: str = &#34;Unknown&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    text: str
+    &#34;&#34;&#34;文本。&#34;&#34;&#34;
+
+
+class FlashImage(Image):
+    &#34;&#34;&#34;闪照。&#34;&#34;&#34;
+    type: str = &#34;FlashImage&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    image_id: Optional[str] = None
+    &#34;&#34;&#34;图片的 image_id，群图片与好友图片格式不同。不为空时将忽略 url 属性。&#34;&#34;&#34;
+    url: Optional[HttpUrl] = None
+    &#34;&#34;&#34;图片的 URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载。&#34;&#34;&#34;
+    path: Optional[str] = None
+    &#34;&#34;&#34;图片的路径，发送本地图片，路径相对于 `plugins/MiraiAPIHTTP/images`。&#34;&#34;&#34;
+    base64: Optional[str] = None
+    &#34;&#34;&#34;图片的 Base64 编码。&#34;&#34;&#34;
+    def __str__(self):
+        return f&#34;[mirai:flash:{self.image_id}]&#34;
+
+    def as_image(self) -&gt; Image:
+        return Image(self.image_id, self.url)
+
+
+class Voice(MessageComponent):
+    &#34;&#34;&#34;语音。&#34;&#34;&#34;
+    type: str = &#34;Voice&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    voice_id: Optional[str] = None
+    &#34;&#34;&#34;语音的 voice_id，不为空时将忽略 url 属性。&#34;&#34;&#34;
+    url: Optional[str] = None
+    &#34;&#34;&#34;语音的 URL，发送时可作网络语音的链接；接收时为腾讯语音服务器的链接，可用于语音下载。&#34;&#34;&#34;
+    path: Optional[str] = None
+    &#34;&#34;&#34;语音的路径，发送本地语音。&#34;&#34;&#34;
+    base64: Optional[str] = None
+    &#34;&#34;&#34;语音的 Base64 编码。&#34;&#34;&#34;
+    @validator(&#39;path&#39;)
+    def validate_path(cls, path: Optional[str]):
+        &#34;&#34;&#34;修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。&#34;&#34;&#34;
+        if path:
+            try:
+                return str(Path(path).resolve(strict=True))
+            except FileNotFoundError:
+                raise ValueError(f&#34;无效路径：{path}&#34;)
+        else:
+            return path
+
+    async def download(
+        self,
+        filename: Union[str, Path, None] = None,
+        directory: Union[str, Path, None] = None
+    ):
+        &#34;&#34;&#34;下载语音到本地。
+
+        语音采用 silk v3 格式，silk 格式的编码解码请使用 [graiax-silkcoder](https://pypi.org/project/graiax-silkcoder/)。
+
+        Args:
+            filename: 下载到本地的文件路径。与 `directory` 二选一。
+            directory: 下载到本地的文件夹路径。与 `filename` 二选一。
+        &#34;&#34;&#34;
+        if not self.url:
+            logger.warning(f&#39;语音 `{self.voice_id}` 无 url 参数，下载失败。&#39;)
+            return
+
+        import httpx
+        async with httpx.AsyncClient() as client:
+            response = await client.get(self.url)
+            response.raise_for_status()
+            content = response.content
+
+            if filename:
+                path = Path(filename)
+                path.parent.mkdir(parents=True, exist_ok=True)
+            elif directory:
+                path = Path(directory)
+                path.mkdir(parents=True, exist_ok=True)
+                path = path / f&#39;{self.voice_id}.silk&#39;
+            else:
+                raise ValueError(&#34;请指定文件路径或文件夹路径！&#34;)
+
+            import aiofiles
+            async with aiofiles.open(path, &#39;wb&#39;) as f:
+                await f.write(content)
+
+    @classmethod
+    async def from_local(
+        cls,
+        filename: Union[str, Path, None] = None,
+        content: Optional[bytes] = None,
+    ) -&gt; &#34;Voice&#34;:
+        &#34;&#34;&#34;从本地文件路径加载语音，以 base64 的形式传递。
+
+        Args:
+            filename: 从本地文件路径加载语音，与 `content` 二选一。
+            content: 从本地文件内容加载语音，与 `filename` 二选一。
+        &#34;&#34;&#34;
+        if content:
+            pass
+        if filename:
+            path = Path(filename)
+            import aiofiles
+            async with aiofiles.open(path, &#39;rb&#39;) as f:
+                content = await f.read()
+        else:
+            raise ValueError(&#34;请指定语音路径或语音内容！&#34;)
+        import base64
+        img = cls(base64=base64.b64encode(content).decode())
+        return img
+
+
+class Dice(MessageComponent):
+    &#34;&#34;&#34;骰子。&#34;&#34;&#34;
+    type: str = &#34;Dice&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    value: int
+    &#34;&#34;&#34;点数。&#34;&#34;&#34;
+    def __str__(self):
+        return f&#39;[mirai:dice:{self.value}]&#39;
+
+
+class MusicShareKind(str, Enum):
+    &#34;&#34;&#34;音乐分享的来源。&#34;&#34;&#34;
+    NeteaseCloudMusic = &#34;NeteaseCloudMusic&#34;
+    QQMusic = &#34;QQMusic&#34;
+    MiguMusic = &#34;MiguMusic&#34;
+    KugouMusic = &#34;KugouMusic&#34;
+    KuwoMusic = &#34;KuwoMusic&#34;
+
+
+class MusicShare(MessageComponent):
+    &#34;&#34;&#34;音乐分享。&#34;&#34;&#34;
+    type: str = &#34;MusicShare&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    kind: MusicShareKind
+    &#34;&#34;&#34;音乐分享的来源。&#34;&#34;&#34;
+    title: str
+    &#34;&#34;&#34;标题。&#34;&#34;&#34;
+    summary: str
+    &#34;&#34;&#34;歌手。&#34;&#34;&#34;
+    jump_url: HttpUrl
+    &#34;&#34;&#34;跳转路径。&#34;&#34;&#34;
+    picture_url: HttpUrl
+    &#34;&#34;&#34;封面路径。&#34;&#34;&#34;
+    music_url: HttpUrl
+    &#34;&#34;&#34;音源路径。&#34;&#34;&#34;
+    brief: str = &#34;&#34;
+    &#34;&#34;&#34;在消息列表中显示的内容。&#34;&#34;&#34;
+
+
+class ForwardMessageNode(MiraiBaseModel):
+    &#34;&#34;&#34;合并转发中的一条消息。&#34;&#34;&#34;
+    sender_id: int
+    &#34;&#34;&#34;发送人QQ号。&#34;&#34;&#34;
+    sender_name: str
+    &#34;&#34;&#34;显示名称。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
+    source_id: Optional[int] = None
+    &#34;&#34;&#34;消息的 message_id，可以只使用此属性，从缓存中读取消息内容。&#34;&#34;&#34;
+    time: Optional[datetime] = None
+    &#34;&#34;&#34;发送时间。&#34;&#34;&#34;
+    @validator(&#39;message_chain&#39;, check_fields=False)
+    def _validate_message_chain(cls, value: Union[MessageChain, list]):
+        if isinstance(value, list):
+            return MessageChain.parse_obj(value)
+        return value
+
+    @classmethod
+    def create(
+        cls, sender: Union[Friend, GroupMember], message: MessageChain
+    ) -&gt; &#39;ForwardMessageNode&#39;:
+        &#34;&#34;&#34;从生成转发消息。
+
+        Args:
+            sender: 发送人。
+            message: 消息内容。
+
+        Returns:
+            ForwardMessageNode: 生成的一条消息。
+        &#34;&#34;&#34;
+        return ForwardMessageNode(
+            sender_id=sender.id,
+            sender_name=sender.get_name(),
+            message_chain=message
+        )
+
+
+class Forward(MessageComponent):
+    &#34;&#34;&#34;合并转发。&#34;&#34;&#34;
+    type: str = &#34;Forward&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    node_list: List[ForwardMessageNode]
+    &#34;&#34;&#34;转发消息节点列表。&#34;&#34;&#34;
+    def __init__(self, *args, **kwargs):
+        if len(args) == 1:
+            self.node_list = args[0]
+            super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)
+
+
+class File(MessageComponent):
+    &#34;&#34;&#34;文件。&#34;&#34;&#34;
+    type: str = &#34;File&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    id: str
+    &#34;&#34;&#34;文件识别 ID。&#34;&#34;&#34;
+    name: str
+    &#34;&#34;&#34;文件名称。&#34;&#34;&#34;
+    size: int
+    &#34;&#34;&#34;文件大小。&#34;&#34;&#34;
+
+
+class MiraiCode(MessageComponent):
+    &#34;&#34;&#34;Mirai 码。&#34;&#34;&#34;
+    type: str = &#34;MiraiCode&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    code: str
+    &#34;&#34;&#34;Mirai 码。&#34;&#34;&#34;
+    def __str__(self):
+        return serialize(self.code)
+
+    def __repr__(self):
+        return f&#39;MiraiCode({self.code!r})&#39;
+
+
+__all__ = [
+    &#39;App&#39;,
+    &#39;At&#39;,
+    &#39;AtAll&#39;,
+    &#39;Dice&#39;,
+    &#39;Face&#39;,
+    &#39;File&#39;,
+    &#39;FlashImage&#39;,
+    &#39;Forward&#39;,
+    &#39;ForwardMessageNode&#39;,
+    &#39;Image&#39;,
+    &#39;Json&#39;,
+    &#39;MessageChain&#39;,
+    &#39;MessageComponent&#39;,
+    &#39;MusicShareKind&#39;,
+    &#39;MusicShare&#39;,
+    &#39;Plain&#39;,
+    &#39;PokeNames&#39;,
+    &#39;Poke&#39;,
+    &#39;Quote&#39;,
+    &#39;Source&#39;,
+    &#39;Unknown&#39;,
+    &#39;Voice&#39;,
+    &#39;Xml&#39;,
+    &#39;serialize&#39;,
+    &#39;deserialize&#39;,
+    &#39;TMessage&#39;,
+]</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-variables">Global variables</h2>
+<dl>
+<dt id="mirai.models.message.TMessage"><code class="name">var <span class="ident">TMessage</span></code></dt>
+<dd>
+<div class="desc"><p>可以转化为 MessageChain 的类型。</p></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="mirai.models.message.deserialize"><code class="name flex">
+<span>def <span class="ident">deserialize</span></span>(<span>s: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>mirai 码去转义。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>s</code></strong></dt>
+<dd>待去转义的字符串。</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>去转义后的字符串。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def deserialize(s: str) -&gt; str:
+    &#34;&#34;&#34;mirai 码去转义。
+
+    Args:
+        s: 待去转义的字符串。
+
+    Returns:
+        str: 去转义后的字符串。
+    &#34;&#34;&#34;
+    return re.sub(
+        r&#39;\\([\[\]:,\\])&#39;, lambda match: match.group(1),
+        s.replace(&#39;\\n&#39;, &#39;\n&#39;).replace(&#39;\\r&#39;, &#39;\r&#39;)
+    )</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.message.serialize"><code class="name flex">
+<span>def <span class="ident">serialize</span></span>(<span>s: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>mirai 码转义。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>s</code></strong></dt>
+<dd>待转义的字符串。</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>去转义后的字符串。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def serialize(s: str) -&gt; str:
+    &#34;&#34;&#34;mirai 码转义。
+
+    Args:
+        s: 待转义的字符串。
+
+    Returns:
+        str: 去转义后的字符串。
+    &#34;&#34;&#34;
+    return re.sub(r&#39;[\[\]:,\\]&#39;, lambda match: &#39;\\&#39; + match.group(0),
+                  s).replace(&#39;\n&#39;, &#39;\\n&#39;).replace(&#39;\r&#39;, &#39;\\r&#39;)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="mirai.models.message.App"><code class="flex name class">
+<span>class <span class="ident">App</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>应用。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class App(MessageComponent):
+    &#34;&#34;&#34;应用。&#34;&#34;&#34;
+    type: str = &#34;App&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    content: str
+    &#34;&#34;&#34;内容。&#34;&#34;&#34;
+    def as_json(self):
+        from json import loads as json_loads
+        return json_loads(self.content)
+
+    def __str__(self):
+        return f&#39;[mirai:app:{serialize(self.content)}]&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.message.App.content"><code class="name">var <span class="ident">content</span> : str</code></dt>
+<dd>
+<div class="desc"><p>内容。</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="mirai.models.message.App.as_json"><code class="name flex">
+<span>def <span class="ident">as_json</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def as_json(self):
+    from json import loads as json_loads
+    return json_loads(self.content)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.type" href="#mirai.models.message.MessageComponent.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.message.At"><code class="flex name class">
+<span>class <span class="ident">At</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>At某人。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class At(MessageComponent):
+    &#34;&#34;&#34;At某人。&#34;&#34;&#34;
+    type: str = &#34;At&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    target: int
+    &#34;&#34;&#34;群员 QQ 号。&#34;&#34;&#34;
+    display: Optional[str] = None
+    &#34;&#34;&#34;At时显示的文字，发送消息时无效，自动使用群名片。&#34;&#34;&#34;
+    def __eq__(self, other):
+        return isinstance(other, At) and self.target == other.target
+
+    def __str__(self):
+        return f&#34;[mirai:at:{self.target}]&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.message.At.display"><code class="name">var <span class="ident">display</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>At时显示的文字，发送消息时无效，自动使用群名片。</p></div>
+</dd>
+<dt id="mirai.models.message.At.target"><code class="name">var <span class="ident">target</span> : int</code></dt>
+<dd>
+<div class="desc"><p>群员 QQ 号。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.type" href="#mirai.models.message.MessageComponent.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.message.AtAll"><code class="flex name class">
+<span>class <span class="ident">AtAll</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>At全体。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AtAll(MessageComponent):
+    &#34;&#34;&#34;At全体。&#34;&#34;&#34;
+    type: str = &#34;AtAll&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    def __str__(self):
+        return f&#34;[mirai:atall]&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.type" href="#mirai.models.message.MessageComponent.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.message.Dice"><code class="flex name class">
+<span>class <span class="ident">Dice</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>骰子。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Dice(MessageComponent):
+    &#34;&#34;&#34;骰子。&#34;&#34;&#34;
+    type: str = &#34;Dice&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    value: int
+    &#34;&#34;&#34;点数。&#34;&#34;&#34;
+    def __str__(self):
+        return f&#39;[mirai:dice:{self.value}]&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.message.Dice.value"><code class="name">var <span class="ident">value</span> : int</code></dt>
+<dd>
+<div class="desc"><p>点数。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.type" href="#mirai.models.message.MessageComponent.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.message.Face"><code class="flex name class">
+<span>class <span class="ident">Face</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>表情。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Face(MessageComponent):
+    &#34;&#34;&#34;表情。&#34;&#34;&#34;
+    type: str = &#34;Face&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    face_id: Optional[int] = None
+    &#34;&#34;&#34;QQ 表情编号，可选，优先度高于 name。&#34;&#34;&#34;
+    name: Optional[str] = None
+    &#34;&#34;&#34;QQ表情名称，可选。&#34;&#34;&#34;
+    def __init__(self, *args, **kwargs):
+        if len(args) == 1:
+            if isinstance(args[0], str):
+                self.name = args[0]
+            elif isinstance(args[0], int):
+                self.face_id = args[0]
+            super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)
+
+    def __eq__(self, other):
+        return isinstance(other, Face) and \
+            (self.face_id == other.face_id or self.name == other.name)
+
+    def __str__(self):
+        return f&#34;[mirai:face:{self.face_id}]&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.message.Face.face_id"><code class="name">var <span class="ident">face_id</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>QQ 表情编号，可选，优先度高于 name。</p></div>
+</dd>
+<dt id="mirai.models.message.Face.name"><code class="name">var <span class="ident">name</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>QQ表情名称，可选。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.type" href="#mirai.models.message.MessageComponent.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.message.File"><code class="flex name class">
+<span>class <span class="ident">File</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>文件。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class File(MessageComponent):
+    &#34;&#34;&#34;文件。&#34;&#34;&#34;
+    type: str = &#34;File&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    id: str
+    &#34;&#34;&#34;文件识别 ID。&#34;&#34;&#34;
+    name: str
+    &#34;&#34;&#34;文件名称。&#34;&#34;&#34;
+    size: int
+    &#34;&#34;&#34;文件大小。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.message.File.id"><code class="name">var <span class="ident">id</span> : str</code></dt>
+<dd>
+<div class="desc"><p>文件识别 ID。</p></div>
+</dd>
+<dt id="mirai.models.message.File.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>文件名称。</p></div>
+</dd>
+<dt id="mirai.models.message.File.size"><code class="name">var <span class="ident">size</span> : int</code></dt>
+<dd>
+<div class="desc"><p>文件大小。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.type" href="#mirai.models.message.MessageComponent.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.message.FlashImage"><code class="flex name class">
+<span>class <span class="ident">FlashImage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>闪照。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FlashImage(Image):
+    &#34;&#34;&#34;闪照。&#34;&#34;&#34;
+    type: str = &#34;FlashImage&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    image_id: Optional[str] = None
+    &#34;&#34;&#34;图片的 image_id，群图片与好友图片格式不同。不为空时将忽略 url 属性。&#34;&#34;&#34;
+    url: Optional[HttpUrl] = None
+    &#34;&#34;&#34;图片的 URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载。&#34;&#34;&#34;
+    path: Optional[str] = None
+    &#34;&#34;&#34;图片的路径，发送本地图片，路径相对于 `plugins/MiraiAPIHTTP/images`。&#34;&#34;&#34;
+    base64: Optional[str] = None
+    &#34;&#34;&#34;图片的 Base64 编码。&#34;&#34;&#34;
+    def __str__(self):
+        return f&#34;[mirai:flash:{self.image_id}]&#34;
+
+    def as_image(self) -&gt; Image:
+        return Image(self.image_id, self.url)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.message.Image" href="#mirai.models.message.Image">Image</a></li>
+<li><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="mirai.models.message.FlashImage.as_image"><code class="name flex">
+<span>def <span class="ident">as_image</span></span>(<span>self) ‑> <a title="mirai.models.message.Image" href="#mirai.models.message.Image">Image</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def as_image(self) -&gt; Image:
+    return Image(self.image_id, self.url)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.message.Image" href="#mirai.models.message.Image">Image</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.message.Image.base64" href="#mirai.models.message.Image.base64">base64</a></code></li>
+<li><code><a title="mirai.models.message.Image.download" href="#mirai.models.message.Image.download">download</a></code></li>
+<li><code><a title="mirai.models.message.Image.from_local" href="#mirai.models.message.Image.from_local">from_local</a></code></li>
+<li><code><a title="mirai.models.message.Image.from_unsafe_path" href="#mirai.models.message.Image.from_unsafe_path">from_unsafe_path</a></code></li>
+<li><code><a title="mirai.models.message.Image.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.message.Image.image_id" href="#mirai.models.message.Image.image_id">image_id</a></code></li>
+<li><code><a title="mirai.models.message.Image.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.message.Image.path" href="#mirai.models.message.Image.path">path</a></code></li>
+<li><code><a title="mirai.models.message.Image.type" href="#mirai.models.message.MessageComponent.type">type</a></code></li>
+<li><code><a title="mirai.models.message.Image.url" href="#mirai.models.message.Image.url">url</a></code></li>
+<li><code><a title="mirai.models.message.Image.validate_path" href="#mirai.models.message.Image.validate_path">validate_path</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.message.Forward"><code class="flex name class">
+<span>class <span class="ident">Forward</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>合并转发。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Forward(MessageComponent):
+    &#34;&#34;&#34;合并转发。&#34;&#34;&#34;
+    type: str = &#34;Forward&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    node_list: List[ForwardMessageNode]
+    &#34;&#34;&#34;转发消息节点列表。&#34;&#34;&#34;
+    def __init__(self, *args, **kwargs):
+        if len(args) == 1:
+            self.node_list = args[0]
+            super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.message.Forward.node_list"><code class="name">var <span class="ident">node_list</span> : List[<a title="mirai.models.message.ForwardMessageNode" href="#mirai.models.message.ForwardMessageNode">ForwardMessageNode</a>]</code></dt>
+<dd>
+<div class="desc"><p>转发消息节点列表。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.type" href="#mirai.models.message.MessageComponent.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.message.ForwardMessageNode"><code class="flex name class">
+<span>class <span class="ident">ForwardMessageNode</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>合并转发中的一条消息。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ForwardMessageNode(MiraiBaseModel):
+    &#34;&#34;&#34;合并转发中的一条消息。&#34;&#34;&#34;
+    sender_id: int
+    &#34;&#34;&#34;发送人QQ号。&#34;&#34;&#34;
+    sender_name: str
+    &#34;&#34;&#34;显示名称。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
+    source_id: Optional[int] = None
+    &#34;&#34;&#34;消息的 message_id，可以只使用此属性，从缓存中读取消息内容。&#34;&#34;&#34;
+    time: Optional[datetime] = None
+    &#34;&#34;&#34;发送时间。&#34;&#34;&#34;
+    @validator(&#39;message_chain&#39;, check_fields=False)
+    def _validate_message_chain(cls, value: Union[MessageChain, list]):
+        if isinstance(value, list):
+            return MessageChain.parse_obj(value)
+        return value
+
+    @classmethod
+    def create(
+        cls, sender: Union[Friend, GroupMember], message: MessageChain
+    ) -&gt; &#39;ForwardMessageNode&#39;:
+        &#34;&#34;&#34;从生成转发消息。
+
+        Args:
+            sender: 发送人。
+            message: 消息内容。
+
+        Returns:
+            ForwardMessageNode: 生成的一条消息。
+        &#34;&#34;&#34;
+        return ForwardMessageNode(
+            sender_id=sender.id,
+            sender_name=sender.get_name(),
+            message_chain=message
+        )</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.message.ForwardMessageNode.message_chain"><code class="name">var <span class="ident">message_chain</span> : <a title="mirai.models.message.MessageChain" href="#mirai.models.message.MessageChain">MessageChain</a></code></dt>
+<dd>
+<div class="desc"><p>消息内容。</p></div>
+</dd>
+<dt id="mirai.models.message.ForwardMessageNode.sender_id"><code class="name">var <span class="ident">sender_id</span> : int</code></dt>
+<dd>
+<div class="desc"><p>发送人QQ号。</p></div>
+</dd>
+<dt id="mirai.models.message.ForwardMessageNode.sender_name"><code class="name">var <span class="ident">sender_name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>显示名称。</p></div>
+</dd>
+<dt id="mirai.models.message.ForwardMessageNode.source_id"><code class="name">var <span class="ident">source_id</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>消息的 message_id，可以只使用此属性，从缓存中读取消息内容。</p></div>
+</dd>
+<dt id="mirai.models.message.ForwardMessageNode.time"><code class="name">var <span class="ident">time</span> : Union[datetime.datetime, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>发送时间。</p></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="mirai.models.message.ForwardMessageNode.create"><code class="name flex">
+<span>def <span class="ident">create</span></span>(<span>sender: Union[<a title="mirai.models.entities.Friend" href="entities.html#mirai.models.entities.Friend">Friend</a>, <a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>], message: <a title="mirai.models.message.MessageChain" href="#mirai.models.message.MessageChain">MessageChain</a>) ‑> <a title="mirai.models.message.ForwardMessageNode" href="#mirai.models.message.ForwardMessageNode">ForwardMessageNode</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>从生成转发消息。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>sender</code></strong></dt>
+<dd>发送人。</dd>
+<dt><strong><code>message</code></strong></dt>
+<dd>消息内容。</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="mirai.models.message.ForwardMessageNode" href="#mirai.models.message.ForwardMessageNode">ForwardMessageNode</a></code></dt>
+<dd>生成的一条消息。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def create(
+    cls, sender: Union[Friend, GroupMember], message: MessageChain
+) -&gt; &#39;ForwardMessageNode&#39;:
+    &#34;&#34;&#34;从生成转发消息。
+
+    Args:
+        sender: 发送人。
+        message: 消息内容。
+
+    Returns:
+        ForwardMessageNode: 生成的一条消息。
+    &#34;&#34;&#34;
+    return ForwardMessageNode(
+        sender_id=sender.id,
+        sender_name=sender.get_name(),
+        message_chain=message
+    )</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="mirai.models.message.Image"><code class="flex name class">
+<span>class <span class="ident">Image</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>图片。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Image(MessageComponent):
+    &#34;&#34;&#34;图片。&#34;&#34;&#34;
+    type: str = &#34;Image&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    image_id: Optional[str] = None
+    &#34;&#34;&#34;图片的 image_id，群图片与好友图片格式不同。不为空时将忽略 url 属性。&#34;&#34;&#34;
+    url: Optional[HttpUrl] = None
+    &#34;&#34;&#34;图片的 URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载。&#34;&#34;&#34;
+    path: Union[str, Path, None] = None
+    &#34;&#34;&#34;图片的路径，发送本地图片。&#34;&#34;&#34;
+    base64: Optional[str] = None
+    &#34;&#34;&#34;图片的 Base64 编码。&#34;&#34;&#34;
+    def __eq__(self, other):
+        return isinstance(
+            other, Image
+        ) and self.type == other.type and self.uuid == other.uuid
+
+    def __str__(self):
+        return f&#34;[mirai:image:{self.image_id}]&#34;
+
+    @validator(&#39;path&#39;)
+    def validate_path(cls, path: Union[str, Path, None]):
+        &#34;&#34;&#34;修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。&#34;&#34;&#34;
+        if path:
+            try:
+                return str(Path(path).resolve(strict=True))
+            except FileNotFoundError:
+                raise ValueError(f&#34;无效路径：{path}&#34;)
+        else:
+            return path
+
+    @property
+    def uuid(self):
+        image_id = self.image_id
+        if image_id[0] == &#39;{&#39;:  # 群图片
+            image_id = image_id[1:37]
+        elif image_id[0] == &#39;/&#39;:  # 好友图片
+            image_id = image_id[1:]
+        return image_id
+
+    def as_group_image(self) -&gt; str:
+        return f&#34;{{{self.uuid.upper()}}}.jpg&#34;
+
+    def as_friend_image(self) -&gt; str:
+        return f&#34;/{self.uuid.lower()}&#34;
+
+    def as_flash_image(self) -&gt; &#34;FlashImage&#34;:
+        return FlashImage(
+            image_id=self.image_id,
+            url=self.url,
+            path=self.path,
+            base64=self.base64
+        )
+
+    async def download(
+        self,
+        filename: Union[str, Path, None] = None,
+        directory: Union[str, Path, None] = None,
+        determine_type: bool = True
+    ):
+        &#34;&#34;&#34;下载图片到本地。
+
+        Args:
+            filename: 下载到本地的文件路径。与 `directory` 二选一。
+            directory: 下载到本地的文件夹路径。与 `filename` 二选一。
+            determine_type: 是否自动根据图片类型确定拓展名，默认为 True。
+        &#34;&#34;&#34;
+        if not self.url:
+            logger.warning(f&#39;图片 `{self.uuid}` 无 url 参数，下载失败。&#39;)
+            return
+
+        import httpx
+        async with httpx.AsyncClient() as client:
+            response = await client.get(self.url)
+            response.raise_for_status()
+            content = response.content
+
+            if filename:
+                path = Path(filename)
+                if determine_type:
+                    import imghdr
+                    path = path.with_suffix(
+                        &#39;.&#39; + str(imghdr.what(None, content))
+                    )
+                path.parent.mkdir(parents=True, exist_ok=True)
+            elif directory:
+                import imghdr
+                path = Path(directory)
+                path.mkdir(parents=True, exist_ok=True)
+                path = path / f&#39;{self.uuid}.{imghdr.what(None, content)}&#39;
+            else:
+                raise ValueError(&#34;请指定文件路径或文件夹路径！&#34;)
+
+            import aiofiles
+            async with aiofiles.open(path, &#39;wb&#39;) as f:
+                await f.write(content)
+
+            return path
+
+    @classmethod
+    async def from_local(
+        cls,
+        filename: Union[str, Path, None] = None,
+        content: Optional[bytes] = None,
+    ) -&gt; &#34;Image&#34;:
+        &#34;&#34;&#34;从本地文件路径加载图片，以 base64 的形式传递。
+
+        Args:
+            filename: 从本地文件路径加载图片，与 `content` 二选一。
+            content: 从本地文件内容加载图片，与 `filename` 二选一。
+
+        Returns:
+            Image: 图片对象。
+        &#34;&#34;&#34;
+        if content:
+            pass
+        if filename:
+            path = Path(filename)
+            import aiofiles
+            async with aiofiles.open(path, &#39;rb&#39;) as f:
+                content = await f.read()
+        else:
+            raise ValueError(&#34;请指定图片路径或图片内容！&#34;)
+        import base64
+        img = cls(base64=base64.b64encode(content).decode())
+        return img
+
+    @classmethod
+    def from_unsafe_path(cls, path: Union[str, Path]) -&gt; &#34;Image&#34;:
+        &#34;&#34;&#34;从不安全的路径加载图片。
+
+        Args:
+            path: 从不安全的路径加载图片。
+
+        Returns:
+            Image: 图片对象。
+        &#34;&#34;&#34;
+        return cls.construct(path=str(path))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mirai.models.message.FlashImage" href="#mirai.models.message.FlashImage">FlashImage</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.message.Image.base64"><code class="name">var <span class="ident">base64</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>图片的 Base64 编码。</p></div>
+</dd>
+<dt id="mirai.models.message.Image.image_id"><code class="name">var <span class="ident">image_id</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>图片的 image_id，群图片与好友图片格式不同。不为空时将忽略 url 属性。</p></div>
+</dd>
+<dt id="mirai.models.message.Image.path"><code class="name">var <span class="ident">path</span> : Union[str, pathlib.Path, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>图片的路径，发送本地图片。</p></div>
+</dd>
+<dt id="mirai.models.message.Image.url"><code class="name">var <span class="ident">url</span> : Union[pydantic.networks.HttpUrl, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>图片的 URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载。</p></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="mirai.models.message.Image.from_local"><code class="name flex">
+<span>async def <span class="ident">from_local</span></span>(<span>filename: Union[str, pathlib.Path, NoneType] = None, content: Union[bytes, NoneType] = None) ‑> <a title="mirai.models.message.Image" href="#mirai.models.message.Image">Image</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>从本地文件路径加载图片，以 base64 的形式传递。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filename</code></strong></dt>
+<dd>从本地文件路径加载图片，与 <code>content</code> 二选一。</dd>
+<dt><strong><code>content</code></strong></dt>
+<dd>从本地文件内容加载图片，与 <code>filename</code> 二选一。</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="mirai.models.message.Image" href="#mirai.models.message.Image">Image</a></code></dt>
+<dd>图片对象。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+async def from_local(
+    cls,
+    filename: Union[str, Path, None] = None,
+    content: Optional[bytes] = None,
+) -&gt; &#34;Image&#34;:
+    &#34;&#34;&#34;从本地文件路径加载图片，以 base64 的形式传递。
+
+    Args:
+        filename: 从本地文件路径加载图片，与 `content` 二选一。
+        content: 从本地文件内容加载图片，与 `filename` 二选一。
+
+    Returns:
+        Image: 图片对象。
+    &#34;&#34;&#34;
+    if content:
+        pass
+    if filename:
+        path = Path(filename)
+        import aiofiles
+        async with aiofiles.open(path, &#39;rb&#39;) as f:
+            content = await f.read()
+    else:
+        raise ValueError(&#34;请指定图片路径或图片内容！&#34;)
+    import base64
+    img = cls(base64=base64.b64encode(content).decode())
+    return img</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.message.Image.from_unsafe_path"><code class="name flex">
+<span>def <span class="ident">from_unsafe_path</span></span>(<span>path: Union[str, pathlib.Path]) ‑> <a title="mirai.models.message.Image" href="#mirai.models.message.Image">Image</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>从不安全的路径加载图片。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>path</code></strong></dt>
+<dd>从不安全的路径加载图片。</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="mirai.models.message.Image" href="#mirai.models.message.Image">Image</a></code></dt>
+<dd>图片对象。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def from_unsafe_path(cls, path: Union[str, Path]) -&gt; &#34;Image&#34;:
+    &#34;&#34;&#34;从不安全的路径加载图片。
+
+    Args:
+        path: 从不安全的路径加载图片。
+
+    Returns:
+        Image: 图片对象。
+    &#34;&#34;&#34;
+    return cls.construct(path=str(path))</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.message.Image.validate_path"><code class="name flex">
+<span>def <span class="ident">validate_path</span></span>(<span>path: Union[str, pathlib.Path, NoneType])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@validator(&#39;path&#39;)
+def validate_path(cls, path: Union[str, Path, None]):
+    &#34;&#34;&#34;修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。&#34;&#34;&#34;
+    if path:
+        try:
+            return str(Path(path).resolve(strict=True))
+        except FileNotFoundError:
+            raise ValueError(f&#34;无效路径：{path}&#34;)
+    else:
+        return path</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="mirai.models.message.Image.uuid"><code class="name">var <span class="ident">uuid</span></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def uuid(self):
+    image_id = self.image_id
+    if image_id[0] == &#39;{&#39;:  # 群图片
+        image_id = image_id[1:37]
+    elif image_id[0] == &#39;/&#39;:  # 好友图片
+        image_id = image_id[1:]
+    return image_id</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="mirai.models.message.Image.as_flash_image"><code class="name flex">
+<span>def <span class="ident">as_flash_image</span></span>(<span>self) ‑> <a title="mirai.models.message.FlashImage" href="#mirai.models.message.FlashImage">FlashImage</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def as_flash_image(self) -&gt; &#34;FlashImage&#34;:
+    return FlashImage(
+        image_id=self.image_id,
+        url=self.url,
+        path=self.path,
+        base64=self.base64
+    )</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.message.Image.as_friend_image"><code class="name flex">
+<span>def <span class="ident">as_friend_image</span></span>(<span>self) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def as_friend_image(self) -&gt; str:
+    return f&#34;/{self.uuid.lower()}&#34;</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.message.Image.as_group_image"><code class="name flex">
+<span>def <span class="ident">as_group_image</span></span>(<span>self) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def as_group_image(self) -&gt; str:
+    return f&#34;{{{self.uuid.upper()}}}.jpg&#34;</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.message.Image.download"><code class="name flex">
+<span>async def <span class="ident">download</span></span>(<span>self, filename: Union[str, pathlib.Path, NoneType] = None, directory: Union[str, pathlib.Path, NoneType] = None, determine_type: bool = True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>下载图片到本地。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filename</code></strong></dt>
+<dd>下载到本地的文件路径。与 <code>directory</code> 二选一。</dd>
+<dt><strong><code>directory</code></strong></dt>
+<dd>下载到本地的文件夹路径。与 <code>filename</code> 二选一。</dd>
+<dt><strong><code>determine_type</code></strong></dt>
+<dd>是否自动根据图片类型确定拓展名，默认为 True。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def download(
+    self,
+    filename: Union[str, Path, None] = None,
+    directory: Union[str, Path, None] = None,
+    determine_type: bool = True
+):
+    &#34;&#34;&#34;下载图片到本地。
+
+    Args:
+        filename: 下载到本地的文件路径。与 `directory` 二选一。
+        directory: 下载到本地的文件夹路径。与 `filename` 二选一。
+        determine_type: 是否自动根据图片类型确定拓展名，默认为 True。
+    &#34;&#34;&#34;
+    if not self.url:
+        logger.warning(f&#39;图片 `{self.uuid}` 无 url 参数，下载失败。&#39;)
+        return
+
+    import httpx
+    async with httpx.AsyncClient() as client:
+        response = await client.get(self.url)
+        response.raise_for_status()
+        content = response.content
+
+        if filename:
+            path = Path(filename)
+            if determine_type:
+                import imghdr
+                path = path.with_suffix(
+                    &#39;.&#39; + str(imghdr.what(None, content))
+                )
+            path.parent.mkdir(parents=True, exist_ok=True)
+        elif directory:
+            import imghdr
+            path = Path(directory)
+            path.mkdir(parents=True, exist_ok=True)
+            path = path / f&#39;{self.uuid}.{imghdr.what(None, content)}&#39;
+        else:
+            raise ValueError(&#34;请指定文件路径或文件夹路径！&#34;)
+
+        import aiofiles
+        async with aiofiles.open(path, &#39;wb&#39;) as f:
+            await f.write(content)
+
+        return path</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.type" href="#mirai.models.message.MessageComponent.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.message.Json"><code class="flex name class">
+<span>class <span class="ident">Json</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>JSON。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Json(MessageComponent):
+    &#34;&#34;&#34;JSON。&#34;&#34;&#34;
+    type: str = &#34;Json&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    json_: str
+    &#34;&#34;&#34;JSON 文本。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.message.Json.json_"><code class="name">var <span class="ident">json_</span> : str</code></dt>
+<dd>
+<div class="desc"><p>JSON 文本。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.type" href="#mirai.models.message.MessageComponent.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.message.MessageChain"><code class="flex name class">
+<span>class <span class="ident">MessageChain</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>消息链。</p>
+<p>一个构造消息链的例子：</p>
+<pre><code class="language-py">message_chain = MessageChain([
+    AtAll(),
+    Plain(&quot;Hello World!&quot;),
+])
+</code></pre>
+<p><code><a title="mirai.models.message.Plain" href="#mirai.models.message.Plain">Plain</a></code> 可以省略。</p>
+<pre><code class="language-py">message_chain = MessageChain([
+    AtAll(),
+    &quot;Hello World!&quot;,
+])
+</code></pre>
+<p>在调用 API 时，参数中需要 MessageChain 的，也可以使用 <code>List[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>]</code> 代替。
+例如，以下两种写法是等价的：</p>
+<pre><code class="language-py">await bot.send_friend_message(12345678, [
+    Plain(&quot;Hello World!&quot;)
+])
+</code></pre>
+<pre><code class="language-py">await bot.send_friend_message(12345678, MessageChain([
+    Plain(&quot;Hello World!&quot;)
+]))
+</code></pre>
+<p>使用<code>str(message_chain)</code>获取消息链的字符串表示，字符串采用 mirai 码格式，
+并自动按照 mirai 码的规定转义。
+参看 mirai 的<a href="https://github.com/mamoe/mirai/blob/dev/docs/Messages.md#mirai-%E7%A0%81">文档</a>。
+获取未转义的消息链字符串，可以使用<code><a title="mirai.models.message.deserialize" href="#mirai.models.message.deserialize">deserialize()</a>(str(message_chain))</code>。</p>
+<p>可以使用 for 循环遍历消息链中的消息组件。</p>
+<pre><code class="language-py">for component in message_chain:
+    print(repr(component))
+</code></pre>
+<p>可以使用 <code>==</code> 运算符比较两个消息链是否相同。</p>
+<pre><code class="language-py">another_msg_chain = MessageChain([
+    {
+        &quot;type&quot;: &quot;AtAll&quot;
+    }, {
+        &quot;type&quot;: &quot;Plain&quot;,
+        &quot;text&quot;: &quot;Hello World!&quot;
+    },
+])
+print(message_chain == another_msg_chain)
+'True'
+</code></pre>
+<p>可以使用 <code>in</code> 运算检查消息链中：
+1. 是否有某个消息组件。
+2. 是否有某个类型的消息组件。
+3. 是否有某个子消息链。
+4. 对应的 mirai 码中是否有某子字符串。</p>
+<pre><code class="language-py">if AtAll in message_chain:
+    print('AtAll')
+
+if At(bot.qq) in message_chain:
+    print('At Me')
+
+if MessageChain([At(bot.qq), Plain('Hello!')]) in message_chain:
+    print('Hello!')
+
+if 'Hello' in message_chain:
+    print('Hi!')
+</code></pre>
+<p>消息链的 <code>has</code> 方法和 <code>in</code> 等价。</p>
+<pre><code class="language-py">if message_chain.has(AtAll):
+    print('AtAll')
+</code></pre>
+<p>也可以使用 <code>&gt;=</code> 和 <code>&lt;=</code>运算符：</p>
+<pre><code class="language-py">if MessageChain([At(bot.qq), Plain('Hello!')]) &lt;= message_chain:
+    print('Hello!')
+</code></pre>
+<p>需注意，此处的子消息链匹配会把 Plain 看成一个整体，而不是匹配其文本的一部分。
+如需对文本进行部分匹配，请采用 mirai 码字符串匹配的方式。</p>
+<p>消息链对索引操作进行了增强。以消息组件类型为索引，获取消息链中的全部该类型的消息组件。</p>
+<pre><code class="language-py">plain_list = message_chain[Plain]
+'[Plain(&quot;Hello World!&quot;)]'
+</code></pre>
+<p>以 <code>类型, 数量</code> 为索引，获取前至多多少个该类型的消息组件。</p>
+<pre><code class="language-py">plain_list_first = message_chain[Plain, 1]
+'[Plain(&quot;Hello World!&quot;)]'
+</code></pre>
+<p>消息链的 <code>get</code> 方法和索引操作等价。</p>
+<pre><code class="language-py">plain_list_first = message_chain.get(Plain)
+'[Plain(&quot;Hello World!&quot;)]'
+</code></pre>
+<p>消息链的 <code>get</code> 方法还可指定第二个参数 <code>count</code>，这相当于以 <code>类型, 数量</code> 为索引。</p>
+<pre><code class="language-py">plain_list_first = message_chain.get(Plain, 1)
+# 这等价于
+plain_list_first = message_chain[Plain, 1]
+</code></pre>
+<p>可以用加号连接两个消息链。</p>
+<pre><code class="language-py">MessageChain(['Hello World!']) + MessageChain(['Goodbye World!'])
+# 返回 MessageChain([Plain(&quot;Hello World!&quot;), Plain(&quot;Goodbye World!&quot;)])
+</code></pre>
+<p>可以用 <code>*</code> 运算符复制消息链。</p>
+<pre><code class="language-py">MessageChain(['Hello World!']) * 2
+# 返回 MessageChain([Plain(&quot;Hello World!&quot;), Plain(&quot;Hello World!&quot;)])
+</code></pre>
+<p>除此之外，消息链还支持很多 list 拥有的操作，比如 <code>index</code> 和 <code>count</code>。</p>
+<pre><code class="language-py">message_chain = MessageChain([
+    AtAll(),
+    &quot;Hello World!&quot;,
+])
+message_chain.index(Plain)
+# 返回 0
+message_chain.count(Plain)
+# 返回 1
+</code></pre>
+<p>消息链对这些操作进行了拓展。在传入元素的地方，一般都可以传入元素的类型。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MessageChain(MiraiBaseModel):
+    &#34;&#34;&#34;消息链。
+
+    一个构造消息链的例子：
+    ```py
+    message_chain = MessageChain([
+        AtAll(),
+        Plain(&#34;Hello World!&#34;),
+    ])
+    ```
+
+    `Plain` 可以省略。
+    ```py
+    message_chain = MessageChain([
+        AtAll(),
+        &#34;Hello World!&#34;,
+    ])
+    ```
+
+    在调用 API 时，参数中需要 MessageChain 的，也可以使用 `List[MessageComponent]` 代替。
+    例如，以下两种写法是等价的：
+    ```py
+    await bot.send_friend_message(12345678, [
+        Plain(&#34;Hello World!&#34;)
+    ])
+    ```
+    ```py
+    await bot.send_friend_message(12345678, MessageChain([
+        Plain(&#34;Hello World!&#34;)
+    ]))
+    ```
+
+    使用`str(message_chain)`获取消息链的字符串表示，字符串采用 mirai 码格式，
+    并自动按照 mirai 码的规定转义。
+    参看 mirai 的[文档](https://github.com/mamoe/mirai/blob/dev/docs/Messages.md#mirai-%E7%A0%81)。
+    获取未转义的消息链字符串，可以使用`deserialize(str(message_chain))`。
+
+    可以使用 for 循环遍历消息链中的消息组件。
+    ```py
+    for component in message_chain:
+        print(repr(component))
+    ```
+
+    可以使用 `==` 运算符比较两个消息链是否相同。
+    ```py
+    another_msg_chain = MessageChain([
+        {
+            &#34;type&#34;: &#34;AtAll&#34;
+        }, {
+            &#34;type&#34;: &#34;Plain&#34;,
+            &#34;text&#34;: &#34;Hello World!&#34;
+        },
+    ])
+    print(message_chain == another_msg_chain)
+    &#39;True&#39;
+    ```
+
+    可以使用 `in` 运算检查消息链中：
+    1. 是否有某个消息组件。
+    2. 是否有某个类型的消息组件。
+    3. 是否有某个子消息链。
+    4. 对应的 mirai 码中是否有某子字符串。
+
+    ```py
+    if AtAll in message_chain:
+        print(&#39;AtAll&#39;)
+
+    if At(bot.qq) in message_chain:
+        print(&#39;At Me&#39;)
+
+    if MessageChain([At(bot.qq), Plain(&#39;Hello!&#39;)]) in message_chain:
+        print(&#39;Hello!&#39;)
+
+    if &#39;Hello&#39; in message_chain:
+        print(&#39;Hi!&#39;)
+    ```
+
+    消息链的 `has` 方法和 `in` 等价。
+    ```py
+    if message_chain.has(AtAll):
+        print(&#39;AtAll&#39;)
+    ```
+
+    也可以使用 `&gt;=` 和 `&lt;= `运算符：
+    ```py
+    if MessageChain([At(bot.qq), Plain(&#39;Hello!&#39;)]) &lt;= message_chain:
+        print(&#39;Hello!&#39;)
+    ```
+
+    需注意，此处的子消息链匹配会把 Plain 看成一个整体，而不是匹配其文本的一部分。
+    如需对文本进行部分匹配，请采用 mirai 码字符串匹配的方式。
+
+    消息链对索引操作进行了增强。以消息组件类型为索引，获取消息链中的全部该类型的消息组件。
+    ```py
+    plain_list = message_chain[Plain]
+    &#39;[Plain(&#34;Hello World!&#34;)]&#39;
+    ```
+
+    以 `类型, 数量` 为索引，获取前至多多少个该类型的消息组件。
+    ```py
+    plain_list_first = message_chain[Plain, 1]
+    &#39;[Plain(&#34;Hello World!&#34;)]&#39;
+    ```
+
+    消息链的 `get` 方法和索引操作等价。
+    ```py
+    plain_list_first = message_chain.get(Plain)
+    &#39;[Plain(&#34;Hello World!&#34;)]&#39;
+    ```
+
+    消息链的 `get` 方法还可指定第二个参数 `count`，这相当于以 `类型, 数量` 为索引。
+    ```py
+    plain_list_first = message_chain.get(Plain, 1)
+    # 这等价于
+    plain_list_first = message_chain[Plain, 1]
+    ```
+
+    可以用加号连接两个消息链。
+    ```py
+    MessageChain([&#39;Hello World!&#39;]) + MessageChain([&#39;Goodbye World!&#39;])
+    # 返回 MessageChain([Plain(&#34;Hello World!&#34;), Plain(&#34;Goodbye World!&#34;)])
+    ```
+
+    可以用 `*` 运算符复制消息链。
+    ```py
+    MessageChain([&#39;Hello World!&#39;]) * 2
+    # 返回 MessageChain([Plain(&#34;Hello World!&#34;), Plain(&#34;Hello World!&#34;)])
+    ```
+
+    除此之外，消息链还支持很多 list 拥有的操作，比如 `index` 和 `count`。
+    ```py
+    message_chain = MessageChain([
+        AtAll(),
+        &#34;Hello World!&#34;,
+    ])
+    message_chain.index(Plain)
+    # 返回 0
+    message_chain.count(Plain)
+    # 返回 1
+    ```
+
+    消息链对这些操作进行了拓展。在传入元素的地方，一般都可以传入元素的类型。
+    &#34;&#34;&#34;
+    __root__: List[MessageComponent]
+
+    @staticmethod
+    def _parse_message_chain(msg_chain: Iterable):
+        result = []
+        for msg in msg_chain:
+            if isinstance(msg, dict):
+                result.append(MessageComponent.parse_obj(msg))
+            elif isinstance(msg, MessageComponent):
+                result.append(msg)
+            elif isinstance(msg, str):
+                result.append(Plain(msg))
+            else:
+                raise TypeError(
+                    f&#34;消息链中元素需为 dict 或 str 或 MessageComponent，当前类型：{type(msg)}&#34;
+                )
+        return result
+
+    @validator(&#39;__root__&#39;, always=True, pre=True)
+    def _parse_component(cls, msg_chain):
+        if isinstance(msg_chain, (str, MessageComponent)):
+            msg_chain = [msg_chain]
+        if not msg_chain:
+            msg_chain = []
+        return cls._parse_message_chain(msg_chain)
+
+    @classmethod
+    def parse_obj(cls, msg_chain: Iterable):
+        &#34;&#34;&#34;通过列表形式的消息链，构造对应的 `MessageChain` 对象。
+
+        Args:
+            msg_chain: 列表形式的消息链。
+        &#34;&#34;&#34;
+        result = cls._parse_message_chain(msg_chain)
+        return cls(__root__=result)
+
+    def __init__(self, __root__: Iterable[MessageComponent] = None):
+        super().__init__(__root__=__root__)
+
+    def __str__(self):
+        return &#34;&#34;.join(str(component) for component in self.__root__)
+
+    def __repr__(self):
+        return f&#39;{self.__class__.__name__}({self.__root__!r})&#39;
+
+    def __iter__(self):
+        yield from self.__root__
+
+    @overload
+    def get(self, index: int) -&gt; MessageComponent:
+        ...
+
+    @overload
+    def get(self, index: slice) -&gt; List[MessageComponent]:
+        ...
+
+    @overload
+    def get(self, index: Type[TMessageComponent]) -&gt; List[TMessageComponent]:
+        ...
+
+    @overload
+    def get(
+        self, index: Tuple[Type[TMessageComponent], int]
+    ) -&gt; List[TMessageComponent]:
+        ...
+
+    def get(
+        self,
+        index: Union[int, slice, Type[TMessageComponent],
+                     Tuple[Type[TMessageComponent], int]],
+        count: Optional[int] = None
+    ) -&gt; Union[MessageComponent, List[MessageComponent],
+               List[TMessageComponent]]:
+        &#34;&#34;&#34;获取消息链中的某个（某些）消息组件，或某类型的消息组件。
+
+        Args:
+            index (`Union[int, slice, Type[TMessageComponent], Tuple[Type[TMessageComponent], int]]`):
+                如果为 `int`，则返回该索引处的消息组件。
+                如果为 `slice`，则返回该索引范围处的消息组件。
+                如果为 `Type[TMessageComponent]`，则返回该类型的全部消息组件。
+                如果为 `Tuple[Type[TMessageComponent], int]`，则返回该类型的至多 `index[1]` 个消息组件。
+
+            count: 如果为 `int`，则返回至多 `count` 个消息组件。
+
+        Returns:
+            MessageComponent: 返回指定索引处的消息组件。
+            List[MessageComponent]: 返回指定索引范围的消息组件。
+            List[TMessageComponent]: 返回指定类型的消息组件构成的列表。
+        &#34;&#34;&#34;
+        # 正常索引
+        if isinstance(index, int):
+            return self.__root__[index]
+        # 切片索引
+        if isinstance(index, slice):
+            return self.__root__[index]
+        # 指定 count
+        if count:
+            if isinstance(index, type):
+                index = (index, count)
+            elif isinstance(index, tuple):
+                index = (index[0], count if count &lt; index[1] else index[1])
+        # 索引对象为 MessageComponent 类，返回所有对应 component
+        if isinstance(index, type):
+            return [
+                component for component in self if type(component) is index
+            ]
+        # 索引对象为 MessageComponent 和 int 构成的 tuple， 返回指定数量的 component
+        if isinstance(index, tuple):
+            components = (
+                component for component in self if type(component) is index[0]
+            )
+            return [
+                component for component, _ in zip(components, range(index[1]))
+            ]
+        raise TypeError(f&#34;消息链索引需为 int 或 MessageComponent，当前类型：{type(index)}&#34;)
+
+    def get_first(self,
+                  t: Type[TMessageComponent]) -&gt; Optional[TMessageComponent]:
+        &#34;&#34;&#34;获取消息链中第一个符合类型的消息组件。&#34;&#34;&#34;
+        for component in self:
+            if isinstance(component, t):
+                return component
+        return None
+
+    @overload
+    def __getitem__(self, index: int) -&gt; MessageComponent:
+        ...
+
+    @overload
+    def __getitem__(self, index: slice) -&gt; List[MessageComponent]:
+        ...
+
+    @overload
+    def __getitem__(self,
+                    index: Type[TMessageComponent]) -&gt; List[TMessageComponent]:
+        ...
+
+    @overload
+    def __getitem__(
+        self, index: Tuple[Type[TMessageComponent], int]
+    ) -&gt; List[TMessageComponent]:
+        ...
+
+    def __getitem__(
+        self, index: Union[int, slice, Type[TMessageComponent],
+                           Tuple[Type[TMessageComponent], int]]
+    ) -&gt; Union[MessageComponent, List[MessageComponent],
+               List[TMessageComponent]]:
+        return self.get(index)
+
+    def __setitem__(
+        self, key: Union[int, slice],
+        value: Union[MessageComponent, str, Iterable[Union[MessageComponent,
+                                                           str]]]
+    ):
+        if isinstance(value, str):
+            value = Plain(value)
+        if isinstance(value, Iterable):
+            value = (Plain(c) if isinstance(c, str) else c for c in value)
+        self.__root__[key] = value  # type: ignore
+
+    def __delitem__(self, key: Union[int, slice]):
+        del self.__root__[key]
+
+    def __reversed__(self) -&gt; Iterable[MessageComponent]:
+        return reversed(self.__root__)
+
+    def has(
+        self, sub: Union[MessageComponent, Type[MessageComponent],
+                         &#39;MessageChain&#39;, str]
+    ) -&gt; bool:
+        &#34;&#34;&#34;判断消息链中：
+        1. 是否有某个消息组件。
+        2. 是否有某个类型的消息组件。
+        3. 是否有某个子消息链。
+        4. 对应的 mirai 码中是否有某子字符串。
+
+        Args:
+            sub (`Union[MessageComponent, Type[MessageComponent], &#39;MessageChain&#39;, str]`):
+                若为 `MessageComponent`，则判断该组件是否在消息链中。
+                若为 `Type[MessageComponent]`，则判断该组件类型是否在消息链中。
+                若为 `MessageChain`，则判断该子消息链是否在消息链中。
+                若为 `str`，则判断对应的 mirai 码中是否有某子字符串。
+
+        Returns:
+            bool: 是否找到。
+        &#34;&#34;&#34;
+        if isinstance(sub, type):  # 检测消息链中是否有某种类型的对象
+            for i in self:
+                if type(i) is sub:
+                    return True
+            return False
+        if isinstance(sub, MessageComponent):  # 检查消息链中是否有某个组件
+            for i in self:
+                if i == sub:
+                    return True
+            return False
+        if isinstance(sub, MessageChain):  # 检查消息链中是否有某个子消息链
+            return bool(kmp(self, sub))
+        if isinstance(sub, str):  # 检查消息中有无指定字符串子串
+            return sub in deserialize(str(self))
+        raise TypeError(f&#34;类型不匹配，当前类型：{type(sub)}&#34;)
+
+    def __contains__(self, sub) -&gt; bool:
+        return self.has(sub)
+
+    def __ge__(self, other):
+        return other in self
+
+    def __len__(self) -&gt; int:
+        return len(self.__root__)
+
+    def __add__(
+        self, other: Union[&#39;MessageChain&#39;, MessageComponent, str]
+    ) -&gt; &#39;MessageChain&#39;:
+        if isinstance(other, MessageChain):
+            return self.__class__(self.__root__ + other.__root__)
+        if isinstance(other, str):
+            return self.__class__(self.__root__ + [Plain(other)])
+        if isinstance(other, MessageComponent):
+            return self.__class__(self.__root__ + [other])
+        return NotImplemented
+
+    def __radd__(self, other: Union[MessageComponent, str]) -&gt; &#39;MessageChain&#39;:
+        if isinstance(other, MessageComponent):
+            return self.__class__([other] + self.__root__)
+        if isinstance(other, str):
+            return self.__class__(
+                [cast(MessageComponent, Plain(other))] + self.__root__
+            )
+        return NotImplemented
+
+    def __mul__(self, other: int):
+        if isinstance(other, int):
+            return self.__class__(self.__root__ * other)
+        return NotImplemented
+
+    def __rmul__(self, other: int):
+        return self.__mul__(other)
+
+    def __iadd__(self, other: Iterable[Union[MessageComponent, str]]):
+        self.extend(other)
+
+    def __imul__(self, other: int):
+        if isinstance(other, int):
+            self.__root__ *= other
+        return NotImplemented
+
+    def index(
+        self,
+        x: Union[MessageComponent, Type[MessageComponent]],
+        i: int = 0,
+        j: int = -1
+    ) -&gt; int:
+        &#34;&#34;&#34;返回 x 在消息链中首次出现项的索引号（索引号在 i 或其后且在 j 之前）。
+
+        Args:
+            x (`Union[MessageComponent, Type[MessageComponent]]`):
+                要查找的消息元素或消息元素类型。
+            i: 从哪个位置开始查找。
+            j: 查找到哪个位置结束。
+
+        Returns:
+            int: 如果找到，则返回索引号。
+
+        Raises:
+            ValueError: 没有找到。
+            TypeError: 类型不匹配。
+        &#34;&#34;&#34;
+        if isinstance(x, type):
+            l = len(self)
+            if i &lt; 0:
+                i += l
+            if i &lt; 0:
+                i = 0
+            if j &lt; 0:
+                j += l
+            if j &gt; l:
+                j = l
+            for index in range(i, j):
+                if type(self[index]) is x:
+                    return index
+            raise ValueError(&#34;消息链中不存在该类型的组件。&#34;)
+        if isinstance(x, MessageComponent):
+            return self.__root__.index(x, i, j)
+        raise TypeError(f&#34;类型不匹配，当前类型：{type(x)}&#34;)
+
+    def count(self, x: Union[MessageComponent, Type[MessageComponent]]) -&gt; int:
+        &#34;&#34;&#34;返回消息链中 x 出现的次数。
+
+        Args:
+            x (`Union[MessageComponent, Type[MessageComponent]]`):
+                要查找的消息元素或消息元素类型。
+
+        Returns:
+            int: 次数。
+        &#34;&#34;&#34;
+        if isinstance(x, type):
+            return sum(1 for i in self if type(i) is x)
+        if isinstance(x, MessageComponent):
+            return self.__root__.count(x)
+        raise TypeError(f&#34;类型不匹配，当前类型：{type(x)}&#34;)
+
+    def extend(self, x: Iterable[Union[MessageComponent, str]]):
+        &#34;&#34;&#34;将另一个消息链中的元素添加到消息链末尾。
+
+        Args:
+            x: 另一个消息链，也可为消息元素或字符串元素的序列。
+        &#34;&#34;&#34;
+        self.__root__.extend(Plain(c) if isinstance(c, str) else c for c in x)
+
+    def append(self, x: Union[MessageComponent, str]):
+        &#34;&#34;&#34;将一个消息元素或字符串元素添加到消息链末尾。
+
+        Args:
+            x: 消息元素或字符串元素。
+        &#34;&#34;&#34;
+        self.__root__.append(Plain(x) if isinstance(x, str) else x)
+
+    def insert(self, i: int, x: Union[MessageComponent, str]):
+        &#34;&#34;&#34;将一个消息元素或字符串添加到消息链中指定位置。
+
+        Args:
+            i: 插入位置。
+            x: 消息元素或字符串元素。
+        &#34;&#34;&#34;
+        self.__root__.insert(i, Plain(x) if isinstance(x, str) else x)
+
+    def pop(self, i: int = -1) -&gt; MessageComponent:
+        &#34;&#34;&#34;从消息链中移除并返回指定位置的元素。
+
+        Args:
+            i: 移除位置。默认为末尾。
+
+        Returns:
+            MessageComponent: 移除的元素。
+        &#34;&#34;&#34;
+        return self.__root__.pop(i)
+
+    def remove(self, x: Union[MessageComponent, Type[MessageComponent]]):
+        &#34;&#34;&#34;从消息链中移除指定元素或指定类型的一个元素。
+
+        Args:
+            x: 指定的元素或元素类型。
+        &#34;&#34;&#34;
+        if isinstance(x, type):
+            self.pop(self.index(x))
+        if isinstance(x, MessageComponent):
+            self.__root__.remove(x)
+
+    def exclude(
+        self,
+        x: Union[MessageComponent, Type[MessageComponent]],
+        count: int = -1
+    ) -&gt; &#39;MessageChain&#39;:
+        &#34;&#34;&#34;返回移除指定元素或指定类型的元素后剩余的消息链。
+
+        Args:
+            x: 指定的元素或元素类型。
+            count: 至多移除的数量。默认为全部移除。
+
+        Returns:
+            MessageChain: 剩余的消息链。
+        &#34;&#34;&#34;
+        def _exclude():
+            nonlocal count
+            x_is_type = isinstance(x, type)
+            for c in self:
+                if count &gt; 0 and ((x_is_type and type(c) is x) or c == x):
+                    count -= 1
+                    continue
+                yield c
+
+        return self.__class__(_exclude())
+
+    def reverse(self):
+        &#34;&#34;&#34;将消息链原地翻转。&#34;&#34;&#34;
+        self.__root__.reverse()
+
+    @classmethod
+    def join(cls, *args: Iterable[Union[str, MessageComponent]]):
+        return cls(
+            Plain(c) if isinstance(c, str) else c
+            for c in itertools.chain(*args)
+        )
+
+    @property
+    def source(self) -&gt; Optional[&#39;Source&#39;]:
+        &#34;&#34;&#34;获取消息链中的 `Source` 对象。&#34;&#34;&#34;
+        return self.get_first(Source)
+
+    @property
+    def message_id(self) -&gt; int:
+        &#34;&#34;&#34;获取消息链的 message_id，若无法获取，返回 -1。&#34;&#34;&#34;
+        source = self.source
+        return source.id if source else -1</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="mirai.models.message.MessageChain.join"><code class="name flex">
+<span>def <span class="ident">join</span></span>(<span>*args: Iterable[Union[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>, str]])</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def join(cls, *args: Iterable[Union[str, MessageComponent]]):
+    return cls(
+        Plain(c) if isinstance(c, str) else c
+        for c in itertools.chain(*args)
+    )</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.message.MessageChain.parse_obj"><code class="name flex">
+<span>def <span class="ident">parse_obj</span></span>(<span>msg_chain: Iterable)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>通过列表形式的消息链，构造对应的 <code><a title="mirai.models.message.MessageChain" href="#mirai.models.message.MessageChain">MessageChain</a></code> 对象。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>msg_chain</code></strong></dt>
+<dd>列表形式的消息链。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def parse_obj(cls, msg_chain: Iterable):
+    &#34;&#34;&#34;通过列表形式的消息链，构造对应的 `MessageChain` 对象。
+
+    Args:
+        msg_chain: 列表形式的消息链。
+    &#34;&#34;&#34;
+    result = cls._parse_message_chain(msg_chain)
+    return cls(__root__=result)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="mirai.models.message.MessageChain.message_id"><code class="name">var <span class="ident">message_id</span> : int</code></dt>
+<dd>
+<div class="desc"><p>获取消息链的 message_id，若无法获取，返回 -1。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def message_id(self) -&gt; int:
+    &#34;&#34;&#34;获取消息链的 message_id，若无法获取，返回 -1。&#34;&#34;&#34;
+    source = self.source
+    return source.id if source else -1</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.message.MessageChain.source"><code class="name">var <span class="ident">source</span> : Union[<a title="mirai.models.message.Source" href="#mirai.models.message.Source">Source</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>获取消息链中的 <code><a title="mirai.models.message.Source" href="#mirai.models.message.Source">Source</a></code> 对象。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def source(self) -&gt; Optional[&#39;Source&#39;]:
+    &#34;&#34;&#34;获取消息链中的 `Source` 对象。&#34;&#34;&#34;
+    return self.get_first(Source)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="mirai.models.message.MessageChain.append"><code class="name flex">
+<span>def <span class="ident">append</span></span>(<span>self, x: Union[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>, str])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>将一个消息元素或字符串元素添加到消息链末尾。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>x</code></strong></dt>
+<dd>消息元素或字符串元素。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def append(self, x: Union[MessageComponent, str]):
+    &#34;&#34;&#34;将一个消息元素或字符串元素添加到消息链末尾。
+
+    Args:
+        x: 消息元素或字符串元素。
+    &#34;&#34;&#34;
+    self.__root__.append(Plain(x) if isinstance(x, str) else x)</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.message.MessageChain.count"><code class="name flex">
+<span>def <span class="ident">count</span></span>(<span>self, x: Union[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>, Type[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>]]) ‑> int</span>
+</code></dt>
+<dd>
+<div class="desc"><p>返回消息链中 x 出现的次数。</p>
+<h2 id="args">Args</h2>
+<p>x (<code>Union[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>, Type[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>]]</code>):
+要查找的消息元素或消息元素类型。</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>int</code></dt>
+<dd>次数。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def count(self, x: Union[MessageComponent, Type[MessageComponent]]) -&gt; int:
+    &#34;&#34;&#34;返回消息链中 x 出现的次数。
+
+    Args:
+        x (`Union[MessageComponent, Type[MessageComponent]]`):
+            要查找的消息元素或消息元素类型。
+
+    Returns:
+        int: 次数。
+    &#34;&#34;&#34;
+    if isinstance(x, type):
+        return sum(1 for i in self if type(i) is x)
+    if isinstance(x, MessageComponent):
+        return self.__root__.count(x)
+    raise TypeError(f&#34;类型不匹配，当前类型：{type(x)}&#34;)</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.message.MessageChain.exclude"><code class="name flex">
+<span>def <span class="ident">exclude</span></span>(<span>self, x: Union[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>, Type[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>]], count: int = -1) ‑> <a title="mirai.models.message.MessageChain" href="#mirai.models.message.MessageChain">MessageChain</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>返回移除指定元素或指定类型的元素后剩余的消息链。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>x</code></strong></dt>
+<dd>指定的元素或元素类型。</dd>
+<dt><strong><code>count</code></strong></dt>
+<dd>至多移除的数量。默认为全部移除。</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="mirai.models.message.MessageChain" href="#mirai.models.message.MessageChain">MessageChain</a></code></dt>
+<dd>剩余的消息链。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def exclude(
+    self,
+    x: Union[MessageComponent, Type[MessageComponent]],
+    count: int = -1
+) -&gt; &#39;MessageChain&#39;:
+    &#34;&#34;&#34;返回移除指定元素或指定类型的元素后剩余的消息链。
+
+    Args:
+        x: 指定的元素或元素类型。
+        count: 至多移除的数量。默认为全部移除。
+
+    Returns:
+        MessageChain: 剩余的消息链。
+    &#34;&#34;&#34;
+    def _exclude():
+        nonlocal count
+        x_is_type = isinstance(x, type)
+        for c in self:
+            if count &gt; 0 and ((x_is_type and type(c) is x) or c == x):
+                count -= 1
+                continue
+            yield c
+
+    return self.__class__(_exclude())</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.message.MessageChain.extend"><code class="name flex">
+<span>def <span class="ident">extend</span></span>(<span>self, x: Iterable[Union[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>, str]])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>将另一个消息链中的元素添加到消息链末尾。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>x</code></strong></dt>
+<dd>另一个消息链，也可为消息元素或字符串元素的序列。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def extend(self, x: Iterable[Union[MessageComponent, str]]):
+    &#34;&#34;&#34;将另一个消息链中的元素添加到消息链末尾。
+
+    Args:
+        x: 另一个消息链，也可为消息元素或字符串元素的序列。
+    &#34;&#34;&#34;
+    self.__root__.extend(Plain(c) if isinstance(c, str) else c for c in x)</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.message.MessageChain.get"><code class="name flex">
+<span>def <span class="ident">get</span></span>(<span>self, index: Union[int, slice, Type[~TMessageComponent], Tuple[Type[~TMessageComponent], int]], count: Union[int, NoneType] = None) ‑> Union[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>, List[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>], List[~TMessageComponent]]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>获取消息链中的某个（某些）消息组件，或某类型的消息组件。</p>
+<h2 id="args">Args</h2>
+<p>index (<code>Union[int, slice, Type[TMessageComponent], Tuple[Type[TMessageComponent], int]]</code>):
+如果为 <code>int</code>，则返回该索引处的消息组件。
+如果为 <code>slice</code>，则返回该索引范围处的消息组件。
+如果为 <code>Type[TMessageComponent]</code>，则返回该类型的全部消息组件。
+如果为 <code>Tuple[Type[TMessageComponent], int]</code>，则返回该类型的至多 <code>index[1]</code> 个消息组件。</p>
+<dl>
+<dt><strong><code>count</code></strong></dt>
+<dd>如果为 <code>int</code>，则返回至多 <code>count</code> 个消息组件。</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></code></dt>
+<dd>返回指定索引处的消息组件。</dd>
+<dt><code>List[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>]</code></dt>
+<dd>返回指定索引范围的消息组件。</dd>
+<dt><code>List[TMessageComponent]</code></dt>
+<dd>返回指定类型的消息组件构成的列表。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get(
+    self,
+    index: Union[int, slice, Type[TMessageComponent],
+                 Tuple[Type[TMessageComponent], int]],
+    count: Optional[int] = None
+) -&gt; Union[MessageComponent, List[MessageComponent],
+           List[TMessageComponent]]:
+    &#34;&#34;&#34;获取消息链中的某个（某些）消息组件，或某类型的消息组件。
+
+    Args:
+        index (`Union[int, slice, Type[TMessageComponent], Tuple[Type[TMessageComponent], int]]`):
+            如果为 `int`，则返回该索引处的消息组件。
+            如果为 `slice`，则返回该索引范围处的消息组件。
+            如果为 `Type[TMessageComponent]`，则返回该类型的全部消息组件。
+            如果为 `Tuple[Type[TMessageComponent], int]`，则返回该类型的至多 `index[1]` 个消息组件。
+
+        count: 如果为 `int`，则返回至多 `count` 个消息组件。
+
+    Returns:
+        MessageComponent: 返回指定索引处的消息组件。
+        List[MessageComponent]: 返回指定索引范围的消息组件。
+        List[TMessageComponent]: 返回指定类型的消息组件构成的列表。
+    &#34;&#34;&#34;
+    # 正常索引
+    if isinstance(index, int):
+        return self.__root__[index]
+    # 切片索引
+    if isinstance(index, slice):
+        return self.__root__[index]
+    # 指定 count
+    if count:
+        if isinstance(index, type):
+            index = (index, count)
+        elif isinstance(index, tuple):
+            index = (index[0], count if count &lt; index[1] else index[1])
+    # 索引对象为 MessageComponent 类，返回所有对应 component
+    if isinstance(index, type):
+        return [
+            component for component in self if type(component) is index
+        ]
+    # 索引对象为 MessageComponent 和 int 构成的 tuple， 返回指定数量的 component
+    if isinstance(index, tuple):
+        components = (
+            component for component in self if type(component) is index[0]
+        )
+        return [
+            component for component, _ in zip(components, range(index[1]))
+        ]
+    raise TypeError(f&#34;消息链索引需为 int 或 MessageComponent，当前类型：{type(index)}&#34;)</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.message.MessageChain.get_first"><code class="name flex">
+<span>def <span class="ident">get_first</span></span>(<span>self, t: Type[~TMessageComponent]) ‑> Union[~TMessageComponent, NoneType]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>获取消息链中第一个符合类型的消息组件。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_first(self,
+              t: Type[TMessageComponent]) -&gt; Optional[TMessageComponent]:
+    &#34;&#34;&#34;获取消息链中第一个符合类型的消息组件。&#34;&#34;&#34;
+    for component in self:
+        if isinstance(component, t):
+            return component
+    return None</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.message.MessageChain.has"><code class="name flex">
+<span>def <span class="ident">has</span></span>(<span>self, sub: Union[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>, Type[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>], ForwardRef('<a title="mirai.models.message.MessageChain" href="#mirai.models.message.MessageChain">MessageChain</a>'), str]) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>判断消息链中：
+1. 是否有某个消息组件。
+2. 是否有某个类型的消息组件。
+3. 是否有某个子消息链。
+4. 对应的 mirai 码中是否有某子字符串。</p>
+<h2 id="args">Args</h2>
+<p>sub (<code>Union[MessageComponent, Type[MessageComponent], 'MessageChain', str]</code>):
+若为 <code><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></code>，则判断该组件是否在消息链中。
+若为 <code>Type[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>]</code>，则判断该组件类型是否在消息链中。
+若为 <code><a title="mirai.models.message.MessageChain" href="#mirai.models.message.MessageChain">MessageChain</a></code>，则判断该子消息链是否在消息链中。
+若为 <code>str</code>，则判断对应的 mirai 码中是否有某子字符串。</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>是否找到。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def has(
+    self, sub: Union[MessageComponent, Type[MessageComponent],
+                     &#39;MessageChain&#39;, str]
+) -&gt; bool:
+    &#34;&#34;&#34;判断消息链中：
+    1. 是否有某个消息组件。
+    2. 是否有某个类型的消息组件。
+    3. 是否有某个子消息链。
+    4. 对应的 mirai 码中是否有某子字符串。
+
+    Args:
+        sub (`Union[MessageComponent, Type[MessageComponent], &#39;MessageChain&#39;, str]`):
+            若为 `MessageComponent`，则判断该组件是否在消息链中。
+            若为 `Type[MessageComponent]`，则判断该组件类型是否在消息链中。
+            若为 `MessageChain`，则判断该子消息链是否在消息链中。
+            若为 `str`，则判断对应的 mirai 码中是否有某子字符串。
+
+    Returns:
+        bool: 是否找到。
+    &#34;&#34;&#34;
+    if isinstance(sub, type):  # 检测消息链中是否有某种类型的对象
+        for i in self:
+            if type(i) is sub:
+                return True
+        return False
+    if isinstance(sub, MessageComponent):  # 检查消息链中是否有某个组件
+        for i in self:
+            if i == sub:
+                return True
+        return False
+    if isinstance(sub, MessageChain):  # 检查消息链中是否有某个子消息链
+        return bool(kmp(self, sub))
+    if isinstance(sub, str):  # 检查消息中有无指定字符串子串
+        return sub in deserialize(str(self))
+    raise TypeError(f&#34;类型不匹配，当前类型：{type(sub)}&#34;)</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.message.MessageChain.index"><code class="name flex">
+<span>def <span class="ident">index</span></span>(<span>self, x: Union[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>, Type[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>]], i: int = 0, j: int = -1) ‑> int</span>
+</code></dt>
+<dd>
+<div class="desc"><p>返回 x 在消息链中首次出现项的索引号（索引号在 i 或其后且在 j 之前）。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt>x (<code>Union[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>, Type[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>]]</code>):</dt>
+<dt>要查找的消息元素或消息元素类型。</dt>
+<dt><strong><code>i</code></strong></dt>
+<dd>从哪个位置开始查找。</dd>
+<dt><strong><code>j</code></strong></dt>
+<dd>查找到哪个位置结束。</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>int</code></dt>
+<dd>如果找到，则返回索引号。</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>没有找到。</dd>
+<dt><code>TypeError</code></dt>
+<dd>类型不匹配。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def index(
+    self,
+    x: Union[MessageComponent, Type[MessageComponent]],
+    i: int = 0,
+    j: int = -1
+) -&gt; int:
+    &#34;&#34;&#34;返回 x 在消息链中首次出现项的索引号（索引号在 i 或其后且在 j 之前）。
+
+    Args:
+        x (`Union[MessageComponent, Type[MessageComponent]]`):
+            要查找的消息元素或消息元素类型。
+        i: 从哪个位置开始查找。
+        j: 查找到哪个位置结束。
+
+    Returns:
+        int: 如果找到，则返回索引号。
+
+    Raises:
+        ValueError: 没有找到。
+        TypeError: 类型不匹配。
+    &#34;&#34;&#34;
+    if isinstance(x, type):
+        l = len(self)
+        if i &lt; 0:
+            i += l
+        if i &lt; 0:
+            i = 0
+        if j &lt; 0:
+            j += l
+        if j &gt; l:
+            j = l
+        for index in range(i, j):
+            if type(self[index]) is x:
+                return index
+        raise ValueError(&#34;消息链中不存在该类型的组件。&#34;)
+    if isinstance(x, MessageComponent):
+        return self.__root__.index(x, i, j)
+    raise TypeError(f&#34;类型不匹配，当前类型：{type(x)}&#34;)</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.message.MessageChain.insert"><code class="name flex">
+<span>def <span class="ident">insert</span></span>(<span>self, i: int, x: Union[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>, str])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>将一个消息元素或字符串添加到消息链中指定位置。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>i</code></strong></dt>
+<dd>插入位置。</dd>
+<dt><strong><code>x</code></strong></dt>
+<dd>消息元素或字符串元素。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def insert(self, i: int, x: Union[MessageComponent, str]):
+    &#34;&#34;&#34;将一个消息元素或字符串添加到消息链中指定位置。
+
+    Args:
+        i: 插入位置。
+        x: 消息元素或字符串元素。
+    &#34;&#34;&#34;
+    self.__root__.insert(i, Plain(x) if isinstance(x, str) else x)</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.message.MessageChain.pop"><code class="name flex">
+<span>def <span class="ident">pop</span></span>(<span>self, i: int = -1) ‑> <a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>从消息链中移除并返回指定位置的元素。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>i</code></strong></dt>
+<dd>移除位置。默认为末尾。</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></code></dt>
+<dd>移除的元素。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pop(self, i: int = -1) -&gt; MessageComponent:
+    &#34;&#34;&#34;从消息链中移除并返回指定位置的元素。
+
+    Args:
+        i: 移除位置。默认为末尾。
+
+    Returns:
+        MessageComponent: 移除的元素。
+    &#34;&#34;&#34;
+    return self.__root__.pop(i)</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.message.MessageChain.remove"><code class="name flex">
+<span>def <span class="ident">remove</span></span>(<span>self, x: Union[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>, Type[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>]])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>从消息链中移除指定元素或指定类型的一个元素。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>x</code></strong></dt>
+<dd>指定的元素或元素类型。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def remove(self, x: Union[MessageComponent, Type[MessageComponent]]):
+    &#34;&#34;&#34;从消息链中移除指定元素或指定类型的一个元素。
+
+    Args:
+        x: 指定的元素或元素类型。
+    &#34;&#34;&#34;
+    if isinstance(x, type):
+        self.pop(self.index(x))
+    if isinstance(x, MessageComponent):
+        self.__root__.remove(x)</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.message.MessageChain.reverse"><code class="name flex">
+<span>def <span class="ident">reverse</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>将消息链原地翻转。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def reverse(self):
+    &#34;&#34;&#34;将消息链原地翻转。&#34;&#34;&#34;
+    self.__root__.reverse()</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="mirai.models.message.MessageComponent"><code class="flex name class">
+<span>class <span class="ident">MessageComponent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>消息组件。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MessageComponent(MiraiIndexedModel, metaclass=MessageComponentMetaclass):
+    &#34;&#34;&#34;消息组件。&#34;&#34;&#34;
+    type: str
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    def __str__(self):
+        return &#39;&#39;
+
+    def __repr__(self):
+        return self.__class__.__name__ + &#39;(&#39; + &#39;, &#39;.join(
+            (
+                f&#39;{k}={repr(v)}&#39;
+                for k, v in self.__dict__.items() if k != &#39;type&#39; and v
+            )
+        ) + &#39;)&#39;
+
+    def __init__(self, *args, **kwargs):
+        # 解析参数列表，将位置参数转化为具名参数
+        parameter_names = self.__parameter_names__
+        if len(args) &gt; len(parameter_names):
+            raise TypeError(
+                f&#39;`{self.type}`需要{len(parameter_names)}个参数，但传入了{len(args)}个。&#39;
+            )
+        for name, value in zip(parameter_names, args):
+            if name in kwargs:
+                raise TypeError(f&#39;在 `{self.type}` 中，具名参数 `{name}` 与位置参数重复。&#39;)
+            kwargs[name] = value
+
+        super().__init__(**kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mirai.models.message.App" href="#mirai.models.message.App">App</a></li>
+<li><a title="mirai.models.message.At" href="#mirai.models.message.At">At</a></li>
+<li><a title="mirai.models.message.AtAll" href="#mirai.models.message.AtAll">AtAll</a></li>
+<li><a title="mirai.models.message.Dice" href="#mirai.models.message.Dice">Dice</a></li>
+<li><a title="mirai.models.message.Face" href="#mirai.models.message.Face">Face</a></li>
+<li><a title="mirai.models.message.File" href="#mirai.models.message.File">File</a></li>
+<li><a title="mirai.models.message.Forward" href="#mirai.models.message.Forward">Forward</a></li>
+<li><a title="mirai.models.message.Image" href="#mirai.models.message.Image">Image</a></li>
+<li><a title="mirai.models.message.Json" href="#mirai.models.message.Json">Json</a></li>
+<li>mirai.models.message.MiraiCode</li>
+<li><a title="mirai.models.message.MusicShare" href="#mirai.models.message.MusicShare">MusicShare</a></li>
+<li><a title="mirai.models.message.Plain" href="#mirai.models.message.Plain">Plain</a></li>
+<li><a title="mirai.models.message.Poke" href="#mirai.models.message.Poke">Poke</a></li>
+<li><a title="mirai.models.message.Quote" href="#mirai.models.message.Quote">Quote</a></li>
+<li><a title="mirai.models.message.Source" href="#mirai.models.message.Source">Source</a></li>
+<li><a title="mirai.models.message.Unknown" href="#mirai.models.message.Unknown">Unknown</a></li>
+<li><a title="mirai.models.message.Voice" href="#mirai.models.message.Voice">Voice</a></li>
+<li><a title="mirai.models.message.Xml" href="#mirai.models.message.Xml">Xml</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.message.MessageComponent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"><p>消息组件类型。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.base.MiraiIndexedModel.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.base.MiraiIndexedModel.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.message.MusicShare"><code class="flex name class">
+<span>class <span class="ident">MusicShare</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>音乐分享。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MusicShare(MessageComponent):
+    &#34;&#34;&#34;音乐分享。&#34;&#34;&#34;
+    type: str = &#34;MusicShare&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    kind: MusicShareKind
+    &#34;&#34;&#34;音乐分享的来源。&#34;&#34;&#34;
+    title: str
+    &#34;&#34;&#34;标题。&#34;&#34;&#34;
+    summary: str
+    &#34;&#34;&#34;歌手。&#34;&#34;&#34;
+    jump_url: HttpUrl
+    &#34;&#34;&#34;跳转路径。&#34;&#34;&#34;
+    picture_url: HttpUrl
+    &#34;&#34;&#34;封面路径。&#34;&#34;&#34;
+    music_url: HttpUrl
+    &#34;&#34;&#34;音源路径。&#34;&#34;&#34;
+    brief: str = &#34;&#34;
+    &#34;&#34;&#34;在消息列表中显示的内容。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.message.MusicShare.brief"><code class="name">var <span class="ident">brief</span> : str</code></dt>
+<dd>
+<div class="desc"><p>在消息列表中显示的内容。</p></div>
+</dd>
+<dt id="mirai.models.message.MusicShare.jump_url"><code class="name">var <span class="ident">jump_url</span> : pydantic.networks.HttpUrl</code></dt>
+<dd>
+<div class="desc"><p>跳转路径。</p></div>
+</dd>
+<dt id="mirai.models.message.MusicShare.kind"><code class="name">var <span class="ident">kind</span> : <a title="mirai.models.message.MusicShareKind" href="#mirai.models.message.MusicShareKind">MusicShareKind</a></code></dt>
+<dd>
+<div class="desc"><p>音乐分享的来源。</p></div>
+</dd>
+<dt id="mirai.models.message.MusicShare.music_url"><code class="name">var <span class="ident">music_url</span> : pydantic.networks.HttpUrl</code></dt>
+<dd>
+<div class="desc"><p>音源路径。</p></div>
+</dd>
+<dt id="mirai.models.message.MusicShare.picture_url"><code class="name">var <span class="ident">picture_url</span> : pydantic.networks.HttpUrl</code></dt>
+<dd>
+<div class="desc"><p>封面路径。</p></div>
+</dd>
+<dt id="mirai.models.message.MusicShare.summary"><code class="name">var <span class="ident">summary</span> : str</code></dt>
+<dd>
+<div class="desc"><p>歌手。</p></div>
+</dd>
+<dt id="mirai.models.message.MusicShare.title"><code class="name">var <span class="ident">title</span> : str</code></dt>
+<dd>
+<div class="desc"><p>标题。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.type" href="#mirai.models.message.MessageComponent.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.message.MusicShareKind"><code class="flex name class">
+<span>class <span class="ident">MusicShareKind</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>音乐分享的来源。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MusicShareKind(str, Enum):
+    &#34;&#34;&#34;音乐分享的来源。&#34;&#34;&#34;
+    NeteaseCloudMusic = &#34;NeteaseCloudMusic&#34;
+    QQMusic = &#34;QQMusic&#34;
+    MiguMusic = &#34;MiguMusic&#34;
+    KugouMusic = &#34;KugouMusic&#34;
+    KuwoMusic = &#34;KuwoMusic&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.str</li>
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.message.MusicShareKind.KugouMusic"><code class="name">var <span class="ident">KugouMusic</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.message.MusicShareKind.KuwoMusic"><code class="name">var <span class="ident">KuwoMusic</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.message.MusicShareKind.MiguMusic"><code class="name">var <span class="ident">MiguMusic</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.message.MusicShareKind.NeteaseCloudMusic"><code class="name">var <span class="ident">NeteaseCloudMusic</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.message.MusicShareKind.QQMusic"><code class="name">var <span class="ident">QQMusic</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="mirai.models.message.Plain"><code class="flex name class">
+<span>class <span class="ident">Plain</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>纯文本。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Plain(MessageComponent):
+    &#34;&#34;&#34;纯文本。&#34;&#34;&#34;
+    type: str = &#34;Plain&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    text: str
+    &#34;&#34;&#34;文字消息。&#34;&#34;&#34;
+    def __str__(self):
+        return serialize(self.text)
+
+    def __repr__(self):
+        return f&#39;Plain({self.text!r})&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.message.Plain.text"><code class="name">var <span class="ident">text</span> : str</code></dt>
+<dd>
+<div class="desc"><p>文字消息。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.type" href="#mirai.models.message.MessageComponent.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.message.Poke"><code class="flex name class">
+<span>class <span class="ident">Poke</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>戳一戳。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Poke(MessageComponent):
+    &#34;&#34;&#34;戳一戳。&#34;&#34;&#34;
+    type: str = &#34;Poke&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    name: PokeNames
+    &#34;&#34;&#34;名称。&#34;&#34;&#34;
+    @property
+    def poke_type(self):
+        return POKE_TYPE[self.name]
+
+    @property
+    def poke_id(self):
+        return POKE_ID[self.name]
+
+    def __str__(self):
+        return f&#39;[mirai:poke:{self.name},{self.poke_type},{self.poke_id}]&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.message.Poke.name"><code class="name">var <span class="ident">name</span> : <a title="mirai.models.message.PokeNames" href="#mirai.models.message.PokeNames">PokeNames</a></code></dt>
+<dd>
+<div class="desc"><p>名称。</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="mirai.models.message.Poke.poke_id"><code class="name">var <span class="ident">poke_id</span></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def poke_id(self):
+    return POKE_ID[self.name]</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.message.Poke.poke_type"><code class="name">var <span class="ident">poke_type</span></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def poke_type(self):
+    return POKE_TYPE[self.name]</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.type" href="#mirai.models.message.MessageComponent.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.message.PokeNames"><code class="flex name class">
+<span>class <span class="ident">PokeNames</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>戳一戳名称。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class PokeNames(str, Enum):
+    &#34;&#34;&#34;戳一戳名称。&#34;&#34;&#34;
+    ChuoYiChuo = &#34;ChuoYiChuo&#34;
+    BiXin = &#34;BiXin&#34;
+    DianZan = &#34;DianZan&#34;
+    XinSui = &#34;XinSui&#34;
+    LiuLiuLiu = &#34;LiuLiuLiu&#34;
+    FangDaZhao = &#34;FangDaZhao&#34;
+    BaoBeiQiu = &#34;BaoBeiQiu&#34;
+    Rose = &#34;Rose&#34;
+    ZhaoHuanShu = &#34;ZhaoHuanShu&#34;
+    RangNiPi = &#34;RangNiPi&#34;
+    JeiYin = &#34;JeiYin&#34;
+    ShouLei = &#34;ShouLei&#34;
+    GouYin = &#34;GouYin&#34;
+    ZhuaYiXia = &#34;ZhuaYiXia&#34;
+    SuiPing = &#34;SuiPing&#34;
+    QiaoMen = &#34;QiaoMen&#34;
+
+    def as_component(self) -&gt; &#39;Poke&#39;:
+        return Poke(name=self.value)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.str</li>
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.message.PokeNames.BaoBeiQiu"><code class="name">var <span class="ident">BaoBeiQiu</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.message.PokeNames.BiXin"><code class="name">var <span class="ident">BiXin</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.message.PokeNames.ChuoYiChuo"><code class="name">var <span class="ident">ChuoYiChuo</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.message.PokeNames.DianZan"><code class="name">var <span class="ident">DianZan</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.message.PokeNames.FangDaZhao"><code class="name">var <span class="ident">FangDaZhao</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.message.PokeNames.GouYin"><code class="name">var <span class="ident">GouYin</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.message.PokeNames.JeiYin"><code class="name">var <span class="ident">JeiYin</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.message.PokeNames.LiuLiuLiu"><code class="name">var <span class="ident">LiuLiuLiu</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.message.PokeNames.QiaoMen"><code class="name">var <span class="ident">QiaoMen</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.message.PokeNames.RangNiPi"><code class="name">var <span class="ident">RangNiPi</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.message.PokeNames.Rose"><code class="name">var <span class="ident">Rose</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.message.PokeNames.ShouLei"><code class="name">var <span class="ident">ShouLei</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.message.PokeNames.SuiPing"><code class="name">var <span class="ident">SuiPing</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.message.PokeNames.XinSui"><code class="name">var <span class="ident">XinSui</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.message.PokeNames.ZhaoHuanShu"><code class="name">var <span class="ident">ZhaoHuanShu</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.message.PokeNames.ZhuaYiXia"><code class="name">var <span class="ident">ZhuaYiXia</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="mirai.models.message.PokeNames.as_component"><code class="name flex">
+<span>def <span class="ident">as_component</span></span>(<span>self) ‑> <a title="mirai.models.message.Poke" href="#mirai.models.message.Poke">Poke</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def as_component(self) -&gt; &#39;Poke&#39;:
+    return Poke(name=self.value)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="mirai.models.message.Quote"><code class="flex name class">
+<span>class <span class="ident">Quote</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>引用。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Quote(MessageComponent):
+    &#34;&#34;&#34;引用。&#34;&#34;&#34;
+    type: str = &#34;Quote&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    id: Optional[int] = None
+    &#34;&#34;&#34;被引用回复的原消息的 message_id。&#34;&#34;&#34;
+    group_id: Optional[int] = None
+    &#34;&#34;&#34;被引用回复的原消息所接收的群号，当为好友消息时为0。&#34;&#34;&#34;
+    sender_id: Optional[int] = None
+    &#34;&#34;&#34;被引用回复的原消息的发送者的QQ号。&#34;&#34;&#34;
+    target_id: Optional[int] = None
+    &#34;&#34;&#34;被引用回复的原消息的接收者者的QQ号（或群号）。&#34;&#34;&#34;
+    origin: MessageChain
+    &#34;&#34;&#34;被引用回复的原消息的消息链对象。&#34;&#34;&#34;
+    @validator(&#34;origin&#34;, always=True, pre=True)
+    def origin_formater(cls, v):
+        return MessageChain.parse_obj(v)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.message.Quote.group_id"><code class="name">var <span class="ident">group_id</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>被引用回复的原消息所接收的群号，当为好友消息时为0。</p></div>
+</dd>
+<dt id="mirai.models.message.Quote.id"><code class="name">var <span class="ident">id</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>被引用回复的原消息的 message_id。</p></div>
+</dd>
+<dt id="mirai.models.message.Quote.origin"><code class="name">var <span class="ident">origin</span> : <a title="mirai.models.message.MessageChain" href="#mirai.models.message.MessageChain">MessageChain</a></code></dt>
+<dd>
+<div class="desc"><p>被引用回复的原消息的消息链对象。</p></div>
+</dd>
+<dt id="mirai.models.message.Quote.sender_id"><code class="name">var <span class="ident">sender_id</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>被引用回复的原消息的发送者的QQ号。</p></div>
+</dd>
+<dt id="mirai.models.message.Quote.target_id"><code class="name">var <span class="ident">target_id</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>被引用回复的原消息的接收者者的QQ号（或群号）。</p></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="mirai.models.message.Quote.origin_formater"><code class="name flex">
+<span>def <span class="ident">origin_formater</span></span>(<span>v)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@validator(&#34;origin&#34;, always=True, pre=True)
+def origin_formater(cls, v):
+    return MessageChain.parse_obj(v)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.type" href="#mirai.models.message.MessageComponent.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.message.Source"><code class="flex name class">
+<span>class <span class="ident">Source</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>源。包含消息的基本信息。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Source(MessageComponent):
+    &#34;&#34;&#34;源。包含消息的基本信息。&#34;&#34;&#34;
+    type: str = &#34;Source&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    id: int
+    &#34;&#34;&#34;消息的识别号，用于引用回复（Source 类型永远为 MessageChain 的第一个元素）。&#34;&#34;&#34;
+    time: datetime
+    &#34;&#34;&#34;消息时间。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.message.Source.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
+<dd>
+<div class="desc"><p>消息的识别号，用于引用回复（Source 类型永远为 MessageChain 的第一个元素）。</p></div>
+</dd>
+<dt id="mirai.models.message.Source.time"><code class="name">var <span class="ident">time</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"><p>消息时间。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.type" href="#mirai.models.message.MessageComponent.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.message.Unknown"><code class="flex name class">
+<span>class <span class="ident">Unknown</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>未知。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Unknown(MessageComponent):
+    &#34;&#34;&#34;未知。&#34;&#34;&#34;
+    type: str = &#34;Unknown&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    text: str
+    &#34;&#34;&#34;文本。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.message.Unknown.text"><code class="name">var <span class="ident">text</span> : str</code></dt>
+<dd>
+<div class="desc"><p>文本。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.type" href="#mirai.models.message.MessageComponent.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.message.Voice"><code class="flex name class">
+<span>class <span class="ident">Voice</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>语音。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Voice(MessageComponent):
+    &#34;&#34;&#34;语音。&#34;&#34;&#34;
+    type: str = &#34;Voice&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    voice_id: Optional[str] = None
+    &#34;&#34;&#34;语音的 voice_id，不为空时将忽略 url 属性。&#34;&#34;&#34;
+    url: Optional[str] = None
+    &#34;&#34;&#34;语音的 URL，发送时可作网络语音的链接；接收时为腾讯语音服务器的链接，可用于语音下载。&#34;&#34;&#34;
+    path: Optional[str] = None
+    &#34;&#34;&#34;语音的路径，发送本地语音。&#34;&#34;&#34;
+    base64: Optional[str] = None
+    &#34;&#34;&#34;语音的 Base64 编码。&#34;&#34;&#34;
+    @validator(&#39;path&#39;)
+    def validate_path(cls, path: Optional[str]):
+        &#34;&#34;&#34;修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。&#34;&#34;&#34;
+        if path:
+            try:
+                return str(Path(path).resolve(strict=True))
+            except FileNotFoundError:
+                raise ValueError(f&#34;无效路径：{path}&#34;)
+        else:
+            return path
+
+    async def download(
+        self,
+        filename: Union[str, Path, None] = None,
+        directory: Union[str, Path, None] = None
+    ):
+        &#34;&#34;&#34;下载语音到本地。
+
+        语音采用 silk v3 格式，silk 格式的编码解码请使用 [graiax-silkcoder](https://pypi.org/project/graiax-silkcoder/)。
+
+        Args:
+            filename: 下载到本地的文件路径。与 `directory` 二选一。
+            directory: 下载到本地的文件夹路径。与 `filename` 二选一。
+        &#34;&#34;&#34;
+        if not self.url:
+            logger.warning(f&#39;语音 `{self.voice_id}` 无 url 参数，下载失败。&#39;)
+            return
+
+        import httpx
+        async with httpx.AsyncClient() as client:
+            response = await client.get(self.url)
+            response.raise_for_status()
+            content = response.content
+
+            if filename:
+                path = Path(filename)
+                path.parent.mkdir(parents=True, exist_ok=True)
+            elif directory:
+                path = Path(directory)
+                path.mkdir(parents=True, exist_ok=True)
+                path = path / f&#39;{self.voice_id}.silk&#39;
+            else:
+                raise ValueError(&#34;请指定文件路径或文件夹路径！&#34;)
+
+            import aiofiles
+            async with aiofiles.open(path, &#39;wb&#39;) as f:
+                await f.write(content)
+
+    @classmethod
+    async def from_local(
+        cls,
+        filename: Union[str, Path, None] = None,
+        content: Optional[bytes] = None,
+    ) -&gt; &#34;Voice&#34;:
+        &#34;&#34;&#34;从本地文件路径加载语音，以 base64 的形式传递。
+
+        Args:
+            filename: 从本地文件路径加载语音，与 `content` 二选一。
+            content: 从本地文件内容加载语音，与 `filename` 二选一。
+        &#34;&#34;&#34;
+        if content:
+            pass
+        if filename:
+            path = Path(filename)
+            import aiofiles
+            async with aiofiles.open(path, &#39;rb&#39;) as f:
+                content = await f.read()
+        else:
+            raise ValueError(&#34;请指定语音路径或语音内容！&#34;)
+        import base64
+        img = cls(base64=base64.b64encode(content).decode())
+        return img</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.message.Voice.base64"><code class="name">var <span class="ident">base64</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>语音的 Base64 编码。</p></div>
+</dd>
+<dt id="mirai.models.message.Voice.path"><code class="name">var <span class="ident">path</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>语音的路径，发送本地语音。</p></div>
+</dd>
+<dt id="mirai.models.message.Voice.url"><code class="name">var <span class="ident">url</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>语音的 URL，发送时可作网络语音的链接；接收时为腾讯语音服务器的链接，可用于语音下载。</p></div>
+</dd>
+<dt id="mirai.models.message.Voice.voice_id"><code class="name">var <span class="ident">voice_id</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>语音的 voice_id，不为空时将忽略 url 属性。</p></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="mirai.models.message.Voice.from_local"><code class="name flex">
+<span>async def <span class="ident">from_local</span></span>(<span>filename: Union[str, pathlib.Path, NoneType] = None, content: Union[bytes, NoneType] = None) ‑> <a title="mirai.models.message.Voice" href="#mirai.models.message.Voice">Voice</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>从本地文件路径加载语音，以 base64 的形式传递。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filename</code></strong></dt>
+<dd>从本地文件路径加载语音，与 <code>content</code> 二选一。</dd>
+<dt><strong><code>content</code></strong></dt>
+<dd>从本地文件内容加载语音，与 <code>filename</code> 二选一。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+async def from_local(
+    cls,
+    filename: Union[str, Path, None] = None,
+    content: Optional[bytes] = None,
+) -&gt; &#34;Voice&#34;:
+    &#34;&#34;&#34;从本地文件路径加载语音，以 base64 的形式传递。
+
+    Args:
+        filename: 从本地文件路径加载语音，与 `content` 二选一。
+        content: 从本地文件内容加载语音，与 `filename` 二选一。
+    &#34;&#34;&#34;
+    if content:
+        pass
+    if filename:
+        path = Path(filename)
+        import aiofiles
+        async with aiofiles.open(path, &#39;rb&#39;) as f:
+            content = await f.read()
+    else:
+        raise ValueError(&#34;请指定语音路径或语音内容！&#34;)
+    import base64
+    img = cls(base64=base64.b64encode(content).decode())
+    return img</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.message.Voice.validate_path"><code class="name flex">
+<span>def <span class="ident">validate_path</span></span>(<span>path: Union[str, NoneType])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@validator(&#39;path&#39;)
+def validate_path(cls, path: Optional[str]):
+    &#34;&#34;&#34;修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。&#34;&#34;&#34;
+    if path:
+        try:
+            return str(Path(path).resolve(strict=True))
+        except FileNotFoundError:
+            raise ValueError(f&#34;无效路径：{path}&#34;)
+    else:
+        return path</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="mirai.models.message.Voice.download"><code class="name flex">
+<span>async def <span class="ident">download</span></span>(<span>self, filename: Union[str, pathlib.Path, NoneType] = None, directory: Union[str, pathlib.Path, NoneType] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>下载语音到本地。</p>
+<p>语音采用 silk v3 格式，silk 格式的编码解码请使用 <a href="https://pypi.org/project/graiax-silkcoder/">graiax-silkcoder</a>。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filename</code></strong></dt>
+<dd>下载到本地的文件路径。与 <code>directory</code> 二选一。</dd>
+<dt><strong><code>directory</code></strong></dt>
+<dd>下载到本地的文件夹路径。与 <code>filename</code> 二选一。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def download(
+    self,
+    filename: Union[str, Path, None] = None,
+    directory: Union[str, Path, None] = None
+):
+    &#34;&#34;&#34;下载语音到本地。
+
+    语音采用 silk v3 格式，silk 格式的编码解码请使用 [graiax-silkcoder](https://pypi.org/project/graiax-silkcoder/)。
+
+    Args:
+        filename: 下载到本地的文件路径。与 `directory` 二选一。
+        directory: 下载到本地的文件夹路径。与 `filename` 二选一。
+    &#34;&#34;&#34;
+    if not self.url:
+        logger.warning(f&#39;语音 `{self.voice_id}` 无 url 参数，下载失败。&#39;)
+        return
+
+    import httpx
+    async with httpx.AsyncClient() as client:
+        response = await client.get(self.url)
+        response.raise_for_status()
+        content = response.content
+
+        if filename:
+            path = Path(filename)
+            path.parent.mkdir(parents=True, exist_ok=True)
+        elif directory:
+            path = Path(directory)
+            path.mkdir(parents=True, exist_ok=True)
+            path = path / f&#39;{self.voice_id}.silk&#39;
+        else:
+            raise ValueError(&#34;请指定文件路径或文件夹路径！&#34;)
+
+        import aiofiles
+        async with aiofiles.open(path, &#39;wb&#39;) as f:
+            await f.write(content)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.type" href="#mirai.models.message.MessageComponent.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.message.Xml"><code class="flex name class">
+<span>class <span class="ident">Xml</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>XML。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Xml(MessageComponent):
+    &#34;&#34;&#34;XML。&#34;&#34;&#34;
+    type: str = &#34;Xml&#34;
+    &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    xml: str
+    &#34;&#34;&#34;XML文本。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.message.Xml.xml"><code class="name">var <span class="ident">xml</span> : str</code></dt>
+<dd>
+<div class="desc"><p>XML文本。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.message.MessageComponent.type" href="#mirai.models.message.MessageComponent.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="mirai.models" href="index.html">mirai.models</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-variables">Global variables</a></h3>
+<ul class="">
+<li><code><a title="mirai.models.message.TMessage" href="#mirai.models.message.TMessage">TMessage</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="mirai.models.message.deserialize" href="#mirai.models.message.deserialize">deserialize</a></code></li>
+<li><code><a title="mirai.models.message.serialize" href="#mirai.models.message.serialize">serialize</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="mirai.models.message.App" href="#mirai.models.message.App">App</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.message.App.as_json" href="#mirai.models.message.App.as_json">as_json</a></code></li>
+<li><code><a title="mirai.models.message.App.content" href="#mirai.models.message.App.content">content</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.At" href="#mirai.models.message.At">At</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.message.At.display" href="#mirai.models.message.At.display">display</a></code></li>
+<li><code><a title="mirai.models.message.At.target" href="#mirai.models.message.At.target">target</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.AtAll" href="#mirai.models.message.AtAll">AtAll</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.Dice" href="#mirai.models.message.Dice">Dice</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.message.Dice.value" href="#mirai.models.message.Dice.value">value</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.Face" href="#mirai.models.message.Face">Face</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.message.Face.face_id" href="#mirai.models.message.Face.face_id">face_id</a></code></li>
+<li><code><a title="mirai.models.message.Face.name" href="#mirai.models.message.Face.name">name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.File" href="#mirai.models.message.File">File</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.message.File.id" href="#mirai.models.message.File.id">id</a></code></li>
+<li><code><a title="mirai.models.message.File.name" href="#mirai.models.message.File.name">name</a></code></li>
+<li><code><a title="mirai.models.message.File.size" href="#mirai.models.message.File.size">size</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.FlashImage" href="#mirai.models.message.FlashImage">FlashImage</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.message.FlashImage.as_image" href="#mirai.models.message.FlashImage.as_image">as_image</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.Forward" href="#mirai.models.message.Forward">Forward</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.message.Forward.node_list" href="#mirai.models.message.Forward.node_list">node_list</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.ForwardMessageNode" href="#mirai.models.message.ForwardMessageNode">ForwardMessageNode</a></code></h4>
+<ul class="two-column">
+<li><code><a title="mirai.models.message.ForwardMessageNode.create" href="#mirai.models.message.ForwardMessageNode.create">create</a></code></li>
+<li><code><a title="mirai.models.message.ForwardMessageNode.message_chain" href="#mirai.models.message.ForwardMessageNode.message_chain">message_chain</a></code></li>
+<li><code><a title="mirai.models.message.ForwardMessageNode.sender_id" href="#mirai.models.message.ForwardMessageNode.sender_id">sender_id</a></code></li>
+<li><code><a title="mirai.models.message.ForwardMessageNode.sender_name" href="#mirai.models.message.ForwardMessageNode.sender_name">sender_name</a></code></li>
+<li><code><a title="mirai.models.message.ForwardMessageNode.source_id" href="#mirai.models.message.ForwardMessageNode.source_id">source_id</a></code></li>
+<li><code><a title="mirai.models.message.ForwardMessageNode.time" href="#mirai.models.message.ForwardMessageNode.time">time</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.Image" href="#mirai.models.message.Image">Image</a></code></h4>
+<ul class="two-column">
+<li><code><a title="mirai.models.message.Image.as_flash_image" href="#mirai.models.message.Image.as_flash_image">as_flash_image</a></code></li>
+<li><code><a title="mirai.models.message.Image.as_friend_image" href="#mirai.models.message.Image.as_friend_image">as_friend_image</a></code></li>
+<li><code><a title="mirai.models.message.Image.as_group_image" href="#mirai.models.message.Image.as_group_image">as_group_image</a></code></li>
+<li><code><a title="mirai.models.message.Image.base64" href="#mirai.models.message.Image.base64">base64</a></code></li>
+<li><code><a title="mirai.models.message.Image.download" href="#mirai.models.message.Image.download">download</a></code></li>
+<li><code><a title="mirai.models.message.Image.from_local" href="#mirai.models.message.Image.from_local">from_local</a></code></li>
+<li><code><a title="mirai.models.message.Image.from_unsafe_path" href="#mirai.models.message.Image.from_unsafe_path">from_unsafe_path</a></code></li>
+<li><code><a title="mirai.models.message.Image.image_id" href="#mirai.models.message.Image.image_id">image_id</a></code></li>
+<li><code><a title="mirai.models.message.Image.path" href="#mirai.models.message.Image.path">path</a></code></li>
+<li><code><a title="mirai.models.message.Image.url" href="#mirai.models.message.Image.url">url</a></code></li>
+<li><code><a title="mirai.models.message.Image.uuid" href="#mirai.models.message.Image.uuid">uuid</a></code></li>
+<li><code><a title="mirai.models.message.Image.validate_path" href="#mirai.models.message.Image.validate_path">validate_path</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.Json" href="#mirai.models.message.Json">Json</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.message.Json.json_" href="#mirai.models.message.Json.json_">json_</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.MessageChain" href="#mirai.models.message.MessageChain">MessageChain</a></code></h4>
+<ul class="two-column">
+<li><code><a title="mirai.models.message.MessageChain.append" href="#mirai.models.message.MessageChain.append">append</a></code></li>
+<li><code><a title="mirai.models.message.MessageChain.count" href="#mirai.models.message.MessageChain.count">count</a></code></li>
+<li><code><a title="mirai.models.message.MessageChain.exclude" href="#mirai.models.message.MessageChain.exclude">exclude</a></code></li>
+<li><code><a title="mirai.models.message.MessageChain.extend" href="#mirai.models.message.MessageChain.extend">extend</a></code></li>
+<li><code><a title="mirai.models.message.MessageChain.get" href="#mirai.models.message.MessageChain.get">get</a></code></li>
+<li><code><a title="mirai.models.message.MessageChain.get_first" href="#mirai.models.message.MessageChain.get_first">get_first</a></code></li>
+<li><code><a title="mirai.models.message.MessageChain.has" href="#mirai.models.message.MessageChain.has">has</a></code></li>
+<li><code><a title="mirai.models.message.MessageChain.index" href="#mirai.models.message.MessageChain.index">index</a></code></li>
+<li><code><a title="mirai.models.message.MessageChain.insert" href="#mirai.models.message.MessageChain.insert">insert</a></code></li>
+<li><code><a title="mirai.models.message.MessageChain.join" href="#mirai.models.message.MessageChain.join">join</a></code></li>
+<li><code><a title="mirai.models.message.MessageChain.message_id" href="#mirai.models.message.MessageChain.message_id">message_id</a></code></li>
+<li><code><a title="mirai.models.message.MessageChain.parse_obj" href="#mirai.models.message.MessageChain.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.message.MessageChain.pop" href="#mirai.models.message.MessageChain.pop">pop</a></code></li>
+<li><code><a title="mirai.models.message.MessageChain.remove" href="#mirai.models.message.MessageChain.remove">remove</a></code></li>
+<li><code><a title="mirai.models.message.MessageChain.reverse" href="#mirai.models.message.MessageChain.reverse">reverse</a></code></li>
+<li><code><a title="mirai.models.message.MessageChain.source" href="#mirai.models.message.MessageChain.source">source</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.message.MessageComponent.type" href="#mirai.models.message.MessageComponent.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.MusicShare" href="#mirai.models.message.MusicShare">MusicShare</a></code></h4>
+<ul class="two-column">
+<li><code><a title="mirai.models.message.MusicShare.brief" href="#mirai.models.message.MusicShare.brief">brief</a></code></li>
+<li><code><a title="mirai.models.message.MusicShare.jump_url" href="#mirai.models.message.MusicShare.jump_url">jump_url</a></code></li>
+<li><code><a title="mirai.models.message.MusicShare.kind" href="#mirai.models.message.MusicShare.kind">kind</a></code></li>
+<li><code><a title="mirai.models.message.MusicShare.music_url" href="#mirai.models.message.MusicShare.music_url">music_url</a></code></li>
+<li><code><a title="mirai.models.message.MusicShare.picture_url" href="#mirai.models.message.MusicShare.picture_url">picture_url</a></code></li>
+<li><code><a title="mirai.models.message.MusicShare.summary" href="#mirai.models.message.MusicShare.summary">summary</a></code></li>
+<li><code><a title="mirai.models.message.MusicShare.title" href="#mirai.models.message.MusicShare.title">title</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.MusicShareKind" href="#mirai.models.message.MusicShareKind">MusicShareKind</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.message.MusicShareKind.KugouMusic" href="#mirai.models.message.MusicShareKind.KugouMusic">KugouMusic</a></code></li>
+<li><code><a title="mirai.models.message.MusicShareKind.KuwoMusic" href="#mirai.models.message.MusicShareKind.KuwoMusic">KuwoMusic</a></code></li>
+<li><code><a title="mirai.models.message.MusicShareKind.MiguMusic" href="#mirai.models.message.MusicShareKind.MiguMusic">MiguMusic</a></code></li>
+<li><code><a title="mirai.models.message.MusicShareKind.NeteaseCloudMusic" href="#mirai.models.message.MusicShareKind.NeteaseCloudMusic">NeteaseCloudMusic</a></code></li>
+<li><code><a title="mirai.models.message.MusicShareKind.QQMusic" href="#mirai.models.message.MusicShareKind.QQMusic">QQMusic</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.Plain" href="#mirai.models.message.Plain">Plain</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.message.Plain.text" href="#mirai.models.message.Plain.text">text</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.Poke" href="#mirai.models.message.Poke">Poke</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.message.Poke.name" href="#mirai.models.message.Poke.name">name</a></code></li>
+<li><code><a title="mirai.models.message.Poke.poke_id" href="#mirai.models.message.Poke.poke_id">poke_id</a></code></li>
+<li><code><a title="mirai.models.message.Poke.poke_type" href="#mirai.models.message.Poke.poke_type">poke_type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.PokeNames" href="#mirai.models.message.PokeNames">PokeNames</a></code></h4>
+<ul class="two-column">
+<li><code><a title="mirai.models.message.PokeNames.BaoBeiQiu" href="#mirai.models.message.PokeNames.BaoBeiQiu">BaoBeiQiu</a></code></li>
+<li><code><a title="mirai.models.message.PokeNames.BiXin" href="#mirai.models.message.PokeNames.BiXin">BiXin</a></code></li>
+<li><code><a title="mirai.models.message.PokeNames.ChuoYiChuo" href="#mirai.models.message.PokeNames.ChuoYiChuo">ChuoYiChuo</a></code></li>
+<li><code><a title="mirai.models.message.PokeNames.DianZan" href="#mirai.models.message.PokeNames.DianZan">DianZan</a></code></li>
+<li><code><a title="mirai.models.message.PokeNames.FangDaZhao" href="#mirai.models.message.PokeNames.FangDaZhao">FangDaZhao</a></code></li>
+<li><code><a title="mirai.models.message.PokeNames.GouYin" href="#mirai.models.message.PokeNames.GouYin">GouYin</a></code></li>
+<li><code><a title="mirai.models.message.PokeNames.JeiYin" href="#mirai.models.message.PokeNames.JeiYin">JeiYin</a></code></li>
+<li><code><a title="mirai.models.message.PokeNames.LiuLiuLiu" href="#mirai.models.message.PokeNames.LiuLiuLiu">LiuLiuLiu</a></code></li>
+<li><code><a title="mirai.models.message.PokeNames.QiaoMen" href="#mirai.models.message.PokeNames.QiaoMen">QiaoMen</a></code></li>
+<li><code><a title="mirai.models.message.PokeNames.RangNiPi" href="#mirai.models.message.PokeNames.RangNiPi">RangNiPi</a></code></li>
+<li><code><a title="mirai.models.message.PokeNames.Rose" href="#mirai.models.message.PokeNames.Rose">Rose</a></code></li>
+<li><code><a title="mirai.models.message.PokeNames.ShouLei" href="#mirai.models.message.PokeNames.ShouLei">ShouLei</a></code></li>
+<li><code><a title="mirai.models.message.PokeNames.SuiPing" href="#mirai.models.message.PokeNames.SuiPing">SuiPing</a></code></li>
+<li><code><a title="mirai.models.message.PokeNames.XinSui" href="#mirai.models.message.PokeNames.XinSui">XinSui</a></code></li>
+<li><code><a title="mirai.models.message.PokeNames.ZhaoHuanShu" href="#mirai.models.message.PokeNames.ZhaoHuanShu">ZhaoHuanShu</a></code></li>
+<li><code><a title="mirai.models.message.PokeNames.ZhuaYiXia" href="#mirai.models.message.PokeNames.ZhuaYiXia">ZhuaYiXia</a></code></li>
+<li><code><a title="mirai.models.message.PokeNames.as_component" href="#mirai.models.message.PokeNames.as_component">as_component</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.Quote" href="#mirai.models.message.Quote">Quote</a></code></h4>
+<ul class="two-column">
+<li><code><a title="mirai.models.message.Quote.group_id" href="#mirai.models.message.Quote.group_id">group_id</a></code></li>
+<li><code><a title="mirai.models.message.Quote.id" href="#mirai.models.message.Quote.id">id</a></code></li>
+<li><code><a title="mirai.models.message.Quote.origin" href="#mirai.models.message.Quote.origin">origin</a></code></li>
+<li><code><a title="mirai.models.message.Quote.origin_formater" href="#mirai.models.message.Quote.origin_formater">origin_formater</a></code></li>
+<li><code><a title="mirai.models.message.Quote.sender_id" href="#mirai.models.message.Quote.sender_id">sender_id</a></code></li>
+<li><code><a title="mirai.models.message.Quote.target_id" href="#mirai.models.message.Quote.target_id">target_id</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.Source" href="#mirai.models.message.Source">Source</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.message.Source.id" href="#mirai.models.message.Source.id">id</a></code></li>
+<li><code><a title="mirai.models.message.Source.time" href="#mirai.models.message.Source.time">time</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.Unknown" href="#mirai.models.message.Unknown">Unknown</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.message.Unknown.text" href="#mirai.models.message.Unknown.text">text</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.Voice" href="#mirai.models.message.Voice">Voice</a></code></h4>
+<ul class="two-column">
+<li><code><a title="mirai.models.message.Voice.base64" href="#mirai.models.message.Voice.base64">base64</a></code></li>
+<li><code><a title="mirai.models.message.Voice.download" href="#mirai.models.message.Voice.download">download</a></code></li>
+<li><code><a title="mirai.models.message.Voice.from_local" href="#mirai.models.message.Voice.from_local">from_local</a></code></li>
+<li><code><a title="mirai.models.message.Voice.path" href="#mirai.models.message.Voice.path">path</a></code></li>
+<li><code><a title="mirai.models.message.Voice.url" href="#mirai.models.message.Voice.url">url</a></code></li>
+<li><code><a title="mirai.models.message.Voice.validate_path" href="#mirai.models.message.Voice.validate_path">validate_path</a></code></li>
+<li><code><a title="mirai.models.message.Voice.voice_id" href="#mirai.models.message.Voice.voice_id">voice_id</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.message.Xml" href="#mirai.models.message.Xml">Xml</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.message.Xml.xml" href="#mirai.models.message.Xml.xml">xml</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>

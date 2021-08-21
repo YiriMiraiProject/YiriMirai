@@ -1,0 +1,4559 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>mirai.models.events API documentation</title>
+<meta name="description" content="此模块提供事件模型。" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>mirai.models.events</code></h1>
+</header>
+<section id="section-intro">
+<p>此模块提供事件模型。</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># -*- coding: utf-8 -*-
+&#34;&#34;&#34;
+此模块提供事件模型。
+&#34;&#34;&#34;
+from datetime import datetime
+from typing import TYPE_CHECKING, Any, Optional, Union
+
+if TYPE_CHECKING:
+    from typing import Literal
+else:
+    try:
+        from typing import Literal
+    except ImportError:
+        from typing_extensions import Literal
+
+from pydantic import Field
+
+from mirai.models.base import MiraiIndexedModel
+from mirai.models.entities import (
+    Entity, Friend, Group, GroupMember, Permission, Sender, Subject
+)
+from mirai.models.message import MessageChain
+
+
+class Event(MiraiIndexedModel):
+    &#34;&#34;&#34;事件基类。
+
+    Args:
+        type: 事件名。
+    &#34;&#34;&#34;
+    type: str
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    def __repr__(self):
+        return self.__class__.__name__ + &#39;(&#39; + &#39;, &#39;.join(
+            (
+                f&#39;{k}={repr(v)}&#39;
+                for k, v in self.__dict__.items() if k != &#39;type&#39; and v
+            )
+        ) + &#39;)&#39;
+
+
+###############################
+# Bot Event
+class BotEvent(Event):
+    &#34;&#34;&#34;Bot 自身事件。
+
+    Args:
+        type: 事件名。
+        qq: Bot 的 QQ 号。
+    &#34;&#34;&#34;
+    type: str
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    qq: int
+    &#34;&#34;&#34;Bot 的 QQ 号。&#34;&#34;&#34;
+
+
+class BotOnlineEvent(BotEvent):
+    &#34;&#34;&#34;Bot 登陆成功。
+
+    Args:
+        type: 事件名。
+        qq: 登陆成功的 Bot 的 QQ 号。
+    &#34;&#34;&#34;
+    type: str = &#39;BotOnlineEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    qq: int
+    &#34;&#34;&#34;登陆成功的 Bot 的 QQ 号。&#34;&#34;&#34;
+
+
+class BotOfflineEventActive(BotEvent):
+    &#34;&#34;&#34;Bot 主动离线。
+
+    Args:
+        type: 事件名。
+        qq: 主动离线的 Bot 的 QQ 号。
+    &#34;&#34;&#34;
+    type: str = &#39;BotOfflineEventActive&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    qq: int
+    &#34;&#34;&#34;主动离线的 Bot 的 QQ 号。&#34;&#34;&#34;
+
+
+class BotOfflineEventForce(BotEvent):
+    &#34;&#34;&#34;Bot被挤下线。
+
+    Args:
+        type: 事件名。
+        qq: 被挤下线的 Bot 的 QQ 号。
+    &#34;&#34;&#34;
+    type: str = &#39;BotOfflineEventForce&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    qq: int
+    &#34;&#34;&#34;被挤下线的 Bot 的 QQ 号。&#34;&#34;&#34;
+
+
+class BotOfflineEventDropped(BotEvent):
+    &#34;&#34;&#34;Bot 被服务器断开或因网络问题而掉线。
+
+    Args:
+        type: 事件名。
+        qq: 被服务器断开或因网络问题而掉线的 Bot 的 QQ 号。
+    &#34;&#34;&#34;
+    type: str = &#39;BotOfflineEventDropped&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    qq: int
+    &#34;&#34;&#34;被服务器断开或因网络问题而掉线的 Bot 的 QQ 号。&#34;&#34;&#34;
+
+
+class BotReloginEvent(BotEvent):
+    &#34;&#34;&#34;Bot 主动重新登录。
+
+    Args:
+        type: 事件名。
+        qq: 主动重新登录的 Bot 的 QQ 号。
+    &#34;&#34;&#34;
+    type: str = &#39;BotReloginEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    qq: int
+    &#34;&#34;&#34;主动重新登录的 Bot 的 QQ 号。&#34;&#34;&#34;
+
+
+###############################
+# Friend Event
+
+
+class FriendEvent(Event):
+    &#34;&#34;&#34;好友事件。
+
+    Args:
+        type: 事件名。
+        friend: 事件对应的好友。
+    &#34;&#34;&#34;
+    type: str
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    friend: Friend
+    &#34;&#34;&#34;事件对应的好友。&#34;&#34;&#34;
+
+
+class FriendInputStatusChangedEvent(FriendEvent):
+    &#34;&#34;&#34;好友输入状态改变。
+
+    Args:
+        type: 事件名。
+        friend: 事件对应的好友。
+        inputting: 是否正在输入。
+    &#34;&#34;&#34;
+    type: str = &#39;FriendInputStatusChangedEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    friend: Friend
+    &#34;&#34;&#34;事件对应的好友。&#34;&#34;&#34;
+    inputting: bool
+    &#34;&#34;&#34;是否正在输入。&#34;&#34;&#34;
+
+
+class FriendNickChangedEvent(FriendEvent):
+    &#34;&#34;&#34;好友昵称改变。
+
+    Args:
+        type: 事件名。
+        friend: 事件对应的好友。
+        from_: 原昵称。
+        to: 新昵称。
+    &#34;&#34;&#34;
+    type: str = &#39;FriendNickChangedEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    friend: Friend
+    &#34;&#34;&#34;事件对应的好友。&#34;&#34;&#34;
+    from_: str
+    &#34;&#34;&#34;原昵称。&#34;&#34;&#34;
+    to: str
+    &#34;&#34;&#34;新昵称。&#34;&#34;&#34;
+
+
+###############################
+# Group Event
+
+
+class GroupEvent(Event):
+    &#34;&#34;&#34;群事件。
+
+    Args:
+        type: 事件名。
+        group: 事件对应的群。
+    &#34;&#34;&#34;
+    # group: Group
+    # 一个奇怪的现象：群事件不一定有 group，它可能藏在 opeartor.group 里
+
+    type: str
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    def __getattr__(self, name) -&gt; Union[Group, Any]:
+        if name == &#39;group&#39;:
+            member = getattr(self, &#39;operator&#39;,
+                             None) or getattr(self, &#39;member&#39;, None)
+            if member:
+                return member.group
+        return getattr(super(), name)
+
+
+class BotGroupPermissionChangeEvent(GroupEvent):
+    &#34;&#34;&#34; Bot在群里的权限被改变。
+
+    Args:
+        type: 事件名。
+        origin: 原权限。
+        current: 新权限。
+        group: 事件对应的群。
+    &#34;&#34;&#34;
+    type: str = &#39;BotGroupPermissionChangeEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    origin: Permission
+    &#34;&#34;&#34;原权限。&#34;&#34;&#34;
+    current: Permission
+    &#34;&#34;&#34;新权限。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;事件对应的群。&#34;&#34;&#34;
+
+
+class BotMuteEvent(GroupEvent):
+    &#34;&#34;&#34;Bot 被禁言。
+
+    Args:
+        type: 事件名。
+        duration_seconds: 禁言时间，单位秒。
+        operator: 禁言的操作者。
+    &#34;&#34;&#34;
+    type: str = &#39;BotMuteEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    duration_seconds: int
+    &#34;&#34;&#34;禁言时间，单位秒。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;禁言的操作者。&#34;&#34;&#34;
+
+
+class BotUnmuteEvent(GroupEvent):
+    &#34;&#34;&#34;Bot 被取消禁言。
+
+    Args:
+        type: 事件名。
+        operator: 取消禁言的操作者。
+    &#34;&#34;&#34;
+    type: str = &#39;BotUnmuteEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;取消禁言的操作者。&#34;&#34;&#34;
+
+
+class BotJoinGroupEvent(GroupEvent):
+    &#34;&#34;&#34;Bot 加入了一个新群。
+
+    Args:
+        type: 事件名。
+        group: Bot 加入的群。
+    &#34;&#34;&#34;
+    type: str = &#39;BotJoinGroupEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;Bot 加入的群。&#34;&#34;&#34;
+
+
+class BotLeaveEventActive(GroupEvent):
+    &#34;&#34;&#34;Bot 主动退出一个群。
+
+    Args:
+        type: 事件名。
+        group: Bot 退出的群。
+    &#34;&#34;&#34;
+    type: str = &#39;BotLeaveEventActive&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;Bot 退出的群。&#34;&#34;&#34;
+
+
+class BotLeaveEventKick(GroupEvent):
+    &#34;&#34;&#34;Bot 被踢出一个群。
+
+    Args:
+        type: 事件名。
+        group: Bot 被踢出的群。
+    &#34;&#34;&#34;
+    type: str = &#39;BotLeaveEventKick&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;Bot 被踢出的群。&#34;&#34;&#34;
+
+
+class GroupRecallEvent(GroupEvent):
+    &#34;&#34;&#34;群消息撤回。
+
+    Args:
+        type: 事件名。
+        author_id: 原消息发送者的 QQ 号。
+        message_id: 原消息 message_id。
+        time: 原消息发送时间。
+        group: 消息撤回所在的群。
+        operator: 消息撤回的操作者，为 None 表示 Bot 操作。
+    &#34;&#34;&#34;
+    type: str = &#39;GroupRecallEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    author_id: int
+    &#34;&#34;&#34;原消息发送者的 QQ 号。&#34;&#34;&#34;
+    message_id: int
+    &#34;&#34;&#34;原消息 message_id。&#34;&#34;&#34;
+    time: datetime
+    &#34;&#34;&#34;原消息发送时间。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;消息撤回所在的群。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;消息撤回的操作者，为 None 表示 Bot 操作。&#34;&#34;&#34;
+
+
+class FriendRecallEvent(Event):
+    &#34;&#34;&#34;好友消息撤回。
+
+    Args:
+        type: 事件名。
+        author_id: 原消息发送者的 QQ 号。
+        message_id: 原消息 message_id。
+        time: 原消息发送时间。
+        operator: 好友 QQ 号或 Bot QQ 号。
+    &#34;&#34;&#34;
+    type: str = &#39;FriendRecallEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    # 按照文档顺序，这个事件确实应该在这个位置。
+    # 而且它不符合 FriendEvent 的形式，就放在这里吧。
+    author_id: int
+    &#34;&#34;&#34;原消息发送者的 QQ 号。&#34;&#34;&#34;
+    message_id: int
+    &#34;&#34;&#34;原消息 message_id。&#34;&#34;&#34;
+    time: datetime
+    &#34;&#34;&#34;原消息发送时间。&#34;&#34;&#34;
+    operator: int
+    &#34;&#34;&#34;好友 QQ 号或 Bot QQ 号。&#34;&#34;&#34;
+
+
+class GroupNameChangeEvent(GroupEvent):
+    &#34;&#34;&#34;某个群名改变。
+
+    Args:
+        type: 事件名。
+        origin: 原群名。
+        current: 新群名。
+        group: 群名改名的群。
+        operator: 操作者，为 None 表示 Bot 操作。
+    &#34;&#34;&#34;
+    type: str = &#39;GroupNameChangeEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    origin: str
+    &#34;&#34;&#34;原群名。&#34;&#34;&#34;
+    current: str
+    &#34;&#34;&#34;新群名。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;群名改名的群。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;操作者，为 None 表示 Bot 操作。&#34;&#34;&#34;
+
+
+class GroupEntranceAnnouncementChangeEvent(GroupEvent):
+    &#34;&#34;&#34;某群入群公告改变。
+
+    Args:
+        type: 事件名。
+        origin: 原公告。
+        current: 新公告。
+        group: 群公告改变的群。
+        operator: 操作者，为 None 表示 Bot 操作。
+    &#34;&#34;&#34;
+    type: str = &#39;GroupEntranceAnnouncementChangeEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    origin: str
+    &#34;&#34;&#34;原公告。&#34;&#34;&#34;
+    current: str
+    &#34;&#34;&#34;新公告。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;群公告改变的群。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;操作者，为 None 表示 Bot 操作。&#34;&#34;&#34;
+
+
+class GroupMuteAllEvent(GroupEvent):
+    &#34;&#34;&#34;全员禁言。
+
+    Args:
+        type: 事件名。
+        origin: 原本是否处于全员禁言。
+        current: 现在是否处于全员禁言。
+        group: 全员禁言的群。
+        operator: 操作者，为 None 表示 Bot 操作。
+    &#34;&#34;&#34;
+    type: str = &#39;GroupMuteAllEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    origin: bool
+    &#34;&#34;&#34;原本是否处于全员禁言。&#34;&#34;&#34;
+    current: bool
+    &#34;&#34;&#34;现在是否处于全员禁言。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;全员禁言的群。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;操作者，为 None 表示 Bot 操作。&#34;&#34;&#34;
+
+
+class GroupAllowAnonymousChatEvent(GroupEvent):
+    &#34;&#34;&#34;匿名聊天。
+
+    Args:
+        type: 事件名。
+        origin: 原本是否允许匿名聊天。
+        current: 现在是否允许匿名聊天。
+        group: 匿名聊天状态改变的群。
+        operator: 操作者，为 None 表示 Bot 操作。
+    &#34;&#34;&#34;
+    type: str = &#39;GroupAllowAnonymousChatEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    origin: bool
+    &#34;&#34;&#34;原本是否允许匿名聊天。&#34;&#34;&#34;
+    current: bool
+    &#34;&#34;&#34;现在是否允许匿名聊天。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;匿名聊天状态改变的群。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;操作者，为 None 表示 Bot 操作。&#34;&#34;&#34;
+
+
+class GroupAllowConfessTalkEvent(GroupEvent):
+    &#34;&#34;&#34;坦白说。
+
+    Args:
+        type: 事件名。
+        origin: 原本是否允许坦白说。
+        current: 现在是否允许坦白说。
+        group: 坦白说状态改变的群。
+        is_by_bot: 是否 Bot 进行该操作。
+    &#34;&#34;&#34;
+    type: str = &#39;GroupAllowConfessTalkEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    origin: bool
+    &#34;&#34;&#34;原本是否允许坦白说。&#34;&#34;&#34;
+    current: bool
+    &#34;&#34;&#34;现在是否允许坦白说。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;坦白说状态改变的群。&#34;&#34;&#34;
+    is_by_bot: bool
+    &#34;&#34;&#34;是否是 Bot 进行该操作。&#34;&#34;&#34;
+
+
+class GroupAllowMemberInviteEvent(GroupEvent):
+    &#34;&#34;&#34;允许群员邀请好友加群。
+
+    Args:
+        type: 事件名。
+        origin: 原本是否允许群员邀请好友加群。
+        current: 现在是否允许群员邀请好友加群。
+        group: 允许群员邀请好友加群状态改变的群。
+        operator: 操作者，为 None 表示 Bot 操作。
+    &#34;&#34;&#34;
+    type: str = &#39;GroupAllowMemberInviteEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    origin: bool
+    &#34;&#34;&#34;原本是否允许群员邀请好友加群。&#34;&#34;&#34;
+    current: bool
+    &#34;&#34;&#34;现在是否允许群员邀请好友加群。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;允许群员邀请好友加群状态改变的群。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;操作者，为 None 表示 Bot 操作。&#34;&#34;&#34;
+
+
+class MemberJoinEvent(GroupEvent):
+    &#34;&#34;&#34;新人入群。
+
+    Args:
+        type: 事件名。
+        member: 加入的群成员。
+        group: 加入的群。
+    &#34;&#34;&#34;
+    type: str = &#39;MemberJoinEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    member: GroupMember
+    &#34;&#34;&#34;加入的群成员。&#34;&#34;&#34;
+
+
+class MemberLeaveEventKick(GroupEvent):
+    &#34;&#34;&#34;成员被踢出群（该成员不是Bot）。
+
+    Args:
+        type: 事件名。
+        member: 被踢出的群成员。
+        group: 事件发生的群。
+        operator: 被踢出的群的管理员。
+    &#34;&#34;&#34;
+    type: str = &#39;MemberLeaveEventKick&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    member: GroupMember
+    &#34;&#34;&#34;被踢出的群成员。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;被踢出的群的管理员。&#34;&#34;&#34;
+
+
+class MemberLeaveEventQuit(GroupEvent):
+    &#34;&#34;&#34;成员主动离群（该成员不是Bot）。
+
+    Args:
+        type: 事件名。
+        member: 离群的群成员。
+        group: 事件发生的群。
+    &#34;&#34;&#34;
+    type: str = &#39;MemberLeaveEventQuit&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    member: GroupMember
+    &#34;&#34;&#34;离群的群成员。&#34;&#34;&#34;
+
+
+class MemberCardChangeEvent(GroupEvent):
+    &#34;&#34;&#34;群名片改动。
+
+    Args:
+        type: 事件名。
+        origin: 原本名片。
+        current: 现在名片。
+        member: 改动的群成员。
+        group: 事件发生的群。
+    &#34;&#34;&#34;
+    type: str = &#39;MemberCardChangeEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    origin: str
+    &#34;&#34;&#34;原本名片。&#34;&#34;&#34;
+    current: str
+    &#34;&#34;&#34;现在名片。&#34;&#34;&#34;
+    member: GroupMember
+    &#34;&#34;&#34;改动的群成员。&#34;&#34;&#34;
+
+
+class MemberSpecialTitleChangeEvent(GroupEvent):
+    &#34;&#34;&#34;群头衔改动（只有群主有操作权限）。
+
+    Args:
+        type: 事件名。
+        origin: 原本头衔。
+        current: 现在头衔。
+        member: 头衔改动的群成员。
+        group: 事件发生的群。
+    &#34;&#34;&#34;
+    type: str = &#39;MemberSpecialTitleChangeEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    origin: str
+    &#34;&#34;&#34;原本头衔。&#34;&#34;&#34;
+    current: str
+    &#34;&#34;&#34;现在头衔。&#34;&#34;&#34;
+    member: GroupMember
+    &#34;&#34;&#34;头衔改动的群成员。&#34;&#34;&#34;
+
+
+class MemberPermissionChangeEvent(GroupEvent):
+    &#34;&#34;&#34;成员权限改变（该成员不是Bot）。
+
+    Args:
+        type: 事件名。
+        origin: 原本权限。
+        current: 现在权限。
+        member: 权限改变的群成员。
+        group: 事件发生的群。
+    &#34;&#34;&#34;
+    type: str = &#39;MemberPermissionChangeEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    origin: Permission
+    &#34;&#34;&#34;原本权限。&#34;&#34;&#34;
+    current: Permission
+    &#34;&#34;&#34;现在权限。&#34;&#34;&#34;
+    member: GroupMember
+    &#34;&#34;&#34;权限改变的群成员。&#34;&#34;&#34;
+
+
+class MemberMuteEvent(GroupEvent):
+    &#34;&#34;&#34;群成员被禁言（该成员不是Bot）。
+
+    Args:
+        type: 事件名。
+        duration_seconds: 禁言时间，单位为秒。
+    &#34;&#34;&#34;
+    type: str = &#39;MemberMuteEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    duration_seconds: int
+    &#34;&#34;&#34;禁言时间，单位为秒。&#34;&#34;&#34;
+
+
+class MemberUnmuteEvent(GroupEvent):
+    &#34;&#34;&#34;群成员被取消禁言（该成员不是Bot）。
+
+    Args:
+        type: 事件名。
+        member: 被取消禁言的群成员。
+        group: 事件发生的群。
+    &#34;&#34;&#34;
+    type: str = &#39;MemberUnmuteEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    member: GroupMember
+    &#34;&#34;&#34;被取消禁言的群成员。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;被取消禁言的群管理员。&#34;&#34;&#34;
+
+
+class MemberHonorChangeEvent(GroupEvent):
+    &#34;&#34;&#34;群员称号改变。
+
+    Args:
+        type: 事件名。
+        member: 称号改变的群成员。
+        action: 称号变化行为：achieve 获得称号，lose 失去称号。
+        group: 事件发生的群。
+        honor: 称号名称。
+    &#34;&#34;&#34;
+    type: str = &#39;MemberHonorChangeEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    member: GroupMember
+    &#34;&#34;&#34;称号改变的群成员。&#34;&#34;&#34;
+    action: Literal[&#39;achieve&#39;, &#39;lose&#39;]
+    &#34;&#34;&#34;称号变化行为：achieve 获得称号，lose 失去称号。&#34;&#34;&#34;
+    honor: str
+    &#34;&#34;&#34;称号名称。&#34;&#34;&#34;
+
+
+###############################
+# Request Event
+
+
+class RequestEvent(Event):
+    &#34;&#34;&#34;申请事件。
+
+    Args:
+        type: 事件名。
+        event_id: 事件标识，响应该事件时的标识。
+    &#34;&#34;&#34;
+    type: str
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    event_id: int
+    &#34;&#34;&#34;事件标识，响应该事件时的标识。&#34;&#34;&#34;
+    from_id: int
+    &#34;&#34;&#34;申请人 QQ 号。&#34;&#34;&#34;
+    group_id: int
+    &#34;&#34;&#34;申请人群号，可能为0。&#34;&#34;&#34;
+
+
+class NewFriendRequestEvent(RequestEvent):
+    &#34;&#34;&#34;添加好友申请。
+
+    Args:
+        type: 事件名。
+        event_id: 事件标识，响应该事件时的标识。
+        from_id: 申请人 QQ 号。
+        group_id: 申请人如果通过某个群添加好友，该项为该群群号；否则为0。
+        nick: 申请人的昵称或群名片。
+        message: 申请消息。
+    &#34;&#34;&#34;
+    type: str = &#39;NewFriendRequestEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    event_id: int
+    &#34;&#34;&#34;事件标识，响应该事件时的标识。&#34;&#34;&#34;
+    from_id: int
+    &#34;&#34;&#34;申请人 QQ 号。&#34;&#34;&#34;
+    group_id: int
+    &#34;&#34;&#34;申请人如果通过某个群添加好友，该项为该群群号；否则为0。&#34;&#34;&#34;
+    nick: str
+    &#34;&#34;&#34;申请人的昵称或群名片。&#34;&#34;&#34;
+    message: str
+    &#34;&#34;&#34;申请消息。&#34;&#34;&#34;
+
+
+class MemberJoinRequestEvent(RequestEvent):
+    &#34;&#34;&#34;用户入群申请（Bot需要有管理员权限）。
+
+    Args:
+        type: 事件名。
+        event_id: 事件标识，响应该事件时的标识。
+        from_id: 申请人 QQ 号。
+        group_id: 申请人申请入群的群号。
+        group_name: 申请人申请入群的群名称。
+        nick: 申请人的昵称或群名片。
+        message: 申请消息。
+    &#34;&#34;&#34;
+    type: str = &#39;MemberJoinRequestEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    event_id: int
+    &#34;&#34;&#34;事件标识，响应该事件时的标识。&#34;&#34;&#34;
+    from_id: int
+    &#34;&#34;&#34;申请人 QQ 号。&#34;&#34;&#34;
+    group_id: int
+    &#34;&#34;&#34;申请人申请入群的群号。&#34;&#34;&#34;
+    group_name: str
+    &#34;&#34;&#34;申请人申请入群的群名称。&#34;&#34;&#34;
+    nick: str
+    &#34;&#34;&#34;申请人的昵称或群名片。&#34;&#34;&#34;
+    message: str
+    &#34;&#34;&#34;申请消息。&#34;&#34;&#34;
+
+
+class BotInvitedJoinGroupRequestEvent(RequestEvent):
+    &#34;&#34;&#34;Bot 被邀请入群申请。
+
+    Args:
+        type: 事件名。
+        event_id: 事件标识，响应该事件时的标识。
+        from_id: 邀请人 QQ 号。
+        group_id: 被邀请进入群的群号。
+        group_name: 被邀请进入群的群名称。
+        nick: 邀请人（好友）的昵称。
+        message: 邀请消息。
+    &#34;&#34;&#34;
+    type: str = &#39;BotInvitedJoinGroupRequestEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    event_id: int
+    &#34;&#34;&#34;事件标识，响应该事件时的标识。&#34;&#34;&#34;
+    from_id: int
+    &#34;&#34;&#34;邀请人 QQ 号。&#34;&#34;&#34;
+    group_id: int
+    &#34;&#34;&#34;被邀请进入群的群号。&#34;&#34;&#34;
+    group_name: str
+    &#34;&#34;&#34;被邀请进入群的群名称。&#34;&#34;&#34;
+    nick: str
+    &#34;&#34;&#34;邀请人（好友）的昵称。&#34;&#34;&#34;
+    message: str
+    &#34;&#34;&#34;邀请消息。&#34;&#34;&#34;
+
+
+class NudgeEvent(Event):
+    &#34;&#34;&#34;头像戳一戳事件。
+
+    Args:
+        type: 事件名。
+        from_id: 动作发出者的 QQ 号。
+        target: 动作目标的 QQ 号。
+        subject: 来源。
+        action: 戳一戳类型。
+        suffix: 自定义戳一戳内容。
+    &#34;&#34;&#34;
+    type: str = &#34;NudgeEvent&#34;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    from_id: int
+    &#34;&#34;&#34;动作发出者的 QQ 号。&#34;&#34;&#34;
+    target: int
+    &#34;&#34;&#34;动作目标的 QQ 号。&#34;&#34;&#34;
+    subject: Subject
+    &#34;&#34;&#34;来源。&#34;&#34;&#34;
+    action: str
+    &#34;&#34;&#34;戳一戳类型。&#34;&#34;&#34;
+    suffix: str
+    &#34;&#34;&#34;自定义戳一戳内容。&#34;&#34;&#34;
+
+
+###############################
+# Command Event
+
+
+class CommandEvent(Event):
+    &#34;&#34;&#34;命令事件。
+
+    Args:
+        type: 事件名。
+    &#34;&#34;&#34;
+    type: str
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+
+
+class CommandExecutedEvent(CommandEvent):
+    &#34;&#34;&#34;命令被执行。
+
+    Args:
+        type: 事件名。
+        name: 命令名称。
+        friend: 发送命令的好友, 从控制台发送为 None。
+        member: 发送命令的群成员, 从控制台发送为 None。
+        args: 命令执行时的参数。
+    &#34;&#34;&#34;
+    type: str = &#39;CommandExecutedEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    name: str
+    &#34;&#34;&#34;命令名称。&#34;&#34;&#34;
+    friend: Optional[Friend]
+    &#34;&#34;&#34;发送命令的好友, 从控制台发送为 None。&#34;&#34;&#34;
+    member: Optional[GroupMember]
+    &#34;&#34;&#34;发送命令的群成员, 从控制台发送为 None。&#34;&#34;&#34;
+    args: MessageChain
+    &#34;&#34;&#34;命令执行时的参数。&#34;&#34;&#34;
+
+
+###############################
+# Message Event
+class MessageEvent(Event):
+    &#34;&#34;&#34;消息事件。
+
+    Args:
+        type: 事件名。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    sender: Entity
+    &#34;&#34;&#34;发送消息的来源。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
+
+
+class FriendMessage(MessageEvent):
+    &#34;&#34;&#34;好友消息。
+
+    Args:
+        type: 事件名。
+        sender: 发送消息的好友。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;FriendMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    sender: Friend
+    &#34;&#34;&#34;发送消息的好友。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
+
+
+class GroupMessage(MessageEvent):
+    &#34;&#34;&#34;群消息。
+
+    Args:
+        type: 事件名。
+        sender: 发送消息的群成员。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;GroupMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    sender: GroupMember
+    &#34;&#34;&#34;发送消息的群成员。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
+    @property
+    def group(self) -&gt; Group:
+        return self.sender.group
+
+
+class TempMessage(MessageEvent):
+    &#34;&#34;&#34;群临时消息。
+
+    Args:
+        type: 事件名。
+        sender: 发送消息的群成员。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;TempMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    sender: GroupMember
+    &#34;&#34;&#34;发送消息的群成员。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
+    @property
+    def group(self) -&gt; Group:
+        return self.sender.group
+
+
+class StrangerMessage(MessageEvent):
+    &#34;&#34;&#34;陌生人消息。
+
+    Args:
+        type: 事件名。
+        sender: 发送消息的人。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;StrangerMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    sender: Friend
+    &#34;&#34;&#34;发送消息的人。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
+
+
+class OtherClientMessage(MessageEvent):
+    &#34;&#34;&#34;其他客户端消息。
+
+    Args:
+        type: 事件名。
+        sender: 发送消息的人。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;OtherClientMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    sender: Sender
+    &#34;&#34;&#34;发送消息的人。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
+
+
+__all__ = [
+    &#39;BotEvent&#39;,
+    &#39;BotGroupPermissionChangeEvent&#39;,
+    &#39;BotInvitedJoinGroupRequestEvent&#39;,
+    &#39;BotJoinGroupEvent&#39;,
+    &#39;BotLeaveEventActive&#39;,
+    &#39;BotLeaveEventKick&#39;,
+    &#39;BotMuteEvent&#39;,
+    &#39;BotOfflineEventActive&#39;,
+    &#39;BotOfflineEventDropped&#39;,
+    &#39;BotOfflineEventForce&#39;,
+    &#39;BotOnlineEvent&#39;,
+    &#39;BotReloginEvent&#39;,
+    &#39;BotUnmuteEvent&#39;,
+    &#39;CommandEvent&#39;,
+    &#39;CommandExecutedEvent&#39;,
+    &#39;Event&#39;,
+    &#39;FriendEvent&#39;,
+    &#39;FriendInputStatusChangedEvent&#39;,
+    &#39;FriendMessage&#39;,
+    &#39;FriendNickChangedEvent&#39;,
+    &#39;FriendRecallEvent&#39;,
+    &#39;GroupAllowAnonymousChatEvent&#39;,
+    &#39;GroupAllowConfessTalkEvent&#39;,
+    &#39;GroupAllowMemberInviteEvent&#39;,
+    &#39;GroupEntranceAnnouncementChangeEvent&#39;,
+    &#39;GroupEvent&#39;,
+    &#39;GroupMessage&#39;,
+    &#39;GroupMuteAllEvent&#39;,
+    &#39;GroupNameChangeEvent&#39;,
+    &#39;GroupRecallEvent&#39;,
+    &#39;MemberCardChangeEvent&#39;,
+    &#39;MemberHonorChangeEvent&#39;,
+    &#39;MemberJoinEvent&#39;,
+    &#39;MemberJoinRequestEvent&#39;,
+    &#39;MemberLeaveEventKick&#39;,
+    &#39;MemberLeaveEventQuit&#39;,
+    &#39;MemberMuteEvent&#39;,
+    &#39;MemberPermissionChangeEvent&#39;,
+    &#39;MemberSpecialTitleChangeEvent&#39;,
+    &#39;MemberUnmuteEvent&#39;,
+    &#39;MessageEvent&#39;,
+    &#39;NewFriendRequestEvent&#39;,
+    &#39;NudgeEvent&#39;,
+    &#39;OtherClientMessage&#39;,
+    &#39;RequestEvent&#39;,
+    &#39;StrangerMessage&#39;,
+    &#39;TempMessage&#39;,
+]</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="mirai.models.events.BotEvent"><code class="flex name class">
+<span>class <span class="ident">BotEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 自身事件。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>qq</code></strong></dt>
+<dd>Bot 的 QQ 号。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotEvent(Event):
+    &#34;&#34;&#34;Bot 自身事件。
+
+    Args:
+        type: 事件名。
+        qq: Bot 的 QQ 号。
+    &#34;&#34;&#34;
+    type: str
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    qq: int
+    &#34;&#34;&#34;Bot 的 QQ 号。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.BotOfflineEventActive" href="#mirai.models.events.BotOfflineEventActive">BotOfflineEventActive</a></li>
+<li><a title="mirai.models.events.BotOfflineEventDropped" href="#mirai.models.events.BotOfflineEventDropped">BotOfflineEventDropped</a></li>
+<li><a title="mirai.models.events.BotOfflineEventForce" href="#mirai.models.events.BotOfflineEventForce">BotOfflineEventForce</a></li>
+<li><a title="mirai.models.events.BotOnlineEvent" href="#mirai.models.events.BotOnlineEvent">BotOnlineEvent</a></li>
+<li><a title="mirai.models.events.BotReloginEvent" href="#mirai.models.events.BotReloginEvent">BotReloginEvent</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.BotEvent.qq"><code class="name">var <span class="ident">qq</span> : int</code></dt>
+<dd>
+<div class="desc"><p>Bot 的 QQ 号。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.Event.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.BotGroupPermissionChangeEvent"><code class="flex name class">
+<span>class <span class="ident">BotGroupPermissionChangeEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot在群里的权限被改变。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>origin</code></strong></dt>
+<dd>原权限。</dd>
+<dt><strong><code>current</code></strong></dt>
+<dd>新权限。</dd>
+<dt><strong><code>group</code></strong></dt>
+<dd>事件对应的群。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotGroupPermissionChangeEvent(GroupEvent):
+    &#34;&#34;&#34; Bot在群里的权限被改变。
+
+    Args:
+        type: 事件名。
+        origin: 原权限。
+        current: 新权限。
+        group: 事件对应的群。
+    &#34;&#34;&#34;
+    type: str = &#39;BotGroupPermissionChangeEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    origin: Permission
+    &#34;&#34;&#34;原权限。&#34;&#34;&#34;
+    current: Permission
+    &#34;&#34;&#34;新权限。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;事件对应的群。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.BotGroupPermissionChangeEvent.current"><code class="name">var <span class="ident">current</span> : <a title="mirai.models.entities.Permission" href="entities.html#mirai.models.entities.Permission">Permission</a></code></dt>
+<dd>
+<div class="desc"><p>新权限。</p></div>
+</dd>
+<dt id="mirai.models.events.BotGroupPermissionChangeEvent.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"><p>事件对应的群。</p></div>
+</dd>
+<dt id="mirai.models.events.BotGroupPermissionChangeEvent.origin"><code class="name">var <span class="ident">origin</span> : <a title="mirai.models.entities.Permission" href="entities.html#mirai.models.entities.Permission">Permission</a></code></dt>
+<dd>
+<div class="desc"><p>原权限。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.BotInvitedJoinGroupRequestEvent"><code class="flex name class">
+<span>class <span class="ident">BotInvitedJoinGroupRequestEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 被邀请入群申请。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>event_id</code></strong></dt>
+<dd>事件标识，响应该事件时的标识。</dd>
+<dt><strong><code>from_id</code></strong></dt>
+<dd>邀请人 QQ 号。</dd>
+<dt><strong><code>group_id</code></strong></dt>
+<dd>被邀请进入群的群号。</dd>
+<dt><strong><code>group_name</code></strong></dt>
+<dd>被邀请进入群的群名称。</dd>
+<dt><strong><code>nick</code></strong></dt>
+<dd>邀请人（好友）的昵称。</dd>
+<dt><strong><code>message</code></strong></dt>
+<dd>邀请消息。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotInvitedJoinGroupRequestEvent(RequestEvent):
+    &#34;&#34;&#34;Bot 被邀请入群申请。
+
+    Args:
+        type: 事件名。
+        event_id: 事件标识，响应该事件时的标识。
+        from_id: 邀请人 QQ 号。
+        group_id: 被邀请进入群的群号。
+        group_name: 被邀请进入群的群名称。
+        nick: 邀请人（好友）的昵称。
+        message: 邀请消息。
+    &#34;&#34;&#34;
+    type: str = &#39;BotInvitedJoinGroupRequestEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    event_id: int
+    &#34;&#34;&#34;事件标识，响应该事件时的标识。&#34;&#34;&#34;
+    from_id: int
+    &#34;&#34;&#34;邀请人 QQ 号。&#34;&#34;&#34;
+    group_id: int
+    &#34;&#34;&#34;被邀请进入群的群号。&#34;&#34;&#34;
+    group_name: str
+    &#34;&#34;&#34;被邀请进入群的群名称。&#34;&#34;&#34;
+    nick: str
+    &#34;&#34;&#34;邀请人（好友）的昵称。&#34;&#34;&#34;
+    message: str
+    &#34;&#34;&#34;邀请消息。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.RequestEvent" href="#mirai.models.events.RequestEvent">RequestEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.BotInvitedJoinGroupRequestEvent.group_name"><code class="name">var <span class="ident">group_name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>被邀请进入群的群名称。</p></div>
+</dd>
+<dt id="mirai.models.events.BotInvitedJoinGroupRequestEvent.message"><code class="name">var <span class="ident">message</span> : str</code></dt>
+<dd>
+<div class="desc"><p>邀请消息。</p></div>
+</dd>
+<dt id="mirai.models.events.BotInvitedJoinGroupRequestEvent.nick"><code class="name">var <span class="ident">nick</span> : str</code></dt>
+<dd>
+<div class="desc"><p>邀请人（好友）的昵称。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.RequestEvent" href="#mirai.models.events.RequestEvent">RequestEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.RequestEvent.event_id" href="#mirai.models.events.RequestEvent.event_id">event_id</a></code></li>
+<li><code><a title="mirai.models.events.RequestEvent.from_id" href="#mirai.models.events.RequestEvent.from_id">from_id</a></code></li>
+<li><code><a title="mirai.models.events.RequestEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.RequestEvent.group_id" href="#mirai.models.events.RequestEvent.group_id">group_id</a></code></li>
+<li><code><a title="mirai.models.events.RequestEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.RequestEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.BotJoinGroupEvent"><code class="flex name class">
+<span>class <span class="ident">BotJoinGroupEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 加入了一个新群。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>group</code></strong></dt>
+<dd>Bot 加入的群。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotJoinGroupEvent(GroupEvent):
+    &#34;&#34;&#34;Bot 加入了一个新群。
+
+    Args:
+        type: 事件名。
+        group: Bot 加入的群。
+    &#34;&#34;&#34;
+    type: str = &#39;BotJoinGroupEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;Bot 加入的群。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.BotJoinGroupEvent.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"><p>Bot 加入的群。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.BotLeaveEventActive"><code class="flex name class">
+<span>class <span class="ident">BotLeaveEventActive</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 主动退出一个群。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>group</code></strong></dt>
+<dd>Bot 退出的群。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotLeaveEventActive(GroupEvent):
+    &#34;&#34;&#34;Bot 主动退出一个群。
+
+    Args:
+        type: 事件名。
+        group: Bot 退出的群。
+    &#34;&#34;&#34;
+    type: str = &#39;BotLeaveEventActive&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;Bot 退出的群。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.BotLeaveEventActive.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"><p>Bot 退出的群。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.BotLeaveEventKick"><code class="flex name class">
+<span>class <span class="ident">BotLeaveEventKick</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 被踢出一个群。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>group</code></strong></dt>
+<dd>Bot 被踢出的群。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotLeaveEventKick(GroupEvent):
+    &#34;&#34;&#34;Bot 被踢出一个群。
+
+    Args:
+        type: 事件名。
+        group: Bot 被踢出的群。
+    &#34;&#34;&#34;
+    type: str = &#39;BotLeaveEventKick&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;Bot 被踢出的群。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.BotLeaveEventKick.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"><p>Bot 被踢出的群。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.BotMuteEvent"><code class="flex name class">
+<span>class <span class="ident">BotMuteEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 被禁言。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>duration_seconds</code></strong></dt>
+<dd>禁言时间，单位秒。</dd>
+<dt><strong><code>operator</code></strong></dt>
+<dd>禁言的操作者。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotMuteEvent(GroupEvent):
+    &#34;&#34;&#34;Bot 被禁言。
+
+    Args:
+        type: 事件名。
+        duration_seconds: 禁言时间，单位秒。
+        operator: 禁言的操作者。
+    &#34;&#34;&#34;
+    type: str = &#39;BotMuteEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    duration_seconds: int
+    &#34;&#34;&#34;禁言时间，单位秒。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;禁言的操作者。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.BotMuteEvent.duration_seconds"><code class="name">var <span class="ident">duration_seconds</span> : int</code></dt>
+<dd>
+<div class="desc"><p>禁言时间，单位秒。</p></div>
+</dd>
+<dt id="mirai.models.events.BotMuteEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>禁言的操作者。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.BotOfflineEventActive"><code class="flex name class">
+<span>class <span class="ident">BotOfflineEventActive</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 主动离线。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>qq</code></strong></dt>
+<dd>主动离线的 Bot 的 QQ 号。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotOfflineEventActive(BotEvent):
+    &#34;&#34;&#34;Bot 主动离线。
+
+    Args:
+        type: 事件名。
+        qq: 主动离线的 Bot 的 QQ 号。
+    &#34;&#34;&#34;
+    type: str = &#39;BotOfflineEventActive&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    qq: int
+    &#34;&#34;&#34;主动离线的 Bot 的 QQ 号。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.BotEvent" href="#mirai.models.events.BotEvent">BotEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.BotEvent" href="#mirai.models.events.BotEvent">BotEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.BotEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.BotEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.BotEvent.qq" href="#mirai.models.events.BotEvent.qq">qq</a></code></li>
+<li><code><a title="mirai.models.events.BotEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.BotOfflineEventDropped"><code class="flex name class">
+<span>class <span class="ident">BotOfflineEventDropped</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 被服务器断开或因网络问题而掉线。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>qq</code></strong></dt>
+<dd>被服务器断开或因网络问题而掉线的 Bot 的 QQ 号。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotOfflineEventDropped(BotEvent):
+    &#34;&#34;&#34;Bot 被服务器断开或因网络问题而掉线。
+
+    Args:
+        type: 事件名。
+        qq: 被服务器断开或因网络问题而掉线的 Bot 的 QQ 号。
+    &#34;&#34;&#34;
+    type: str = &#39;BotOfflineEventDropped&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    qq: int
+    &#34;&#34;&#34;被服务器断开或因网络问题而掉线的 Bot 的 QQ 号。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.BotEvent" href="#mirai.models.events.BotEvent">BotEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.BotEvent" href="#mirai.models.events.BotEvent">BotEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.BotEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.BotEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.BotEvent.qq" href="#mirai.models.events.BotEvent.qq">qq</a></code></li>
+<li><code><a title="mirai.models.events.BotEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.BotOfflineEventForce"><code class="flex name class">
+<span>class <span class="ident">BotOfflineEventForce</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot被挤下线。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>qq</code></strong></dt>
+<dd>被挤下线的 Bot 的 QQ 号。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotOfflineEventForce(BotEvent):
+    &#34;&#34;&#34;Bot被挤下线。
+
+    Args:
+        type: 事件名。
+        qq: 被挤下线的 Bot 的 QQ 号。
+    &#34;&#34;&#34;
+    type: str = &#39;BotOfflineEventForce&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    qq: int
+    &#34;&#34;&#34;被挤下线的 Bot 的 QQ 号。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.BotEvent" href="#mirai.models.events.BotEvent">BotEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.BotEvent" href="#mirai.models.events.BotEvent">BotEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.BotEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.BotEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.BotEvent.qq" href="#mirai.models.events.BotEvent.qq">qq</a></code></li>
+<li><code><a title="mirai.models.events.BotEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.BotOnlineEvent"><code class="flex name class">
+<span>class <span class="ident">BotOnlineEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 登陆成功。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>qq</code></strong></dt>
+<dd>登陆成功的 Bot 的 QQ 号。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotOnlineEvent(BotEvent):
+    &#34;&#34;&#34;Bot 登陆成功。
+
+    Args:
+        type: 事件名。
+        qq: 登陆成功的 Bot 的 QQ 号。
+    &#34;&#34;&#34;
+    type: str = &#39;BotOnlineEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    qq: int
+    &#34;&#34;&#34;登陆成功的 Bot 的 QQ 号。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.BotEvent" href="#mirai.models.events.BotEvent">BotEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.BotEvent" href="#mirai.models.events.BotEvent">BotEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.BotEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.BotEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.BotEvent.qq" href="#mirai.models.events.BotEvent.qq">qq</a></code></li>
+<li><code><a title="mirai.models.events.BotEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.BotReloginEvent"><code class="flex name class">
+<span>class <span class="ident">BotReloginEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 主动重新登录。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>qq</code></strong></dt>
+<dd>主动重新登录的 Bot 的 QQ 号。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotReloginEvent(BotEvent):
+    &#34;&#34;&#34;Bot 主动重新登录。
+
+    Args:
+        type: 事件名。
+        qq: 主动重新登录的 Bot 的 QQ 号。
+    &#34;&#34;&#34;
+    type: str = &#39;BotReloginEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    qq: int
+    &#34;&#34;&#34;主动重新登录的 Bot 的 QQ 号。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.BotEvent" href="#mirai.models.events.BotEvent">BotEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.BotEvent" href="#mirai.models.events.BotEvent">BotEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.BotEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.BotEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.BotEvent.qq" href="#mirai.models.events.BotEvent.qq">qq</a></code></li>
+<li><code><a title="mirai.models.events.BotEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.BotUnmuteEvent"><code class="flex name class">
+<span>class <span class="ident">BotUnmuteEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 被取消禁言。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>operator</code></strong></dt>
+<dd>取消禁言的操作者。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotUnmuteEvent(GroupEvent):
+    &#34;&#34;&#34;Bot 被取消禁言。
+
+    Args:
+        type: 事件名。
+        operator: 取消禁言的操作者。
+    &#34;&#34;&#34;
+    type: str = &#39;BotUnmuteEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;取消禁言的操作者。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.BotUnmuteEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>取消禁言的操作者。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.CommandEvent"><code class="flex name class">
+<span>class <span class="ident">CommandEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>命令事件。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CommandEvent(Event):
+    &#34;&#34;&#34;命令事件。
+
+    Args:
+        type: 事件名。
+    &#34;&#34;&#34;
+    type: str
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.CommandExecutedEvent" href="#mirai.models.events.CommandExecutedEvent">CommandExecutedEvent</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.Event.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.CommandExecutedEvent"><code class="flex name class">
+<span>class <span class="ident">CommandExecutedEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>命令被执行。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>name</code></strong></dt>
+<dd>命令名称。</dd>
+<dt><strong><code>friend</code></strong></dt>
+<dd>发送命令的好友, 从控制台发送为 None。</dd>
+<dt><strong><code>member</code></strong></dt>
+<dd>发送命令的群成员, 从控制台发送为 None。</dd>
+<dt><strong><code>args</code></strong></dt>
+<dd>命令执行时的参数。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CommandExecutedEvent(CommandEvent):
+    &#34;&#34;&#34;命令被执行。
+
+    Args:
+        type: 事件名。
+        name: 命令名称。
+        friend: 发送命令的好友, 从控制台发送为 None。
+        member: 发送命令的群成员, 从控制台发送为 None。
+        args: 命令执行时的参数。
+    &#34;&#34;&#34;
+    type: str = &#39;CommandExecutedEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    name: str
+    &#34;&#34;&#34;命令名称。&#34;&#34;&#34;
+    friend: Optional[Friend]
+    &#34;&#34;&#34;发送命令的好友, 从控制台发送为 None。&#34;&#34;&#34;
+    member: Optional[GroupMember]
+    &#34;&#34;&#34;发送命令的群成员, 从控制台发送为 None。&#34;&#34;&#34;
+    args: MessageChain
+    &#34;&#34;&#34;命令执行时的参数。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.CommandEvent" href="#mirai.models.events.CommandEvent">CommandEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.CommandExecutedEvent.args"><code class="name">var <span class="ident">args</span> : <a title="mirai.models.message.MessageChain" href="message.html#mirai.models.message.MessageChain">MessageChain</a></code></dt>
+<dd>
+<div class="desc"><p>命令执行时的参数。</p></div>
+</dd>
+<dt id="mirai.models.events.CommandExecutedEvent.friend"><code class="name">var <span class="ident">friend</span> : Union[<a title="mirai.models.entities.Friend" href="entities.html#mirai.models.entities.Friend">Friend</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>发送命令的好友, 从控制台发送为 None。</p></div>
+</dd>
+<dt id="mirai.models.events.CommandExecutedEvent.member"><code class="name">var <span class="ident">member</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>发送命令的群成员, 从控制台发送为 None。</p></div>
+</dd>
+<dt id="mirai.models.events.CommandExecutedEvent.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>命令名称。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.CommandEvent" href="#mirai.models.events.CommandEvent">CommandEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.CommandEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.CommandEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.CommandEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.Event"><code class="flex name class">
+<span>class <span class="ident">Event</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>事件基类。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Event(MiraiIndexedModel):
+    &#34;&#34;&#34;事件基类。
+
+    Args:
+        type: 事件名。
+    &#34;&#34;&#34;
+    type: str
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    def __repr__(self):
+        return self.__class__.__name__ + &#39;(&#39; + &#39;, &#39;.join(
+            (
+                f&#39;{k}={repr(v)}&#39;
+                for k, v in self.__dict__.items() if k != &#39;type&#39; and v
+            )
+        ) + &#39;)&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mirai.bot.LifeSpan" href="../bot.html#mirai.bot.LifeSpan">LifeSpan</a></li>
+<li><a title="mirai.models.events.BotEvent" href="#mirai.models.events.BotEvent">BotEvent</a></li>
+<li><a title="mirai.models.events.CommandEvent" href="#mirai.models.events.CommandEvent">CommandEvent</a></li>
+<li><a title="mirai.models.events.FriendEvent" href="#mirai.models.events.FriendEvent">FriendEvent</a></li>
+<li><a title="mirai.models.events.FriendRecallEvent" href="#mirai.models.events.FriendRecallEvent">FriendRecallEvent</a></li>
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="mirai.models.events.NudgeEvent" href="#mirai.models.events.NudgeEvent">NudgeEvent</a></li>
+<li><a title="mirai.models.events.RequestEvent" href="#mirai.models.events.RequestEvent">RequestEvent</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.Event.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"><p>事件名。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.base.MiraiIndexedModel.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.base.MiraiIndexedModel.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.FriendEvent"><code class="flex name class">
+<span>class <span class="ident">FriendEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>好友事件。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>friend</code></strong></dt>
+<dd>事件对应的好友。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FriendEvent(Event):
+    &#34;&#34;&#34;好友事件。
+
+    Args:
+        type: 事件名。
+        friend: 事件对应的好友。
+    &#34;&#34;&#34;
+    type: str
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    friend: Friend
+    &#34;&#34;&#34;事件对应的好友。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.FriendInputStatusChangedEvent" href="#mirai.models.events.FriendInputStatusChangedEvent">FriendInputStatusChangedEvent</a></li>
+<li><a title="mirai.models.events.FriendNickChangedEvent" href="#mirai.models.events.FriendNickChangedEvent">FriendNickChangedEvent</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.FriendEvent.friend"><code class="name">var <span class="ident">friend</span> : <a title="mirai.models.entities.Friend" href="entities.html#mirai.models.entities.Friend">Friend</a></code></dt>
+<dd>
+<div class="desc"><p>事件对应的好友。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.Event.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.FriendInputStatusChangedEvent"><code class="flex name class">
+<span>class <span class="ident">FriendInputStatusChangedEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>好友输入状态改变。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>friend</code></strong></dt>
+<dd>事件对应的好友。</dd>
+<dt><strong><code>inputting</code></strong></dt>
+<dd>是否正在输入。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FriendInputStatusChangedEvent(FriendEvent):
+    &#34;&#34;&#34;好友输入状态改变。
+
+    Args:
+        type: 事件名。
+        friend: 事件对应的好友。
+        inputting: 是否正在输入。
+    &#34;&#34;&#34;
+    type: str = &#39;FriendInputStatusChangedEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    friend: Friend
+    &#34;&#34;&#34;事件对应的好友。&#34;&#34;&#34;
+    inputting: bool
+    &#34;&#34;&#34;是否正在输入。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.FriendEvent" href="#mirai.models.events.FriendEvent">FriendEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.FriendInputStatusChangedEvent.inputting"><code class="name">var <span class="ident">inputting</span> : bool</code></dt>
+<dd>
+<div class="desc"><p>是否正在输入。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.FriendEvent" href="#mirai.models.events.FriendEvent">FriendEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.FriendEvent.friend" href="#mirai.models.events.FriendEvent.friend">friend</a></code></li>
+<li><code><a title="mirai.models.events.FriendEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.FriendEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.FriendEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.FriendMessage"><code class="flex name class">
+<span>class <span class="ident">FriendMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>好友消息。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>sender</code></strong></dt>
+<dd>发送消息的好友。</dd>
+<dt><strong><code>message_chain</code></strong></dt>
+<dd>消息内容。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FriendMessage(MessageEvent):
+    &#34;&#34;&#34;好友消息。
+
+    Args:
+        type: 事件名。
+        sender: 发送消息的好友。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;FriendMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    sender: Friend
+    &#34;&#34;&#34;发送消息的好友。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.message_chain" href="#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.sender" href="#mirai.models.events.MessageEvent.sender">sender</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.FriendNickChangedEvent"><code class="flex name class">
+<span>class <span class="ident">FriendNickChangedEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>好友昵称改变。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>friend</code></strong></dt>
+<dd>事件对应的好友。</dd>
+<dt><strong><code>from_</code></strong></dt>
+<dd>原昵称。</dd>
+<dt><strong><code>to</code></strong></dt>
+<dd>新昵称。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FriendNickChangedEvent(FriendEvent):
+    &#34;&#34;&#34;好友昵称改变。
+
+    Args:
+        type: 事件名。
+        friend: 事件对应的好友。
+        from_: 原昵称。
+        to: 新昵称。
+    &#34;&#34;&#34;
+    type: str = &#39;FriendNickChangedEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    friend: Friend
+    &#34;&#34;&#34;事件对应的好友。&#34;&#34;&#34;
+    from_: str
+    &#34;&#34;&#34;原昵称。&#34;&#34;&#34;
+    to: str
+    &#34;&#34;&#34;新昵称。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.FriendEvent" href="#mirai.models.events.FriendEvent">FriendEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.FriendNickChangedEvent.from_"><code class="name">var <span class="ident">from_</span> : str</code></dt>
+<dd>
+<div class="desc"><p>原昵称。</p></div>
+</dd>
+<dt id="mirai.models.events.FriendNickChangedEvent.to"><code class="name">var <span class="ident">to</span> : str</code></dt>
+<dd>
+<div class="desc"><p>新昵称。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.FriendEvent" href="#mirai.models.events.FriendEvent">FriendEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.FriendEvent.friend" href="#mirai.models.events.FriendEvent.friend">friend</a></code></li>
+<li><code><a title="mirai.models.events.FriendEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.FriendEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.FriendEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.FriendRecallEvent"><code class="flex name class">
+<span>class <span class="ident">FriendRecallEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>好友消息撤回。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>author_id</code></strong></dt>
+<dd>原消息发送者的 QQ 号。</dd>
+<dt><strong><code>message_id</code></strong></dt>
+<dd>原消息 message_id。</dd>
+<dt><strong><code>time</code></strong></dt>
+<dd>原消息发送时间。</dd>
+<dt><strong><code>operator</code></strong></dt>
+<dd>好友 QQ 号或 Bot QQ 号。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FriendRecallEvent(Event):
+    &#34;&#34;&#34;好友消息撤回。
+
+    Args:
+        type: 事件名。
+        author_id: 原消息发送者的 QQ 号。
+        message_id: 原消息 message_id。
+        time: 原消息发送时间。
+        operator: 好友 QQ 号或 Bot QQ 号。
+    &#34;&#34;&#34;
+    type: str = &#39;FriendRecallEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    # 按照文档顺序，这个事件确实应该在这个位置。
+    # 而且它不符合 FriendEvent 的形式，就放在这里吧。
+    author_id: int
+    &#34;&#34;&#34;原消息发送者的 QQ 号。&#34;&#34;&#34;
+    message_id: int
+    &#34;&#34;&#34;原消息 message_id。&#34;&#34;&#34;
+    time: datetime
+    &#34;&#34;&#34;原消息发送时间。&#34;&#34;&#34;
+    operator: int
+    &#34;&#34;&#34;好友 QQ 号或 Bot QQ 号。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.FriendRecallEvent.author_id"><code class="name">var <span class="ident">author_id</span> : int</code></dt>
+<dd>
+<div class="desc"><p>原消息发送者的 QQ 号。</p></div>
+</dd>
+<dt id="mirai.models.events.FriendRecallEvent.message_id"><code class="name">var <span class="ident">message_id</span> : int</code></dt>
+<dd>
+<div class="desc"><p>原消息 message_id。</p></div>
+</dd>
+<dt id="mirai.models.events.FriendRecallEvent.operator"><code class="name">var <span class="ident">operator</span> : int</code></dt>
+<dd>
+<div class="desc"><p>好友 QQ 号或 Bot QQ 号。</p></div>
+</dd>
+<dt id="mirai.models.events.FriendRecallEvent.time"><code class="name">var <span class="ident">time</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"><p>原消息发送时间。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.Event.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.GroupAllowAnonymousChatEvent"><code class="flex name class">
+<span>class <span class="ident">GroupAllowAnonymousChatEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>匿名聊天。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>origin</code></strong></dt>
+<dd>原本是否允许匿名聊天。</dd>
+<dt><strong><code>current</code></strong></dt>
+<dd>现在是否允许匿名聊天。</dd>
+<dt><strong><code>group</code></strong></dt>
+<dd>匿名聊天状态改变的群。</dd>
+<dt><strong><code>operator</code></strong></dt>
+<dd>操作者，为 None 表示 Bot 操作。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupAllowAnonymousChatEvent(GroupEvent):
+    &#34;&#34;&#34;匿名聊天。
+
+    Args:
+        type: 事件名。
+        origin: 原本是否允许匿名聊天。
+        current: 现在是否允许匿名聊天。
+        group: 匿名聊天状态改变的群。
+        operator: 操作者，为 None 表示 Bot 操作。
+    &#34;&#34;&#34;
+    type: str = &#39;GroupAllowAnonymousChatEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    origin: bool
+    &#34;&#34;&#34;原本是否允许匿名聊天。&#34;&#34;&#34;
+    current: bool
+    &#34;&#34;&#34;现在是否允许匿名聊天。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;匿名聊天状态改变的群。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;操作者，为 None 表示 Bot 操作。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.GroupAllowAnonymousChatEvent.current"><code class="name">var <span class="ident">current</span> : bool</code></dt>
+<dd>
+<div class="desc"><p>现在是否允许匿名聊天。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupAllowAnonymousChatEvent.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"><p>匿名聊天状态改变的群。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupAllowAnonymousChatEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>操作者，为 None 表示 Bot 操作。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupAllowAnonymousChatEvent.origin"><code class="name">var <span class="ident">origin</span> : bool</code></dt>
+<dd>
+<div class="desc"><p>原本是否允许匿名聊天。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.GroupAllowConfessTalkEvent"><code class="flex name class">
+<span>class <span class="ident">GroupAllowConfessTalkEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>坦白说。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>origin</code></strong></dt>
+<dd>原本是否允许坦白说。</dd>
+<dt><strong><code>current</code></strong></dt>
+<dd>现在是否允许坦白说。</dd>
+<dt><strong><code>group</code></strong></dt>
+<dd>坦白说状态改变的群。</dd>
+<dt><strong><code>is_by_bot</code></strong></dt>
+<dd>是否 Bot 进行该操作。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupAllowConfessTalkEvent(GroupEvent):
+    &#34;&#34;&#34;坦白说。
+
+    Args:
+        type: 事件名。
+        origin: 原本是否允许坦白说。
+        current: 现在是否允许坦白说。
+        group: 坦白说状态改变的群。
+        is_by_bot: 是否 Bot 进行该操作。
+    &#34;&#34;&#34;
+    type: str = &#39;GroupAllowConfessTalkEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    origin: bool
+    &#34;&#34;&#34;原本是否允许坦白说。&#34;&#34;&#34;
+    current: bool
+    &#34;&#34;&#34;现在是否允许坦白说。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;坦白说状态改变的群。&#34;&#34;&#34;
+    is_by_bot: bool
+    &#34;&#34;&#34;是否是 Bot 进行该操作。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.GroupAllowConfessTalkEvent.current"><code class="name">var <span class="ident">current</span> : bool</code></dt>
+<dd>
+<div class="desc"><p>现在是否允许坦白说。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupAllowConfessTalkEvent.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"><p>坦白说状态改变的群。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupAllowConfessTalkEvent.is_by_bot"><code class="name">var <span class="ident">is_by_bot</span> : bool</code></dt>
+<dd>
+<div class="desc"><p>是否是 Bot 进行该操作。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupAllowConfessTalkEvent.origin"><code class="name">var <span class="ident">origin</span> : bool</code></dt>
+<dd>
+<div class="desc"><p>原本是否允许坦白说。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.GroupAllowMemberInviteEvent"><code class="flex name class">
+<span>class <span class="ident">GroupAllowMemberInviteEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>允许群员邀请好友加群。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>origin</code></strong></dt>
+<dd>原本是否允许群员邀请好友加群。</dd>
+<dt><strong><code>current</code></strong></dt>
+<dd>现在是否允许群员邀请好友加群。</dd>
+<dt><strong><code>group</code></strong></dt>
+<dd>允许群员邀请好友加群状态改变的群。</dd>
+<dt><strong><code>operator</code></strong></dt>
+<dd>操作者，为 None 表示 Bot 操作。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupAllowMemberInviteEvent(GroupEvent):
+    &#34;&#34;&#34;允许群员邀请好友加群。
+
+    Args:
+        type: 事件名。
+        origin: 原本是否允许群员邀请好友加群。
+        current: 现在是否允许群员邀请好友加群。
+        group: 允许群员邀请好友加群状态改变的群。
+        operator: 操作者，为 None 表示 Bot 操作。
+    &#34;&#34;&#34;
+    type: str = &#39;GroupAllowMemberInviteEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    origin: bool
+    &#34;&#34;&#34;原本是否允许群员邀请好友加群。&#34;&#34;&#34;
+    current: bool
+    &#34;&#34;&#34;现在是否允许群员邀请好友加群。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;允许群员邀请好友加群状态改变的群。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;操作者，为 None 表示 Bot 操作。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.GroupAllowMemberInviteEvent.current"><code class="name">var <span class="ident">current</span> : bool</code></dt>
+<dd>
+<div class="desc"><p>现在是否允许群员邀请好友加群。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupAllowMemberInviteEvent.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"><p>允许群员邀请好友加群状态改变的群。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupAllowMemberInviteEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>操作者，为 None 表示 Bot 操作。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupAllowMemberInviteEvent.origin"><code class="name">var <span class="ident">origin</span> : bool</code></dt>
+<dd>
+<div class="desc"><p>原本是否允许群员邀请好友加群。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.GroupEntranceAnnouncementChangeEvent"><code class="flex name class">
+<span>class <span class="ident">GroupEntranceAnnouncementChangeEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>某群入群公告改变。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>origin</code></strong></dt>
+<dd>原公告。</dd>
+<dt><strong><code>current</code></strong></dt>
+<dd>新公告。</dd>
+<dt><strong><code>group</code></strong></dt>
+<dd>群公告改变的群。</dd>
+<dt><strong><code>operator</code></strong></dt>
+<dd>操作者，为 None 表示 Bot 操作。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupEntranceAnnouncementChangeEvent(GroupEvent):
+    &#34;&#34;&#34;某群入群公告改变。
+
+    Args:
+        type: 事件名。
+        origin: 原公告。
+        current: 新公告。
+        group: 群公告改变的群。
+        operator: 操作者，为 None 表示 Bot 操作。
+    &#34;&#34;&#34;
+    type: str = &#39;GroupEntranceAnnouncementChangeEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    origin: str
+    &#34;&#34;&#34;原公告。&#34;&#34;&#34;
+    current: str
+    &#34;&#34;&#34;新公告。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;群公告改变的群。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;操作者，为 None 表示 Bot 操作。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.GroupEntranceAnnouncementChangeEvent.current"><code class="name">var <span class="ident">current</span> : str</code></dt>
+<dd>
+<div class="desc"><p>新公告。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupEntranceAnnouncementChangeEvent.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"><p>群公告改变的群。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupEntranceAnnouncementChangeEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>操作者，为 None 表示 Bot 操作。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupEntranceAnnouncementChangeEvent.origin"><code class="name">var <span class="ident">origin</span> : str</code></dt>
+<dd>
+<div class="desc"><p>原公告。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.GroupEvent"><code class="flex name class">
+<span>class <span class="ident">GroupEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群事件。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>group</code></strong></dt>
+<dd>事件对应的群。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupEvent(Event):
+    &#34;&#34;&#34;群事件。
+
+    Args:
+        type: 事件名。
+        group: 事件对应的群。
+    &#34;&#34;&#34;
+    # group: Group
+    # 一个奇怪的现象：群事件不一定有 group，它可能藏在 opeartor.group 里
+
+    type: str
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    def __getattr__(self, name) -&gt; Union[Group, Any]:
+        if name == &#39;group&#39;:
+            member = getattr(self, &#39;operator&#39;,
+                             None) or getattr(self, &#39;member&#39;, None)
+            if member:
+                return member.group
+        return getattr(super(), name)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.BotGroupPermissionChangeEvent" href="#mirai.models.events.BotGroupPermissionChangeEvent">BotGroupPermissionChangeEvent</a></li>
+<li><a title="mirai.models.events.BotJoinGroupEvent" href="#mirai.models.events.BotJoinGroupEvent">BotJoinGroupEvent</a></li>
+<li><a title="mirai.models.events.BotLeaveEventActive" href="#mirai.models.events.BotLeaveEventActive">BotLeaveEventActive</a></li>
+<li><a title="mirai.models.events.BotLeaveEventKick" href="#mirai.models.events.BotLeaveEventKick">BotLeaveEventKick</a></li>
+<li><a title="mirai.models.events.BotMuteEvent" href="#mirai.models.events.BotMuteEvent">BotMuteEvent</a></li>
+<li><a title="mirai.models.events.BotUnmuteEvent" href="#mirai.models.events.BotUnmuteEvent">BotUnmuteEvent</a></li>
+<li><a title="mirai.models.events.GroupAllowAnonymousChatEvent" href="#mirai.models.events.GroupAllowAnonymousChatEvent">GroupAllowAnonymousChatEvent</a></li>
+<li><a title="mirai.models.events.GroupAllowConfessTalkEvent" href="#mirai.models.events.GroupAllowConfessTalkEvent">GroupAllowConfessTalkEvent</a></li>
+<li><a title="mirai.models.events.GroupAllowMemberInviteEvent" href="#mirai.models.events.GroupAllowMemberInviteEvent">GroupAllowMemberInviteEvent</a></li>
+<li><a title="mirai.models.events.GroupEntranceAnnouncementChangeEvent" href="#mirai.models.events.GroupEntranceAnnouncementChangeEvent">GroupEntranceAnnouncementChangeEvent</a></li>
+<li><a title="mirai.models.events.GroupMuteAllEvent" href="#mirai.models.events.GroupMuteAllEvent">GroupMuteAllEvent</a></li>
+<li><a title="mirai.models.events.GroupNameChangeEvent" href="#mirai.models.events.GroupNameChangeEvent">GroupNameChangeEvent</a></li>
+<li><a title="mirai.models.events.GroupRecallEvent" href="#mirai.models.events.GroupRecallEvent">GroupRecallEvent</a></li>
+<li><a title="mirai.models.events.MemberCardChangeEvent" href="#mirai.models.events.MemberCardChangeEvent">MemberCardChangeEvent</a></li>
+<li><a title="mirai.models.events.MemberHonorChangeEvent" href="#mirai.models.events.MemberHonorChangeEvent">MemberHonorChangeEvent</a></li>
+<li><a title="mirai.models.events.MemberJoinEvent" href="#mirai.models.events.MemberJoinEvent">MemberJoinEvent</a></li>
+<li><a title="mirai.models.events.MemberLeaveEventKick" href="#mirai.models.events.MemberLeaveEventKick">MemberLeaveEventKick</a></li>
+<li><a title="mirai.models.events.MemberLeaveEventQuit" href="#mirai.models.events.MemberLeaveEventQuit">MemberLeaveEventQuit</a></li>
+<li><a title="mirai.models.events.MemberMuteEvent" href="#mirai.models.events.MemberMuteEvent">MemberMuteEvent</a></li>
+<li><a title="mirai.models.events.MemberPermissionChangeEvent" href="#mirai.models.events.MemberPermissionChangeEvent">MemberPermissionChangeEvent</a></li>
+<li><a title="mirai.models.events.MemberSpecialTitleChangeEvent" href="#mirai.models.events.MemberSpecialTitleChangeEvent">MemberSpecialTitleChangeEvent</a></li>
+<li><a title="mirai.models.events.MemberUnmuteEvent" href="#mirai.models.events.MemberUnmuteEvent">MemberUnmuteEvent</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.Event.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.GroupMessage"><code class="flex name class">
+<span>class <span class="ident">GroupMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群消息。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>sender</code></strong></dt>
+<dd>发送消息的群成员。</dd>
+<dt><strong><code>message_chain</code></strong></dt>
+<dd>消息内容。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupMessage(MessageEvent):
+    &#34;&#34;&#34;群消息。
+
+    Args:
+        type: 事件名。
+        sender: 发送消息的群成员。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;GroupMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    sender: GroupMember
+    &#34;&#34;&#34;发送消息的群成员。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
+    @property
+    def group(self) -&gt; Group:
+        return self.sender.group</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="mirai.models.events.GroupMessage.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def group(self) -&gt; Group:
+    return self.sender.group</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.message_chain" href="#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.sender" href="#mirai.models.events.MessageEvent.sender">sender</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.GroupMuteAllEvent"><code class="flex name class">
+<span>class <span class="ident">GroupMuteAllEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>全员禁言。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>origin</code></strong></dt>
+<dd>原本是否处于全员禁言。</dd>
+<dt><strong><code>current</code></strong></dt>
+<dd>现在是否处于全员禁言。</dd>
+<dt><strong><code>group</code></strong></dt>
+<dd>全员禁言的群。</dd>
+<dt><strong><code>operator</code></strong></dt>
+<dd>操作者，为 None 表示 Bot 操作。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupMuteAllEvent(GroupEvent):
+    &#34;&#34;&#34;全员禁言。
+
+    Args:
+        type: 事件名。
+        origin: 原本是否处于全员禁言。
+        current: 现在是否处于全员禁言。
+        group: 全员禁言的群。
+        operator: 操作者，为 None 表示 Bot 操作。
+    &#34;&#34;&#34;
+    type: str = &#39;GroupMuteAllEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    origin: bool
+    &#34;&#34;&#34;原本是否处于全员禁言。&#34;&#34;&#34;
+    current: bool
+    &#34;&#34;&#34;现在是否处于全员禁言。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;全员禁言的群。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;操作者，为 None 表示 Bot 操作。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.GroupMuteAllEvent.current"><code class="name">var <span class="ident">current</span> : bool</code></dt>
+<dd>
+<div class="desc"><p>现在是否处于全员禁言。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupMuteAllEvent.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"><p>全员禁言的群。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupMuteAllEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>操作者，为 None 表示 Bot 操作。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupMuteAllEvent.origin"><code class="name">var <span class="ident">origin</span> : bool</code></dt>
+<dd>
+<div class="desc"><p>原本是否处于全员禁言。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.GroupNameChangeEvent"><code class="flex name class">
+<span>class <span class="ident">GroupNameChangeEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>某个群名改变。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>origin</code></strong></dt>
+<dd>原群名。</dd>
+<dt><strong><code>current</code></strong></dt>
+<dd>新群名。</dd>
+<dt><strong><code>group</code></strong></dt>
+<dd>群名改名的群。</dd>
+<dt><strong><code>operator</code></strong></dt>
+<dd>操作者，为 None 表示 Bot 操作。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupNameChangeEvent(GroupEvent):
+    &#34;&#34;&#34;某个群名改变。
+
+    Args:
+        type: 事件名。
+        origin: 原群名。
+        current: 新群名。
+        group: 群名改名的群。
+        operator: 操作者，为 None 表示 Bot 操作。
+    &#34;&#34;&#34;
+    type: str = &#39;GroupNameChangeEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    origin: str
+    &#34;&#34;&#34;原群名。&#34;&#34;&#34;
+    current: str
+    &#34;&#34;&#34;新群名。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;群名改名的群。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;操作者，为 None 表示 Bot 操作。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.GroupNameChangeEvent.current"><code class="name">var <span class="ident">current</span> : str</code></dt>
+<dd>
+<div class="desc"><p>新群名。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupNameChangeEvent.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"><p>群名改名的群。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupNameChangeEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>操作者，为 None 表示 Bot 操作。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupNameChangeEvent.origin"><code class="name">var <span class="ident">origin</span> : str</code></dt>
+<dd>
+<div class="desc"><p>原群名。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.GroupRecallEvent"><code class="flex name class">
+<span>class <span class="ident">GroupRecallEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群消息撤回。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>author_id</code></strong></dt>
+<dd>原消息发送者的 QQ 号。</dd>
+<dt><strong><code>message_id</code></strong></dt>
+<dd>原消息 message_id。</dd>
+<dt><strong><code>time</code></strong></dt>
+<dd>原消息发送时间。</dd>
+<dt><strong><code>group</code></strong></dt>
+<dd>消息撤回所在的群。</dd>
+<dt><strong><code>operator</code></strong></dt>
+<dd>消息撤回的操作者，为 None 表示 Bot 操作。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupRecallEvent(GroupEvent):
+    &#34;&#34;&#34;群消息撤回。
+
+    Args:
+        type: 事件名。
+        author_id: 原消息发送者的 QQ 号。
+        message_id: 原消息 message_id。
+        time: 原消息发送时间。
+        group: 消息撤回所在的群。
+        operator: 消息撤回的操作者，为 None 表示 Bot 操作。
+    &#34;&#34;&#34;
+    type: str = &#39;GroupRecallEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    author_id: int
+    &#34;&#34;&#34;原消息发送者的 QQ 号。&#34;&#34;&#34;
+    message_id: int
+    &#34;&#34;&#34;原消息 message_id。&#34;&#34;&#34;
+    time: datetime
+    &#34;&#34;&#34;原消息发送时间。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;消息撤回所在的群。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;消息撤回的操作者，为 None 表示 Bot 操作。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.GroupRecallEvent.author_id"><code class="name">var <span class="ident">author_id</span> : int</code></dt>
+<dd>
+<div class="desc"><p>原消息发送者的 QQ 号。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupRecallEvent.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"><p>消息撤回所在的群。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupRecallEvent.message_id"><code class="name">var <span class="ident">message_id</span> : int</code></dt>
+<dd>
+<div class="desc"><p>原消息 message_id。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupRecallEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>消息撤回的操作者，为 None 表示 Bot 操作。</p></div>
+</dd>
+<dt id="mirai.models.events.GroupRecallEvent.time"><code class="name">var <span class="ident">time</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"><p>原消息发送时间。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.MemberCardChangeEvent"><code class="flex name class">
+<span>class <span class="ident">MemberCardChangeEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群名片改动。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>origin</code></strong></dt>
+<dd>原本名片。</dd>
+<dt><strong><code>current</code></strong></dt>
+<dd>现在名片。</dd>
+<dt><strong><code>member</code></strong></dt>
+<dd>改动的群成员。</dd>
+<dt><strong><code>group</code></strong></dt>
+<dd>事件发生的群。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberCardChangeEvent(GroupEvent):
+    &#34;&#34;&#34;群名片改动。
+
+    Args:
+        type: 事件名。
+        origin: 原本名片。
+        current: 现在名片。
+        member: 改动的群成员。
+        group: 事件发生的群。
+    &#34;&#34;&#34;
+    type: str = &#39;MemberCardChangeEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    origin: str
+    &#34;&#34;&#34;原本名片。&#34;&#34;&#34;
+    current: str
+    &#34;&#34;&#34;现在名片。&#34;&#34;&#34;
+    member: GroupMember
+    &#34;&#34;&#34;改动的群成员。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.MemberCardChangeEvent.current"><code class="name">var <span class="ident">current</span> : str</code></dt>
+<dd>
+<div class="desc"><p>现在名片。</p></div>
+</dd>
+<dt id="mirai.models.events.MemberCardChangeEvent.member"><code class="name">var <span class="ident">member</span> : <a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"><p>改动的群成员。</p></div>
+</dd>
+<dt id="mirai.models.events.MemberCardChangeEvent.origin"><code class="name">var <span class="ident">origin</span> : str</code></dt>
+<dd>
+<div class="desc"><p>原本名片。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.MemberHonorChangeEvent"><code class="flex name class">
+<span>class <span class="ident">MemberHonorChangeEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群员称号改变。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>member</code></strong></dt>
+<dd>称号改变的群成员。</dd>
+<dt><strong><code>action</code></strong></dt>
+<dd>称号变化行为：achieve 获得称号，lose 失去称号。</dd>
+<dt><strong><code>group</code></strong></dt>
+<dd>事件发生的群。</dd>
+<dt><strong><code>honor</code></strong></dt>
+<dd>称号名称。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberHonorChangeEvent(GroupEvent):
+    &#34;&#34;&#34;群员称号改变。
+
+    Args:
+        type: 事件名。
+        member: 称号改变的群成员。
+        action: 称号变化行为：achieve 获得称号，lose 失去称号。
+        group: 事件发生的群。
+        honor: 称号名称。
+    &#34;&#34;&#34;
+    type: str = &#39;MemberHonorChangeEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    member: GroupMember
+    &#34;&#34;&#34;称号改变的群成员。&#34;&#34;&#34;
+    action: Literal[&#39;achieve&#39;, &#39;lose&#39;]
+    &#34;&#34;&#34;称号变化行为：achieve 获得称号，lose 失去称号。&#34;&#34;&#34;
+    honor: str
+    &#34;&#34;&#34;称号名称。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.MemberHonorChangeEvent.action"><code class="name">var <span class="ident">action</span> : typing_extensions.Literal['achieve', 'lose']</code></dt>
+<dd>
+<div class="desc"><p>称号变化行为：achieve 获得称号，lose 失去称号。</p></div>
+</dd>
+<dt id="mirai.models.events.MemberHonorChangeEvent.honor"><code class="name">var <span class="ident">honor</span> : str</code></dt>
+<dd>
+<div class="desc"><p>称号名称。</p></div>
+</dd>
+<dt id="mirai.models.events.MemberHonorChangeEvent.member"><code class="name">var <span class="ident">member</span> : <a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"><p>称号改变的群成员。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.MemberJoinEvent"><code class="flex name class">
+<span>class <span class="ident">MemberJoinEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>新人入群。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>member</code></strong></dt>
+<dd>加入的群成员。</dd>
+<dt><strong><code>group</code></strong></dt>
+<dd>加入的群。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberJoinEvent(GroupEvent):
+    &#34;&#34;&#34;新人入群。
+
+    Args:
+        type: 事件名。
+        member: 加入的群成员。
+        group: 加入的群。
+    &#34;&#34;&#34;
+    type: str = &#39;MemberJoinEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    member: GroupMember
+    &#34;&#34;&#34;加入的群成员。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.MemberJoinEvent.member"><code class="name">var <span class="ident">member</span> : <a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"><p>加入的群成员。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.MemberJoinRequestEvent"><code class="flex name class">
+<span>class <span class="ident">MemberJoinRequestEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>用户入群申请（Bot需要有管理员权限）。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>event_id</code></strong></dt>
+<dd>事件标识，响应该事件时的标识。</dd>
+<dt><strong><code>from_id</code></strong></dt>
+<dd>申请人 QQ 号。</dd>
+<dt><strong><code>group_id</code></strong></dt>
+<dd>申请人申请入群的群号。</dd>
+<dt><strong><code>group_name</code></strong></dt>
+<dd>申请人申请入群的群名称。</dd>
+<dt><strong><code>nick</code></strong></dt>
+<dd>申请人的昵称或群名片。</dd>
+<dt><strong><code>message</code></strong></dt>
+<dd>申请消息。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberJoinRequestEvent(RequestEvent):
+    &#34;&#34;&#34;用户入群申请（Bot需要有管理员权限）。
+
+    Args:
+        type: 事件名。
+        event_id: 事件标识，响应该事件时的标识。
+        from_id: 申请人 QQ 号。
+        group_id: 申请人申请入群的群号。
+        group_name: 申请人申请入群的群名称。
+        nick: 申请人的昵称或群名片。
+        message: 申请消息。
+    &#34;&#34;&#34;
+    type: str = &#39;MemberJoinRequestEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    event_id: int
+    &#34;&#34;&#34;事件标识，响应该事件时的标识。&#34;&#34;&#34;
+    from_id: int
+    &#34;&#34;&#34;申请人 QQ 号。&#34;&#34;&#34;
+    group_id: int
+    &#34;&#34;&#34;申请人申请入群的群号。&#34;&#34;&#34;
+    group_name: str
+    &#34;&#34;&#34;申请人申请入群的群名称。&#34;&#34;&#34;
+    nick: str
+    &#34;&#34;&#34;申请人的昵称或群名片。&#34;&#34;&#34;
+    message: str
+    &#34;&#34;&#34;申请消息。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.RequestEvent" href="#mirai.models.events.RequestEvent">RequestEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.MemberJoinRequestEvent.group_name"><code class="name">var <span class="ident">group_name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>申请人申请入群的群名称。</p></div>
+</dd>
+<dt id="mirai.models.events.MemberJoinRequestEvent.message"><code class="name">var <span class="ident">message</span> : str</code></dt>
+<dd>
+<div class="desc"><p>申请消息。</p></div>
+</dd>
+<dt id="mirai.models.events.MemberJoinRequestEvent.nick"><code class="name">var <span class="ident">nick</span> : str</code></dt>
+<dd>
+<div class="desc"><p>申请人的昵称或群名片。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.RequestEvent" href="#mirai.models.events.RequestEvent">RequestEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.RequestEvent.event_id" href="#mirai.models.events.RequestEvent.event_id">event_id</a></code></li>
+<li><code><a title="mirai.models.events.RequestEvent.from_id" href="#mirai.models.events.RequestEvent.from_id">from_id</a></code></li>
+<li><code><a title="mirai.models.events.RequestEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.RequestEvent.group_id" href="#mirai.models.events.RequestEvent.group_id">group_id</a></code></li>
+<li><code><a title="mirai.models.events.RequestEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.RequestEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.MemberLeaveEventKick"><code class="flex name class">
+<span>class <span class="ident">MemberLeaveEventKick</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>成员被踢出群（该成员不是Bot）。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>member</code></strong></dt>
+<dd>被踢出的群成员。</dd>
+<dt><strong><code>group</code></strong></dt>
+<dd>事件发生的群。</dd>
+<dt><strong><code>operator</code></strong></dt>
+<dd>被踢出的群的管理员。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberLeaveEventKick(GroupEvent):
+    &#34;&#34;&#34;成员被踢出群（该成员不是Bot）。
+
+    Args:
+        type: 事件名。
+        member: 被踢出的群成员。
+        group: 事件发生的群。
+        operator: 被踢出的群的管理员。
+    &#34;&#34;&#34;
+    type: str = &#39;MemberLeaveEventKick&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    member: GroupMember
+    &#34;&#34;&#34;被踢出的群成员。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;被踢出的群的管理员。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.MemberLeaveEventKick.member"><code class="name">var <span class="ident">member</span> : <a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"><p>被踢出的群成员。</p></div>
+</dd>
+<dt id="mirai.models.events.MemberLeaveEventKick.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>被踢出的群的管理员。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.MemberLeaveEventQuit"><code class="flex name class">
+<span>class <span class="ident">MemberLeaveEventQuit</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>成员主动离群（该成员不是Bot）。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>member</code></strong></dt>
+<dd>离群的群成员。</dd>
+<dt><strong><code>group</code></strong></dt>
+<dd>事件发生的群。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberLeaveEventQuit(GroupEvent):
+    &#34;&#34;&#34;成员主动离群（该成员不是Bot）。
+
+    Args:
+        type: 事件名。
+        member: 离群的群成员。
+        group: 事件发生的群。
+    &#34;&#34;&#34;
+    type: str = &#39;MemberLeaveEventQuit&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    member: GroupMember
+    &#34;&#34;&#34;离群的群成员。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.MemberLeaveEventQuit.member"><code class="name">var <span class="ident">member</span> : <a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"><p>离群的群成员。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.MemberMuteEvent"><code class="flex name class">
+<span>class <span class="ident">MemberMuteEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群成员被禁言（该成员不是Bot）。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>duration_seconds</code></strong></dt>
+<dd>禁言时间，单位为秒。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberMuteEvent(GroupEvent):
+    &#34;&#34;&#34;群成员被禁言（该成员不是Bot）。
+
+    Args:
+        type: 事件名。
+        duration_seconds: 禁言时间，单位为秒。
+    &#34;&#34;&#34;
+    type: str = &#39;MemberMuteEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    duration_seconds: int
+    &#34;&#34;&#34;禁言时间，单位为秒。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.MemberMuteEvent.duration_seconds"><code class="name">var <span class="ident">duration_seconds</span> : int</code></dt>
+<dd>
+<div class="desc"><p>禁言时间，单位为秒。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.MemberPermissionChangeEvent"><code class="flex name class">
+<span>class <span class="ident">MemberPermissionChangeEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>成员权限改变（该成员不是Bot）。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>origin</code></strong></dt>
+<dd>原本权限。</dd>
+<dt><strong><code>current</code></strong></dt>
+<dd>现在权限。</dd>
+<dt><strong><code>member</code></strong></dt>
+<dd>权限改变的群成员。</dd>
+<dt><strong><code>group</code></strong></dt>
+<dd>事件发生的群。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberPermissionChangeEvent(GroupEvent):
+    &#34;&#34;&#34;成员权限改变（该成员不是Bot）。
+
+    Args:
+        type: 事件名。
+        origin: 原本权限。
+        current: 现在权限。
+        member: 权限改变的群成员。
+        group: 事件发生的群。
+    &#34;&#34;&#34;
+    type: str = &#39;MemberPermissionChangeEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    origin: Permission
+    &#34;&#34;&#34;原本权限。&#34;&#34;&#34;
+    current: Permission
+    &#34;&#34;&#34;现在权限。&#34;&#34;&#34;
+    member: GroupMember
+    &#34;&#34;&#34;权限改变的群成员。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.MemberPermissionChangeEvent.current"><code class="name">var <span class="ident">current</span> : <a title="mirai.models.entities.Permission" href="entities.html#mirai.models.entities.Permission">Permission</a></code></dt>
+<dd>
+<div class="desc"><p>现在权限。</p></div>
+</dd>
+<dt id="mirai.models.events.MemberPermissionChangeEvent.member"><code class="name">var <span class="ident">member</span> : <a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"><p>权限改变的群成员。</p></div>
+</dd>
+<dt id="mirai.models.events.MemberPermissionChangeEvent.origin"><code class="name">var <span class="ident">origin</span> : <a title="mirai.models.entities.Permission" href="entities.html#mirai.models.entities.Permission">Permission</a></code></dt>
+<dd>
+<div class="desc"><p>原本权限。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.MemberSpecialTitleChangeEvent"><code class="flex name class">
+<span>class <span class="ident">MemberSpecialTitleChangeEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群头衔改动（只有群主有操作权限）。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>origin</code></strong></dt>
+<dd>原本头衔。</dd>
+<dt><strong><code>current</code></strong></dt>
+<dd>现在头衔。</dd>
+<dt><strong><code>member</code></strong></dt>
+<dd>头衔改动的群成员。</dd>
+<dt><strong><code>group</code></strong></dt>
+<dd>事件发生的群。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberSpecialTitleChangeEvent(GroupEvent):
+    &#34;&#34;&#34;群头衔改动（只有群主有操作权限）。
+
+    Args:
+        type: 事件名。
+        origin: 原本头衔。
+        current: 现在头衔。
+        member: 头衔改动的群成员。
+        group: 事件发生的群。
+    &#34;&#34;&#34;
+    type: str = &#39;MemberSpecialTitleChangeEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    origin: str
+    &#34;&#34;&#34;原本头衔。&#34;&#34;&#34;
+    current: str
+    &#34;&#34;&#34;现在头衔。&#34;&#34;&#34;
+    member: GroupMember
+    &#34;&#34;&#34;头衔改动的群成员。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.MemberSpecialTitleChangeEvent.current"><code class="name">var <span class="ident">current</span> : str</code></dt>
+<dd>
+<div class="desc"><p>现在头衔。</p></div>
+</dd>
+<dt id="mirai.models.events.MemberSpecialTitleChangeEvent.member"><code class="name">var <span class="ident">member</span> : <a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"><p>头衔改动的群成员。</p></div>
+</dd>
+<dt id="mirai.models.events.MemberSpecialTitleChangeEvent.origin"><code class="name">var <span class="ident">origin</span> : str</code></dt>
+<dd>
+<div class="desc"><p>原本头衔。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.MemberUnmuteEvent"><code class="flex name class">
+<span>class <span class="ident">MemberUnmuteEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群成员被取消禁言（该成员不是Bot）。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>member</code></strong></dt>
+<dd>被取消禁言的群成员。</dd>
+<dt><strong><code>group</code></strong></dt>
+<dd>事件发生的群。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberUnmuteEvent(GroupEvent):
+    &#34;&#34;&#34;群成员被取消禁言（该成员不是Bot）。
+
+    Args:
+        type: 事件名。
+        member: 被取消禁言的群成员。
+        group: 事件发生的群。
+    &#34;&#34;&#34;
+    type: str = &#39;MemberUnmuteEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    member: GroupMember
+    &#34;&#34;&#34;被取消禁言的群成员。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;被取消禁言的群管理员。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.MemberUnmuteEvent.member"><code class="name">var <span class="ident">member</span> : <a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"><p>被取消禁言的群成员。</p></div>
+</dd>
+<dt id="mirai.models.events.MemberUnmuteEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>被取消禁言的群管理员。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.MessageEvent"><code class="flex name class">
+<span>class <span class="ident">MessageEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>消息事件。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>message_chain</code></strong></dt>
+<dd>消息内容。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MessageEvent(Event):
+    &#34;&#34;&#34;消息事件。
+
+    Args:
+        type: 事件名。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    sender: Entity
+    &#34;&#34;&#34;发送消息的来源。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.FriendMessage" href="#mirai.models.events.FriendMessage">FriendMessage</a></li>
+<li><a title="mirai.models.events.GroupMessage" href="#mirai.models.events.GroupMessage">GroupMessage</a></li>
+<li><a title="mirai.models.events.OtherClientMessage" href="#mirai.models.events.OtherClientMessage">OtherClientMessage</a></li>
+<li><a title="mirai.models.events.StrangerMessage" href="#mirai.models.events.StrangerMessage">StrangerMessage</a></li>
+<li><a title="mirai.models.events.TempMessage" href="#mirai.models.events.TempMessage">TempMessage</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.MessageEvent.message_chain"><code class="name">var <span class="ident">message_chain</span> : <a title="mirai.models.message.MessageChain" href="message.html#mirai.models.message.MessageChain">MessageChain</a></code></dt>
+<dd>
+<div class="desc"><p>消息内容。</p></div>
+</dd>
+<dt id="mirai.models.events.MessageEvent.sender"><code class="name">var <span class="ident">sender</span> : <a title="mirai.models.entities.Entity" href="entities.html#mirai.models.entities.Entity">Entity</a></code></dt>
+<dd>
+<div class="desc"><p>发送消息的来源。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.Event.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.NewFriendRequestEvent"><code class="flex name class">
+<span>class <span class="ident">NewFriendRequestEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>添加好友申请。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>event_id</code></strong></dt>
+<dd>事件标识，响应该事件时的标识。</dd>
+<dt><strong><code>from_id</code></strong></dt>
+<dd>申请人 QQ 号。</dd>
+<dt><strong><code>group_id</code></strong></dt>
+<dd>申请人如果通过某个群添加好友，该项为该群群号；否则为0。</dd>
+<dt><strong><code>nick</code></strong></dt>
+<dd>申请人的昵称或群名片。</dd>
+<dt><strong><code>message</code></strong></dt>
+<dd>申请消息。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class NewFriendRequestEvent(RequestEvent):
+    &#34;&#34;&#34;添加好友申请。
+
+    Args:
+        type: 事件名。
+        event_id: 事件标识，响应该事件时的标识。
+        from_id: 申请人 QQ 号。
+        group_id: 申请人如果通过某个群添加好友，该项为该群群号；否则为0。
+        nick: 申请人的昵称或群名片。
+        message: 申请消息。
+    &#34;&#34;&#34;
+    type: str = &#39;NewFriendRequestEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    event_id: int
+    &#34;&#34;&#34;事件标识，响应该事件时的标识。&#34;&#34;&#34;
+    from_id: int
+    &#34;&#34;&#34;申请人 QQ 号。&#34;&#34;&#34;
+    group_id: int
+    &#34;&#34;&#34;申请人如果通过某个群添加好友，该项为该群群号；否则为0。&#34;&#34;&#34;
+    nick: str
+    &#34;&#34;&#34;申请人的昵称或群名片。&#34;&#34;&#34;
+    message: str
+    &#34;&#34;&#34;申请消息。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.RequestEvent" href="#mirai.models.events.RequestEvent">RequestEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.NewFriendRequestEvent.message"><code class="name">var <span class="ident">message</span> : str</code></dt>
+<dd>
+<div class="desc"><p>申请消息。</p></div>
+</dd>
+<dt id="mirai.models.events.NewFriendRequestEvent.nick"><code class="name">var <span class="ident">nick</span> : str</code></dt>
+<dd>
+<div class="desc"><p>申请人的昵称或群名片。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.RequestEvent" href="#mirai.models.events.RequestEvent">RequestEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.RequestEvent.event_id" href="#mirai.models.events.RequestEvent.event_id">event_id</a></code></li>
+<li><code><a title="mirai.models.events.RequestEvent.from_id" href="#mirai.models.events.RequestEvent.from_id">from_id</a></code></li>
+<li><code><a title="mirai.models.events.RequestEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.RequestEvent.group_id" href="#mirai.models.events.RequestEvent.group_id">group_id</a></code></li>
+<li><code><a title="mirai.models.events.RequestEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.RequestEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.NudgeEvent"><code class="flex name class">
+<span>class <span class="ident">NudgeEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>头像戳一戳事件。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>from_id</code></strong></dt>
+<dd>动作发出者的 QQ 号。</dd>
+<dt><strong><code>target</code></strong></dt>
+<dd>动作目标的 QQ 号。</dd>
+<dt><strong><code>subject</code></strong></dt>
+<dd>来源。</dd>
+<dt><strong><code>action</code></strong></dt>
+<dd>戳一戳类型。</dd>
+<dt><strong><code>suffix</code></strong></dt>
+<dd>自定义戳一戳内容。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class NudgeEvent(Event):
+    &#34;&#34;&#34;头像戳一戳事件。
+
+    Args:
+        type: 事件名。
+        from_id: 动作发出者的 QQ 号。
+        target: 动作目标的 QQ 号。
+        subject: 来源。
+        action: 戳一戳类型。
+        suffix: 自定义戳一戳内容。
+    &#34;&#34;&#34;
+    type: str = &#34;NudgeEvent&#34;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    from_id: int
+    &#34;&#34;&#34;动作发出者的 QQ 号。&#34;&#34;&#34;
+    target: int
+    &#34;&#34;&#34;动作目标的 QQ 号。&#34;&#34;&#34;
+    subject: Subject
+    &#34;&#34;&#34;来源。&#34;&#34;&#34;
+    action: str
+    &#34;&#34;&#34;戳一戳类型。&#34;&#34;&#34;
+    suffix: str
+    &#34;&#34;&#34;自定义戳一戳内容。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.NudgeEvent.action"><code class="name">var <span class="ident">action</span> : str</code></dt>
+<dd>
+<div class="desc"><p>戳一戳类型。</p></div>
+</dd>
+<dt id="mirai.models.events.NudgeEvent.from_id"><code class="name">var <span class="ident">from_id</span> : int</code></dt>
+<dd>
+<div class="desc"><p>动作发出者的 QQ 号。</p></div>
+</dd>
+<dt id="mirai.models.events.NudgeEvent.subject"><code class="name">var <span class="ident">subject</span> : <a title="mirai.models.entities.Subject" href="entities.html#mirai.models.entities.Subject">Subject</a></code></dt>
+<dd>
+<div class="desc"><p>来源。</p></div>
+</dd>
+<dt id="mirai.models.events.NudgeEvent.suffix"><code class="name">var <span class="ident">suffix</span> : str</code></dt>
+<dd>
+<div class="desc"><p>自定义戳一戳内容。</p></div>
+</dd>
+<dt id="mirai.models.events.NudgeEvent.target"><code class="name">var <span class="ident">target</span> : int</code></dt>
+<dd>
+<div class="desc"><p>动作目标的 QQ 号。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.Event.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.OtherClientMessage"><code class="flex name class">
+<span>class <span class="ident">OtherClientMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>其他客户端消息。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>sender</code></strong></dt>
+<dd>发送消息的人。</dd>
+<dt><strong><code>message_chain</code></strong></dt>
+<dd>消息内容。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class OtherClientMessage(MessageEvent):
+    &#34;&#34;&#34;其他客户端消息。
+
+    Args:
+        type: 事件名。
+        sender: 发送消息的人。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;OtherClientMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    sender: Sender
+    &#34;&#34;&#34;发送消息的人。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.message_chain" href="#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.sender" href="#mirai.models.events.MessageEvent.sender">sender</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.RequestEvent"><code class="flex name class">
+<span>class <span class="ident">RequestEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>申请事件。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>event_id</code></strong></dt>
+<dd>事件标识，响应该事件时的标识。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RequestEvent(Event):
+    &#34;&#34;&#34;申请事件。
+
+    Args:
+        type: 事件名。
+        event_id: 事件标识，响应该事件时的标识。
+    &#34;&#34;&#34;
+    type: str
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    event_id: int
+    &#34;&#34;&#34;事件标识，响应该事件时的标识。&#34;&#34;&#34;
+    from_id: int
+    &#34;&#34;&#34;申请人 QQ 号。&#34;&#34;&#34;
+    group_id: int
+    &#34;&#34;&#34;申请人群号，可能为0。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.BotInvitedJoinGroupRequestEvent" href="#mirai.models.events.BotInvitedJoinGroupRequestEvent">BotInvitedJoinGroupRequestEvent</a></li>
+<li><a title="mirai.models.events.MemberJoinRequestEvent" href="#mirai.models.events.MemberJoinRequestEvent">MemberJoinRequestEvent</a></li>
+<li><a title="mirai.models.events.NewFriendRequestEvent" href="#mirai.models.events.NewFriendRequestEvent">NewFriendRequestEvent</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.RequestEvent.event_id"><code class="name">var <span class="ident">event_id</span> : int</code></dt>
+<dd>
+<div class="desc"><p>事件标识，响应该事件时的标识。</p></div>
+</dd>
+<dt id="mirai.models.events.RequestEvent.from_id"><code class="name">var <span class="ident">from_id</span> : int</code></dt>
+<dd>
+<div class="desc"><p>申请人 QQ 号。</p></div>
+</dd>
+<dt id="mirai.models.events.RequestEvent.group_id"><code class="name">var <span class="ident">group_id</span> : int</code></dt>
+<dd>
+<div class="desc"><p>申请人群号，可能为0。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.Event.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.StrangerMessage"><code class="flex name class">
+<span>class <span class="ident">StrangerMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>陌生人消息。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>sender</code></strong></dt>
+<dd>发送消息的人。</dd>
+<dt><strong><code>message_chain</code></strong></dt>
+<dd>消息内容。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class StrangerMessage(MessageEvent):
+    &#34;&#34;&#34;陌生人消息。
+
+    Args:
+        type: 事件名。
+        sender: 发送消息的人。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;StrangerMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    sender: Friend
+    &#34;&#34;&#34;发送消息的人。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.message_chain" href="#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.sender" href="#mirai.models.events.MessageEvent.sender">sender</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.TempMessage"><code class="flex name class">
+<span>class <span class="ident">TempMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群临时消息。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>sender</code></strong></dt>
+<dd>发送消息的群成员。</dd>
+<dt><strong><code>message_chain</code></strong></dt>
+<dd>消息内容。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TempMessage(MessageEvent):
+    &#34;&#34;&#34;群临时消息。
+
+    Args:
+        type: 事件名。
+        sender: 发送消息的群成员。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;TempMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    sender: GroupMember
+    &#34;&#34;&#34;发送消息的群成员。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
+    @property
+    def group(self) -&gt; Group:
+        return self.sender.group</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="mirai.models.events.TempMessage.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def group(self) -&gt; Group:
+    return self.sender.group</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.message_chain" href="#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.sender" href="#mirai.models.events.MessageEvent.sender">sender</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="mirai.models" href="index.html">mirai.models</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="mirai.models.events.BotEvent" href="#mirai.models.events.BotEvent">BotEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.BotEvent.qq" href="#mirai.models.events.BotEvent.qq">qq</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.BotGroupPermissionChangeEvent" href="#mirai.models.events.BotGroupPermissionChangeEvent">BotGroupPermissionChangeEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.BotGroupPermissionChangeEvent.current" href="#mirai.models.events.BotGroupPermissionChangeEvent.current">current</a></code></li>
+<li><code><a title="mirai.models.events.BotGroupPermissionChangeEvent.group" href="#mirai.models.events.BotGroupPermissionChangeEvent.group">group</a></code></li>
+<li><code><a title="mirai.models.events.BotGroupPermissionChangeEvent.origin" href="#mirai.models.events.BotGroupPermissionChangeEvent.origin">origin</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.BotInvitedJoinGroupRequestEvent" href="#mirai.models.events.BotInvitedJoinGroupRequestEvent">BotInvitedJoinGroupRequestEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.BotInvitedJoinGroupRequestEvent.group_name" href="#mirai.models.events.BotInvitedJoinGroupRequestEvent.group_name">group_name</a></code></li>
+<li><code><a title="mirai.models.events.BotInvitedJoinGroupRequestEvent.message" href="#mirai.models.events.BotInvitedJoinGroupRequestEvent.message">message</a></code></li>
+<li><code><a title="mirai.models.events.BotInvitedJoinGroupRequestEvent.nick" href="#mirai.models.events.BotInvitedJoinGroupRequestEvent.nick">nick</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.BotJoinGroupEvent" href="#mirai.models.events.BotJoinGroupEvent">BotJoinGroupEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.BotJoinGroupEvent.group" href="#mirai.models.events.BotJoinGroupEvent.group">group</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.BotLeaveEventActive" href="#mirai.models.events.BotLeaveEventActive">BotLeaveEventActive</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.BotLeaveEventActive.group" href="#mirai.models.events.BotLeaveEventActive.group">group</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.BotLeaveEventKick" href="#mirai.models.events.BotLeaveEventKick">BotLeaveEventKick</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.BotLeaveEventKick.group" href="#mirai.models.events.BotLeaveEventKick.group">group</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.BotMuteEvent" href="#mirai.models.events.BotMuteEvent">BotMuteEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.BotMuteEvent.duration_seconds" href="#mirai.models.events.BotMuteEvent.duration_seconds">duration_seconds</a></code></li>
+<li><code><a title="mirai.models.events.BotMuteEvent.operator" href="#mirai.models.events.BotMuteEvent.operator">operator</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.BotOfflineEventActive" href="#mirai.models.events.BotOfflineEventActive">BotOfflineEventActive</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.BotOfflineEventDropped" href="#mirai.models.events.BotOfflineEventDropped">BotOfflineEventDropped</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.BotOfflineEventForce" href="#mirai.models.events.BotOfflineEventForce">BotOfflineEventForce</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.BotOnlineEvent" href="#mirai.models.events.BotOnlineEvent">BotOnlineEvent</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.BotReloginEvent" href="#mirai.models.events.BotReloginEvent">BotReloginEvent</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.BotUnmuteEvent" href="#mirai.models.events.BotUnmuteEvent">BotUnmuteEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.BotUnmuteEvent.operator" href="#mirai.models.events.BotUnmuteEvent.operator">operator</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.CommandEvent" href="#mirai.models.events.CommandEvent">CommandEvent</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.CommandExecutedEvent" href="#mirai.models.events.CommandExecutedEvent">CommandExecutedEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.CommandExecutedEvent.args" href="#mirai.models.events.CommandExecutedEvent.args">args</a></code></li>
+<li><code><a title="mirai.models.events.CommandExecutedEvent.friend" href="#mirai.models.events.CommandExecutedEvent.friend">friend</a></code></li>
+<li><code><a title="mirai.models.events.CommandExecutedEvent.member" href="#mirai.models.events.CommandExecutedEvent.member">member</a></code></li>
+<li><code><a title="mirai.models.events.CommandExecutedEvent.name" href="#mirai.models.events.CommandExecutedEvent.name">name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.Event.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.FriendEvent" href="#mirai.models.events.FriendEvent">FriendEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.FriendEvent.friend" href="#mirai.models.events.FriendEvent.friend">friend</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.FriendInputStatusChangedEvent" href="#mirai.models.events.FriendInputStatusChangedEvent">FriendInputStatusChangedEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.FriendInputStatusChangedEvent.inputting" href="#mirai.models.events.FriendInputStatusChangedEvent.inputting">inputting</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.FriendMessage" href="#mirai.models.events.FriendMessage">FriendMessage</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.FriendNickChangedEvent" href="#mirai.models.events.FriendNickChangedEvent">FriendNickChangedEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.FriendNickChangedEvent.from_" href="#mirai.models.events.FriendNickChangedEvent.from_">from_</a></code></li>
+<li><code><a title="mirai.models.events.FriendNickChangedEvent.to" href="#mirai.models.events.FriendNickChangedEvent.to">to</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.FriendRecallEvent" href="#mirai.models.events.FriendRecallEvent">FriendRecallEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.FriendRecallEvent.author_id" href="#mirai.models.events.FriendRecallEvent.author_id">author_id</a></code></li>
+<li><code><a title="mirai.models.events.FriendRecallEvent.message_id" href="#mirai.models.events.FriendRecallEvent.message_id">message_id</a></code></li>
+<li><code><a title="mirai.models.events.FriendRecallEvent.operator" href="#mirai.models.events.FriendRecallEvent.operator">operator</a></code></li>
+<li><code><a title="mirai.models.events.FriendRecallEvent.time" href="#mirai.models.events.FriendRecallEvent.time">time</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.GroupAllowAnonymousChatEvent" href="#mirai.models.events.GroupAllowAnonymousChatEvent">GroupAllowAnonymousChatEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.GroupAllowAnonymousChatEvent.current" href="#mirai.models.events.GroupAllowAnonymousChatEvent.current">current</a></code></li>
+<li><code><a title="mirai.models.events.GroupAllowAnonymousChatEvent.group" href="#mirai.models.events.GroupAllowAnonymousChatEvent.group">group</a></code></li>
+<li><code><a title="mirai.models.events.GroupAllowAnonymousChatEvent.operator" href="#mirai.models.events.GroupAllowAnonymousChatEvent.operator">operator</a></code></li>
+<li><code><a title="mirai.models.events.GroupAllowAnonymousChatEvent.origin" href="#mirai.models.events.GroupAllowAnonymousChatEvent.origin">origin</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.GroupAllowConfessTalkEvent" href="#mirai.models.events.GroupAllowConfessTalkEvent">GroupAllowConfessTalkEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.GroupAllowConfessTalkEvent.current" href="#mirai.models.events.GroupAllowConfessTalkEvent.current">current</a></code></li>
+<li><code><a title="mirai.models.events.GroupAllowConfessTalkEvent.group" href="#mirai.models.events.GroupAllowConfessTalkEvent.group">group</a></code></li>
+<li><code><a title="mirai.models.events.GroupAllowConfessTalkEvent.is_by_bot" href="#mirai.models.events.GroupAllowConfessTalkEvent.is_by_bot">is_by_bot</a></code></li>
+<li><code><a title="mirai.models.events.GroupAllowConfessTalkEvent.origin" href="#mirai.models.events.GroupAllowConfessTalkEvent.origin">origin</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.GroupAllowMemberInviteEvent" href="#mirai.models.events.GroupAllowMemberInviteEvent">GroupAllowMemberInviteEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.GroupAllowMemberInviteEvent.current" href="#mirai.models.events.GroupAllowMemberInviteEvent.current">current</a></code></li>
+<li><code><a title="mirai.models.events.GroupAllowMemberInviteEvent.group" href="#mirai.models.events.GroupAllowMemberInviteEvent.group">group</a></code></li>
+<li><code><a title="mirai.models.events.GroupAllowMemberInviteEvent.operator" href="#mirai.models.events.GroupAllowMemberInviteEvent.operator">operator</a></code></li>
+<li><code><a title="mirai.models.events.GroupAllowMemberInviteEvent.origin" href="#mirai.models.events.GroupAllowMemberInviteEvent.origin">origin</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.GroupEntranceAnnouncementChangeEvent" href="#mirai.models.events.GroupEntranceAnnouncementChangeEvent">GroupEntranceAnnouncementChangeEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.GroupEntranceAnnouncementChangeEvent.current" href="#mirai.models.events.GroupEntranceAnnouncementChangeEvent.current">current</a></code></li>
+<li><code><a title="mirai.models.events.GroupEntranceAnnouncementChangeEvent.group" href="#mirai.models.events.GroupEntranceAnnouncementChangeEvent.group">group</a></code></li>
+<li><code><a title="mirai.models.events.GroupEntranceAnnouncementChangeEvent.operator" href="#mirai.models.events.GroupEntranceAnnouncementChangeEvent.operator">operator</a></code></li>
+<li><code><a title="mirai.models.events.GroupEntranceAnnouncementChangeEvent.origin" href="#mirai.models.events.GroupEntranceAnnouncementChangeEvent.origin">origin</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.GroupMessage" href="#mirai.models.events.GroupMessage">GroupMessage</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.GroupMessage.group" href="#mirai.models.events.GroupMessage.group">group</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.GroupMuteAllEvent" href="#mirai.models.events.GroupMuteAllEvent">GroupMuteAllEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.GroupMuteAllEvent.current" href="#mirai.models.events.GroupMuteAllEvent.current">current</a></code></li>
+<li><code><a title="mirai.models.events.GroupMuteAllEvent.group" href="#mirai.models.events.GroupMuteAllEvent.group">group</a></code></li>
+<li><code><a title="mirai.models.events.GroupMuteAllEvent.operator" href="#mirai.models.events.GroupMuteAllEvent.operator">operator</a></code></li>
+<li><code><a title="mirai.models.events.GroupMuteAllEvent.origin" href="#mirai.models.events.GroupMuteAllEvent.origin">origin</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.GroupNameChangeEvent" href="#mirai.models.events.GroupNameChangeEvent">GroupNameChangeEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.GroupNameChangeEvent.current" href="#mirai.models.events.GroupNameChangeEvent.current">current</a></code></li>
+<li><code><a title="mirai.models.events.GroupNameChangeEvent.group" href="#mirai.models.events.GroupNameChangeEvent.group">group</a></code></li>
+<li><code><a title="mirai.models.events.GroupNameChangeEvent.operator" href="#mirai.models.events.GroupNameChangeEvent.operator">operator</a></code></li>
+<li><code><a title="mirai.models.events.GroupNameChangeEvent.origin" href="#mirai.models.events.GroupNameChangeEvent.origin">origin</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.GroupRecallEvent" href="#mirai.models.events.GroupRecallEvent">GroupRecallEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.GroupRecallEvent.author_id" href="#mirai.models.events.GroupRecallEvent.author_id">author_id</a></code></li>
+<li><code><a title="mirai.models.events.GroupRecallEvent.group" href="#mirai.models.events.GroupRecallEvent.group">group</a></code></li>
+<li><code><a title="mirai.models.events.GroupRecallEvent.message_id" href="#mirai.models.events.GroupRecallEvent.message_id">message_id</a></code></li>
+<li><code><a title="mirai.models.events.GroupRecallEvent.operator" href="#mirai.models.events.GroupRecallEvent.operator">operator</a></code></li>
+<li><code><a title="mirai.models.events.GroupRecallEvent.time" href="#mirai.models.events.GroupRecallEvent.time">time</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.MemberCardChangeEvent" href="#mirai.models.events.MemberCardChangeEvent">MemberCardChangeEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.MemberCardChangeEvent.current" href="#mirai.models.events.MemberCardChangeEvent.current">current</a></code></li>
+<li><code><a title="mirai.models.events.MemberCardChangeEvent.member" href="#mirai.models.events.MemberCardChangeEvent.member">member</a></code></li>
+<li><code><a title="mirai.models.events.MemberCardChangeEvent.origin" href="#mirai.models.events.MemberCardChangeEvent.origin">origin</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.MemberHonorChangeEvent" href="#mirai.models.events.MemberHonorChangeEvent">MemberHonorChangeEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.MemberHonorChangeEvent.action" href="#mirai.models.events.MemberHonorChangeEvent.action">action</a></code></li>
+<li><code><a title="mirai.models.events.MemberHonorChangeEvent.honor" href="#mirai.models.events.MemberHonorChangeEvent.honor">honor</a></code></li>
+<li><code><a title="mirai.models.events.MemberHonorChangeEvent.member" href="#mirai.models.events.MemberHonorChangeEvent.member">member</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.MemberJoinEvent" href="#mirai.models.events.MemberJoinEvent">MemberJoinEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.MemberJoinEvent.member" href="#mirai.models.events.MemberJoinEvent.member">member</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.MemberJoinRequestEvent" href="#mirai.models.events.MemberJoinRequestEvent">MemberJoinRequestEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.MemberJoinRequestEvent.group_name" href="#mirai.models.events.MemberJoinRequestEvent.group_name">group_name</a></code></li>
+<li><code><a title="mirai.models.events.MemberJoinRequestEvent.message" href="#mirai.models.events.MemberJoinRequestEvent.message">message</a></code></li>
+<li><code><a title="mirai.models.events.MemberJoinRequestEvent.nick" href="#mirai.models.events.MemberJoinRequestEvent.nick">nick</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.MemberLeaveEventKick" href="#mirai.models.events.MemberLeaveEventKick">MemberLeaveEventKick</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.MemberLeaveEventKick.member" href="#mirai.models.events.MemberLeaveEventKick.member">member</a></code></li>
+<li><code><a title="mirai.models.events.MemberLeaveEventKick.operator" href="#mirai.models.events.MemberLeaveEventKick.operator">operator</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.MemberLeaveEventQuit" href="#mirai.models.events.MemberLeaveEventQuit">MemberLeaveEventQuit</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.MemberLeaveEventQuit.member" href="#mirai.models.events.MemberLeaveEventQuit.member">member</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.MemberMuteEvent" href="#mirai.models.events.MemberMuteEvent">MemberMuteEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.MemberMuteEvent.duration_seconds" href="#mirai.models.events.MemberMuteEvent.duration_seconds">duration_seconds</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.MemberPermissionChangeEvent" href="#mirai.models.events.MemberPermissionChangeEvent">MemberPermissionChangeEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.MemberPermissionChangeEvent.current" href="#mirai.models.events.MemberPermissionChangeEvent.current">current</a></code></li>
+<li><code><a title="mirai.models.events.MemberPermissionChangeEvent.member" href="#mirai.models.events.MemberPermissionChangeEvent.member">member</a></code></li>
+<li><code><a title="mirai.models.events.MemberPermissionChangeEvent.origin" href="#mirai.models.events.MemberPermissionChangeEvent.origin">origin</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.MemberSpecialTitleChangeEvent" href="#mirai.models.events.MemberSpecialTitleChangeEvent">MemberSpecialTitleChangeEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.MemberSpecialTitleChangeEvent.current" href="#mirai.models.events.MemberSpecialTitleChangeEvent.current">current</a></code></li>
+<li><code><a title="mirai.models.events.MemberSpecialTitleChangeEvent.member" href="#mirai.models.events.MemberSpecialTitleChangeEvent.member">member</a></code></li>
+<li><code><a title="mirai.models.events.MemberSpecialTitleChangeEvent.origin" href="#mirai.models.events.MemberSpecialTitleChangeEvent.origin">origin</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.MemberUnmuteEvent" href="#mirai.models.events.MemberUnmuteEvent">MemberUnmuteEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.MemberUnmuteEvent.member" href="#mirai.models.events.MemberUnmuteEvent.member">member</a></code></li>
+<li><code><a title="mirai.models.events.MemberUnmuteEvent.operator" href="#mirai.models.events.MemberUnmuteEvent.operator">operator</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.MessageEvent.message_chain" href="#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.sender" href="#mirai.models.events.MessageEvent.sender">sender</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.NewFriendRequestEvent" href="#mirai.models.events.NewFriendRequestEvent">NewFriendRequestEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.NewFriendRequestEvent.message" href="#mirai.models.events.NewFriendRequestEvent.message">message</a></code></li>
+<li><code><a title="mirai.models.events.NewFriendRequestEvent.nick" href="#mirai.models.events.NewFriendRequestEvent.nick">nick</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.NudgeEvent" href="#mirai.models.events.NudgeEvent">NudgeEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.NudgeEvent.action" href="#mirai.models.events.NudgeEvent.action">action</a></code></li>
+<li><code><a title="mirai.models.events.NudgeEvent.from_id" href="#mirai.models.events.NudgeEvent.from_id">from_id</a></code></li>
+<li><code><a title="mirai.models.events.NudgeEvent.subject" href="#mirai.models.events.NudgeEvent.subject">subject</a></code></li>
+<li><code><a title="mirai.models.events.NudgeEvent.suffix" href="#mirai.models.events.NudgeEvent.suffix">suffix</a></code></li>
+<li><code><a title="mirai.models.events.NudgeEvent.target" href="#mirai.models.events.NudgeEvent.target">target</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.OtherClientMessage" href="#mirai.models.events.OtherClientMessage">OtherClientMessage</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.RequestEvent" href="#mirai.models.events.RequestEvent">RequestEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.RequestEvent.event_id" href="#mirai.models.events.RequestEvent.event_id">event_id</a></code></li>
+<li><code><a title="mirai.models.events.RequestEvent.from_id" href="#mirai.models.events.RequestEvent.from_id">from_id</a></code></li>
+<li><code><a title="mirai.models.events.RequestEvent.group_id" href="#mirai.models.events.RequestEvent.group_id">group_id</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.StrangerMessage" href="#mirai.models.events.StrangerMessage">StrangerMessage</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.TempMessage" href="#mirai.models.events.TempMessage">TempMessage</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.TempMessage.group" href="#mirai.models.events.TempMessage.group">group</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>

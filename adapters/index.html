@@ -1,0 +1,1619 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>mirai.adapters API documentation</title>
+<meta name="description" content="此模块提供网络适配器相关。 …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>mirai.adapters</code></h1>
+</header>
+<section id="section-intro">
+<p>此模块提供网络适配器相关。</p>
+<p>网络适配器负责与 mirai-api-http 沟通，详见各子模块。</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># -*- coding: utf-8 -*-
+&#34;&#34;&#34;
+此模块提供网络适配器相关。
+
+网络适配器负责与 mirai-api-http 沟通，详见各子模块。
+&#34;&#34;&#34;
+from typing import TYPE_CHECKING
+
+from .base import Adapter
+
+if TYPE_CHECKING:
+    from .compose import ComposeAdapter
+    from .http import HTTPAdapter
+    from .webhook import WebHookAdapter
+    from .websocket import WebSocketAdapter
+
+
+def __getattr__(name):
+    import importlib
+    MODULES = {
+        &#39;Adapter&#39;: &#39;.base&#39;,
+        &#39;ComposeAdapter&#39;: &#39;.compose&#39;,
+        &#39;HTTPAdapter&#39;: &#39;.http&#39;,
+        &#39;WebHookAdapter&#39;: &#39;.webhook&#39;,
+        &#39;WebSocketAdapter&#39;: &#39;.websocket&#39;,
+    }
+    if name in MODULES:
+        module_name = MODULES[name]
+        module = importlib.import_module(module_name, __name__)
+        return getattr(module, name)
+    raise AttributeError(f&#39;Module {__name__} has no attribute {name}&#39;)
+
+
+__all__ = [
+    &#39;Adapter&#39;,
+    &#39;HTTPAdapter&#39;,
+    &#39;WebSocketAdapter&#39;,
+    &#39;WebHookAdapter&#39;,
+    &#39;ComposeAdapter&#39;,
+]</code></pre>
+</details>
+</section>
+<section>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+<dl>
+<dt><code class="name"><a title="mirai.adapters.base" href="base.html">mirai.adapters.base</a></code></dt>
+<dd>
+<div class="desc"><p>此模块提供网络适配器的一系列基础定义。</p></div>
+</dd>
+<dt><code class="name"><a title="mirai.adapters.compose" href="compose.html">mirai.adapters.compose</a></code></dt>
+<dd>
+<div class="desc"><p>此模块提供组合适配器，可以将两个适配器组合使用。</p></div>
+</dd>
+<dt><code class="name"><a title="mirai.adapters.http" href="http.html">mirai.adapters.http</a></code></dt>
+<dd>
+<div class="desc"><p>此模块提供 HTTP 轮询适配器，适用于 mirai-api-http 的 http adapter。</p></div>
+</dd>
+<dt><code class="name"><a title="mirai.adapters.reverse_websocket" href="reverse_websocket.html">mirai.adapters.reverse_websocket</a></code></dt>
+<dd>
+<div class="desc"><p>此模块提供反向 WebSocket 适配器，适用于 mirai-api-http 的 reverse websocket adapter。</p></div>
+</dd>
+<dt><code class="name"><a title="mirai.adapters.webhook" href="webhook.html">mirai.adapters.webhook</a></code></dt>
+<dd>
+<div class="desc"><p>此模块提供 HTTP 回调适配器，适用于 mirai-api-http 的 webhook adapter。</p></div>
+</dd>
+<dt><code class="name"><a title="mirai.adapters.websocket" href="websocket.html">mirai.adapters.websocket</a></code></dt>
+<dd>
+<div class="desc"><p>此模块提供正向 WebSocket 适配器，适用于 mirai-api-http 的 websocket adapter。</p></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="mirai.adapters.Adapter"><code class="flex name class">
+<span>class <span class="ident">Adapter</span></span>
+<span>(</span><span>verify_key: Union[str, NoneType], single_mode: bool = False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>适配器基类，与 mirai-api-http 沟通的底层实现。</p>
+<p>属性 <code>buses</code> 为适配器注册的事件总线集合。适配器被绑定到 bot 时，bot 会自动将自身的事件总线注册到适配器。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>verify_key</code></strong></dt>
+<dd>mirai-api-http 配置的认证 key，关闭认证时为 None。</dd>
+<dt><strong><code>single_mode</code></strong></dt>
+<dd>是否开启 single_mode，开启后与 session 将无效。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Adapter(ApiProvider, AdapterInterface):
+    &#34;&#34;&#34;适配器基类，与 mirai-api-http 沟通的底层实现。
+
+    属性 `buses` 为适配器注册的事件总线集合。适配器被绑定到 bot 时，bot 会自动将自身的事件总线注册到适配器。
+    &#34;&#34;&#34;
+    verify_key: Optional[str]
+    &#34;&#34;&#34;mirai-api-http 配置的认证 key，关闭认证时为 None。&#34;&#34;&#34;
+    single_mode: bool
+    &#34;&#34;&#34;是否开启 single_mode，开启后与 session 将无效。&#34;&#34;&#34;
+    session: str
+    &#34;&#34;&#34;从 mirai-api-http 处获得的 session。&#34;&#34;&#34;
+    buses: Set[AbstractEventBus]
+    &#34;&#34;&#34;注册的事件总线集合。&#34;&#34;&#34;
+    background: Optional[asyncio.Task]
+    &#34;&#34;&#34;背景事件循环任务。&#34;&#34;&#34;
+    def __init__(self, verify_key: Optional[str], single_mode: bool = False):
+        &#34;&#34;&#34;
+        Args:
+            verify_key: mirai-api-http 配置的认证 key，关闭认证时为 None。
+            single_mode: 是否开启 single_mode，开启后与 session 将无效。
+        &#34;&#34;&#34;
+        self.verify_key = verify_key
+        self.single_mode = single_mode
+        self.session = &#39;&#39;
+        self.buses = set()
+        self.background = None
+
+    @property
+    def adapter_info(self):
+        return {
+            &#39;verify_key&#39;: self.verify_key,
+            &#39;session&#39;: self.session,
+            &#39;single_mode&#39;: self.single_mode,
+        }
+
+    @classmethod
+    def via(cls, adapter_interface: AdapterInterface) -&gt; &#34;Adapter&#34;:
+        &#34;&#34;&#34;从适配器接口创建适配器。
+
+        Args:
+            adapter_interface: 适配器接口。
+
+        Returns:
+            Adapter: 创建的适配器。
+        &#34;&#34;&#34;
+        info = adapter_interface.adapter_info
+        adapter = cls(
+            verify_key=info[&#39;verify_key&#39;],
+            **{
+                key: info[key]
+                for key in [&#39;single_mode&#39;] if info.get(key) is not None
+            }
+        )
+        adapter.session = cast(str, info.get(&#39;session&#39;))
+        return adapter
+
+    def register_event_bus(self, *buses: AbstractEventBus):
+        &#34;&#34;&#34;注册事件总线。
+
+        Args:
+            *buses: 一个或多个事件总线。
+        &#34;&#34;&#34;
+        self.buses |= set(buses)
+
+    def unregister_event_bus(self, *buses: AbstractEventBus):
+        &#34;&#34;&#34;解除注册事件总线。
+
+        Args:
+            *buses: 一个或多个事件总线。
+        &#34;&#34;&#34;
+        self.buses -= set(buses)
+
+    @abc.abstractmethod
+    async def login(self, qq: int):
+        &#34;&#34;&#34;登录到 mirai-api-http。&#34;&#34;&#34;
+
+    @abc.abstractmethod
+    async def logout(self, terminate: bool = True):
+        &#34;&#34;&#34;登出。&#34;&#34;&#34;
+
+    @abc.abstractmethod
+    async def call_api(self, api: str, method: Method = Method.GET, **params):
+        &#34;&#34;&#34;调用 API。
+
+        Args:
+            api: API 名称，需与 mirai-api-http 中的定义一致。
+            method: 调用方法。默认为 GET。
+            **params: 参数。
+        &#34;&#34;&#34;
+
+    @abc.abstractmethod
+    async def _background(self):
+        &#34;&#34;&#34;背景事件循环，用于接收事件。&#34;&#34;&#34;
+
+    async def start(self):
+        &#34;&#34;&#34;运行背景事件循环。&#34;&#34;&#34;
+        if not self.buses:
+            raise RuntimeError(&#39;事件总线未指定！&#39;)
+        if not self.session:
+            raise RuntimeError(&#39;未登录！&#39;)
+
+        self.background = asyncio.create_task(self._background())
+
+    async def shutdown(self):
+        &#34;&#34;&#34;停止背景事件循环。&#34;&#34;&#34;
+        if self.background:
+            await Tasks.cancel(self.background)
+
+    async def emit(self, event: str, *args, **kwargs):
+        &#34;&#34;&#34;向事件总线发送一个事件。
+
+        Args:
+            event: 事件名称。
+            *args: 事件参数。
+            **kwargs: 事件参数。
+        &#34;&#34;&#34;
+        coros = [bus.emit(event, *args, **kwargs) for bus in self.buses]
+        return sum(await asyncio.gather(*coros), [])</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.api_provider.ApiProvider" href="../api_provider.html#mirai.api_provider.ApiProvider">ApiProvider</a></li>
+<li><a title="mirai.adapters.base.AdapterInterface" href="base.html#mirai.adapters.base.AdapterInterface">AdapterInterface</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mirai.adapters.compose.ComposeAdapter" href="compose.html#mirai.adapters.compose.ComposeAdapter">ComposeAdapter</a></li>
+<li><a title="mirai.adapters.http.HTTPAdapter" href="http.html#mirai.adapters.http.HTTPAdapter">HTTPAdapter</a></li>
+<li><a title="mirai.adapters.reverse_websocket.ReverseWebSocketAdapter" href="reverse_websocket.html#mirai.adapters.reverse_websocket.ReverseWebSocketAdapter">ReverseWebSocketAdapter</a></li>
+<li><a title="mirai.adapters.webhook.WebHookAdapter" href="webhook.html#mirai.adapters.webhook.WebHookAdapter">WebHookAdapter</a></li>
+<li><a title="mirai.adapters.websocket.WebSocketAdapter" href="websocket.html#mirai.adapters.websocket.WebSocketAdapter">WebSocketAdapter</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.adapters.Adapter.background"><code class="name">var <span class="ident">background</span> : Union[_asyncio.Task, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>背景事件循环任务。</p></div>
+</dd>
+<dt id="mirai.adapters.Adapter.buses"><code class="name">var <span class="ident">buses</span> : Set[<a title="mirai.bus.AbstractEventBus" href="../bus.html#mirai.bus.AbstractEventBus">AbstractEventBus</a>]</code></dt>
+<dd>
+<div class="desc"><p>注册的事件总线集合。</p></div>
+</dd>
+<dt id="mirai.adapters.Adapter.session"><code class="name">var <span class="ident">session</span> : str</code></dt>
+<dd>
+<div class="desc"><p>从 mirai-api-http 处获得的 session。</p></div>
+</dd>
+<dt id="mirai.adapters.Adapter.single_mode"><code class="name">var <span class="ident">single_mode</span> : bool</code></dt>
+<dd>
+<div class="desc"><p>是否开启 single_mode，开启后与 session 将无效。</p></div>
+</dd>
+<dt id="mirai.adapters.Adapter.verify_key"><code class="name">var <span class="ident">verify_key</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>mirai-api-http 配置的认证 key，关闭认证时为 None。</p></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="mirai.adapters.Adapter.via"><code class="name flex">
+<span>def <span class="ident">via</span></span>(<span>adapter_interface: <a title="mirai.adapters.base.AdapterInterface" href="base.html#mirai.adapters.base.AdapterInterface">AdapterInterface</a>) ‑> <a title="mirai.adapters.base.Adapter" href="base.html#mirai.adapters.base.Adapter">Adapter</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>从适配器接口创建适配器。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>adapter_interface</code></strong></dt>
+<dd>适配器接口。</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="mirai.adapters.Adapter" href="#mirai.adapters.Adapter">Adapter</a></code></dt>
+<dd>创建的适配器。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def via(cls, adapter_interface: AdapterInterface) -&gt; &#34;Adapter&#34;:
+    &#34;&#34;&#34;从适配器接口创建适配器。
+
+    Args:
+        adapter_interface: 适配器接口。
+
+    Returns:
+        Adapter: 创建的适配器。
+    &#34;&#34;&#34;
+    info = adapter_interface.adapter_info
+    adapter = cls(
+        verify_key=info[&#39;verify_key&#39;],
+        **{
+            key: info[key]
+            for key in [&#39;single_mode&#39;] if info.get(key) is not None
+        }
+    )
+    adapter.session = cast(str, info.get(&#39;session&#39;))
+    return adapter</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="mirai.adapters.Adapter.call_api"><code class="name flex">
+<span>async def <span class="ident">call_api</span></span>(<span>self, api: str, method: <a title="mirai.api_provider.Method" href="../api_provider.html#mirai.api_provider.Method">Method</a> = Method.GET, **params)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>调用 API。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>api</code></strong></dt>
+<dd>API 名称，需与 mirai-api-http 中的定义一致。</dd>
+<dt><strong><code>method</code></strong></dt>
+<dd>调用方法。默认为 GET。</dd>
+<dt><strong><code>**params</code></strong></dt>
+<dd>参数。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abc.abstractmethod
+async def call_api(self, api: str, method: Method = Method.GET, **params):
+    &#34;&#34;&#34;调用 API。
+
+    Args:
+        api: API 名称，需与 mirai-api-http 中的定义一致。
+        method: 调用方法。默认为 GET。
+        **params: 参数。
+    &#34;&#34;&#34;</code></pre>
+</details>
+</dd>
+<dt id="mirai.adapters.Adapter.emit"><code class="name flex">
+<span>async def <span class="ident">emit</span></span>(<span>self, event: str, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>向事件总线发送一个事件。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>event</code></strong></dt>
+<dd>事件名称。</dd>
+<dt><strong><code>*args</code></strong></dt>
+<dd>事件参数。</dd>
+<dt><strong><code>**kwargs</code></strong></dt>
+<dd>事件参数。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def emit(self, event: str, *args, **kwargs):
+    &#34;&#34;&#34;向事件总线发送一个事件。
+
+    Args:
+        event: 事件名称。
+        *args: 事件参数。
+        **kwargs: 事件参数。
+    &#34;&#34;&#34;
+    coros = [bus.emit(event, *args, **kwargs) for bus in self.buses]
+    return sum(await asyncio.gather(*coros), [])</code></pre>
+</details>
+</dd>
+<dt id="mirai.adapters.Adapter.login"><code class="name flex">
+<span>async def <span class="ident">login</span></span>(<span>self, qq: int)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>登录到 mirai-api-http。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abc.abstractmethod
+async def login(self, qq: int):
+    &#34;&#34;&#34;登录到 mirai-api-http。&#34;&#34;&#34;</code></pre>
+</details>
+</dd>
+<dt id="mirai.adapters.Adapter.logout"><code class="name flex">
+<span>async def <span class="ident">logout</span></span>(<span>self, terminate: bool = True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>登出。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abc.abstractmethod
+async def logout(self, terminate: bool = True):
+    &#34;&#34;&#34;登出。&#34;&#34;&#34;</code></pre>
+</details>
+</dd>
+<dt id="mirai.adapters.Adapter.register_event_bus"><code class="name flex">
+<span>def <span class="ident">register_event_bus</span></span>(<span>self, *buses: <a title="mirai.bus.AbstractEventBus" href="../bus.html#mirai.bus.AbstractEventBus">AbstractEventBus</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>注册事件总线。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>*buses</code></strong></dt>
+<dd>一个或多个事件总线。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def register_event_bus(self, *buses: AbstractEventBus):
+    &#34;&#34;&#34;注册事件总线。
+
+    Args:
+        *buses: 一个或多个事件总线。
+    &#34;&#34;&#34;
+    self.buses |= set(buses)</code></pre>
+</details>
+</dd>
+<dt id="mirai.adapters.Adapter.shutdown"><code class="name flex">
+<span>async def <span class="ident">shutdown</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>停止背景事件循环。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def shutdown(self):
+    &#34;&#34;&#34;停止背景事件循环。&#34;&#34;&#34;
+    if self.background:
+        await Tasks.cancel(self.background)</code></pre>
+</details>
+</dd>
+<dt id="mirai.adapters.Adapter.start"><code class="name flex">
+<span>async def <span class="ident">start</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>运行背景事件循环。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def start(self):
+    &#34;&#34;&#34;运行背景事件循环。&#34;&#34;&#34;
+    if not self.buses:
+        raise RuntimeError(&#39;事件总线未指定！&#39;)
+    if not self.session:
+        raise RuntimeError(&#39;未登录！&#39;)
+
+    self.background = asyncio.create_task(self._background())</code></pre>
+</details>
+</dd>
+<dt id="mirai.adapters.Adapter.unregister_event_bus"><code class="name flex">
+<span>def <span class="ident">unregister_event_bus</span></span>(<span>self, *buses: <a title="mirai.bus.AbstractEventBus" href="../bus.html#mirai.bus.AbstractEventBus">AbstractEventBus</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>解除注册事件总线。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>*buses</code></strong></dt>
+<dd>一个或多个事件总线。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def unregister_event_bus(self, *buses: AbstractEventBus):
+    &#34;&#34;&#34;解除注册事件总线。
+
+    Args:
+        *buses: 一个或多个事件总线。
+    &#34;&#34;&#34;
+    self.buses -= set(buses)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.adapters.base.AdapterInterface" href="base.html#mirai.adapters.base.AdapterInterface">AdapterInterface</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.adapters.base.AdapterInterface.adapter_info" href="base.html#mirai.adapters.base.AdapterInterface.adapter_info">adapter_info</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.adapters.ComposeAdapter"><code class="flex name class">
+<span>class <span class="ident">ComposeAdapter</span></span>
+<span>(</span><span>api_channel: <a title="mirai.adapters.base.Adapter" href="base.html#mirai.adapters.base.Adapter">Adapter</a>, event_channel: <a title="mirai.adapters.base.Adapter" href="base.html#mirai.adapters.base.Adapter">Adapter</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>组合适配器。使用一个适配器提供 API 调用，另一个适配器提供事件处理。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>api_channel</code></strong></dt>
+<dd>提供 API 调用的适配器。</dd>
+<dt><strong><code>event_channel</code></strong></dt>
+<dd>提供事件处理的适配器。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ComposeAdapter(Adapter):
+    &#34;&#34;&#34;组合适配器。使用一个适配器提供 API 调用，另一个适配器提供事件处理。&#34;&#34;&#34;
+    api_channel: Adapter
+    &#34;&#34;&#34;提供 API 调用的适配器。&#34;&#34;&#34;
+    event_channel: Adapter
+    &#34;&#34;&#34;提供事件处理的适配器。&#34;&#34;&#34;
+    def __init__(self, api_channel: Adapter, event_channel: Adapter):
+        &#34;&#34;&#34;
+        Args:
+            api_channel: 提供 API 调用的适配器。
+            event_channel: 提供事件处理的适配器。
+        &#34;&#34;&#34;
+        super().__init__(
+            verify_key=api_channel.verify_key,
+            single_mode=api_channel.single_mode
+        )
+        if api_channel.verify_key != event_channel.verify_key:
+            raise ValueError(&#39;组合适配器应使用相同的 verify_key。&#39;)
+
+        self.api_channel = api_channel
+        self.event_channel = event_channel
+
+        event_channel.buses = self.buses
+
+        self.verify_key = api_channel.verify_key
+        self.single_mode = api_channel.single_mode
+
+    @property
+    def adapter_info(self):
+        return self.api_channel.adapter_info
+
+    async def login(self, qq: int):
+        await self.api_channel.login(qq)
+        # 绑定 session
+        self.event_channel.session = self.api_channel.session
+        self.session = self.api_channel.session
+        await self.event_channel.login(qq)
+
+    async def logout(self):
+        await self.event_channel.logout()
+        await self.api_channel.logout()
+
+    async def call_api(self, api: str, method: Method = Method.GET, **params):
+        return await self.api_channel.call_api(api, method, **params)
+
+    async def _background(self):
+        await self.event_channel._background()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.adapters.base.Adapter" href="base.html#mirai.adapters.base.Adapter">Adapter</a></li>
+<li><a title="mirai.api_provider.ApiProvider" href="../api_provider.html#mirai.api_provider.ApiProvider">ApiProvider</a></li>
+<li><a title="mirai.adapters.base.AdapterInterface" href="base.html#mirai.adapters.base.AdapterInterface">AdapterInterface</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.adapters.ComposeAdapter.api_channel"><code class="name">var <span class="ident">api_channel</span> : <a title="mirai.adapters.base.Adapter" href="base.html#mirai.adapters.base.Adapter">Adapter</a></code></dt>
+<dd>
+<div class="desc"><p>提供 API 调用的适配器。</p></div>
+</dd>
+<dt id="mirai.adapters.ComposeAdapter.event_channel"><code class="name">var <span class="ident">event_channel</span> : <a title="mirai.adapters.base.Adapter" href="base.html#mirai.adapters.base.Adapter">Adapter</a></code></dt>
+<dd>
+<div class="desc"><p>提供事件处理的适配器。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.adapters.base.Adapter" href="base.html#mirai.adapters.base.Adapter">Adapter</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.adapters.base.Adapter.adapter_info" href="base.html#mirai.adapters.base.AdapterInterface.adapter_info">adapter_info</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.background" href="base.html#mirai.adapters.base.Adapter.background">background</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.buses" href="base.html#mirai.adapters.base.Adapter.buses">buses</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.call_api" href="base.html#mirai.adapters.base.Adapter.call_api">call_api</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.emit" href="base.html#mirai.adapters.base.Adapter.emit">emit</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.login" href="base.html#mirai.adapters.base.Adapter.login">login</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.logout" href="base.html#mirai.adapters.base.Adapter.logout">logout</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.register_event_bus" href="base.html#mirai.adapters.base.Adapter.register_event_bus">register_event_bus</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.session" href="base.html#mirai.adapters.base.Adapter.session">session</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.shutdown" href="base.html#mirai.adapters.base.Adapter.shutdown">shutdown</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.single_mode" href="base.html#mirai.adapters.base.Adapter.single_mode">single_mode</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.start" href="base.html#mirai.adapters.base.Adapter.start">start</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.unregister_event_bus" href="base.html#mirai.adapters.base.Adapter.unregister_event_bus">unregister_event_bus</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.verify_key" href="base.html#mirai.adapters.base.Adapter.verify_key">verify_key</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.via" href="base.html#mirai.adapters.base.Adapter.via">via</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.adapters.HTTPAdapter"><code class="flex name class">
+<span>class <span class="ident">HTTPAdapter</span></span>
+<span>(</span><span>verify_key: Union[str, NoneType], host: str, port: int, poll_interval: float = 1.0, single_mode: bool = False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>HTTP 轮询适配器。使用 HTTP 轮询的方式与 mirai-api-http 沟通。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>verify_key</code></strong></dt>
+<dd>mirai-api-http 配置的认证 key，关闭认证时为 None。</dd>
+<dt><strong><code>host</code></strong></dt>
+<dd>HTTP Server 的地址。</dd>
+<dt><strong><code>port</code></strong></dt>
+<dd>HTTP Server 的端口。</dd>
+<dt><strong><code>poll_interval</code></strong></dt>
+<dd>轮询时间间隔，单位秒。</dd>
+<dt><strong><code>single_mode</code></strong></dt>
+<dd>是否为单例模式。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class HTTPAdapter(Adapter):
+    &#34;&#34;&#34;HTTP 轮询适配器。使用 HTTP 轮询的方式与 mirai-api-http 沟通。&#34;&#34;&#34;
+    host_name: str
+    &#34;&#34;&#34;mirai-api-http 的 HTTPAdapter Server 主机名。&#34;&#34;&#34;
+    poll_interval: float
+    &#34;&#34;&#34;轮询时间间隔，单位秒。&#34;&#34;&#34;
+    qq: int
+    &#34;&#34;&#34;机器人的 QQ 号。&#34;&#34;&#34;
+    headers: httpx.Headers
+    &#34;&#34;&#34;HTTP 请求头。&#34;&#34;&#34;
+    def __init__(
+        self,
+        verify_key: Optional[str],
+        host: str,
+        port: int,
+        poll_interval: float = 1.,
+        single_mode: bool = False
+    ):
+        &#34;&#34;&#34;
+        Args:
+            verify_key: mirai-api-http 配置的认证 key，关闭认证时为 None。
+            host: HTTP Server 的地址。
+            port: HTTP Server 的端口。
+            poll_interval: 轮询时间间隔，单位秒。
+            single_mode: 是否为单例模式。
+        &#34;&#34;&#34;
+        super().__init__(verify_key=verify_key, single_mode=single_mode)
+
+        self._host = host
+        self._port = port
+
+        if host[:2] == &#39;//&#39;:
+            host = &#39;http:&#39; + host
+        elif host[:8] == &#39;https://&#39;:
+            raise exceptions.NetworkError(&#39;不支持 HTTPS！&#39;)
+        elif host[:7] != &#39;http://&#39;:
+            host = &#39;http://&#39; + host
+
+        if host[-1:] == &#39;/&#39;:
+            host = host[:-1]
+
+        self.host_name = f&#39;{host}:{port}&#39;
+
+        self.poll_interval = poll_interval
+
+        self.qq = 0
+        self.headers = httpx.Headers()  # 使用 headers 传递 session
+        self._tasks = Tasks()
+
+    @property
+    def adapter_info(self):
+        return {
+            &#39;verify_key&#39;: self.verify_key,
+            &#39;session&#39;: self.session,
+            &#39;single_mode&#39;: self.single_mode,
+            &#39;host&#39;: self._host,
+            &#39;port&#39;: self._port,
+            &#39;poll_interval&#39;: self.poll_interval,
+        }
+
+    @classmethod
+    def via(cls, adapter_interface: AdapterInterface) -&gt; &#34;HTTPAdapter&#34;:
+        info = adapter_interface.adapter_info
+        adapter = cls(
+            verify_key=info[&#39;verify_key&#39;],
+            **{
+                key: info[key]
+                for key in [&#39;host&#39;, &#39;port&#39;, &#39;poll_interval&#39;, &#39;single_mode&#39;]
+                if key in info
+            }
+        )
+        adapter.session = cast(str, info.get(&#39;session&#39;))
+        return adapter
+
+    @_error_handler_async_local
+    async def _post(self, client: httpx.AsyncClient, url: str,
+                    json: dict) -&gt; Optional[dict]:
+        &#34;&#34;&#34;调用 POST 方法。&#34;&#34;&#34;
+        # 使用自定义的 json.dumps
+        content = json_dumps(json).encode(&#39;utf-8&#39;)
+        try:
+            response = await client.post(
+                url,
+                content=content,
+                headers={&#39;Content-Type&#39;: &#39;application/json&#39;},
+                timeout=10.
+            )
+            logger.debug(
+                f&#39;[HTTP] 发送 POST 请求，地址{url}，状态 {response.status_code}。&#39;
+            )
+        except httpx.TimeoutException:
+            logger.error(f&#39;[HTTP] POST 请求超时，地址{url}。&#39;)
+            return None
+        return _parse_response(response)
+
+    @_error_handler_async_local
+    async def _get(self, client: httpx.AsyncClient, url: str,
+                   params: dict) -&gt; Optional[dict]:
+        &#34;&#34;&#34;调用 GET 方法。&#34;&#34;&#34;
+        try:
+            response = await client.get(url, params=params, timeout=10.)
+            logger.debug(
+                f&#39;[HTTP] 发送 GET 请求，地址{url}，状态 {response.status_code}。&#39;
+            )
+        except httpx.TimeoutException:
+            logger.error(f&#39;[HTTP] GET 请求超时，地址{url}。&#39;)
+            return None
+        return _parse_response(response)
+
+    @_error_handler_async_local
+    async def _post_multipart(
+        self, client: httpx.AsyncClient, url: str, data: dict, files: dict
+    ) -&gt; Optional[dict]:
+        &#34;&#34;&#34;调用 POST 方法，发送 multipart 数据。&#34;&#34;&#34;
+        try:
+            response = await client.post(
+                url, data=data, files=files, timeout=30.
+            )
+            logger.debug(
+                f&#39;[HTTP] 发送 POST 请求，地址{url}，状态 {response.status_code}。&#39;
+            )
+        except httpx.TimeoutException:
+            logger.error(f&#39;[HTTP] POST 请求超时，地址{url}。&#39;)
+            return None
+        return _parse_response(response)
+
+    @_error_handler_async_local
+    async def login(self, qq: int):
+        async with httpx.AsyncClient(
+            base_url=self.host_name, headers=self.headers
+        ) as client:
+            if not self.session:
+                if self.verify_key is not None:
+                    self.session = (
+                        await self._post(
+                            client, &#39;/verify&#39;, {
+                                &#34;verifyKey&#34;: self.verify_key,
+                            }
+                        )
+                    )[&#39;session&#39;]
+                else:
+                    self.session = str(random.randint(1, 2**20))
+
+            if not self.single_mode:
+                await self._post(
+                    client, &#39;/bind&#39;, {
+                        &#34;sessionKey&#34;: self.session,
+                        &#34;qq&#34;: qq,
+                    }
+                )
+
+            self.headers = httpx.Headers({&#39;sessionKey&#39;: self.session})
+            self.qq = qq
+            logger.info(f&#39;[HTTP] 成功登录到账号{qq}。&#39;)
+
+    @_error_handler_async_local
+    async def logout(self, terminate: bool = True):
+        if self.session and not self.single_mode:
+            if terminate:
+                async with httpx.AsyncClient(
+                    base_url=self.host_name, headers=self.headers
+                ) as client:
+                    await self._post(
+                        client, &#39;/release&#39;, {
+                            &#34;sessionKey&#34;: self.session,
+                            &#34;qq&#34;: self.qq,
+                        }
+                    )
+        logger.info(f&#34;[HTTP] 从账号{self.qq}退出。&#34;)
+
+    async def poll_event(self):
+        &#34;&#34;&#34;进行一次轮询，获取并处理事件。&#34;&#34;&#34;
+        async with httpx.AsyncClient(
+            base_url=self.host_name, headers=self.headers
+        ) as client:
+            msg_count = (await self._get(client, &#39;/countMessage&#39;, {}))[&#39;data&#39;]
+            if msg_count &gt; 0:
+                msg_list = (
+                    await
+                    self._get(client, &#39;/fetchMessage&#39;, {&#39;count&#39;: msg_count})
+                )[&#39;data&#39;]
+
+                coros = [self.emit(msg[&#39;type&#39;], msg) for msg in msg_list]
+                await asyncio.gather(*coros)
+
+    async def call_api(self,
+                       api: str,
+                       method: Method = Method.GET,
+                       **params) -&gt; Optional[dict]:
+        async with httpx.AsyncClient(
+            base_url=self.host_name, headers=self.headers
+        ) as client:
+            if method == Method.GET or method == Method.RESTGET:
+                return await self._get(client, f&#39;/{api}&#39;, params)
+            if method == Method.POST or method == Method.RESTPOST:
+                return await self._post(client, f&#39;/{api}&#39;, params)
+            if method == Method.MULTIPART:
+                return await self._post_multipart(
+                    client, f&#39;/{api}&#39;, params[&#39;data&#39;], params[&#39;files&#39;]
+                )
+            return None
+
+    async def _background(self):
+        &#34;&#34;&#34;开始轮询。&#34;&#34;&#34;
+        logger.info(&#39;[HTTP] 机器人开始运行。按 Ctrl + C 停止。&#39;)
+
+        try:
+            while True:
+                self._tasks.create_task(self.poll_event())
+                await asyncio.sleep(self.poll_interval)
+        finally:
+            await self._tasks.cancel_all()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.adapters.base.Adapter" href="base.html#mirai.adapters.base.Adapter">Adapter</a></li>
+<li><a title="mirai.api_provider.ApiProvider" href="../api_provider.html#mirai.api_provider.ApiProvider">ApiProvider</a></li>
+<li><a title="mirai.adapters.base.AdapterInterface" href="base.html#mirai.adapters.base.AdapterInterface">AdapterInterface</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.adapters.HTTPAdapter.headers"><code class="name">var <span class="ident">headers</span> : httpx.Headers</code></dt>
+<dd>
+<div class="desc"><p>HTTP 请求头。</p></div>
+</dd>
+<dt id="mirai.adapters.HTTPAdapter.host_name"><code class="name">var <span class="ident">host_name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>mirai-api-http 的 HTTPAdapter Server 主机名。</p></div>
+</dd>
+<dt id="mirai.adapters.HTTPAdapter.poll_interval"><code class="name">var <span class="ident">poll_interval</span> : float</code></dt>
+<dd>
+<div class="desc"><p>轮询时间间隔，单位秒。</p></div>
+</dd>
+<dt id="mirai.adapters.HTTPAdapter.qq"><code class="name">var <span class="ident">qq</span> : int</code></dt>
+<dd>
+<div class="desc"><p>机器人的 QQ 号。</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="mirai.adapters.HTTPAdapter.poll_event"><code class="name flex">
+<span>async def <span class="ident">poll_event</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>进行一次轮询，获取并处理事件。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def poll_event(self):
+    &#34;&#34;&#34;进行一次轮询，获取并处理事件。&#34;&#34;&#34;
+    async with httpx.AsyncClient(
+        base_url=self.host_name, headers=self.headers
+    ) as client:
+        msg_count = (await self._get(client, &#39;/countMessage&#39;, {}))[&#39;data&#39;]
+        if msg_count &gt; 0:
+            msg_list = (
+                await
+                self._get(client, &#39;/fetchMessage&#39;, {&#39;count&#39;: msg_count})
+            )[&#39;data&#39;]
+
+            coros = [self.emit(msg[&#39;type&#39;], msg) for msg in msg_list]
+            await asyncio.gather(*coros)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.adapters.base.Adapter" href="base.html#mirai.adapters.base.Adapter">Adapter</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.adapters.base.Adapter.adapter_info" href="base.html#mirai.adapters.base.AdapterInterface.adapter_info">adapter_info</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.background" href="base.html#mirai.adapters.base.Adapter.background">background</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.buses" href="base.html#mirai.adapters.base.Adapter.buses">buses</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.call_api" href="base.html#mirai.adapters.base.Adapter.call_api">call_api</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.emit" href="base.html#mirai.adapters.base.Adapter.emit">emit</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.login" href="base.html#mirai.adapters.base.Adapter.login">login</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.logout" href="base.html#mirai.adapters.base.Adapter.logout">logout</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.register_event_bus" href="base.html#mirai.adapters.base.Adapter.register_event_bus">register_event_bus</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.session" href="base.html#mirai.adapters.base.Adapter.session">session</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.shutdown" href="base.html#mirai.adapters.base.Adapter.shutdown">shutdown</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.single_mode" href="base.html#mirai.adapters.base.Adapter.single_mode">single_mode</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.start" href="base.html#mirai.adapters.base.Adapter.start">start</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.unregister_event_bus" href="base.html#mirai.adapters.base.Adapter.unregister_event_bus">unregister_event_bus</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.verify_key" href="base.html#mirai.adapters.base.Adapter.verify_key">verify_key</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.via" href="base.html#mirai.adapters.base.Adapter.via">via</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.adapters.WebHookAdapter"><code class="flex name class">
+<span>class <span class="ident">WebHookAdapter</span></span>
+<span>(</span><span>verify_key: Union[str, NoneType], route: str = '/', extra_headers: Union[Mapping[str, str], NoneType] = None, enable_quick_response: bool = True, single_mode: bool = False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>WebHook 适配器。作为 HTTP 服务器与 mirai-api-http 沟通。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>verify_key</code></strong></dt>
+<dd>mirai-api-http 配置的认证 key，关闭认证时为 None。</dd>
+<dt><strong><code>route</code></strong></dt>
+<dd>适配器的路由，默认在根目录上提供服务。</dd>
+<dt><strong><code>extra_headers</code></strong></dt>
+<dd>额外请求头，与 mirai-api-http 的配置一致。</dd>
+<dt><strong><code>enable_quick_response</code></strong></dt>
+<dd>是否启用快速响应，当与其他适配器混合使用时，禁用可以提高响应速度。</dd>
+<dt><strong><code>single_mode</code></strong></dt>
+<dd>是否启用单例模式。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class WebHookAdapter(Adapter):
+    &#34;&#34;&#34;WebHook 适配器。作为 HTTP 服务器与 mirai-api-http 沟通。&#34;&#34;&#34;
+    session: str
+    &#34;&#34;&#34;WebHook 不需要 session，此处为机器人的 QQ 号。&#34;&#34;&#34;
+    route: str
+    &#34;&#34;&#34;适配器的路由。&#34;&#34;&#34;
+    extra_headers: Mapping[str, str]
+    &#34;&#34;&#34;额外请求头。&#34;&#34;&#34;
+    enable_quick_response: bool
+    &#34;&#34;&#34;是否启用快速响应。&#34;&#34;&#34;
+    def __init__(
+        self,
+        verify_key: Optional[str],
+        route: str = &#39;/&#39;,
+        extra_headers: Optional[Mapping[str, str]] = None,
+        enable_quick_response: bool = True,
+        single_mode: bool = False
+    ):
+        &#34;&#34;&#34;
+        Args:
+            verify_key: mirai-api-http 配置的认证 key，关闭认证时为 None。
+            route: 适配器的路由，默认在根目录上提供服务。
+            extra_headers: 额外请求头，与 mirai-api-http 的配置一致。
+            enable_quick_response: 是否启用快速响应，当与其他适配器混合使用时，禁用可以提高响应速度。
+            single_mode: 是否启用单例模式。
+        &#34;&#34;&#34;
+        super().__init__(verify_key=verify_key, single_mode=single_mode)
+        self.route = route
+        self.extra_headers = extra_headers or {}
+        self.enable_quick_response = enable_quick_response
+
+        async def endpoint(request: Request):
+            # 鉴权（QQ 号和额外请求头）
+            if request.headers.get(&#39;bot&#39;) != self.session:  # 验证 QQ 号
+                logger.debug(f&#34;收到来自其他账号（{request.headers.get(&#39;bot&#39;)}）的事件。&#34;)
+                return
+            for key in self.extra_headers:  # 验证请求头
+                key = key.lower()  # HTTP headers 不区分大小写
+                request_value = request.headers.get(key, &#39;&#39;).lower()
+                expect_value = self.extra_headers[key].lower()
+                if (request_value != expect_value
+                    ) and (request_value != &#39;[&#39; + expect_value + &#39;]&#39;):
+                    logger.info(
+                        f&#34;请求头验证失败：expect [{expect_value}], &#34; +
+                        f&#34;got {request_value}。&#34;
+                    )
+                    return JSONResponse(
+                        status_code=401, content={&#39;error&#39;: &#39;Unauthorized&#39;}
+                    )
+            # 处理事件
+            event = await request.json()
+            result = await self.handle_event(event)
+            return YiriMiraiJSONResponse(result)
+
+        ASGI().add_route(self.route, endpoint, methods=[&#39;POST&#39;])
+
+    class QuickResponse(BaseException):
+        &#34;&#34;&#34;WebHook 快速响应，以异常的方式跳出。&#34;&#34;&#34;
+        def __init__(self, data: dict):
+            self.data = data
+
+    @property
+    def adapter_info(self):
+        return {
+            &#39;verify_key&#39;: self.verify_key,
+            &#39;session&#39;: self.session,
+            &#39;single_mode&#39;: self.single_mode,
+            &#39;route&#39;: self.route,
+            &#39;extra_headers&#39;: self.extra_headers,
+            &#39;enable_quick_response&#39;: self.enable_quick_response,
+        }
+
+    @classmethod
+    def via(cls, adapter_interface: AdapterInterface) -&gt; &#34;WebHookAdapter&#34;:
+        info = adapter_interface.adapter_info
+        adapter = cls(
+            verify_key=info[&#39;verify_key&#39;],
+            **{
+                key: info[key]
+                for key in [
+                    &#39;route&#39;, &#39;extra_headers&#39;, &#39;enable_quick_response&#39;,
+                    &#39;single_mode&#39;
+                ] if key in info
+            }
+        )
+        adapter.session = cast(str, info.get(&#39;session&#39;))
+        return adapter
+
+    async def login(self, qq: int):
+        &#34;&#34;&#34;WebHook 不需要登录。直接返回。&#34;&#34;&#34;
+        self.session = str(qq)
+        logger.info(f&#39;[WebHook] 成功登录到账号{qq}。&#39;)
+
+    async def logout(self, terminate: bool = True):
+        &#34;&#34;&#34;WebHook 不需要登出。直接返回。&#34;&#34;&#34;
+        logger.info(f&#34;[WebHook] 从账号{self.session}退出。&#34;)
+
+    async def call_api(self, api: str, method: Method = Method.GET, **params):
+        &#34;&#34;&#34;调用 API。WebHook 的 API 调用只能在快速响应中发生。&#34;&#34;&#34;
+        if self.enable_quick_response:
+            content = {&#39;command&#39;: api.replace(&#39;/&#39;, &#39;_&#39;), &#39;content&#39;: params}
+            if method == Method.RESTGET:
+                content[&#39;subCommand&#39;] = &#39;get&#39;
+            elif method == Method.RESTPOST:
+                content[&#39;subCommand&#39;] = &#39;update&#39;
+            elif method == Method.MULTIPART:
+                raise NotImplementedError(
+                    &#34;WebHook 适配器不支持上传操作。请使用 bot.use_adapter 临时调用 HTTP 适配器。&#34;
+                )
+
+            logger.debug(f&#39;[WebHook] WebHook 快速响应 {api}。&#39;)
+            raise WebHookAdapter.QuickResponse(content)
+        return None
+
+    async def _background(self):
+        &#34;&#34;&#34;WebHook 不需要事件循环。直接返回。&#34;&#34;&#34;
+
+    async def handle_event(self, event):
+        try:
+            tasks = await self.emit(event[&#39;type&#39;], event)
+            await asyncio.gather(*tasks)
+        except WebHookAdapter.QuickResponse as response:
+            # 快速响应，直接返回。
+            return response.data
+
+        return {}</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.adapters.base.Adapter" href="base.html#mirai.adapters.base.Adapter">Adapter</a></li>
+<li><a title="mirai.api_provider.ApiProvider" href="../api_provider.html#mirai.api_provider.ApiProvider">ApiProvider</a></li>
+<li><a title="mirai.adapters.base.AdapterInterface" href="base.html#mirai.adapters.base.AdapterInterface">AdapterInterface</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.adapters.WebHookAdapter.QuickResponse"><code class="name">var <span class="ident">QuickResponse</span></code></dt>
+<dd>
+<div class="desc"><p>WebHook 快速响应，以异常的方式跳出。</p></div>
+</dd>
+<dt id="mirai.adapters.WebHookAdapter.enable_quick_response"><code class="name">var <span class="ident">enable_quick_response</span> : bool</code></dt>
+<dd>
+<div class="desc"><p>是否启用快速响应。</p></div>
+</dd>
+<dt id="mirai.adapters.WebHookAdapter.extra_headers"><code class="name">var <span class="ident">extra_headers</span> : Mapping[str, str]</code></dt>
+<dd>
+<div class="desc"><p>额外请求头。</p></div>
+</dd>
+<dt id="mirai.adapters.WebHookAdapter.route"><code class="name">var <span class="ident">route</span> : str</code></dt>
+<dd>
+<div class="desc"><p>适配器的路由。</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="mirai.adapters.WebHookAdapter.call_api"><code class="name flex">
+<span>async def <span class="ident">call_api</span></span>(<span>self, api: str, method: <a title="mirai.api_provider.Method" href="../api_provider.html#mirai.api_provider.Method">Method</a> = Method.GET, **params)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>调用 API。WebHook 的 API 调用只能在快速响应中发生。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def call_api(self, api: str, method: Method = Method.GET, **params):
+    &#34;&#34;&#34;调用 API。WebHook 的 API 调用只能在快速响应中发生。&#34;&#34;&#34;
+    if self.enable_quick_response:
+        content = {&#39;command&#39;: api.replace(&#39;/&#39;, &#39;_&#39;), &#39;content&#39;: params}
+        if method == Method.RESTGET:
+            content[&#39;subCommand&#39;] = &#39;get&#39;
+        elif method == Method.RESTPOST:
+            content[&#39;subCommand&#39;] = &#39;update&#39;
+        elif method == Method.MULTIPART:
+            raise NotImplementedError(
+                &#34;WebHook 适配器不支持上传操作。请使用 bot.use_adapter 临时调用 HTTP 适配器。&#34;
+            )
+
+        logger.debug(f&#39;[WebHook] WebHook 快速响应 {api}。&#39;)
+        raise WebHookAdapter.QuickResponse(content)
+    return None</code></pre>
+</details>
+</dd>
+<dt id="mirai.adapters.WebHookAdapter.handle_event"><code class="name flex">
+<span>async def <span class="ident">handle_event</span></span>(<span>self, event)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def handle_event(self, event):
+    try:
+        tasks = await self.emit(event[&#39;type&#39;], event)
+        await asyncio.gather(*tasks)
+    except WebHookAdapter.QuickResponse as response:
+        # 快速响应，直接返回。
+        return response.data
+
+    return {}</code></pre>
+</details>
+</dd>
+<dt id="mirai.adapters.WebHookAdapter.login"><code class="name flex">
+<span>async def <span class="ident">login</span></span>(<span>self, qq: int)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>WebHook 不需要登录。直接返回。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def login(self, qq: int):
+    &#34;&#34;&#34;WebHook 不需要登录。直接返回。&#34;&#34;&#34;
+    self.session = str(qq)
+    logger.info(f&#39;[WebHook] 成功登录到账号{qq}。&#39;)</code></pre>
+</details>
+</dd>
+<dt id="mirai.adapters.WebHookAdapter.logout"><code class="name flex">
+<span>async def <span class="ident">logout</span></span>(<span>self, terminate: bool = True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>WebHook 不需要登出。直接返回。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def logout(self, terminate: bool = True):
+    &#34;&#34;&#34;WebHook 不需要登出。直接返回。&#34;&#34;&#34;
+    logger.info(f&#34;[WebHook] 从账号{self.session}退出。&#34;)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.adapters.base.Adapter" href="base.html#mirai.adapters.base.Adapter">Adapter</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.adapters.base.Adapter.adapter_info" href="base.html#mirai.adapters.base.AdapterInterface.adapter_info">adapter_info</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.background" href="base.html#mirai.adapters.base.Adapter.background">background</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.buses" href="base.html#mirai.adapters.base.Adapter.buses">buses</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.emit" href="base.html#mirai.adapters.base.Adapter.emit">emit</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.register_event_bus" href="base.html#mirai.adapters.base.Adapter.register_event_bus">register_event_bus</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.session" href="base.html#mirai.adapters.base.Adapter.session">session</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.shutdown" href="base.html#mirai.adapters.base.Adapter.shutdown">shutdown</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.single_mode" href="base.html#mirai.adapters.base.Adapter.single_mode">single_mode</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.start" href="base.html#mirai.adapters.base.Adapter.start">start</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.unregister_event_bus" href="base.html#mirai.adapters.base.Adapter.unregister_event_bus">unregister_event_bus</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.verify_key" href="base.html#mirai.adapters.base.Adapter.verify_key">verify_key</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.via" href="base.html#mirai.adapters.base.Adapter.via">via</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.adapters.WebSocketAdapter"><code class="flex name class">
+<span>class <span class="ident">WebSocketAdapter</span></span>
+<span>(</span><span>verify_key: Union[str, NoneType], host: str, port: int, sync_id: str = '-1', single_mode: bool = False, heartbeat_interval: float = 60.0)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>WebSocket 适配器。作为 WebSocket 客户端与 mirai-api-http 沟通。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>verify_key</code></strong></dt>
+<dd>mirai-api-http 配置的认证 key，关闭认证时为 None。</dd>
+<dt><strong><code>host</code></strong></dt>
+<dd>WebSocket Server 的地址。</dd>
+<dt><strong><code>port</code></strong></dt>
+<dd>WebSocket Server 的端口。</dd>
+<dt><strong><code>sync_id</code></strong></dt>
+<dd>mirai-api-http 配置的同步 ID。</dd>
+<dt><strong><code>single_mode</code></strong></dt>
+<dd>是否启用单例模式。</dd>
+<dt><strong><code>heartbeat_interval</code></strong></dt>
+<dd>每隔多久发送心跳包，单位秒。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class WebSocketAdapter(Adapter):
+    &#34;&#34;&#34;WebSocket 适配器。作为 WebSocket 客户端与 mirai-api-http 沟通。&#34;&#34;&#34;
+    host_name: str
+    &#34;&#34;&#34;WebSocket Server 的地址。&#34;&#34;&#34;
+    sync_id: str
+    &#34;&#34;&#34;mirai-api-http 配置的同步 ID。&#34;&#34;&#34;
+    qq: int
+    &#34;&#34;&#34;机器人的 QQ 号。&#34;&#34;&#34;
+    connection: Optional[WebSocketClientProtocol]
+    &#34;&#34;&#34;WebSocket 客户端连接。&#34;&#34;&#34;
+    heartbeat_interval: float
+    &#34;&#34;&#34;每隔多久发送心跳包，单位：秒。&#34;&#34;&#34;
+    def __init__(
+        self,
+        verify_key: Optional[str],
+        host: str,
+        port: int,
+        sync_id: str = &#39;-1&#39;,
+        single_mode: bool = False,
+        heartbeat_interval: float = 60.,
+    ):
+        &#34;&#34;&#34;
+        Args:
+            verify_key: mirai-api-http 配置的认证 key，关闭认证时为 None。
+            host: WebSocket Server 的地址。
+            port: WebSocket Server 的端口。
+            sync_id: mirai-api-http 配置的同步 ID。
+            single_mode: 是否启用单例模式。
+            heartbeat_interval: 每隔多久发送心跳包，单位秒。
+        &#34;&#34;&#34;
+        super().__init__(verify_key=verify_key, single_mode=single_mode)
+
+        self._host = host
+        self._port = port
+
+        if host[:2] == &#39;//&#39;:
+            host = &#39;ws:&#39; + host
+        elif host[:7] == &#39;http://&#39; or host[:8] == &#39;https://&#39;:
+            raise exceptions.NetworkError(f&#39;{host} 不是一个可用的 WebSocket 地址！&#39;)
+        elif host[:5] != &#39;ws://&#39;:
+            host = &#39;ws://&#39; + host
+
+        if host[-1:] == &#39;/&#39;:
+            host = host[:-1]
+
+        self.host_name = f&#39;{host}:{port}/all&#39;
+
+        self.sync_id = sync_id  # 这个神奇的 sync_id，默认值 -1，居然是个字符串
+        # 既然这样不如把 sync_id 全改成字符串好了
+
+        self.qq = 0
+        self.connection = None
+
+        self.heartbeat_interval = heartbeat_interval
+
+        # 接收 WebSocket 数据的 Task
+        self._receiver_task: Optional[asyncio.Task] = None
+        # 用于临时保存接收到的数据，以便根据 sync_id 进行同步识别
+        self._recv_dict: Dict[str, deque] = defaultdict(deque)
+        # 本地同步 ID，每次调用 API 递增。
+        self._local_sync_id = random.randint(1, 1024) * 1024
+        # 事件处理任务管理器
+        self._tasks = Tasks()
+        # 心跳机制（Keep-Alive）：上次发送数据包的时间
+        self._last_send_time: float = 0.
+
+    @property
+    def adapter_info(self):
+        return {
+            &#39;verify_key&#39;: self.verify_key,
+            &#39;session&#39;: self.session,
+            &#39;single_mode&#39;: self.single_mode,
+            &#39;host&#39;: self._host,
+            &#39;port&#39;: self._port,
+            &#39;sync_id&#39;: self.sync_id,
+        }
+
+    @classmethod
+    def via(cls, adapter_interface: AdapterInterface) -&gt; &#34;WebSocketAdapter&#34;:
+        info = adapter_interface.adapter_info
+        adapter = cls(
+            verify_key=info[&#39;verify_key&#39;],
+            **{
+                key: info[key]
+                for key in [&#39;host&#39;, &#39;port&#39;, &#39;sync_id&#39;, &#39;single_mode&#39;]
+                if key in info
+            }
+        )
+        adapter.session = cast(str, info.get(&#39;session&#39;))
+        return adapter
+
+    @_error_handler_async_local
+    async def _receiver(self):
+        &#34;&#34;&#34;开始接收 websocket 数据。&#34;&#34;&#34;
+        if not self.connection:
+            raise exceptions.NetworkError(
+                f&#39;WebSocket 通道 {self.host_name} 未连接！&#39;
+            )
+        while True:
+            try:
+                # 数据格式：
+                # {
+                #   &#39;syncId&#39;: &#39;-1&#39;,
+                #   &#39;data&#39;: {
+                #       // Event Content
+                #   }
+                # }
+                response = json.loads(await self.connection.recv())
+                data = response[&#39;data&#39;]
+
+                logger.debug(
+                    f&#34;[WebSocket] 收到 WebSocket 数据，同步 ID：{response[&#39;syncId&#39;]}。&#34;
+                )
+                self._recv_dict[response[&#39;syncId&#39;]].append(data)
+            except KeyError:
+                logger.error(f&#39;[WebSocket] 不正确的数据：{response}&#39;)
+            except ConnectionClosedOK:
+                return
+            except ConnectionClosed as e:
+                logger.error(
+                    f&#39;[WebSocket] WebSocket 通道意外关闭。code: {e.code}, reason: {e.reason}&#39;
+                )
+                return
+
+    async def _recv(self, sync_id: str = &#39;-1&#39;, timeout: int = 600) -&gt; dict:
+        &#34;&#34;&#34;接收并解析 websocket 数据。&#34;&#34;&#34;
+        timer = range(timeout) if timeout &gt; 0 else repeat(0)
+        for _ in timer:
+            if self._recv_dict[sync_id]:
+                data = self._recv_dict[sync_id].popleft()
+
+                if data.get(&#39;code&#39;, 0) != 0:
+                    raise exceptions.ApiError(data)
+
+                return data
+                # 如果没有对应同步 ID 的数据，则等待 websocket 数据
+                # 目前存在问题：如果 mah 发回的数据不含 sync_id，
+                # 这里就会无限循环……
+                # 所以还是限制次数好了。
+            await asyncio.sleep(0.1)
+        raise TimeoutError(
+            f&#39;[WebSocket] mirai-api-http 响应超时，可能是由于调用出错。同步 ID：{sync_id}。&#39;
+        )
+
+    @_error_handler_async_local
+    async def login(self, qq: int):
+        headers = {
+            &#39;verifyKey&#39;: self.verify_key or
+                         &#39;&#39;,  # 关闭认证时，WebSocket 可传入任意 verify_key
+            &#39;qq&#39;: str(qq),
+        }
+        if self.session:
+            headers[&#39;sessionKey&#39;] = self.session
+
+        self.connection = await connect(self.host_name, extra_headers=headers)
+        self._receiver_task = asyncio.create_task(self._receiver())
+
+        verify_response = await self._recv(&#39;&#39;)  # 神奇现象：这里的 syncId 是个空字符串
+        self.session = verify_response[&#39;session&#39;]
+
+        self.qq = qq
+        logger.info(f&#39;[WebSocket] 成功登录到账号{qq}。&#39;)
+
+    @_error_handler_async_local
+    async def logout(self, terminate: bool = True):
+        if self.connection:
+            await self.connection.close()
+
+            await self._receiver_task
+
+            logger.info(f&#34;[WebSocket] 从账号{self.qq}退出。&#34;)
+
+    async def poll_event(self):
+        &#34;&#34;&#34;获取并处理事件。&#34;&#34;&#34;
+        event = await self._recv(self.sync_id, -1)
+
+        self._tasks.create_task(self.emit(event[&#39;type&#39;], event))
+
+    async def call_api(self, api: str, method: Method = Method.GET, **params):
+        if not self.connection:
+            raise exceptions.NetworkError(
+                f&#39;WebSocket 通道 {self.host_name} 未连接！&#39;
+            )
+        self._local_sync_id += 1  # 使用不同的 sync_id
+        sync_id = str(self._local_sync_id)
+        content = {
+            &#39;syncId&#39;: sync_id,
+            &#39;command&#39;: api.replace(&#39;/&#39;, &#39;_&#39;),
+            &#39;content&#39;: params
+        }
+        if method == Method.RESTGET:
+            content[&#39;subCommand&#39;] = &#39;get&#39;
+        elif method == Method.RESTPOST:
+            content[&#39;subCommand&#39;] = &#39;update&#39;
+        elif method == Method.MULTIPART:
+            raise NotImplementedError(
+                &#34;WebSocket 适配器不支持上传操作。请使用 bot.use_adapter 临时调用 HTTP 适配器。&#34;
+            )
+
+        await self.connection.send(json_dumps(content))
+        self._last_send_time = time.time()
+        logger.debug(f&#34;[WebSocket] 发送 WebSocket 数据，同步 ID：{sync_id}。&#34;)
+        try:
+            return await self._recv(sync_id)
+        except TimeoutError as e:
+            logger.debug(e)
+
+    async def _heartbeat(self):
+        while True:
+            await asyncio.sleep(self.heartbeat_interval)
+            if time.time() - self._last_send_time &gt; self.heartbeat_interval:
+                await self.call_api(&#39;about&#39;)
+                self._last_send_time = time.time()
+                logger.debug(&#34;[WebSocket] 发送心跳包。&#34;)
+
+    async def _background(self):
+        &#34;&#34;&#34;开始接收事件。&#34;&#34;&#34;
+        logger.info(&#39;[WebSocket] 机器人开始运行。按 Ctrl + C 停止。&#39;)
+
+        try:
+            heartbeat = asyncio.create_task(self._heartbeat())
+            while True:
+                await self.poll_event()
+        finally:
+            await Tasks.cancel(heartbeat)
+            await self._tasks.cancel_all()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.adapters.base.Adapter" href="base.html#mirai.adapters.base.Adapter">Adapter</a></li>
+<li><a title="mirai.api_provider.ApiProvider" href="../api_provider.html#mirai.api_provider.ApiProvider">ApiProvider</a></li>
+<li><a title="mirai.adapters.base.AdapterInterface" href="base.html#mirai.adapters.base.AdapterInterface">AdapterInterface</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.adapters.WebSocketAdapter.connection"><code class="name">var <span class="ident">connection</span> : Union[websockets.legacy.client.WebSocketClientProtocol, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>WebSocket 客户端连接。</p></div>
+</dd>
+<dt id="mirai.adapters.WebSocketAdapter.heartbeat_interval"><code class="name">var <span class="ident">heartbeat_interval</span> : float</code></dt>
+<dd>
+<div class="desc"><p>每隔多久发送心跳包，单位：秒。</p></div>
+</dd>
+<dt id="mirai.adapters.WebSocketAdapter.host_name"><code class="name">var <span class="ident">host_name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>WebSocket Server 的地址。</p></div>
+</dd>
+<dt id="mirai.adapters.WebSocketAdapter.qq"><code class="name">var <span class="ident">qq</span> : int</code></dt>
+<dd>
+<div class="desc"><p>机器人的 QQ 号。</p></div>
+</dd>
+<dt id="mirai.adapters.WebSocketAdapter.sync_id"><code class="name">var <span class="ident">sync_id</span> : str</code></dt>
+<dd>
+<div class="desc"><p>mirai-api-http 配置的同步 ID。</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="mirai.adapters.WebSocketAdapter.poll_event"><code class="name flex">
+<span>async def <span class="ident">poll_event</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>获取并处理事件。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def poll_event(self):
+    &#34;&#34;&#34;获取并处理事件。&#34;&#34;&#34;
+    event = await self._recv(self.sync_id, -1)
+
+    self._tasks.create_task(self.emit(event[&#39;type&#39;], event))</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.adapters.base.Adapter" href="base.html#mirai.adapters.base.Adapter">Adapter</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.adapters.base.Adapter.adapter_info" href="base.html#mirai.adapters.base.AdapterInterface.adapter_info">adapter_info</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.background" href="base.html#mirai.adapters.base.Adapter.background">background</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.buses" href="base.html#mirai.adapters.base.Adapter.buses">buses</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.call_api" href="base.html#mirai.adapters.base.Adapter.call_api">call_api</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.emit" href="base.html#mirai.adapters.base.Adapter.emit">emit</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.login" href="base.html#mirai.adapters.base.Adapter.login">login</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.logout" href="base.html#mirai.adapters.base.Adapter.logout">logout</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.register_event_bus" href="base.html#mirai.adapters.base.Adapter.register_event_bus">register_event_bus</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.session" href="base.html#mirai.adapters.base.Adapter.session">session</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.shutdown" href="base.html#mirai.adapters.base.Adapter.shutdown">shutdown</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.single_mode" href="base.html#mirai.adapters.base.Adapter.single_mode">single_mode</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.start" href="base.html#mirai.adapters.base.Adapter.start">start</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.unregister_event_bus" href="base.html#mirai.adapters.base.Adapter.unregister_event_bus">unregister_event_bus</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.verify_key" href="base.html#mirai.adapters.base.Adapter.verify_key">verify_key</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.via" href="base.html#mirai.adapters.base.Adapter.via">via</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="mirai" href="../index.html">mirai</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="mirai.adapters.base" href="base.html">mirai.adapters.base</a></code></li>
+<li><code><a title="mirai.adapters.compose" href="compose.html">mirai.adapters.compose</a></code></li>
+<li><code><a title="mirai.adapters.http" href="http.html">mirai.adapters.http</a></code></li>
+<li><code><a title="mirai.adapters.reverse_websocket" href="reverse_websocket.html">mirai.adapters.reverse_websocket</a></code></li>
+<li><code><a title="mirai.adapters.webhook" href="webhook.html">mirai.adapters.webhook</a></code></li>
+<li><code><a title="mirai.adapters.websocket" href="websocket.html">mirai.adapters.websocket</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="mirai.adapters.Adapter" href="#mirai.adapters.Adapter">Adapter</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.adapters.Adapter.background" href="#mirai.adapters.Adapter.background">background</a></code></li>
+<li><code><a title="mirai.adapters.Adapter.buses" href="#mirai.adapters.Adapter.buses">buses</a></code></li>
+<li><code><a title="mirai.adapters.Adapter.call_api" href="#mirai.adapters.Adapter.call_api">call_api</a></code></li>
+<li><code><a title="mirai.adapters.Adapter.emit" href="#mirai.adapters.Adapter.emit">emit</a></code></li>
+<li><code><a title="mirai.adapters.Adapter.login" href="#mirai.adapters.Adapter.login">login</a></code></li>
+<li><code><a title="mirai.adapters.Adapter.logout" href="#mirai.adapters.Adapter.logout">logout</a></code></li>
+<li><code><a title="mirai.adapters.Adapter.register_event_bus" href="#mirai.adapters.Adapter.register_event_bus">register_event_bus</a></code></li>
+<li><code><a title="mirai.adapters.Adapter.session" href="#mirai.adapters.Adapter.session">session</a></code></li>
+<li><code><a title="mirai.adapters.Adapter.shutdown" href="#mirai.adapters.Adapter.shutdown">shutdown</a></code></li>
+<li><code><a title="mirai.adapters.Adapter.single_mode" href="#mirai.adapters.Adapter.single_mode">single_mode</a></code></li>
+<li><code><a title="mirai.adapters.Adapter.start" href="#mirai.adapters.Adapter.start">start</a></code></li>
+<li><code><a title="mirai.adapters.Adapter.unregister_event_bus" href="#mirai.adapters.Adapter.unregister_event_bus">unregister_event_bus</a></code></li>
+<li><code><a title="mirai.adapters.Adapter.verify_key" href="#mirai.adapters.Adapter.verify_key">verify_key</a></code></li>
+<li><code><a title="mirai.adapters.Adapter.via" href="#mirai.adapters.Adapter.via">via</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.adapters.ComposeAdapter" href="#mirai.adapters.ComposeAdapter">ComposeAdapter</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.adapters.ComposeAdapter.api_channel" href="#mirai.adapters.ComposeAdapter.api_channel">api_channel</a></code></li>
+<li><code><a title="mirai.adapters.ComposeAdapter.event_channel" href="#mirai.adapters.ComposeAdapter.event_channel">event_channel</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.adapters.HTTPAdapter" href="#mirai.adapters.HTTPAdapter">HTTPAdapter</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.adapters.HTTPAdapter.headers" href="#mirai.adapters.HTTPAdapter.headers">headers</a></code></li>
+<li><code><a title="mirai.adapters.HTTPAdapter.host_name" href="#mirai.adapters.HTTPAdapter.host_name">host_name</a></code></li>
+<li><code><a title="mirai.adapters.HTTPAdapter.poll_event" href="#mirai.adapters.HTTPAdapter.poll_event">poll_event</a></code></li>
+<li><code><a title="mirai.adapters.HTTPAdapter.poll_interval" href="#mirai.adapters.HTTPAdapter.poll_interval">poll_interval</a></code></li>
+<li><code><a title="mirai.adapters.HTTPAdapter.qq" href="#mirai.adapters.HTTPAdapter.qq">qq</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.adapters.WebHookAdapter" href="#mirai.adapters.WebHookAdapter">WebHookAdapter</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.adapters.WebHookAdapter.QuickResponse" href="#mirai.adapters.WebHookAdapter.QuickResponse">QuickResponse</a></code></li>
+<li><code><a title="mirai.adapters.WebHookAdapter.call_api" href="#mirai.adapters.WebHookAdapter.call_api">call_api</a></code></li>
+<li><code><a title="mirai.adapters.WebHookAdapter.enable_quick_response" href="#mirai.adapters.WebHookAdapter.enable_quick_response">enable_quick_response</a></code></li>
+<li><code><a title="mirai.adapters.WebHookAdapter.extra_headers" href="#mirai.adapters.WebHookAdapter.extra_headers">extra_headers</a></code></li>
+<li><code><a title="mirai.adapters.WebHookAdapter.handle_event" href="#mirai.adapters.WebHookAdapter.handle_event">handle_event</a></code></li>
+<li><code><a title="mirai.adapters.WebHookAdapter.login" href="#mirai.adapters.WebHookAdapter.login">login</a></code></li>
+<li><code><a title="mirai.adapters.WebHookAdapter.logout" href="#mirai.adapters.WebHookAdapter.logout">logout</a></code></li>
+<li><code><a title="mirai.adapters.WebHookAdapter.route" href="#mirai.adapters.WebHookAdapter.route">route</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.adapters.WebSocketAdapter" href="#mirai.adapters.WebSocketAdapter">WebSocketAdapter</a></code></h4>
+<ul class="two-column">
+<li><code><a title="mirai.adapters.WebSocketAdapter.connection" href="#mirai.adapters.WebSocketAdapter.connection">connection</a></code></li>
+<li><code><a title="mirai.adapters.WebSocketAdapter.heartbeat_interval" href="#mirai.adapters.WebSocketAdapter.heartbeat_interval">heartbeat_interval</a></code></li>
+<li><code><a title="mirai.adapters.WebSocketAdapter.host_name" href="#mirai.adapters.WebSocketAdapter.host_name">host_name</a></code></li>
+<li><code><a title="mirai.adapters.WebSocketAdapter.poll_event" href="#mirai.adapters.WebSocketAdapter.poll_event">poll_event</a></code></li>
+<li><code><a title="mirai.adapters.WebSocketAdapter.qq" href="#mirai.adapters.WebSocketAdapter.qq">qq</a></code></li>
+<li><code><a title="mirai.adapters.WebSocketAdapter.sync_id" href="#mirai.adapters.WebSocketAdapter.sync_id">sync_id</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>

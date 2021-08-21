@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>mirai.adapters.websocket API documentation</title>
+<meta name="description" content="此模块提供正向 WebSocket 适配器，适用于 mirai-api-http 的 websocket adapter。" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>mirai.adapters.websocket</code></h1>
+</header>
+<section id="section-intro">
+<p>此模块提供正向 WebSocket 适配器，适用于 mirai-api-http 的 websocket adapter。</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># -*- coding: utf-8 -*-
+&#34;&#34;&#34;
+此模块提供正向 WebSocket 适配器，适用于 mirai-api-http 的 websocket adapter。
+&#34;&#34;&#34;
+
+import asyncio
+import json
+import logging
+import random
+import time
+from collections import defaultdict, deque
+from itertools import repeat
+from typing import Dict, Optional, cast
+
+from websockets.client import WebSocketClientProtocol, connect
+from websockets.exceptions import (
+    ConnectionClosed, ConnectionClosedOK, InvalidURI
+)
+
+from mirai import exceptions
+from mirai.adapters.base import (
+    Adapter, AdapterInterface, error_handler_async, json_dumps
+)
+from mirai.api_provider import Method
+from mirai.tasks import Tasks
+
+logger = logging.getLogger(__name__)
+
+_error_handler_async_local = error_handler_async(
+    (ConnectionRefusedError, InvalidURI)
+)
+
+
+class WebSocketAdapter(Adapter):
+    &#34;&#34;&#34;WebSocket 适配器。作为 WebSocket 客户端与 mirai-api-http 沟通。&#34;&#34;&#34;
+    host_name: str
+    &#34;&#34;&#34;WebSocket Server 的地址。&#34;&#34;&#34;
+    sync_id: str
+    &#34;&#34;&#34;mirai-api-http 配置的同步 ID。&#34;&#34;&#34;
+    qq: int
+    &#34;&#34;&#34;机器人的 QQ 号。&#34;&#34;&#34;
+    connection: Optional[WebSocketClientProtocol]
+    &#34;&#34;&#34;WebSocket 客户端连接。&#34;&#34;&#34;
+    heartbeat_interval: float
+    &#34;&#34;&#34;每隔多久发送心跳包，单位：秒。&#34;&#34;&#34;
+    def __init__(
+        self,
+        verify_key: Optional[str],
+        host: str,
+        port: int,
+        sync_id: str = &#39;-1&#39;,
+        single_mode: bool = False,
+        heartbeat_interval: float = 60.,
+    ):
+        &#34;&#34;&#34;
+        Args:
+            verify_key: mirai-api-http 配置的认证 key，关闭认证时为 None。
+            host: WebSocket Server 的地址。
+            port: WebSocket Server 的端口。
+            sync_id: mirai-api-http 配置的同步 ID。
+            single_mode: 是否启用单例模式。
+            heartbeat_interval: 每隔多久发送心跳包，单位秒。
+        &#34;&#34;&#34;
+        super().__init__(verify_key=verify_key, single_mode=single_mode)
+
+        self._host = host
+        self._port = port
+
+        if host[:2] == &#39;//&#39;:
+            host = &#39;ws:&#39; + host
+        elif host[:7] == &#39;http://&#39; or host[:8] == &#39;https://&#39;:
+            raise exceptions.NetworkError(f&#39;{host} 不是一个可用的 WebSocket 地址！&#39;)
+        elif host[:5] != &#39;ws://&#39;:
+            host = &#39;ws://&#39; + host
+
+        if host[-1:] == &#39;/&#39;:
+            host = host[:-1]
+
+        self.host_name = f&#39;{host}:{port}/all&#39;
+
+        self.sync_id = sync_id  # 这个神奇的 sync_id，默认值 -1，居然是个字符串
+        # 既然这样不如把 sync_id 全改成字符串好了
+
+        self.qq = 0
+        self.connection = None
+
+        self.heartbeat_interval = heartbeat_interval
+
+        # 接收 WebSocket 数据的 Task
+        self._receiver_task: Optional[asyncio.Task] = None
+        # 用于临时保存接收到的数据，以便根据 sync_id 进行同步识别
+        self._recv_dict: Dict[str, deque] = defaultdict(deque)
+        # 本地同步 ID，每次调用 API 递增。
+        self._local_sync_id = random.randint(1, 1024) * 1024
+        # 事件处理任务管理器
+        self._tasks = Tasks()
+        # 心跳机制（Keep-Alive）：上次发送数据包的时间
+        self._last_send_time: float = 0.
+
+    @property
+    def adapter_info(self):
+        return {
+            &#39;verify_key&#39;: self.verify_key,
+            &#39;session&#39;: self.session,
+            &#39;single_mode&#39;: self.single_mode,
+            &#39;host&#39;: self._host,
+            &#39;port&#39;: self._port,
+            &#39;sync_id&#39;: self.sync_id,
+        }
+
+    @classmethod
+    def via(cls, adapter_interface: AdapterInterface) -&gt; &#34;WebSocketAdapter&#34;:
+        info = adapter_interface.adapter_info
+        adapter = cls(
+            verify_key=info[&#39;verify_key&#39;],
+            **{
+                key: info[key]
+                for key in [&#39;host&#39;, &#39;port&#39;, &#39;sync_id&#39;, &#39;single_mode&#39;]
+                if key in info
+            }
+        )
+        adapter.session = cast(str, info.get(&#39;session&#39;))
+        return adapter
+
+    @_error_handler_async_local
+    async def _receiver(self):
+        &#34;&#34;&#34;开始接收 websocket 数据。&#34;&#34;&#34;
+        if not self.connection:
+            raise exceptions.NetworkError(
+                f&#39;WebSocket 通道 {self.host_name} 未连接！&#39;
+            )
+        while True:
+            try:
+                # 数据格式：
+                # {
+                #   &#39;syncId&#39;: &#39;-1&#39;,
+                #   &#39;data&#39;: {
+                #       // Event Content
+                #   }
+                # }
+                response = json.loads(await self.connection.recv())
+                data = response[&#39;data&#39;]
+
+                logger.debug(
+                    f&#34;[WebSocket] 收到 WebSocket 数据，同步 ID：{response[&#39;syncId&#39;]}。&#34;
+                )
+                self._recv_dict[response[&#39;syncId&#39;]].append(data)
+            except KeyError:
+                logger.error(f&#39;[WebSocket] 不正确的数据：{response}&#39;)
+            except ConnectionClosedOK:
+                return
+            except ConnectionClosed as e:
+                logger.error(
+                    f&#39;[WebSocket] WebSocket 通道意外关闭。code: {e.code}, reason: {e.reason}&#39;
+                )
+                return
+
+    async def _recv(self, sync_id: str = &#39;-1&#39;, timeout: int = 600) -&gt; dict:
+        &#34;&#34;&#34;接收并解析 websocket 数据。&#34;&#34;&#34;
+        timer = range(timeout) if timeout &gt; 0 else repeat(0)
+        for _ in timer:
+            if self._recv_dict[sync_id]:
+                data = self._recv_dict[sync_id].popleft()
+
+                if data.get(&#39;code&#39;, 0) != 0:
+                    raise exceptions.ApiError(data)
+
+                return data
+                # 如果没有对应同步 ID 的数据，则等待 websocket 数据
+                # 目前存在问题：如果 mah 发回的数据不含 sync_id，
+                # 这里就会无限循环……
+                # 所以还是限制次数好了。
+            await asyncio.sleep(0.1)
+        raise TimeoutError(
+            f&#39;[WebSocket] mirai-api-http 响应超时，可能是由于调用出错。同步 ID：{sync_id}。&#39;
+        )
+
+    @_error_handler_async_local
+    async def login(self, qq: int):
+        headers = {
+            &#39;verifyKey&#39;: self.verify_key or
+                         &#39;&#39;,  # 关闭认证时，WebSocket 可传入任意 verify_key
+            &#39;qq&#39;: str(qq),
+        }
+        if self.session:
+            headers[&#39;sessionKey&#39;] = self.session
+
+        self.connection = await connect(self.host_name, extra_headers=headers)
+        self._receiver_task = asyncio.create_task(self._receiver())
+
+        verify_response = await self._recv(&#39;&#39;)  # 神奇现象：这里的 syncId 是个空字符串
+        self.session = verify_response[&#39;session&#39;]
+
+        self.qq = qq
+        logger.info(f&#39;[WebSocket] 成功登录到账号{qq}。&#39;)
+
+    @_error_handler_async_local
+    async def logout(self, terminate: bool = True):
+        if self.connection:
+            await self.connection.close()
+
+            await self._receiver_task
+
+            logger.info(f&#34;[WebSocket] 从账号{self.qq}退出。&#34;)
+
+    async def poll_event(self):
+        &#34;&#34;&#34;获取并处理事件。&#34;&#34;&#34;
+        event = await self._recv(self.sync_id, -1)
+
+        self._tasks.create_task(self.emit(event[&#39;type&#39;], event))
+
+    async def call_api(self, api: str, method: Method = Method.GET, **params):
+        if not self.connection:
+            raise exceptions.NetworkError(
+                f&#39;WebSocket 通道 {self.host_name} 未连接！&#39;
+            )
+        self._local_sync_id += 1  # 使用不同的 sync_id
+        sync_id = str(self._local_sync_id)
+        content = {
+            &#39;syncId&#39;: sync_id,
+            &#39;command&#39;: api.replace(&#39;/&#39;, &#39;_&#39;),
+            &#39;content&#39;: params
+        }
+        if method == Method.RESTGET:
+            content[&#39;subCommand&#39;] = &#39;get&#39;
+        elif method == Method.RESTPOST:
+            content[&#39;subCommand&#39;] = &#39;update&#39;
+        elif method == Method.MULTIPART:
+            raise NotImplementedError(
+                &#34;WebSocket 适配器不支持上传操作。请使用 bot.use_adapter 临时调用 HTTP 适配器。&#34;
+            )
+
+        await self.connection.send(json_dumps(content))
+        self._last_send_time = time.time()
+        logger.debug(f&#34;[WebSocket] 发送 WebSocket 数据，同步 ID：{sync_id}。&#34;)
+        try:
+            return await self._recv(sync_id)
+        except TimeoutError as e:
+            logger.debug(e)
+
+    async def _heartbeat(self):
+        while True:
+            await asyncio.sleep(self.heartbeat_interval)
+            if time.time() - self._last_send_time &gt; self.heartbeat_interval:
+                await self.call_api(&#39;about&#39;)
+                self._last_send_time = time.time()
+                logger.debug(&#34;[WebSocket] 发送心跳包。&#34;)
+
+    async def _background(self):
+        &#34;&#34;&#34;开始接收事件。&#34;&#34;&#34;
+        logger.info(&#39;[WebSocket] 机器人开始运行。按 Ctrl + C 停止。&#39;)
+
+        try:
+            heartbeat = asyncio.create_task(self._heartbeat())
+            while True:
+                await self.poll_event()
+        finally:
+            await Tasks.cancel(heartbeat)
+            await self._tasks.cancel_all()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="mirai.adapters.websocket.WebSocketAdapter"><code class="flex name class">
+<span>class <span class="ident">WebSocketAdapter</span></span>
+<span>(</span><span>verify_key: Union[str, NoneType], host: str, port: int, sync_id: str = '-1', single_mode: bool = False, heartbeat_interval: float = 60.0)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>WebSocket 适配器。作为 WebSocket 客户端与 mirai-api-http 沟通。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>verify_key</code></strong></dt>
+<dd>mirai-api-http 配置的认证 key，关闭认证时为 None。</dd>
+<dt><strong><code>host</code></strong></dt>
+<dd>WebSocket Server 的地址。</dd>
+<dt><strong><code>port</code></strong></dt>
+<dd>WebSocket Server 的端口。</dd>
+<dt><strong><code>sync_id</code></strong></dt>
+<dd>mirai-api-http 配置的同步 ID。</dd>
+<dt><strong><code>single_mode</code></strong></dt>
+<dd>是否启用单例模式。</dd>
+<dt><strong><code>heartbeat_interval</code></strong></dt>
+<dd>每隔多久发送心跳包，单位秒。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class WebSocketAdapter(Adapter):
+    &#34;&#34;&#34;WebSocket 适配器。作为 WebSocket 客户端与 mirai-api-http 沟通。&#34;&#34;&#34;
+    host_name: str
+    &#34;&#34;&#34;WebSocket Server 的地址。&#34;&#34;&#34;
+    sync_id: str
+    &#34;&#34;&#34;mirai-api-http 配置的同步 ID。&#34;&#34;&#34;
+    qq: int
+    &#34;&#34;&#34;机器人的 QQ 号。&#34;&#34;&#34;
+    connection: Optional[WebSocketClientProtocol]
+    &#34;&#34;&#34;WebSocket 客户端连接。&#34;&#34;&#34;
+    heartbeat_interval: float
+    &#34;&#34;&#34;每隔多久发送心跳包，单位：秒。&#34;&#34;&#34;
+    def __init__(
+        self,
+        verify_key: Optional[str],
+        host: str,
+        port: int,
+        sync_id: str = &#39;-1&#39;,
+        single_mode: bool = False,
+        heartbeat_interval: float = 60.,
+    ):
+        &#34;&#34;&#34;
+        Args:
+            verify_key: mirai-api-http 配置的认证 key，关闭认证时为 None。
+            host: WebSocket Server 的地址。
+            port: WebSocket Server 的端口。
+            sync_id: mirai-api-http 配置的同步 ID。
+            single_mode: 是否启用单例模式。
+            heartbeat_interval: 每隔多久发送心跳包，单位秒。
+        &#34;&#34;&#34;
+        super().__init__(verify_key=verify_key, single_mode=single_mode)
+
+        self._host = host
+        self._port = port
+
+        if host[:2] == &#39;//&#39;:
+            host = &#39;ws:&#39; + host
+        elif host[:7] == &#39;http://&#39; or host[:8] == &#39;https://&#39;:
+            raise exceptions.NetworkError(f&#39;{host} 不是一个可用的 WebSocket 地址！&#39;)
+        elif host[:5] != &#39;ws://&#39;:
+            host = &#39;ws://&#39; + host
+
+        if host[-1:] == &#39;/&#39;:
+            host = host[:-1]
+
+        self.host_name = f&#39;{host}:{port}/all&#39;
+
+        self.sync_id = sync_id  # 这个神奇的 sync_id，默认值 -1，居然是个字符串
+        # 既然这样不如把 sync_id 全改成字符串好了
+
+        self.qq = 0
+        self.connection = None
+
+        self.heartbeat_interval = heartbeat_interval
+
+        # 接收 WebSocket 数据的 Task
+        self._receiver_task: Optional[asyncio.Task] = None
+        # 用于临时保存接收到的数据，以便根据 sync_id 进行同步识别
+        self._recv_dict: Dict[str, deque] = defaultdict(deque)
+        # 本地同步 ID，每次调用 API 递增。
+        self._local_sync_id = random.randint(1, 1024) * 1024
+        # 事件处理任务管理器
+        self._tasks = Tasks()
+        # 心跳机制（Keep-Alive）：上次发送数据包的时间
+        self._last_send_time: float = 0.
+
+    @property
+    def adapter_info(self):
+        return {
+            &#39;verify_key&#39;: self.verify_key,
+            &#39;session&#39;: self.session,
+            &#39;single_mode&#39;: self.single_mode,
+            &#39;host&#39;: self._host,
+            &#39;port&#39;: self._port,
+            &#39;sync_id&#39;: self.sync_id,
+        }
+
+    @classmethod
+    def via(cls, adapter_interface: AdapterInterface) -&gt; &#34;WebSocketAdapter&#34;:
+        info = adapter_interface.adapter_info
+        adapter = cls(
+            verify_key=info[&#39;verify_key&#39;],
+            **{
+                key: info[key]
+                for key in [&#39;host&#39;, &#39;port&#39;, &#39;sync_id&#39;, &#39;single_mode&#39;]
+                if key in info
+            }
+        )
+        adapter.session = cast(str, info.get(&#39;session&#39;))
+        return adapter
+
+    @_error_handler_async_local
+    async def _receiver(self):
+        &#34;&#34;&#34;开始接收 websocket 数据。&#34;&#34;&#34;
+        if not self.connection:
+            raise exceptions.NetworkError(
+                f&#39;WebSocket 通道 {self.host_name} 未连接！&#39;
+            )
+        while True:
+            try:
+                # 数据格式：
+                # {
+                #   &#39;syncId&#39;: &#39;-1&#39;,
+                #   &#39;data&#39;: {
+                #       // Event Content
+                #   }
+                # }
+                response = json.loads(await self.connection.recv())
+                data = response[&#39;data&#39;]
+
+                logger.debug(
+                    f&#34;[WebSocket] 收到 WebSocket 数据，同步 ID：{response[&#39;syncId&#39;]}。&#34;
+                )
+                self._recv_dict[response[&#39;syncId&#39;]].append(data)
+            except KeyError:
+                logger.error(f&#39;[WebSocket] 不正确的数据：{response}&#39;)
+            except ConnectionClosedOK:
+                return
+            except ConnectionClosed as e:
+                logger.error(
+                    f&#39;[WebSocket] WebSocket 通道意外关闭。code: {e.code}, reason: {e.reason}&#39;
+                )
+                return
+
+    async def _recv(self, sync_id: str = &#39;-1&#39;, timeout: int = 600) -&gt; dict:
+        &#34;&#34;&#34;接收并解析 websocket 数据。&#34;&#34;&#34;
+        timer = range(timeout) if timeout &gt; 0 else repeat(0)
+        for _ in timer:
+            if self._recv_dict[sync_id]:
+                data = self._recv_dict[sync_id].popleft()
+
+                if data.get(&#39;code&#39;, 0) != 0:
+                    raise exceptions.ApiError(data)
+
+                return data
+                # 如果没有对应同步 ID 的数据，则等待 websocket 数据
+                # 目前存在问题：如果 mah 发回的数据不含 sync_id，
+                # 这里就会无限循环……
+                # 所以还是限制次数好了。
+            await asyncio.sleep(0.1)
+        raise TimeoutError(
+            f&#39;[WebSocket] mirai-api-http 响应超时，可能是由于调用出错。同步 ID：{sync_id}。&#39;
+        )
+
+    @_error_handler_async_local
+    async def login(self, qq: int):
+        headers = {
+            &#39;verifyKey&#39;: self.verify_key or
+                         &#39;&#39;,  # 关闭认证时，WebSocket 可传入任意 verify_key
+            &#39;qq&#39;: str(qq),
+        }
+        if self.session:
+            headers[&#39;sessionKey&#39;] = self.session
+
+        self.connection = await connect(self.host_name, extra_headers=headers)
+        self._receiver_task = asyncio.create_task(self._receiver())
+
+        verify_response = await self._recv(&#39;&#39;)  # 神奇现象：这里的 syncId 是个空字符串
+        self.session = verify_response[&#39;session&#39;]
+
+        self.qq = qq
+        logger.info(f&#39;[WebSocket] 成功登录到账号{qq}。&#39;)
+
+    @_error_handler_async_local
+    async def logout(self, terminate: bool = True):
+        if self.connection:
+            await self.connection.close()
+
+            await self._receiver_task
+
+            logger.info(f&#34;[WebSocket] 从账号{self.qq}退出。&#34;)
+
+    async def poll_event(self):
+        &#34;&#34;&#34;获取并处理事件。&#34;&#34;&#34;
+        event = await self._recv(self.sync_id, -1)
+
+        self._tasks.create_task(self.emit(event[&#39;type&#39;], event))
+
+    async def call_api(self, api: str, method: Method = Method.GET, **params):
+        if not self.connection:
+            raise exceptions.NetworkError(
+                f&#39;WebSocket 通道 {self.host_name} 未连接！&#39;
+            )
+        self._local_sync_id += 1  # 使用不同的 sync_id
+        sync_id = str(self._local_sync_id)
+        content = {
+            &#39;syncId&#39;: sync_id,
+            &#39;command&#39;: api.replace(&#39;/&#39;, &#39;_&#39;),
+            &#39;content&#39;: params
+        }
+        if method == Method.RESTGET:
+            content[&#39;subCommand&#39;] = &#39;get&#39;
+        elif method == Method.RESTPOST:
+            content[&#39;subCommand&#39;] = &#39;update&#39;
+        elif method == Method.MULTIPART:
+            raise NotImplementedError(
+                &#34;WebSocket 适配器不支持上传操作。请使用 bot.use_adapter 临时调用 HTTP 适配器。&#34;
+            )
+
+        await self.connection.send(json_dumps(content))
+        self._last_send_time = time.time()
+        logger.debug(f&#34;[WebSocket] 发送 WebSocket 数据，同步 ID：{sync_id}。&#34;)
+        try:
+            return await self._recv(sync_id)
+        except TimeoutError as e:
+            logger.debug(e)
+
+    async def _heartbeat(self):
+        while True:
+            await asyncio.sleep(self.heartbeat_interval)
+            if time.time() - self._last_send_time &gt; self.heartbeat_interval:
+                await self.call_api(&#39;about&#39;)
+                self._last_send_time = time.time()
+                logger.debug(&#34;[WebSocket] 发送心跳包。&#34;)
+
+    async def _background(self):
+        &#34;&#34;&#34;开始接收事件。&#34;&#34;&#34;
+        logger.info(&#39;[WebSocket] 机器人开始运行。按 Ctrl + C 停止。&#39;)
+
+        try:
+            heartbeat = asyncio.create_task(self._heartbeat())
+            while True:
+                await self.poll_event()
+        finally:
+            await Tasks.cancel(heartbeat)
+            await self._tasks.cancel_all()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.adapters.base.Adapter" href="base.html#mirai.adapters.base.Adapter">Adapter</a></li>
+<li><a title="mirai.api_provider.ApiProvider" href="../api_provider.html#mirai.api_provider.ApiProvider">ApiProvider</a></li>
+<li><a title="mirai.adapters.base.AdapterInterface" href="base.html#mirai.adapters.base.AdapterInterface">AdapterInterface</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.adapters.websocket.WebSocketAdapter.connection"><code class="name">var <span class="ident">connection</span> : Union[websockets.legacy.client.WebSocketClientProtocol, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>WebSocket 客户端连接。</p></div>
+</dd>
+<dt id="mirai.adapters.websocket.WebSocketAdapter.heartbeat_interval"><code class="name">var <span class="ident">heartbeat_interval</span> : float</code></dt>
+<dd>
+<div class="desc"><p>每隔多久发送心跳包，单位：秒。</p></div>
+</dd>
+<dt id="mirai.adapters.websocket.WebSocketAdapter.host_name"><code class="name">var <span class="ident">host_name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>WebSocket Server 的地址。</p></div>
+</dd>
+<dt id="mirai.adapters.websocket.WebSocketAdapter.qq"><code class="name">var <span class="ident">qq</span> : int</code></dt>
+<dd>
+<div class="desc"><p>机器人的 QQ 号。</p></div>
+</dd>
+<dt id="mirai.adapters.websocket.WebSocketAdapter.sync_id"><code class="name">var <span class="ident">sync_id</span> : str</code></dt>
+<dd>
+<div class="desc"><p>mirai-api-http 配置的同步 ID。</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="mirai.adapters.websocket.WebSocketAdapter.poll_event"><code class="name flex">
+<span>async def <span class="ident">poll_event</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>获取并处理事件。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def poll_event(self):
+    &#34;&#34;&#34;获取并处理事件。&#34;&#34;&#34;
+    event = await self._recv(self.sync_id, -1)
+
+    self._tasks.create_task(self.emit(event[&#39;type&#39;], event))</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.adapters.base.Adapter" href="base.html#mirai.adapters.base.Adapter">Adapter</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.adapters.base.Adapter.adapter_info" href="base.html#mirai.adapters.base.AdapterInterface.adapter_info">adapter_info</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.background" href="base.html#mirai.adapters.base.Adapter.background">background</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.buses" href="base.html#mirai.adapters.base.Adapter.buses">buses</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.call_api" href="base.html#mirai.adapters.base.Adapter.call_api">call_api</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.emit" href="base.html#mirai.adapters.base.Adapter.emit">emit</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.login" href="base.html#mirai.adapters.base.Adapter.login">login</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.logout" href="base.html#mirai.adapters.base.Adapter.logout">logout</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.register_event_bus" href="base.html#mirai.adapters.base.Adapter.register_event_bus">register_event_bus</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.session" href="base.html#mirai.adapters.base.Adapter.session">session</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.shutdown" href="base.html#mirai.adapters.base.Adapter.shutdown">shutdown</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.single_mode" href="base.html#mirai.adapters.base.Adapter.single_mode">single_mode</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.start" href="base.html#mirai.adapters.base.Adapter.start">start</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.unregister_event_bus" href="base.html#mirai.adapters.base.Adapter.unregister_event_bus">unregister_event_bus</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.verify_key" href="base.html#mirai.adapters.base.Adapter.verify_key">verify_key</a></code></li>
+<li><code><a title="mirai.adapters.base.Adapter.via" href="base.html#mirai.adapters.base.Adapter.via">via</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="mirai.adapters" href="index.html">mirai.adapters</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="mirai.adapters.websocket.WebSocketAdapter" href="#mirai.adapters.websocket.WebSocketAdapter">WebSocketAdapter</a></code></h4>
+<ul class="two-column">
+<li><code><a title="mirai.adapters.websocket.WebSocketAdapter.connection" href="#mirai.adapters.websocket.WebSocketAdapter.connection">connection</a></code></li>
+<li><code><a title="mirai.adapters.websocket.WebSocketAdapter.heartbeat_interval" href="#mirai.adapters.websocket.WebSocketAdapter.heartbeat_interval">heartbeat_interval</a></code></li>
+<li><code><a title="mirai.adapters.websocket.WebSocketAdapter.host_name" href="#mirai.adapters.websocket.WebSocketAdapter.host_name">host_name</a></code></li>
+<li><code><a title="mirai.adapters.websocket.WebSocketAdapter.poll_event" href="#mirai.adapters.websocket.WebSocketAdapter.poll_event">poll_event</a></code></li>
+<li><code><a title="mirai.adapters.websocket.WebSocketAdapter.qq" href="#mirai.adapters.websocket.WebSocketAdapter.qq">qq</a></code></li>
+<li><code><a title="mirai.adapters.websocket.WebSocketAdapter.sync_id" href="#mirai.adapters.websocket.WebSocketAdapter.sync_id">sync_id</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>

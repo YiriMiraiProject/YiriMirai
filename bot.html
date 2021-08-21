@@ -1,0 +1,2259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>mirai.bot API documentation</title>
+<meta name="description" content="此模块定义机器人类，包含处于 model 层之下的 `SimpleMirai` 和建立在 model 层上的 `Mirai`。" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>mirai.bot</code></h1>
+</header>
+<section id="section-intro">
+<p>此模块定义机器人类，包含处于 model 层之下的 <code><a title="mirai.bot.SimpleMirai" href="#mirai.bot.SimpleMirai">SimpleMirai</a></code> 和建立在 model 层上的 <code><a title="mirai.bot.Mirai" href="#mirai.bot.Mirai">Mirai</a></code>。</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># -*- coding: utf-8 -*-
+&#34;&#34;&#34;
+此模块定义机器人类，包含处于 model 层之下的 `SimpleMirai` 和建立在 model 层上的 `Mirai`。
+&#34;&#34;&#34;
+import asyncio
+import contextlib
+import logging
+from typing import (
+    Any, Awaitable, Callable, Dict, Iterable, List, Optional, Type, Union, cast
+)
+
+import mirai.models.api
+from mirai.adapters.base import Adapter, AdapterInterface, ApiProvider
+from mirai.asgi import ASGI, asgi_serve
+from mirai.bus import AbstractEventBus, EventBus
+from mirai.models.api import ApiModel, RespEvent, RespOperate
+from mirai.models.bus import ModelEventBus
+from mirai.models.entities import (
+    Entity, Friend, Group, GroupMember, Permission, Subject
+)
+from mirai.models.events import Event, MessageEvent, RequestEvent, TempMessage
+from mirai.models.message import TMessage
+from mirai.utils import Singleton
+
+__all__ = [
+    &#39;Mirai&#39;, &#39;SimpleMirai&#39;, &#39;MiraiRunner&#39;, &#39;LifeSpan&#39;, &#39;Startup&#39;, &#39;Shutdown&#39;
+]
+
+
+class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
+    &#34;&#34;&#34;
+    基于 adapter 和 bus，处于 model 层之下的机器人类。
+
+    使用了 `__getattr__` 魔术方法，可以直接在对象上调用 API。
+
+    通过 `SimpleMirai` 调用 API 时，需注意此类不含 model 层封装，
+    因此 API 名称与参数名称需与 mirai-api-http 中的定义相同，
+    参数需要全部以具名参数的形式给出，并且需要指明使用的方法（GET/POST）。
+
+    例如：
+    ```py
+    await bot.sendFriendMessage(target=12345678, messageChain=[
+        {&#34;type&#34;: &#34;Plain&#34;, &#34;text&#34;: &#34;Hello World!&#34;}
+    ], method=&#34;POST&#34;)
+    ```
+
+    也可以使用 `call_api` 方法。
+
+    对于名称的路由含有二级目录的 API，由于名称中含有斜杠，必须使用 `call_api` 调用，例如：
+    ```py
+    file_list = await bot.call_api(
+        &#34;file/list&#34;, id=&#34;&#34;, target=12345678, method=&#34;GET&#34;
+    )
+    ```
+    &#34;&#34;&#34;
+    qq: int
+
+    def __init__(self, qq: int, adapter: Adapter):
+        &#34;&#34;&#34;
+        Args:
+            qq: QQ 号。启用 Single Mode 时，可以随便传入，登陆后会自动获取正确的 QQ 号。
+            adapter: 适配器，负责与 mirai-api-http 沟通，详见模块`mirai.adapters。
+        &#34;&#34;&#34;
+        self.qq = qq
+
+        self._adapter = adapter
+        self._bus = EventBus()
+        self._adapter.register_event_bus(self._bus)
+
+    @property
+    def bus(self) -&gt; EventBus:
+        return self._bus
+
+    def subscribe(self, event, func: Callable, priority: int = 0) -&gt; None:
+        self._bus.subscribe(event, func, priority)
+
+    def unsubscribe(self, event, func: Callable) -&gt; None:
+        self._bus.unsubscribe(event, func)
+
+    async def emit(self, event, *args, **kwargs) -&gt; List[Awaitable[Any]]:
+        return await self._bus.emit(event, *args, **kwargs)
+
+    async def call_api(self, api: str, *args, **kwargs):
+        &#34;&#34;&#34;调用 API。
+
+        Args:
+            api: API 名称。
+            *args: 参数。
+            **kwargs: 参数。
+        &#34;&#34;&#34;
+        return await self._adapter.call_api(api, *args, **kwargs)
+
+    def on(self, event: str, priority: int = 0) -&gt; Callable:
+        &#34;&#34;&#34;注册事件处理器。
+
+        用法举例：
+        ```py
+        @bot.on(&#39;FriendMessage&#39;)
+        async def on_friend_message(event: dict):
+            print(f&#34;收到来自{event[&#39;sender&#39;][&#39;nickname&#39;]}的消息。&#34;)
+        ```
+
+        Args:
+            event: 事件名。
+            priority: 优先级，小者优先。
+        &#34;&#34;&#34;
+        return self._bus.on(event, priority=priority)
+
+    @property
+    def adapter_info(self) -&gt; Dict[str, Any]:
+        return self._adapter.adapter_info
+
+    @contextlib.asynccontextmanager
+    async def use_adapter(self, adapter: Adapter):
+        &#34;&#34;&#34;临时使用另一个适配器。
+
+        用法：
+        ```py
+        async with bot.use_adapter(HTTPAdapter.via(bot)):
+            ...
+        ```
+
+        Args:
+            adapter: 使用的适配器。
+        &#34;&#34;&#34;
+        origin_adapter = self._adapter
+        await adapter.login(self.qq)
+        self._adapter = adapter
+        yield
+        self._adapter = origin_adapter
+        await adapter.logout(False)
+
+    async def startup(self):
+        &#34;&#34;&#34;开始运行机器人（立即返回）。&#34;&#34;&#34;
+        await self._adapter.login(self.qq)
+
+        if self._adapter.single_mode:
+            # Single Mode 下，QQ 号可以随便传入。这里从 session info 中获取正确的 QQ 号。
+            self.qq = (await self.call_api(&#39;sessionInfo&#39;))[&#39;data&#39;][&#39;qq&#39;][&#39;id&#39;]
+
+        asyncio.create_task(self._adapter.emit(&#34;Startup&#34;, {&#39;type&#39;: &#39;Startup&#39;}))
+        await self._adapter.start()
+
+    async def background(self):
+        &#34;&#34;&#34;等待背景任务完成。&#34;&#34;&#34;
+        await self._adapter.background
+
+    async def shutdown(self):
+        &#34;&#34;&#34;结束运行机器人。&#34;&#34;&#34;
+        await asyncio.create_task(
+            self._adapter.emit(&#34;Shutdown&#34;, {&#39;type&#39;: &#39;Shutdown&#39;})
+        )
+        await self._adapter.logout()
+        await self._adapter.shutdown()
+
+    @property
+    def session(self) -&gt; str:
+        &#34;&#34;&#34;获取 session key，可用于调试。
+
+        Returns:
+            str: session key。
+        &#34;&#34;&#34;
+        return self._adapter.session
+
+    @property
+    def asgi(self) -&gt; &#39;MiraiRunner&#39;:
+        &#34;&#34;&#34;ASGI 对象，用于使用 uvicorn 等启动。&#34;&#34;&#34;
+        return MiraiRunner(self)
+
+    def run(
+        self,
+        host: str = &#39;127.0.0.1&#39;,
+        port: int = 8000,
+        asgi_server: str = &#39;auto&#39;,
+        **kwargs
+    ):
+        &#34;&#34;&#34;开始运行机器人。
+
+        一般情况下，此函数会进入主循环，不再返回。
+
+        Args:
+            host: YiriMirai 作为服务器的地址，默认为 127.0.0.1。
+            port: YiriMirai 作为服务器的端口，默认为 8000。
+            asgi_server: ASGI 服务器类型，可选项有 `&#39;uvicorn&#39;` `&#39;hypercorn&#39;` 和 `&#39;auto&#39;`。
+            **kwargs: 可选参数。多余的参数将传递给 `uvicorn.run` 和 `hypercorn.run`。
+        &#34;&#34;&#34;
+        MiraiRunner(self).run(host, port, asgi_server, **kwargs)
+
+
+class MiraiRunner(Singleton):
+    &#34;&#34;&#34;运行 SimpleMirai 对象的托管类。
+
+    使用此类以实现机器人的多例运行。
+
+    例如:
+    ```py
+    runner = MiraiRunner(mirai)
+    runner.run(host=&#39;127.0.0.1&#39;, port=8000)
+    ```
+    &#34;&#34;&#34;
+    bots: Iterable[SimpleMirai]
+    &#34;&#34;&#34;运行的 SimpleMirai 对象。&#34;&#34;&#34;
+    def __init__(self, *bots: SimpleMirai):
+        &#34;&#34;&#34;
+        Args:
+            *bots: 要运行的机器人。
+        &#34;&#34;&#34;
+        self.bots = bots
+        self._asgi = ASGI()
+        self._asgi.add_event_handler(&#39;startup&#39;, self.startup)
+        self._asgi.add_event_handler(&#39;shutdown&#39;, self.shutdown)
+
+    async def startup(self):
+        &#34;&#34;&#34;开始运行。&#34;&#34;&#34;
+        coros = [bot.startup() for bot in self.bots]
+        await asyncio.gather(*coros)
+
+    async def shutdown(self):
+        &#34;&#34;&#34;结束运行。&#34;&#34;&#34;
+        coros = [bot.shutdown() for bot in self.bots]
+        await asyncio.gather(*coros)
+
+    async def __call__(self, scope, recv, send):
+        await self._asgi(scope, recv, send)
+
+    async def _run(self):
+        try:
+            await self.startup()
+            backgrounds = [bot.background() for bot in self.bots]
+            await asyncio.gather(*backgrounds)
+        finally:
+            await self.shutdown()
+
+    def run(
+        self,
+        host: str = &#39;127.0.0.1&#39;,
+        port: int = 8000,
+        asgi_server: str = &#39;auto&#39;,
+        **kwargs
+    ):
+        &#34;&#34;&#34;开始运行机器人。
+
+        一般情况下，此函数会进入主循环，不再返回。
+        &#34;&#34;&#34;
+        if not asgi_serve(
+            self, host=host, port=port, asgi_server=asgi_server, **kwargs
+        ):
+            import textwrap
+            logger = logging.getLogger(__name__)
+            logger.warning(
+                textwrap.dedent(
+                    &#34;&#34;&#34;
+                    未找到可用的 ASGI 服务，反向 WebSocket 和 WebHook 上报将不可用。
+                    仅 HTTP 轮询与正向 WebSocket 可用。
+                    建议安装 ASGI 服务器，如 `uvicorn` 或 `hypercorn`。
+                    在命令行键入：
+                        pip install uvicorn
+                    或者
+                        pip install hypercorn
+                    &#34;&#34;&#34;
+                ).strip()
+            )
+            try:
+                asyncio.run(self._run())
+            except KeyboardInterrupt:
+                exit()
+
+
+class Mirai(SimpleMirai):
+    &#34;&#34;&#34;
+    机器人主类。
+
+    使用了 `__getattr__` 魔术方法，可以直接在对象上调用 API。
+
+        Mirai: 类包含 model 层封装，API 名称经过转写以符合命名规范，所有的 API 全部使用小写字母及下划线命名。
+    （API 名称也可使用原名。）
+    API 参数可以使用具名参数，也可以使用位置参数，关于 API 参数的更多信息请参见模块 `mirai.models.api`。
+
+    例如：
+    ```py
+    await bot.send_friend_message(12345678, [
+        Plain(&#34;Hello World!&#34;)
+    ])
+    ```
+
+    也可以使用 `call_api` 方法，须注意此方法直接继承自 `SimpleMirai`，因此未经 model 层封装，
+    需要遵循 `SimpleMirai` 的规定。
+    &#34;&#34;&#34;
+    def __init__(self, qq: int, adapter: Adapter):
+        super().__init__(qq=qq, adapter=adapter)
+        # 将 bus 更换为 ModelEventBus
+        adapter.unregister_event_bus(self._bus)
+        self._bus: ModelEventBus = ModelEventBus()
+        adapter.register_event_bus(self._bus.base_bus)
+
+    @property
+    def bus(self) -&gt; ModelEventBus:
+        return self._bus
+
+    def on(
+        self,
+        event_type: Union[Type[Event], str],
+        priority: int = 0,
+    ) -&gt; Callable:
+        &#34;&#34;&#34;注册事件处理器。
+
+        用法举例：
+        ```python
+        @bot.on(FriendMessage)
+        async def on_friend_message(event: FriendMessage):
+            print(f&#34;收到来自{event.sender.nickname}的消息。&#34;)
+        ```
+
+        Args:
+            event_type: 事件类或事件名。
+            priority: 优先级，较小者优先。
+        &#34;&#34;&#34;
+        return self._bus.on(event_type, priority)
+
+    def api(self, api: str) -&gt; ApiModel.Proxy:
+        &#34;&#34;&#34;获取 API Proxy 对象。
+
+        API Proxy 提供更加简便的调用 API 的写法，详见 `mirai.models.api`。
+
+        `Mirai` 的 `__getattr__` 与此方法完全相同，可支持直接在对象上调用 API。
+
+        Args:
+            api: API 名称。
+
+        Returns:
+            ApiModel.Proxy: API Proxy 对象。
+        &#34;&#34;&#34;
+        api_type = ApiModel.get_subtype(api)
+        return api_type.Proxy(self, api_type)
+
+    def __getattr__(self, api: str) -&gt; ApiModel.Proxy:
+        return self.api(api)
+
+    async def send(
+        self,
+        target: Union[Entity, MessageEvent],
+        message: TMessage,
+        quote: bool = False
+    ) -&gt; int:
+        &#34;&#34;&#34;发送消息。可以从 `Friend` `Group` 等对象，或者从 `MessageEvent` 中自动识别消息发送对象。
+
+        Args:
+            target: 目标对象。
+            message: 发送的消息。
+            quote: 是否以回复消息的形式发送，默认为 False。
+
+        Returns:
+            int: 发送的消息的 message_id。
+        &#34;&#34;&#34;
+        # 识别消息发送对象
+        if isinstance(target, TempMessage):
+            quoting = target.message_chain.message_id if quote else None
+            return (
+                await self.send_temp_message(
+                    qq=target.sender.id,
+                    group=target.group.id,
+                    message_chain=message,
+                    quote=quoting
+                )
+            ).message_id
+
+        if isinstance(target, MessageEvent):
+            quoting = target.message_chain.message_id if quote else None
+            target = target.sender
+        else:
+            quoting = None
+
+        if isinstance(target, Friend):
+            send_message = self.send_friend_message
+            id_ = target.id
+        elif isinstance(target, Group):
+            send_message = self.send_group_message
+            id_ = target.id
+        elif isinstance(target, GroupMember):
+            send_message = self.send_group_message
+            id_ = target.group.id
+        else:
+            raise ValueError(f&#34;{target} 不是有效的消息发送对象。&#34;)
+
+        response = await send_message(
+            target=id_, message_chain=message, quote=quoting
+        )
+
+        return response.message_id if response else -1
+
+    async def get_friend(self, id_: int) -&gt; Optional[Friend]:
+        &#34;&#34;&#34;获取好友对象。
+
+        Args:
+            id: 好友 QQ 号。
+
+        Returns:
+            Friend: 好友对象。
+            None: 好友不存在。
+        &#34;&#34;&#34;
+        friend_list = await self.friend_list.get()
+        if not friend_list:
+            return None
+        for friend in cast(List[Friend], friend_list):
+            if friend.id == id_:
+                return friend
+        return None
+
+    async def get_group(self, id_: int) -&gt; Optional[Group]:
+        &#34;&#34;&#34;获取群组对象。
+
+        Args:
+            id: 群号。
+
+        Returns:
+            Group: 群组对象。
+            None: 群组不存在或 bot 未入群。
+        &#34;&#34;&#34;
+        group_list = await self.group_list.get()
+        if not group_list:
+            return None
+        for group in cast(List[Group], group_list):
+            if group.id == id_:
+                return group
+        return None
+
+    async def get_group_member(self, group: Union[Group, int],
+                               id_: int) -&gt; Optional[GroupMember]:
+        &#34;&#34;&#34;获取群成员对象。
+
+        Args:
+            group: 群组对象或群号。
+            id: 群成员 QQ 号。
+
+        Returns:
+            GroupMember: 群成员对象。
+            None: 群成员不存在。
+        &#34;&#34;&#34;
+        if isinstance(group, Group):
+            group = group.id
+        member_list = await self.member_list.get(group)
+        if not member_list:
+            return None
+        for member in cast(List[GroupMember], member_list):
+            if member.id == id_:
+                return member
+        return None
+
+    async def get_entity(self, subject: Subject) -&gt; Optional[Entity]:
+        &#34;&#34;&#34;获取实体对象。
+
+        Args:
+            subject: 以 `Subject` 表示的实体对象。
+
+        Returns:
+            Entity: 实体对象。
+            None: 实体不存在。
+        &#34;&#34;&#34;
+        if subject.kind == &#39;Friend&#39;:
+            return await self.get_friend(subject.id)
+        if subject.kind == &#39;Group&#39;:
+            return await self.get_group(subject.id)
+        return None
+
+    async def is_admin(self, group: Group) -&gt; bool:
+        &#34;&#34;&#34;判断机器人在群组中是否是管理员。
+
+        Args:
+            group: 群组对象。
+
+        Returns:
+            bool: 是否是管理员。
+        &#34;&#34;&#34;
+        return group.permission in (Permission.Administrator, Permission.Owner)
+
+    async def process_request(
+        self,
+        event: RequestEvent,
+        operate: Union[int, RespOperate],
+        message: str = &#39;&#39;
+    ):
+        &#34;&#34;&#34;处理申请。
+
+        Args:
+            event: 申请事件。
+            operate: 处理操作。
+            message: 回复的信息。
+        &#34;&#34;&#34;
+        api_type = cast(
+            Type[RespEvent], getattr(mirai.models.api, &#39;Resp&#39; + event.type)
+        )
+        api = api_type.from_event(event, operate, message)
+        await api.call(self, &#39;POST&#39;)
+
+    async def allow(self, event: RequestEvent, message: str = &#39;&#39;):
+        &#34;&#34;&#34;允许申请。
+
+        Args:
+            event: 申请事件。
+            message: 回复的信息。
+        &#34;&#34;&#34;
+        await self.process_request(event, RespOperate.ALLOW, message)
+
+    async def decline(
+        self, event: RequestEvent, message: str = &#39;&#39;, ban: bool = False
+    ):
+        &#34;&#34;&#34;拒绝申请。
+
+        Args:
+            event: 申请事件。
+            message: 回复的信息。
+        &#34;&#34;&#34;
+        await self.process_request(
+            event, RespOperate.DECLINE
+            &amp; RespOperate.BAN if ban else RespOperate.DECLINE, message
+        )
+
+    async def ignore(
+        self, event: RequestEvent, message: str = &#39;&#39;, ban: bool = False
+    ):
+        &#34;&#34;&#34;忽略申请。
+
+        Args:
+            event: 申请事件。
+            message: 回复的信息。
+        &#34;&#34;&#34;
+        await self.process_request(
+            event, RespOperate.IGNORE
+            &amp; RespOperate.BAN if ban else RespOperate.DECLINE, message
+        )
+
+
+class LifeSpan(Event):
+    &#34;&#34;&#34;生命周期事件。&#34;&#34;&#34;
+    type: str = &#39;LifeSpan&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+
+
+class Startup(LifeSpan):
+    &#34;&#34;&#34;启动事件。&#34;&#34;&#34;
+    type: str = &#39;Startup&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+
+
+class Shutdown(LifeSpan):
+    &#34;&#34;&#34;关闭事件。&#34;&#34;&#34;
+    type: str = &#39;Shutdown&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="mirai.bot.LifeSpan"><code class="flex name class">
+<span>class <span class="ident">LifeSpan</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>生命周期事件。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class LifeSpan(Event):
+    &#34;&#34;&#34;生命周期事件。&#34;&#34;&#34;
+    type: str = &#39;LifeSpan&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.Event" href="models/events.html#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="models/base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="models/base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mirai.bot.Shutdown" href="#mirai.bot.Shutdown">Shutdown</a></li>
+<li><a title="mirai.bot.Startup" href="#mirai.bot.Startup">Startup</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.Event" href="models/events.html#mirai.models.events.Event">Event</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.Event.get_subtype" href="models/base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_obj" href="models/base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.type" href="models/events.html#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.bot.Mirai"><code class="flex name class">
+<span>class <span class="ident">Mirai</span></span>
+<span>(</span><span>qq: int, adapter: <a title="mirai.adapters.base.Adapter" href="adapters/base.html#mirai.adapters.base.Adapter">Adapter</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>机器人主类。</p>
+<p>使用了 <code>__getattr__</code> 魔术方法，可以直接在对象上调用 API。</p>
+<pre><code>Mirai: 类包含 model 层封装，API 名称经过转写以符合命名规范，所有的 API 全部使用小写字母及下划线命名。
+</code></pre>
+<p>（API 名称也可使用原名。）
+API 参数可以使用具名参数，也可以使用位置参数，关于 API 参数的更多信息请参见模块 <code><a title="mirai.models.api" href="models/api.html">mirai.models.api</a></code>。</p>
+<p>例如：</p>
+<pre><code class="language-py">await bot.send_friend_message(12345678, [
+    Plain(&quot;Hello World!&quot;)
+])
+</code></pre>
+<p>也可以使用 <code>call_api</code> 方法，须注意此方法直接继承自 <code><a title="mirai.bot.SimpleMirai" href="#mirai.bot.SimpleMirai">SimpleMirai</a></code>，因此未经 model 层封装，
+需要遵循 <code><a title="mirai.bot.SimpleMirai" href="#mirai.bot.SimpleMirai">SimpleMirai</a></code> 的规定。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>qq</code></strong></dt>
+<dd>QQ 号。启用 Single Mode 时，可以随便传入，登陆后会自动获取正确的 QQ 号。</dd>
+<dt><strong><code>adapter</code></strong></dt>
+<dd>适配器，负责与 mirai-api-http 沟通，详见模块`mirai.adapters。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Mirai(SimpleMirai):
+    &#34;&#34;&#34;
+    机器人主类。
+
+    使用了 `__getattr__` 魔术方法，可以直接在对象上调用 API。
+
+        Mirai: 类包含 model 层封装，API 名称经过转写以符合命名规范，所有的 API 全部使用小写字母及下划线命名。
+    （API 名称也可使用原名。）
+    API 参数可以使用具名参数，也可以使用位置参数，关于 API 参数的更多信息请参见模块 `mirai.models.api`。
+
+    例如：
+    ```py
+    await bot.send_friend_message(12345678, [
+        Plain(&#34;Hello World!&#34;)
+    ])
+    ```
+
+    也可以使用 `call_api` 方法，须注意此方法直接继承自 `SimpleMirai`，因此未经 model 层封装，
+    需要遵循 `SimpleMirai` 的规定。
+    &#34;&#34;&#34;
+    def __init__(self, qq: int, adapter: Adapter):
+        super().__init__(qq=qq, adapter=adapter)
+        # 将 bus 更换为 ModelEventBus
+        adapter.unregister_event_bus(self._bus)
+        self._bus: ModelEventBus = ModelEventBus()
+        adapter.register_event_bus(self._bus.base_bus)
+
+    @property
+    def bus(self) -&gt; ModelEventBus:
+        return self._bus
+
+    def on(
+        self,
+        event_type: Union[Type[Event], str],
+        priority: int = 0,
+    ) -&gt; Callable:
+        &#34;&#34;&#34;注册事件处理器。
+
+        用法举例：
+        ```python
+        @bot.on(FriendMessage)
+        async def on_friend_message(event: FriendMessage):
+            print(f&#34;收到来自{event.sender.nickname}的消息。&#34;)
+        ```
+
+        Args:
+            event_type: 事件类或事件名。
+            priority: 优先级，较小者优先。
+        &#34;&#34;&#34;
+        return self._bus.on(event_type, priority)
+
+    def api(self, api: str) -&gt; ApiModel.Proxy:
+        &#34;&#34;&#34;获取 API Proxy 对象。
+
+        API Proxy 提供更加简便的调用 API 的写法，详见 `mirai.models.api`。
+
+        `Mirai` 的 `__getattr__` 与此方法完全相同，可支持直接在对象上调用 API。
+
+        Args:
+            api: API 名称。
+
+        Returns:
+            ApiModel.Proxy: API Proxy 对象。
+        &#34;&#34;&#34;
+        api_type = ApiModel.get_subtype(api)
+        return api_type.Proxy(self, api_type)
+
+    def __getattr__(self, api: str) -&gt; ApiModel.Proxy:
+        return self.api(api)
+
+    async def send(
+        self,
+        target: Union[Entity, MessageEvent],
+        message: TMessage,
+        quote: bool = False
+    ) -&gt; int:
+        &#34;&#34;&#34;发送消息。可以从 `Friend` `Group` 等对象，或者从 `MessageEvent` 中自动识别消息发送对象。
+
+        Args:
+            target: 目标对象。
+            message: 发送的消息。
+            quote: 是否以回复消息的形式发送，默认为 False。
+
+        Returns:
+            int: 发送的消息的 message_id。
+        &#34;&#34;&#34;
+        # 识别消息发送对象
+        if isinstance(target, TempMessage):
+            quoting = target.message_chain.message_id if quote else None
+            return (
+                await self.send_temp_message(
+                    qq=target.sender.id,
+                    group=target.group.id,
+                    message_chain=message,
+                    quote=quoting
+                )
+            ).message_id
+
+        if isinstance(target, MessageEvent):
+            quoting = target.message_chain.message_id if quote else None
+            target = target.sender
+        else:
+            quoting = None
+
+        if isinstance(target, Friend):
+            send_message = self.send_friend_message
+            id_ = target.id
+        elif isinstance(target, Group):
+            send_message = self.send_group_message
+            id_ = target.id
+        elif isinstance(target, GroupMember):
+            send_message = self.send_group_message
+            id_ = target.group.id
+        else:
+            raise ValueError(f&#34;{target} 不是有效的消息发送对象。&#34;)
+
+        response = await send_message(
+            target=id_, message_chain=message, quote=quoting
+        )
+
+        return response.message_id if response else -1
+
+    async def get_friend(self, id_: int) -&gt; Optional[Friend]:
+        &#34;&#34;&#34;获取好友对象。
+
+        Args:
+            id: 好友 QQ 号。
+
+        Returns:
+            Friend: 好友对象。
+            None: 好友不存在。
+        &#34;&#34;&#34;
+        friend_list = await self.friend_list.get()
+        if not friend_list:
+            return None
+        for friend in cast(List[Friend], friend_list):
+            if friend.id == id_:
+                return friend
+        return None
+
+    async def get_group(self, id_: int) -&gt; Optional[Group]:
+        &#34;&#34;&#34;获取群组对象。
+
+        Args:
+            id: 群号。
+
+        Returns:
+            Group: 群组对象。
+            None: 群组不存在或 bot 未入群。
+        &#34;&#34;&#34;
+        group_list = await self.group_list.get()
+        if not group_list:
+            return None
+        for group in cast(List[Group], group_list):
+            if group.id == id_:
+                return group
+        return None
+
+    async def get_group_member(self, group: Union[Group, int],
+                               id_: int) -&gt; Optional[GroupMember]:
+        &#34;&#34;&#34;获取群成员对象。
+
+        Args:
+            group: 群组对象或群号。
+            id: 群成员 QQ 号。
+
+        Returns:
+            GroupMember: 群成员对象。
+            None: 群成员不存在。
+        &#34;&#34;&#34;
+        if isinstance(group, Group):
+            group = group.id
+        member_list = await self.member_list.get(group)
+        if not member_list:
+            return None
+        for member in cast(List[GroupMember], member_list):
+            if member.id == id_:
+                return member
+        return None
+
+    async def get_entity(self, subject: Subject) -&gt; Optional[Entity]:
+        &#34;&#34;&#34;获取实体对象。
+
+        Args:
+            subject: 以 `Subject` 表示的实体对象。
+
+        Returns:
+            Entity: 实体对象。
+            None: 实体不存在。
+        &#34;&#34;&#34;
+        if subject.kind == &#39;Friend&#39;:
+            return await self.get_friend(subject.id)
+        if subject.kind == &#39;Group&#39;:
+            return await self.get_group(subject.id)
+        return None
+
+    async def is_admin(self, group: Group) -&gt; bool:
+        &#34;&#34;&#34;判断机器人在群组中是否是管理员。
+
+        Args:
+            group: 群组对象。
+
+        Returns:
+            bool: 是否是管理员。
+        &#34;&#34;&#34;
+        return group.permission in (Permission.Administrator, Permission.Owner)
+
+    async def process_request(
+        self,
+        event: RequestEvent,
+        operate: Union[int, RespOperate],
+        message: str = &#39;&#39;
+    ):
+        &#34;&#34;&#34;处理申请。
+
+        Args:
+            event: 申请事件。
+            operate: 处理操作。
+            message: 回复的信息。
+        &#34;&#34;&#34;
+        api_type = cast(
+            Type[RespEvent], getattr(mirai.models.api, &#39;Resp&#39; + event.type)
+        )
+        api = api_type.from_event(event, operate, message)
+        await api.call(self, &#39;POST&#39;)
+
+    async def allow(self, event: RequestEvent, message: str = &#39;&#39;):
+        &#34;&#34;&#34;允许申请。
+
+        Args:
+            event: 申请事件。
+            message: 回复的信息。
+        &#34;&#34;&#34;
+        await self.process_request(event, RespOperate.ALLOW, message)
+
+    async def decline(
+        self, event: RequestEvent, message: str = &#39;&#39;, ban: bool = False
+    ):
+        &#34;&#34;&#34;拒绝申请。
+
+        Args:
+            event: 申请事件。
+            message: 回复的信息。
+        &#34;&#34;&#34;
+        await self.process_request(
+            event, RespOperate.DECLINE
+            &amp; RespOperate.BAN if ban else RespOperate.DECLINE, message
+        )
+
+    async def ignore(
+        self, event: RequestEvent, message: str = &#39;&#39;, ban: bool = False
+    ):
+        &#34;&#34;&#34;忽略申请。
+
+        Args:
+            event: 申请事件。
+            message: 回复的信息。
+        &#34;&#34;&#34;
+        await self.process_request(
+            event, RespOperate.IGNORE
+            &amp; RespOperate.BAN if ban else RespOperate.DECLINE, message
+        )</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.bot.SimpleMirai" href="#mirai.bot.SimpleMirai">SimpleMirai</a></li>
+<li><a title="mirai.api_provider.ApiProvider" href="api_provider.html#mirai.api_provider.ApiProvider">ApiProvider</a></li>
+<li><a title="mirai.adapters.base.AdapterInterface" href="adapters/base.html#mirai.adapters.base.AdapterInterface">AdapterInterface</a></li>
+<li>abc.ABC</li>
+<li><a title="mirai.bus.AbstractEventBus" href="bus.html#mirai.bus.AbstractEventBus">AbstractEventBus</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.bot.Mirai.qq"><code class="name">var <span class="ident">qq</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="mirai.bot.Mirai.bus"><code class="name">var <span class="ident">bus</span> : <a title="mirai.models.bus.ModelEventBus" href="models/bus.html#mirai.models.bus.ModelEventBus">ModelEventBus</a></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def bus(self) -&gt; ModelEventBus:
+    return self._bus</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="mirai.bot.Mirai.allow"><code class="name flex">
+<span>async def <span class="ident">allow</span></span>(<span>self, event: <a title="mirai.models.events.RequestEvent" href="models/events.html#mirai.models.events.RequestEvent">RequestEvent</a>, message: str = '')</span>
+</code></dt>
+<dd>
+<div class="desc"><p>允许申请。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>event</code></strong></dt>
+<dd>申请事件。</dd>
+<dt><strong><code>message</code></strong></dt>
+<dd>回复的信息。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def allow(self, event: RequestEvent, message: str = &#39;&#39;):
+    &#34;&#34;&#34;允许申请。
+
+    Args:
+        event: 申请事件。
+        message: 回复的信息。
+    &#34;&#34;&#34;
+    await self.process_request(event, RespOperate.ALLOW, message)</code></pre>
+</details>
+</dd>
+<dt id="mirai.bot.Mirai.api"><code class="name flex">
+<span>def <span class="ident">api</span></span>(<span>self, api: str) ‑> <a title="mirai.models.api.ApiModel.Proxy" href="models/api.html#mirai.models.api.ApiModel.Proxy">ApiModel.Proxy</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>获取 API Proxy 对象。</p>
+<p>API Proxy 提供更加简便的调用 API 的写法，详见 <code><a title="mirai.models.api" href="models/api.html">mirai.models.api</a></code>。</p>
+<p><code><a title="mirai.bot.Mirai" href="#mirai.bot.Mirai">Mirai</a></code> 的 <code>__getattr__</code> 与此方法完全相同，可支持直接在对象上调用 API。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>api</code></strong></dt>
+<dd>API 名称。</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>ApiModel.Proxy</code></dt>
+<dd>API Proxy 对象。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def api(self, api: str) -&gt; ApiModel.Proxy:
+    &#34;&#34;&#34;获取 API Proxy 对象。
+
+    API Proxy 提供更加简便的调用 API 的写法，详见 `mirai.models.api`。
+
+    `Mirai` 的 `__getattr__` 与此方法完全相同，可支持直接在对象上调用 API。
+
+    Args:
+        api: API 名称。
+
+    Returns:
+        ApiModel.Proxy: API Proxy 对象。
+    &#34;&#34;&#34;
+    api_type = ApiModel.get_subtype(api)
+    return api_type.Proxy(self, api_type)</code></pre>
+</details>
+</dd>
+<dt id="mirai.bot.Mirai.decline"><code class="name flex">
+<span>async def <span class="ident">decline</span></span>(<span>self, event: <a title="mirai.models.events.RequestEvent" href="models/events.html#mirai.models.events.RequestEvent">RequestEvent</a>, message: str = '', ban: bool = False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>拒绝申请。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>event</code></strong></dt>
+<dd>申请事件。</dd>
+<dt><strong><code>message</code></strong></dt>
+<dd>回复的信息。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def decline(
+    self, event: RequestEvent, message: str = &#39;&#39;, ban: bool = False
+):
+    &#34;&#34;&#34;拒绝申请。
+
+    Args:
+        event: 申请事件。
+        message: 回复的信息。
+    &#34;&#34;&#34;
+    await self.process_request(
+        event, RespOperate.DECLINE
+        &amp; RespOperate.BAN if ban else RespOperate.DECLINE, message
+    )</code></pre>
+</details>
+</dd>
+<dt id="mirai.bot.Mirai.get_entity"><code class="name flex">
+<span>async def <span class="ident">get_entity</span></span>(<span>self, subject: <a title="mirai.models.entities.Subject" href="models/entities.html#mirai.models.entities.Subject">Subject</a>) ‑> Union[<a title="mirai.models.entities.Entity" href="models/entities.html#mirai.models.entities.Entity">Entity</a>, NoneType]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>获取实体对象。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>subject</code></strong></dt>
+<dd>以 <code>Subject</code> 表示的实体对象。</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Entity</code></dt>
+<dd>实体对象。</dd>
+<dt><code>None</code></dt>
+<dd>实体不存在。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def get_entity(self, subject: Subject) -&gt; Optional[Entity]:
+    &#34;&#34;&#34;获取实体对象。
+
+    Args:
+        subject: 以 `Subject` 表示的实体对象。
+
+    Returns:
+        Entity: 实体对象。
+        None: 实体不存在。
+    &#34;&#34;&#34;
+    if subject.kind == &#39;Friend&#39;:
+        return await self.get_friend(subject.id)
+    if subject.kind == &#39;Group&#39;:
+        return await self.get_group(subject.id)
+    return None</code></pre>
+</details>
+</dd>
+<dt id="mirai.bot.Mirai.get_friend"><code class="name flex">
+<span>async def <span class="ident">get_friend</span></span>(<span>self, id_: int) ‑> Union[<a title="mirai.models.entities.Friend" href="models/entities.html#mirai.models.entities.Friend">Friend</a>, NoneType]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>获取好友对象。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id</code></strong></dt>
+<dd>好友 QQ 号。</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Friend</code></dt>
+<dd>好友对象。</dd>
+<dt><code>None</code></dt>
+<dd>好友不存在。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def get_friend(self, id_: int) -&gt; Optional[Friend]:
+    &#34;&#34;&#34;获取好友对象。
+
+    Args:
+        id: 好友 QQ 号。
+
+    Returns:
+        Friend: 好友对象。
+        None: 好友不存在。
+    &#34;&#34;&#34;
+    friend_list = await self.friend_list.get()
+    if not friend_list:
+        return None
+    for friend in cast(List[Friend], friend_list):
+        if friend.id == id_:
+            return friend
+    return None</code></pre>
+</details>
+</dd>
+<dt id="mirai.bot.Mirai.get_group"><code class="name flex">
+<span>async def <span class="ident">get_group</span></span>(<span>self, id_: int) ‑> Union[<a title="mirai.models.entities.Group" href="models/entities.html#mirai.models.entities.Group">Group</a>, NoneType]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>获取群组对象。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id</code></strong></dt>
+<dd>群号。</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Group</code></dt>
+<dd>群组对象。</dd>
+<dt><code>None</code></dt>
+<dd>群组不存在或 bot 未入群。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def get_group(self, id_: int) -&gt; Optional[Group]:
+    &#34;&#34;&#34;获取群组对象。
+
+    Args:
+        id: 群号。
+
+    Returns:
+        Group: 群组对象。
+        None: 群组不存在或 bot 未入群。
+    &#34;&#34;&#34;
+    group_list = await self.group_list.get()
+    if not group_list:
+        return None
+    for group in cast(List[Group], group_list):
+        if group.id == id_:
+            return group
+    return None</code></pre>
+</details>
+</dd>
+<dt id="mirai.bot.Mirai.get_group_member"><code class="name flex">
+<span>async def <span class="ident">get_group_member</span></span>(<span>self, group: Union[<a title="mirai.models.entities.Group" href="models/entities.html#mirai.models.entities.Group">Group</a>, int], id_: int) ‑> Union[<a title="mirai.models.entities.GroupMember" href="models/entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>获取群成员对象。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>group</code></strong></dt>
+<dd>群组对象或群号。</dd>
+<dt><strong><code>id</code></strong></dt>
+<dd>群成员 QQ 号。</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>GroupMember</code></dt>
+<dd>群成员对象。</dd>
+<dt><code>None</code></dt>
+<dd>群成员不存在。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def get_group_member(self, group: Union[Group, int],
+                           id_: int) -&gt; Optional[GroupMember]:
+    &#34;&#34;&#34;获取群成员对象。
+
+    Args:
+        group: 群组对象或群号。
+        id: 群成员 QQ 号。
+
+    Returns:
+        GroupMember: 群成员对象。
+        None: 群成员不存在。
+    &#34;&#34;&#34;
+    if isinstance(group, Group):
+        group = group.id
+    member_list = await self.member_list.get(group)
+    if not member_list:
+        return None
+    for member in cast(List[GroupMember], member_list):
+        if member.id == id_:
+            return member
+    return None</code></pre>
+</details>
+</dd>
+<dt id="mirai.bot.Mirai.ignore"><code class="name flex">
+<span>async def <span class="ident">ignore</span></span>(<span>self, event: <a title="mirai.models.events.RequestEvent" href="models/events.html#mirai.models.events.RequestEvent">RequestEvent</a>, message: str = '', ban: bool = False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>忽略申请。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>event</code></strong></dt>
+<dd>申请事件。</dd>
+<dt><strong><code>message</code></strong></dt>
+<dd>回复的信息。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def ignore(
+    self, event: RequestEvent, message: str = &#39;&#39;, ban: bool = False
+):
+    &#34;&#34;&#34;忽略申请。
+
+    Args:
+        event: 申请事件。
+        message: 回复的信息。
+    &#34;&#34;&#34;
+    await self.process_request(
+        event, RespOperate.IGNORE
+        &amp; RespOperate.BAN if ban else RespOperate.DECLINE, message
+    )</code></pre>
+</details>
+</dd>
+<dt id="mirai.bot.Mirai.is_admin"><code class="name flex">
+<span>async def <span class="ident">is_admin</span></span>(<span>self, group: <a title="mirai.models.entities.Group" href="models/entities.html#mirai.models.entities.Group">Group</a>) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>判断机器人在群组中是否是管理员。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>group</code></strong></dt>
+<dd>群组对象。</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>是否是管理员。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def is_admin(self, group: Group) -&gt; bool:
+    &#34;&#34;&#34;判断机器人在群组中是否是管理员。
+
+    Args:
+        group: 群组对象。
+
+    Returns:
+        bool: 是否是管理员。
+    &#34;&#34;&#34;
+    return group.permission in (Permission.Administrator, Permission.Owner)</code></pre>
+</details>
+</dd>
+<dt id="mirai.bot.Mirai.on"><code class="name flex">
+<span>def <span class="ident">on</span></span>(<span>self, event_type: Union[Type[<a title="mirai.models.events.Event" href="models/events.html#mirai.models.events.Event">Event</a>], str], priority: int = 0) ‑> Callable</span>
+</code></dt>
+<dd>
+<div class="desc"><p>注册事件处理器。</p>
+<p>用法举例：</p>
+<pre><code class="language-python">@bot.on(FriendMessage)
+async def on_friend_message(event: FriendMessage):
+    print(f&quot;收到来自{event.sender.nickname}的消息。&quot;)
+</code></pre>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>event_type</code></strong></dt>
+<dd>事件类或事件名。</dd>
+<dt><strong><code>priority</code></strong></dt>
+<dd>优先级，较小者优先。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def on(
+    self,
+    event_type: Union[Type[Event], str],
+    priority: int = 0,
+) -&gt; Callable:
+    &#34;&#34;&#34;注册事件处理器。
+
+    用法举例：
+    ```python
+    @bot.on(FriendMessage)
+    async def on_friend_message(event: FriendMessage):
+        print(f&#34;收到来自{event.sender.nickname}的消息。&#34;)
+    ```
+
+    Args:
+        event_type: 事件类或事件名。
+        priority: 优先级，较小者优先。
+    &#34;&#34;&#34;
+    return self._bus.on(event_type, priority)</code></pre>
+</details>
+</dd>
+<dt id="mirai.bot.Mirai.process_request"><code class="name flex">
+<span>async def <span class="ident">process_request</span></span>(<span>self, event: <a title="mirai.models.events.RequestEvent" href="models/events.html#mirai.models.events.RequestEvent">RequestEvent</a>, operate: Union[int, <a title="mirai.models.api.RespOperate" href="models/api.html#mirai.models.api.RespOperate">RespOperate</a>], message: str = '')</span>
+</code></dt>
+<dd>
+<div class="desc"><p>处理申请。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>event</code></strong></dt>
+<dd>申请事件。</dd>
+<dt><strong><code>operate</code></strong></dt>
+<dd>处理操作。</dd>
+<dt><strong><code>message</code></strong></dt>
+<dd>回复的信息。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def process_request(
+    self,
+    event: RequestEvent,
+    operate: Union[int, RespOperate],
+    message: str = &#39;&#39;
+):
+    &#34;&#34;&#34;处理申请。
+
+    Args:
+        event: 申请事件。
+        operate: 处理操作。
+        message: 回复的信息。
+    &#34;&#34;&#34;
+    api_type = cast(
+        Type[RespEvent], getattr(mirai.models.api, &#39;Resp&#39; + event.type)
+    )
+    api = api_type.from_event(event, operate, message)
+    await api.call(self, &#39;POST&#39;)</code></pre>
+</details>
+</dd>
+<dt id="mirai.bot.Mirai.send"><code class="name flex">
+<span>async def <span class="ident">send</span></span>(<span>self, target: Union[<a title="mirai.models.entities.Entity" href="models/entities.html#mirai.models.entities.Entity">Entity</a>, <a title="mirai.models.events.MessageEvent" href="models/events.html#mirai.models.events.MessageEvent">MessageEvent</a>], message: Union[<a title="mirai.models.message.MessageChain" href="models/message.html#mirai.models.message.MessageChain">MessageChain</a>, Iterable[Union[<a title="mirai.models.message.MessageComponent" href="models/message.html#mirai.models.message.MessageComponent">MessageComponent</a>, str]], <a title="mirai.models.message.MessageComponent" href="models/message.html#mirai.models.message.MessageComponent">MessageComponent</a>, str], quote: bool = False) ‑> int</span>
+</code></dt>
+<dd>
+<div class="desc"><p>发送消息。可以从 <code>Friend</code> <code>Group</code> 等对象，或者从 <code>MessageEvent</code> 中自动识别消息发送对象。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>target</code></strong></dt>
+<dd>目标对象。</dd>
+<dt><strong><code>message</code></strong></dt>
+<dd>发送的消息。</dd>
+<dt><strong><code>quote</code></strong></dt>
+<dd>是否以回复消息的形式发送，默认为 False。</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>int</code></dt>
+<dd>发送的消息的 message_id。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def send(
+    self,
+    target: Union[Entity, MessageEvent],
+    message: TMessage,
+    quote: bool = False
+) -&gt; int:
+    &#34;&#34;&#34;发送消息。可以从 `Friend` `Group` 等对象，或者从 `MessageEvent` 中自动识别消息发送对象。
+
+    Args:
+        target: 目标对象。
+        message: 发送的消息。
+        quote: 是否以回复消息的形式发送，默认为 False。
+
+    Returns:
+        int: 发送的消息的 message_id。
+    &#34;&#34;&#34;
+    # 识别消息发送对象
+    if isinstance(target, TempMessage):
+        quoting = target.message_chain.message_id if quote else None
+        return (
+            await self.send_temp_message(
+                qq=target.sender.id,
+                group=target.group.id,
+                message_chain=message,
+                quote=quoting
+            )
+        ).message_id
+
+    if isinstance(target, MessageEvent):
+        quoting = target.message_chain.message_id if quote else None
+        target = target.sender
+    else:
+        quoting = None
+
+    if isinstance(target, Friend):
+        send_message = self.send_friend_message
+        id_ = target.id
+    elif isinstance(target, Group):
+        send_message = self.send_group_message
+        id_ = target.id
+    elif isinstance(target, GroupMember):
+        send_message = self.send_group_message
+        id_ = target.group.id
+    else:
+        raise ValueError(f&#34;{target} 不是有效的消息发送对象。&#34;)
+
+    response = await send_message(
+        target=id_, message_chain=message, quote=quoting
+    )
+
+    return response.message_id if response else -1</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.bot.SimpleMirai" href="#mirai.bot.SimpleMirai">SimpleMirai</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.bot.SimpleMirai.adapter_info" href="adapters/base.html#mirai.adapters.base.AdapterInterface.adapter_info">adapter_info</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.asgi" href="#mirai.bot.SimpleMirai.asgi">asgi</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.background" href="#mirai.bot.SimpleMirai.background">background</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.call_api" href="#mirai.bot.SimpleMirai.call_api">call_api</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.emit" href="bus.html#mirai.bus.AbstractEventBus.emit">emit</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.run" href="#mirai.bot.SimpleMirai.run">run</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.session" href="#mirai.bot.SimpleMirai.session">session</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.shutdown" href="#mirai.bot.SimpleMirai.shutdown">shutdown</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.startup" href="#mirai.bot.SimpleMirai.startup">startup</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.subscribe" href="bus.html#mirai.bus.AbstractEventBus.subscribe">subscribe</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.unsubscribe" href="bus.html#mirai.bus.AbstractEventBus.unsubscribe">unsubscribe</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.use_adapter" href="#mirai.bot.SimpleMirai.use_adapter">use_adapter</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.bot.MiraiRunner"><code class="flex name class">
+<span>class <span class="ident">MiraiRunner</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>运行 SimpleMirai 对象的托管类。</p>
+<p>使用此类以实现机器人的多例运行。</p>
+<p>例如:</p>
+<pre><code class="language-py">runner = MiraiRunner(mirai)
+runner.run(host='127.0.0.1', port=8000)
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MiraiRunner(Singleton):
+    &#34;&#34;&#34;运行 SimpleMirai 对象的托管类。
+
+    使用此类以实现机器人的多例运行。
+
+    例如:
+    ```py
+    runner = MiraiRunner(mirai)
+    runner.run(host=&#39;127.0.0.1&#39;, port=8000)
+    ```
+    &#34;&#34;&#34;
+    bots: Iterable[SimpleMirai]
+    &#34;&#34;&#34;运行的 SimpleMirai 对象。&#34;&#34;&#34;
+    def __init__(self, *bots: SimpleMirai):
+        &#34;&#34;&#34;
+        Args:
+            *bots: 要运行的机器人。
+        &#34;&#34;&#34;
+        self.bots = bots
+        self._asgi = ASGI()
+        self._asgi.add_event_handler(&#39;startup&#39;, self.startup)
+        self._asgi.add_event_handler(&#39;shutdown&#39;, self.shutdown)
+
+    async def startup(self):
+        &#34;&#34;&#34;开始运行。&#34;&#34;&#34;
+        coros = [bot.startup() for bot in self.bots]
+        await asyncio.gather(*coros)
+
+    async def shutdown(self):
+        &#34;&#34;&#34;结束运行。&#34;&#34;&#34;
+        coros = [bot.shutdown() for bot in self.bots]
+        await asyncio.gather(*coros)
+
+    async def __call__(self, scope, recv, send):
+        await self._asgi(scope, recv, send)
+
+    async def _run(self):
+        try:
+            await self.startup()
+            backgrounds = [bot.background() for bot in self.bots]
+            await asyncio.gather(*backgrounds)
+        finally:
+            await self.shutdown()
+
+    def run(
+        self,
+        host: str = &#39;127.0.0.1&#39;,
+        port: int = 8000,
+        asgi_server: str = &#39;auto&#39;,
+        **kwargs
+    ):
+        &#34;&#34;&#34;开始运行机器人。
+
+        一般情况下，此函数会进入主循环，不再返回。
+        &#34;&#34;&#34;
+        if not asgi_serve(
+            self, host=host, port=port, asgi_server=asgi_server, **kwargs
+        ):
+            import textwrap
+            logger = logging.getLogger(__name__)
+            logger.warning(
+                textwrap.dedent(
+                    &#34;&#34;&#34;
+                    未找到可用的 ASGI 服务，反向 WebSocket 和 WebHook 上报将不可用。
+                    仅 HTTP 轮询与正向 WebSocket 可用。
+                    建议安装 ASGI 服务器，如 `uvicorn` 或 `hypercorn`。
+                    在命令行键入：
+                        pip install uvicorn
+                    或者
+                        pip install hypercorn
+                    &#34;&#34;&#34;
+                ).strip()
+            )
+            try:
+                asyncio.run(self._run())
+            except KeyboardInterrupt:
+                exit()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.utils.Singleton" href="utils.html#mirai.utils.Singleton">Singleton</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.bot.MiraiRunner.bots"><code class="name">var <span class="ident">bots</span> : Iterable[<a title="mirai.bot.SimpleMirai" href="#mirai.bot.SimpleMirai">SimpleMirai</a>]</code></dt>
+<dd>
+<div class="desc"><p>运行的 SimpleMirai 对象。</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="mirai.bot.MiraiRunner.run"><code class="name flex">
+<span>def <span class="ident">run</span></span>(<span>self, host: str = '127.0.0.1', port: int = 8000, asgi_server: str = 'auto', **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>开始运行机器人。</p>
+<p>一般情况下，此函数会进入主循环，不再返回。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def run(
+    self,
+    host: str = &#39;127.0.0.1&#39;,
+    port: int = 8000,
+    asgi_server: str = &#39;auto&#39;,
+    **kwargs
+):
+    &#34;&#34;&#34;开始运行机器人。
+
+    一般情况下，此函数会进入主循环，不再返回。
+    &#34;&#34;&#34;
+    if not asgi_serve(
+        self, host=host, port=port, asgi_server=asgi_server, **kwargs
+    ):
+        import textwrap
+        logger = logging.getLogger(__name__)
+        logger.warning(
+            textwrap.dedent(
+                &#34;&#34;&#34;
+                未找到可用的 ASGI 服务，反向 WebSocket 和 WebHook 上报将不可用。
+                仅 HTTP 轮询与正向 WebSocket 可用。
+                建议安装 ASGI 服务器，如 `uvicorn` 或 `hypercorn`。
+                在命令行键入：
+                    pip install uvicorn
+                或者
+                    pip install hypercorn
+                &#34;&#34;&#34;
+            ).strip()
+        )
+        try:
+            asyncio.run(self._run())
+        except KeyboardInterrupt:
+            exit()</code></pre>
+</details>
+</dd>
+<dt id="mirai.bot.MiraiRunner.shutdown"><code class="name flex">
+<span>async def <span class="ident">shutdown</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>结束运行。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def shutdown(self):
+    &#34;&#34;&#34;结束运行。&#34;&#34;&#34;
+    coros = [bot.shutdown() for bot in self.bots]
+    await asyncio.gather(*coros)</code></pre>
+</details>
+</dd>
+<dt id="mirai.bot.MiraiRunner.startup"><code class="name flex">
+<span>async def <span class="ident">startup</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>开始运行。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def startup(self):
+    &#34;&#34;&#34;开始运行。&#34;&#34;&#34;
+    coros = [bot.startup() for bot in self.bots]
+    await asyncio.gather(*coros)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="mirai.bot.Shutdown"><code class="flex name class">
+<span>class <span class="ident">Shutdown</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>关闭事件。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Shutdown(LifeSpan):
+    &#34;&#34;&#34;关闭事件。&#34;&#34;&#34;
+    type: str = &#39;Shutdown&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.bot.LifeSpan" href="#mirai.bot.LifeSpan">LifeSpan</a></li>
+<li><a title="mirai.models.events.Event" href="models/events.html#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="models/base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="models/base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.bot.LifeSpan" href="#mirai.bot.LifeSpan">LifeSpan</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.bot.LifeSpan.get_subtype" href="models/base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.bot.LifeSpan.parse_obj" href="models/base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.bot.LifeSpan.type" href="models/events.html#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.bot.SimpleMirai"><code class="flex name class">
+<span>class <span class="ident">SimpleMirai</span></span>
+<span>(</span><span>qq: int, adapter: <a title="mirai.adapters.base.Adapter" href="adapters/base.html#mirai.adapters.base.Adapter">Adapter</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>基于 adapter 和 bus，处于 model 层之下的机器人类。</p>
+<p>使用了 <code>__getattr__</code> 魔术方法，可以直接在对象上调用 API。</p>
+<p>通过 <code><a title="mirai.bot.SimpleMirai" href="#mirai.bot.SimpleMirai">SimpleMirai</a></code> 调用 API 时，需注意此类不含 model 层封装，
+因此 API 名称与参数名称需与 mirai-api-http 中的定义相同，
+参数需要全部以具名参数的形式给出，并且需要指明使用的方法（GET/POST）。</p>
+<p>例如：</p>
+<pre><code class="language-py">await bot.sendFriendMessage(target=12345678, messageChain=[
+    {&quot;type&quot;: &quot;Plain&quot;, &quot;text&quot;: &quot;Hello World!&quot;}
+], method=&quot;POST&quot;)
+</code></pre>
+<p>也可以使用 <code>call_api</code> 方法。</p>
+<p>对于名称的路由含有二级目录的 API，由于名称中含有斜杠，必须使用 <code>call_api</code> 调用，例如：</p>
+<pre><code class="language-py">file_list = await bot.call_api(
+    &quot;file/list&quot;, id=&quot;&quot;, target=12345678, method=&quot;GET&quot;
+)
+</code></pre>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>qq</code></strong></dt>
+<dd>QQ 号。启用 Single Mode 时，可以随便传入，登陆后会自动获取正确的 QQ 号。</dd>
+<dt><strong><code>adapter</code></strong></dt>
+<dd>适配器，负责与 mirai-api-http 沟通，详见模块`mirai.adapters。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
+    &#34;&#34;&#34;
+    基于 adapter 和 bus，处于 model 层之下的机器人类。
+
+    使用了 `__getattr__` 魔术方法，可以直接在对象上调用 API。
+
+    通过 `SimpleMirai` 调用 API 时，需注意此类不含 model 层封装，
+    因此 API 名称与参数名称需与 mirai-api-http 中的定义相同，
+    参数需要全部以具名参数的形式给出，并且需要指明使用的方法（GET/POST）。
+
+    例如：
+    ```py
+    await bot.sendFriendMessage(target=12345678, messageChain=[
+        {&#34;type&#34;: &#34;Plain&#34;, &#34;text&#34;: &#34;Hello World!&#34;}
+    ], method=&#34;POST&#34;)
+    ```
+
+    也可以使用 `call_api` 方法。
+
+    对于名称的路由含有二级目录的 API，由于名称中含有斜杠，必须使用 `call_api` 调用，例如：
+    ```py
+    file_list = await bot.call_api(
+        &#34;file/list&#34;, id=&#34;&#34;, target=12345678, method=&#34;GET&#34;
+    )
+    ```
+    &#34;&#34;&#34;
+    qq: int
+
+    def __init__(self, qq: int, adapter: Adapter):
+        &#34;&#34;&#34;
+        Args:
+            qq: QQ 号。启用 Single Mode 时，可以随便传入，登陆后会自动获取正确的 QQ 号。
+            adapter: 适配器，负责与 mirai-api-http 沟通，详见模块`mirai.adapters。
+        &#34;&#34;&#34;
+        self.qq = qq
+
+        self._adapter = adapter
+        self._bus = EventBus()
+        self._adapter.register_event_bus(self._bus)
+
+    @property
+    def bus(self) -&gt; EventBus:
+        return self._bus
+
+    def subscribe(self, event, func: Callable, priority: int = 0) -&gt; None:
+        self._bus.subscribe(event, func, priority)
+
+    def unsubscribe(self, event, func: Callable) -&gt; None:
+        self._bus.unsubscribe(event, func)
+
+    async def emit(self, event, *args, **kwargs) -&gt; List[Awaitable[Any]]:
+        return await self._bus.emit(event, *args, **kwargs)
+
+    async def call_api(self, api: str, *args, **kwargs):
+        &#34;&#34;&#34;调用 API。
+
+        Args:
+            api: API 名称。
+            *args: 参数。
+            **kwargs: 参数。
+        &#34;&#34;&#34;
+        return await self._adapter.call_api(api, *args, **kwargs)
+
+    def on(self, event: str, priority: int = 0) -&gt; Callable:
+        &#34;&#34;&#34;注册事件处理器。
+
+        用法举例：
+        ```py
+        @bot.on(&#39;FriendMessage&#39;)
+        async def on_friend_message(event: dict):
+            print(f&#34;收到来自{event[&#39;sender&#39;][&#39;nickname&#39;]}的消息。&#34;)
+        ```
+
+        Args:
+            event: 事件名。
+            priority: 优先级，小者优先。
+        &#34;&#34;&#34;
+        return self._bus.on(event, priority=priority)
+
+    @property
+    def adapter_info(self) -&gt; Dict[str, Any]:
+        return self._adapter.adapter_info
+
+    @contextlib.asynccontextmanager
+    async def use_adapter(self, adapter: Adapter):
+        &#34;&#34;&#34;临时使用另一个适配器。
+
+        用法：
+        ```py
+        async with bot.use_adapter(HTTPAdapter.via(bot)):
+            ...
+        ```
+
+        Args:
+            adapter: 使用的适配器。
+        &#34;&#34;&#34;
+        origin_adapter = self._adapter
+        await adapter.login(self.qq)
+        self._adapter = adapter
+        yield
+        self._adapter = origin_adapter
+        await adapter.logout(False)
+
+    async def startup(self):
+        &#34;&#34;&#34;开始运行机器人（立即返回）。&#34;&#34;&#34;
+        await self._adapter.login(self.qq)
+
+        if self._adapter.single_mode:
+            # Single Mode 下，QQ 号可以随便传入。这里从 session info 中获取正确的 QQ 号。
+            self.qq = (await self.call_api(&#39;sessionInfo&#39;))[&#39;data&#39;][&#39;qq&#39;][&#39;id&#39;]
+
+        asyncio.create_task(self._adapter.emit(&#34;Startup&#34;, {&#39;type&#39;: &#39;Startup&#39;}))
+        await self._adapter.start()
+
+    async def background(self):
+        &#34;&#34;&#34;等待背景任务完成。&#34;&#34;&#34;
+        await self._adapter.background
+
+    async def shutdown(self):
+        &#34;&#34;&#34;结束运行机器人。&#34;&#34;&#34;
+        await asyncio.create_task(
+            self._adapter.emit(&#34;Shutdown&#34;, {&#39;type&#39;: &#39;Shutdown&#39;})
+        )
+        await self._adapter.logout()
+        await self._adapter.shutdown()
+
+    @property
+    def session(self) -&gt; str:
+        &#34;&#34;&#34;获取 session key，可用于调试。
+
+        Returns:
+            str: session key。
+        &#34;&#34;&#34;
+        return self._adapter.session
+
+    @property
+    def asgi(self) -&gt; &#39;MiraiRunner&#39;:
+        &#34;&#34;&#34;ASGI 对象，用于使用 uvicorn 等启动。&#34;&#34;&#34;
+        return MiraiRunner(self)
+
+    def run(
+        self,
+        host: str = &#39;127.0.0.1&#39;,
+        port: int = 8000,
+        asgi_server: str = &#39;auto&#39;,
+        **kwargs
+    ):
+        &#34;&#34;&#34;开始运行机器人。
+
+        一般情况下，此函数会进入主循环，不再返回。
+
+        Args:
+            host: YiriMirai 作为服务器的地址，默认为 127.0.0.1。
+            port: YiriMirai 作为服务器的端口，默认为 8000。
+            asgi_server: ASGI 服务器类型，可选项有 `&#39;uvicorn&#39;` `&#39;hypercorn&#39;` 和 `&#39;auto&#39;`。
+            **kwargs: 可选参数。多余的参数将传递给 `uvicorn.run` 和 `hypercorn.run`。
+        &#34;&#34;&#34;
+        MiraiRunner(self).run(host, port, asgi_server, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.api_provider.ApiProvider" href="api_provider.html#mirai.api_provider.ApiProvider">ApiProvider</a></li>
+<li><a title="mirai.adapters.base.AdapterInterface" href="adapters/base.html#mirai.adapters.base.AdapterInterface">AdapterInterface</a></li>
+<li>abc.ABC</li>
+<li><a title="mirai.bus.AbstractEventBus" href="bus.html#mirai.bus.AbstractEventBus">AbstractEventBus</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mirai.bot.Mirai" href="#mirai.bot.Mirai">Mirai</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.bot.SimpleMirai.qq"><code class="name">var <span class="ident">qq</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="mirai.bot.SimpleMirai.asgi"><code class="name">var <span class="ident">asgi</span> : <a title="mirai.bot.MiraiRunner" href="#mirai.bot.MiraiRunner">MiraiRunner</a></code></dt>
+<dd>
+<div class="desc"><p>ASGI 对象，用于使用 uvicorn 等启动。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def asgi(self) -&gt; &#39;MiraiRunner&#39;:
+    &#34;&#34;&#34;ASGI 对象，用于使用 uvicorn 等启动。&#34;&#34;&#34;
+    return MiraiRunner(self)</code></pre>
+</details>
+</dd>
+<dt id="mirai.bot.SimpleMirai.bus"><code class="name">var <span class="ident">bus</span> : <a title="mirai.bus.EventBus" href="bus.html#mirai.bus.EventBus">EventBus</a></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def bus(self) -&gt; EventBus:
+    return self._bus</code></pre>
+</details>
+</dd>
+<dt id="mirai.bot.SimpleMirai.session"><code class="name">var <span class="ident">session</span> : str</code></dt>
+<dd>
+<div class="desc"><p>获取 session key，可用于调试。</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>session key。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def session(self) -&gt; str:
+    &#34;&#34;&#34;获取 session key，可用于调试。
+
+    Returns:
+        str: session key。
+    &#34;&#34;&#34;
+    return self._adapter.session</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="mirai.bot.SimpleMirai.background"><code class="name flex">
+<span>async def <span class="ident">background</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>等待背景任务完成。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def background(self):
+    &#34;&#34;&#34;等待背景任务完成。&#34;&#34;&#34;
+    await self._adapter.background</code></pre>
+</details>
+</dd>
+<dt id="mirai.bot.SimpleMirai.call_api"><code class="name flex">
+<span>async def <span class="ident">call_api</span></span>(<span>self, api: str, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>调用 API。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>api</code></strong></dt>
+<dd>API 名称。</dd>
+<dt><strong><code>*args</code></strong></dt>
+<dd>参数。</dd>
+<dt><strong><code>**kwargs</code></strong></dt>
+<dd>参数。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def call_api(self, api: str, *args, **kwargs):
+    &#34;&#34;&#34;调用 API。
+
+    Args:
+        api: API 名称。
+        *args: 参数。
+        **kwargs: 参数。
+    &#34;&#34;&#34;
+    return await self._adapter.call_api(api, *args, **kwargs)</code></pre>
+</details>
+</dd>
+<dt id="mirai.bot.SimpleMirai.on"><code class="name flex">
+<span>def <span class="ident">on</span></span>(<span>self, event: str, priority: int = 0) ‑> Callable</span>
+</code></dt>
+<dd>
+<div class="desc"><p>注册事件处理器。</p>
+<p>用法举例：</p>
+<pre><code class="language-py">@bot.on('FriendMessage')
+async def on_friend_message(event: dict):
+    print(f&quot;收到来自{event['sender']['nickname']}的消息。&quot;)
+</code></pre>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>event</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>priority</code></strong></dt>
+<dd>优先级，小者优先。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def on(self, event: str, priority: int = 0) -&gt; Callable:
+    &#34;&#34;&#34;注册事件处理器。
+
+    用法举例：
+    ```py
+    @bot.on(&#39;FriendMessage&#39;)
+    async def on_friend_message(event: dict):
+        print(f&#34;收到来自{event[&#39;sender&#39;][&#39;nickname&#39;]}的消息。&#34;)
+    ```
+
+    Args:
+        event: 事件名。
+        priority: 优先级，小者优先。
+    &#34;&#34;&#34;
+    return self._bus.on(event, priority=priority)</code></pre>
+</details>
+</dd>
+<dt id="mirai.bot.SimpleMirai.run"><code class="name flex">
+<span>def <span class="ident">run</span></span>(<span>self, host: str = '127.0.0.1', port: int = 8000, asgi_server: str = 'auto', **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>开始运行机器人。</p>
+<p>一般情况下，此函数会进入主循环，不再返回。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>host</code></strong></dt>
+<dd>YiriMirai 作为服务器的地址，默认为 127.0.0.1。</dd>
+<dt><strong><code>port</code></strong></dt>
+<dd>YiriMirai 作为服务器的端口，默认为 8000。</dd>
+<dt><strong><code>asgi_server</code></strong></dt>
+<dd>ASGI 服务器类型，可选项有 <code>'uvicorn'</code> <code>'hypercorn'</code> 和 <code>'auto'</code>。</dd>
+<dt><strong><code>**kwargs</code></strong></dt>
+<dd>可选参数。多余的参数将传递给 <code>uvicorn.run</code> 和 <code>hypercorn.run</code>。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def run(
+    self,
+    host: str = &#39;127.0.0.1&#39;,
+    port: int = 8000,
+    asgi_server: str = &#39;auto&#39;,
+    **kwargs
+):
+    &#34;&#34;&#34;开始运行机器人。
+
+    一般情况下，此函数会进入主循环，不再返回。
+
+    Args:
+        host: YiriMirai 作为服务器的地址，默认为 127.0.0.1。
+        port: YiriMirai 作为服务器的端口，默认为 8000。
+        asgi_server: ASGI 服务器类型，可选项有 `&#39;uvicorn&#39;` `&#39;hypercorn&#39;` 和 `&#39;auto&#39;`。
+        **kwargs: 可选参数。多余的参数将传递给 `uvicorn.run` 和 `hypercorn.run`。
+    &#34;&#34;&#34;
+    MiraiRunner(self).run(host, port, asgi_server, **kwargs)</code></pre>
+</details>
+</dd>
+<dt id="mirai.bot.SimpleMirai.shutdown"><code class="name flex">
+<span>async def <span class="ident">shutdown</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>结束运行机器人。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def shutdown(self):
+    &#34;&#34;&#34;结束运行机器人。&#34;&#34;&#34;
+    await asyncio.create_task(
+        self._adapter.emit(&#34;Shutdown&#34;, {&#39;type&#39;: &#39;Shutdown&#39;})
+    )
+    await self._adapter.logout()
+    await self._adapter.shutdown()</code></pre>
+</details>
+</dd>
+<dt id="mirai.bot.SimpleMirai.startup"><code class="name flex">
+<span>async def <span class="ident">startup</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>开始运行机器人（立即返回）。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def startup(self):
+    &#34;&#34;&#34;开始运行机器人（立即返回）。&#34;&#34;&#34;
+    await self._adapter.login(self.qq)
+
+    if self._adapter.single_mode:
+        # Single Mode 下，QQ 号可以随便传入。这里从 session info 中获取正确的 QQ 号。
+        self.qq = (await self.call_api(&#39;sessionInfo&#39;))[&#39;data&#39;][&#39;qq&#39;][&#39;id&#39;]
+
+    asyncio.create_task(self._adapter.emit(&#34;Startup&#34;, {&#39;type&#39;: &#39;Startup&#39;}))
+    await self._adapter.start()</code></pre>
+</details>
+</dd>
+<dt id="mirai.bot.SimpleMirai.use_adapter"><code class="name flex">
+<span>async def <span class="ident">use_adapter</span></span>(<span>self, adapter: <a title="mirai.adapters.base.Adapter" href="adapters/base.html#mirai.adapters.base.Adapter">Adapter</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>临时使用另一个适配器。</p>
+<p>用法：</p>
+<pre><code class="language-py">async with bot.use_adapter(HTTPAdapter.via(bot)):
+    ...
+</code></pre>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>adapter</code></strong></dt>
+<dd>使用的适配器。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@contextlib.asynccontextmanager
+async def use_adapter(self, adapter: Adapter):
+    &#34;&#34;&#34;临时使用另一个适配器。
+
+    用法：
+    ```py
+    async with bot.use_adapter(HTTPAdapter.via(bot)):
+        ...
+    ```
+
+    Args:
+        adapter: 使用的适配器。
+    &#34;&#34;&#34;
+    origin_adapter = self._adapter
+    await adapter.login(self.qq)
+    self._adapter = adapter
+    yield
+    self._adapter = origin_adapter
+    await adapter.logout(False)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.adapters.base.AdapterInterface" href="adapters/base.html#mirai.adapters.base.AdapterInterface">AdapterInterface</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.adapters.base.AdapterInterface.adapter_info" href="adapters/base.html#mirai.adapters.base.AdapterInterface.adapter_info">adapter_info</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="mirai.bus.AbstractEventBus" href="bus.html#mirai.bus.AbstractEventBus">AbstractEventBus</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.bus.AbstractEventBus.emit" href="bus.html#mirai.bus.AbstractEventBus.emit">emit</a></code></li>
+<li><code><a title="mirai.bus.AbstractEventBus.subscribe" href="bus.html#mirai.bus.AbstractEventBus.subscribe">subscribe</a></code></li>
+<li><code><a title="mirai.bus.AbstractEventBus.unsubscribe" href="bus.html#mirai.bus.AbstractEventBus.unsubscribe">unsubscribe</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.bot.Startup"><code class="flex name class">
+<span>class <span class="ident">Startup</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>启动事件。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Startup(LifeSpan):
+    &#34;&#34;&#34;启动事件。&#34;&#34;&#34;
+    type: str = &#39;Startup&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.bot.LifeSpan" href="#mirai.bot.LifeSpan">LifeSpan</a></li>
+<li><a title="mirai.models.events.Event" href="models/events.html#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="models/base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="models/base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.bot.LifeSpan" href="#mirai.bot.LifeSpan">LifeSpan</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.bot.LifeSpan.get_subtype" href="models/base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.bot.LifeSpan.parse_obj" href="models/base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.bot.LifeSpan.type" href="models/events.html#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="mirai" href="index.html">mirai</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="mirai.bot.LifeSpan" href="#mirai.bot.LifeSpan">LifeSpan</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mirai.bot.Mirai" href="#mirai.bot.Mirai">Mirai</a></code></h4>
+<ul class="two-column">
+<li><code><a title="mirai.bot.Mirai.allow" href="#mirai.bot.Mirai.allow">allow</a></code></li>
+<li><code><a title="mirai.bot.Mirai.api" href="#mirai.bot.Mirai.api">api</a></code></li>
+<li><code><a title="mirai.bot.Mirai.bus" href="#mirai.bot.Mirai.bus">bus</a></code></li>
+<li><code><a title="mirai.bot.Mirai.decline" href="#mirai.bot.Mirai.decline">decline</a></code></li>
+<li><code><a title="mirai.bot.Mirai.get_entity" href="#mirai.bot.Mirai.get_entity">get_entity</a></code></li>
+<li><code><a title="mirai.bot.Mirai.get_friend" href="#mirai.bot.Mirai.get_friend">get_friend</a></code></li>
+<li><code><a title="mirai.bot.Mirai.get_group" href="#mirai.bot.Mirai.get_group">get_group</a></code></li>
+<li><code><a title="mirai.bot.Mirai.get_group_member" href="#mirai.bot.Mirai.get_group_member">get_group_member</a></code></li>
+<li><code><a title="mirai.bot.Mirai.ignore" href="#mirai.bot.Mirai.ignore">ignore</a></code></li>
+<li><code><a title="mirai.bot.Mirai.is_admin" href="#mirai.bot.Mirai.is_admin">is_admin</a></code></li>
+<li><code><a title="mirai.bot.Mirai.on" href="#mirai.bot.Mirai.on">on</a></code></li>
+<li><code><a title="mirai.bot.Mirai.process_request" href="#mirai.bot.Mirai.process_request">process_request</a></code></li>
+<li><code><a title="mirai.bot.Mirai.qq" href="#mirai.bot.Mirai.qq">qq</a></code></li>
+<li><code><a title="mirai.bot.Mirai.send" href="#mirai.bot.Mirai.send">send</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.bot.MiraiRunner" href="#mirai.bot.MiraiRunner">MiraiRunner</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.bot.MiraiRunner.bots" href="#mirai.bot.MiraiRunner.bots">bots</a></code></li>
+<li><code><a title="mirai.bot.MiraiRunner.run" href="#mirai.bot.MiraiRunner.run">run</a></code></li>
+<li><code><a title="mirai.bot.MiraiRunner.shutdown" href="#mirai.bot.MiraiRunner.shutdown">shutdown</a></code></li>
+<li><code><a title="mirai.bot.MiraiRunner.startup" href="#mirai.bot.MiraiRunner.startup">startup</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.bot.Shutdown" href="#mirai.bot.Shutdown">Shutdown</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mirai.bot.SimpleMirai" href="#mirai.bot.SimpleMirai">SimpleMirai</a></code></h4>
+<ul class="two-column">
+<li><code><a title="mirai.bot.SimpleMirai.asgi" href="#mirai.bot.SimpleMirai.asgi">asgi</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.background" href="#mirai.bot.SimpleMirai.background">background</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.bus" href="#mirai.bot.SimpleMirai.bus">bus</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.call_api" href="#mirai.bot.SimpleMirai.call_api">call_api</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.on" href="#mirai.bot.SimpleMirai.on">on</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.qq" href="#mirai.bot.SimpleMirai.qq">qq</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.run" href="#mirai.bot.SimpleMirai.run">run</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.session" href="#mirai.bot.SimpleMirai.session">session</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.shutdown" href="#mirai.bot.SimpleMirai.shutdown">shutdown</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.startup" href="#mirai.bot.SimpleMirai.startup">startup</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.use_adapter" href="#mirai.bot.SimpleMirai.use_adapter">use_adapter</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.bot.Startup" href="#mirai.bot.Startup">Startup</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>

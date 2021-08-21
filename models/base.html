@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>mirai.models.base API documentation</title>
+<meta name="description" content="此模块提供 YiriMirai 中使用的 pydantic 模型的基类。" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>mirai.models.base</code></h1>
+</header>
+<section id="section-intro">
+<p>此模块提供 YiriMirai 中使用的 pydantic 模型的基类。</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># -*- coding: utf-8 -*-
+&#34;&#34;&#34;
+此模块提供 YiriMirai 中使用的 pydantic 模型的基类。
+&#34;&#34;&#34;
+from typing import Dict, List, Type
+
+import pydantic.main as pdm
+from pydantic import BaseModel
+
+
+class MiraiMetaclass(pdm.ModelMetaclass):
+    &#34;&#34;&#34;此类是 YiriMirai 中使用的 pydantic 模型的元类的基类。&#34;&#34;&#34;
+
+
+def to_camel(name: str) -&gt; str:
+    &#34;&#34;&#34;将下划线命名风格转换为小驼峰命名。&#34;&#34;&#34;
+    if name[:2] == &#39;__&#39;:  # 不处理双下划线开头的特殊命名。
+        return name
+    name_parts = name.split(&#39;_&#39;)
+    return &#39;&#39;.join(name_parts[:1] + [x.title() for x in name_parts[1:]])
+
+
+class MiraiBaseModel(BaseModel, metaclass=MiraiMetaclass):
+    &#34;&#34;&#34;模型基类。
+
+    启用了三项配置：
+    1. 允许解析时传入额外的值，并将额外值保存在模型中。
+    2. 允许通过别名访问字段。
+    3. 自动生成小驼峰风格的别名，以符合 mirai-api-http 的命名。
+    &#34;&#34;&#34;
+    def __init__(self, *args, **kwargs):
+        &#34;&#34;&#34;&#34;&#34;&#34;
+        super().__init__(*args, **kwargs)
+
+    def __repr__(self) -&gt; str:
+        return self.__class__.__name__ + &#39;(&#39; + &#39;, &#39;.join(
+            (f&#39;{k}={repr(v)}&#39; for k, v in self.__dict__.items() if v)
+        ) + &#39;)&#39;
+
+    class Config:
+        extra = &#39;allow&#39;
+        allow_population_by_field_name = True
+        alias_generator = to_camel
+
+
+class MiraiIndexedMetaclass(MiraiMetaclass):
+    &#34;&#34;&#34;可以通过子类名获取子类的类的元类。&#34;&#34;&#34;
+    __indexedbases__: List[Type[&#39;MiraiIndexedModel&#39;]] = []
+    __indexedmodel__ = None
+
+    def __new__(cls, name, bases, attrs, **kwargs):
+        new_cls = super().__new__(cls, name, bases, attrs, **kwargs)
+        # 第一类：MiraiIndexedModel
+        if name == &#39;MiraiIndexedModel&#39;:
+            cls.__indexedmodel__ = new_cls
+            new_cls.__indexes__ = {}
+            return new_cls
+        # 第二类：MiraiIndexedModel 的直接子类，这些是可以通过子类名获取子类的类。
+        if cls.__indexedmodel__ in bases:
+            cls.__indexedbases__.append(new_cls)
+            new_cls.__indexes__ = {}
+            return new_cls
+        # 第三类：MiraiIndexedModel 的直接子类的子类，这些添加到直接子类的索引中。
+        for base in cls.__indexedbases__:
+            if issubclass(new_cls, base):
+                base.__indexes__[name] = new_cls
+                return new_cls
+
+    def __getitem__(cls, name):
+        return cls.get_subtype(name)
+
+
+class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):
+    &#34;&#34;&#34;可以通过子类名获取子类的类。&#34;&#34;&#34;
+    __indexes__: Dict[str, Type[&#39;MiraiIndexedModel&#39;]]
+
+    @classmethod
+    def get_subtype(cls, name: str) -&gt; Type[&#39;MiraiIndexedModel&#39;]:
+        &#34;&#34;&#34;根据类名称，获取相应的子类类型。
+
+        Args:
+            name: 类名称。
+
+        Returns:
+            Type[&#39;MiraiIndexedModel&#39;]: 子类类型。
+        &#34;&#34;&#34;
+        try:
+            type_ = cls.__indexes__.get(name)
+            if not (type_ and issubclass(type_, cls)):
+                raise ValueError(f&#39;`{name}` 不是 `{cls.__name__}` 的子类！&#39;)
+            return type_
+        except AttributeError as e:
+            raise ValueError(f&#39;`{name}` 不是 `{cls.__name__}` 的子类！&#39;) from None
+
+    @classmethod
+    def parse_obj(cls, obj: dict) -&gt; &#39;MiraiIndexedModel&#39;:
+        &#34;&#34;&#34;通过字典，构造对应的模型对象。
+
+        Args:
+            obj: 一个字典，包含了模型对象的属性。
+
+        Returns:
+            MiraiIndexedModel: 构造的对象。
+        &#34;&#34;&#34;
+        if cls in MiraiIndexedModel.__subclasses__():
+            ModelType = cls.get_subtype(obj[&#39;type&#39;])
+            return ModelType.parse_obj(obj)
+        return super().parse_obj(obj)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="mirai.models.base.to_camel"><code class="name flex">
+<span>def <span class="ident">to_camel</span></span>(<span>name: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>将下划线命名风格转换为小驼峰命名。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_camel(name: str) -&gt; str:
+    &#34;&#34;&#34;将下划线命名风格转换为小驼峰命名。&#34;&#34;&#34;
+    if name[:2] == &#39;__&#39;:  # 不处理双下划线开头的特殊命名。
+        return name
+    name_parts = name.split(&#39;_&#39;)
+    return &#39;&#39;.join(name_parts[:1] + [x.title() for x in name_parts[1:]])</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="mirai.models.base.MiraiBaseModel"><code class="flex name class">
+<span>class <span class="ident">MiraiBaseModel</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>模型基类。</p>
+<p>启用了三项配置：
+1. 允许解析时传入额外的值，并将额外值保存在模型中。
+2. 允许通过别名访问字段。
+3. 自动生成小驼峰风格的别名，以符合 mirai-api-http 的命名。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MiraiBaseModel(BaseModel, metaclass=MiraiMetaclass):
+    &#34;&#34;&#34;模型基类。
+
+    启用了三项配置：
+    1. 允许解析时传入额外的值，并将额外值保存在模型中。
+    2. 允许通过别名访问字段。
+    3. 自动生成小驼峰风格的别名，以符合 mirai-api-http 的命名。
+    &#34;&#34;&#34;
+    def __init__(self, *args, **kwargs):
+        &#34;&#34;&#34;&#34;&#34;&#34;
+        super().__init__(*args, **kwargs)
+
+    def __repr__(self) -&gt; str:
+        return self.__class__.__name__ + &#39;(&#39; + &#39;, &#39;.join(
+            (f&#39;{k}={repr(v)}&#39; for k, v in self.__dict__.items() if v)
+        ) + &#39;)&#39;
+
+    class Config:
+        extra = &#39;allow&#39;
+        allow_population_by_field_name = True
+        alias_generator = to_camel</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mirai.models.api.DownloadInfo" href="api.html#mirai.models.api.DownloadInfo">DownloadInfo</a></li>
+<li><a title="mirai.models.api.FileProperties" href="api.html#mirai.models.api.FileProperties">FileProperties</a></li>
+<li><a title="mirai.models.api.ProfileResponse" href="api.html#mirai.models.api.ProfileResponse">ProfileResponse</a></li>
+<li><a title="mirai.models.api.Response" href="api.html#mirai.models.api.Response">Response</a></li>
+<li><a title="mirai.models.api.SessionInfoResponse.Data" href="api.html#mirai.models.api.SessionInfoResponse.Data">SessionInfoResponse.Data</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.entities.Config" href="entities.html#mirai.models.entities.Config">Config</a></li>
+<li><a title="mirai.models.entities.Entity" href="entities.html#mirai.models.entities.Entity">Entity</a></li>
+<li><a title="mirai.models.entities.Subject" href="entities.html#mirai.models.entities.Subject">Subject</a></li>
+<li><a title="mirai.models.message.ForwardMessageNode" href="message.html#mirai.models.message.ForwardMessageNode">ForwardMessageNode</a></li>
+<li><a title="mirai.models.message.MessageChain" href="message.html#mirai.models.message.MessageChain">MessageChain</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.base.MiraiBaseModel.Config"><code class="name">var <span class="ident">Config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="mirai.models.base.MiraiIndexedMetaclass"><code class="flex name class">
+<span>class <span class="ident">MiraiIndexedMetaclass</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>可以通过子类名获取子类的类的元类。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MiraiIndexedMetaclass(MiraiMetaclass):
+    &#34;&#34;&#34;可以通过子类名获取子类的类的元类。&#34;&#34;&#34;
+    __indexedbases__: List[Type[&#39;MiraiIndexedModel&#39;]] = []
+    __indexedmodel__ = None
+
+    def __new__(cls, name, bases, attrs, **kwargs):
+        new_cls = super().__new__(cls, name, bases, attrs, **kwargs)
+        # 第一类：MiraiIndexedModel
+        if name == &#39;MiraiIndexedModel&#39;:
+            cls.__indexedmodel__ = new_cls
+            new_cls.__indexes__ = {}
+            return new_cls
+        # 第二类：MiraiIndexedModel 的直接子类，这些是可以通过子类名获取子类的类。
+        if cls.__indexedmodel__ in bases:
+            cls.__indexedbases__.append(new_cls)
+            new_cls.__indexes__ = {}
+            return new_cls
+        # 第三类：MiraiIndexedModel 的直接子类的子类，这些添加到直接子类的索引中。
+        for base in cls.__indexedbases__:
+            if issubclass(new_cls, base):
+                base.__indexes__[name] = new_cls
+                return new_cls
+
+    def __getitem__(cls, name):
+        return cls.get_subtype(name)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.base.MiraiMetaclass" href="#mirai.models.base.MiraiMetaclass">MiraiMetaclass</a></li>
+<li>pydantic.main.ModelMetaclass</li>
+<li>abc.ABCMeta</li>
+<li>builtins.type</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mirai.models.api.ApiMetaclass" href="api.html#mirai.models.api.ApiMetaclass">ApiMetaclass</a></li>
+<li>mirai.models.message.MessageComponentMetaclass</li>
+</ul>
+</dd>
+<dt id="mirai.models.base.MiraiIndexedModel"><code class="flex name class">
+<span>class <span class="ident">MiraiIndexedModel</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>可以通过子类名获取子类的类。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):
+    &#34;&#34;&#34;可以通过子类名获取子类的类。&#34;&#34;&#34;
+    __indexes__: Dict[str, Type[&#39;MiraiIndexedModel&#39;]]
+
+    @classmethod
+    def get_subtype(cls, name: str) -&gt; Type[&#39;MiraiIndexedModel&#39;]:
+        &#34;&#34;&#34;根据类名称，获取相应的子类类型。
+
+        Args:
+            name: 类名称。
+
+        Returns:
+            Type[&#39;MiraiIndexedModel&#39;]: 子类类型。
+        &#34;&#34;&#34;
+        try:
+            type_ = cls.__indexes__.get(name)
+            if not (type_ and issubclass(type_, cls)):
+                raise ValueError(f&#39;`{name}` 不是 `{cls.__name__}` 的子类！&#39;)
+            return type_
+        except AttributeError as e:
+            raise ValueError(f&#39;`{name}` 不是 `{cls.__name__}` 的子类！&#39;) from None
+
+    @classmethod
+    def parse_obj(cls, obj: dict) -&gt; &#39;MiraiIndexedModel&#39;:
+        &#34;&#34;&#34;通过字典，构造对应的模型对象。
+
+        Args:
+            obj: 一个字典，包含了模型对象的属性。
+
+        Returns:
+            MiraiIndexedModel: 构造的对象。
+        &#34;&#34;&#34;
+        if cls in MiraiIndexedModel.__subclasses__():
+            ModelType = cls.get_subtype(obj[&#39;type&#39;])
+            return ModelType.parse_obj(obj)
+        return super().parse_obj(obj)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.base.MiraiBaseModel" href="#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mirai.models.api.ApiBaseModel" href="api.html#mirai.models.api.ApiBaseModel">ApiBaseModel</a></li>
+<li><a title="mirai.models.events.Event" href="events.html#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a></li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="mirai.models.base.MiraiIndexedModel.get_subtype"><code class="name flex">
+<span>def <span class="ident">get_subtype</span></span>(<span>name: str) ‑> Type[<a title="mirai.models.base.MiraiIndexedModel" href="#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>根据类名称，获取相应的子类类型。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>类名称。</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Type['MiraiIndexedModel']: 子类类型。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def get_subtype(cls, name: str) -&gt; Type[&#39;MiraiIndexedModel&#39;]:
+    &#34;&#34;&#34;根据类名称，获取相应的子类类型。
+
+    Args:
+        name: 类名称。
+
+    Returns:
+        Type[&#39;MiraiIndexedModel&#39;]: 子类类型。
+    &#34;&#34;&#34;
+    try:
+        type_ = cls.__indexes__.get(name)
+        if not (type_ and issubclass(type_, cls)):
+            raise ValueError(f&#39;`{name}` 不是 `{cls.__name__}` 的子类！&#39;)
+        return type_
+    except AttributeError as e:
+        raise ValueError(f&#39;`{name}` 不是 `{cls.__name__}` 的子类！&#39;) from None</code></pre>
+</details>
+</dd>
+<dt id="mirai.models.base.MiraiIndexedModel.parse_obj"><code class="name flex">
+<span>def <span class="ident">parse_obj</span></span>(<span>obj: dict) ‑> <a title="mirai.models.base.MiraiIndexedModel" href="#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>通过字典，构造对应的模型对象。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>obj</code></strong></dt>
+<dd>一个字典，包含了模型对象的属性。</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="mirai.models.base.MiraiIndexedModel" href="#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></code></dt>
+<dd>构造的对象。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def parse_obj(cls, obj: dict) -&gt; &#39;MiraiIndexedModel&#39;:
+    &#34;&#34;&#34;通过字典，构造对应的模型对象。
+
+    Args:
+        obj: 一个字典，包含了模型对象的属性。
+
+    Returns:
+        MiraiIndexedModel: 构造的对象。
+    &#34;&#34;&#34;
+    if cls in MiraiIndexedModel.__subclasses__():
+        ModelType = cls.get_subtype(obj[&#39;type&#39;])
+        return ModelType.parse_obj(obj)
+    return super().parse_obj(obj)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="mirai.models.base.MiraiMetaclass"><code class="flex name class">
+<span>class <span class="ident">MiraiMetaclass</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>此类是 YiriMirai 中使用的 pydantic 模型的元类的基类。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MiraiMetaclass(pdm.ModelMetaclass):
+    &#34;&#34;&#34;此类是 YiriMirai 中使用的 pydantic 模型的元类的基类。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.ModelMetaclass</li>
+<li>abc.ABCMeta</li>
+<li>builtins.type</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mirai.models.base.MiraiIndexedMetaclass" href="#mirai.models.base.MiraiIndexedMetaclass">MiraiIndexedMetaclass</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="mirai.models" href="index.html">mirai.models</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="mirai.models.base.to_camel" href="#mirai.models.base.to_camel">to_camel</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="mirai.models.base.MiraiBaseModel" href="#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.base.MiraiBaseModel.Config" href="#mirai.models.base.MiraiBaseModel.Config">Config</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.base.MiraiIndexedMetaclass" href="#mirai.models.base.MiraiIndexedMetaclass">MiraiIndexedMetaclass</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mirai.models.base.MiraiIndexedModel" href="#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.base.MiraiIndexedModel.get_subtype" href="#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.base.MiraiIndexedModel.parse_obj" href="#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.base.MiraiMetaclass" href="#mirai.models.base.MiraiMetaclass">MiraiMetaclass</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>
