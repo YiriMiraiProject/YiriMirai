@@ -1,4 +1,4 @@
-# deploy on vercel
+# deploy on pages
 name: pdoc
 
 on:
@@ -34,16 +34,22 @@ jobs:
 
       - name: prepare vercel project
         run: |
-          mv ./docs/mirai ./docs/yiri-mirai-api
+          mv ./docs/mirai/* ./docs/
 
-      - uses: actions/setup-node@v1
+      # - uses: actions/setup-node@v1
+      #   with:
+      #     node-version: "14.x"
+
+      # - name: install vercel cli
+      #   run: npm i vercel
+
+      # - name: deploy
+      #   run: |
+      #     vercel link "$PWD/docs/yiri-mirai-api" --confirm --token=${{ secrets.VERCEL_TOKEN }}
+      #     vercel deploy "$PWD/docs/yiri-mirai-api" --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
-          node-version: "14.x"
-
-      - name: install vercel cli
-        run: npm i vercel
-
-      - name: deploy
-        run: |
-          vercel link "$PWD/docs/yiri-mirai-api" --confirm --token=${{ secrets.VERCEL_TOKEN }}
-          vercel deploy "$PWD/docs/yiri-mirai-api" --prod --token=${{ secrets.VERCEL_TOKEN }}
+          branch: gh-pages # The branch the action should deploy to.
+          folder: docs # The folder the action should deploy.
