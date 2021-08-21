@@ -82,7 +82,7 @@ class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):
             name: 类名称。
 
         Returns:
-            `Type['MiraiIndexedModel']`: 子类类型。
+            Type['MiraiIndexedModel']: 子类类型。
         """
         try:
             type_ = cls.__indexes__.get(name)
@@ -97,10 +97,10 @@ class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):
         """通过字典，构造对应的模型对象。
 
         Args:
-            obj (`dict`): 一个字典，包含了模型对象的属性。
+            obj: 一个字典，包含了模型对象的属性。
 
         Returns:
-            `MiraiIndexedModel`: 构造的对象。
+            MiraiIndexedModel: 构造的对象。
         """
         if cls in MiraiIndexedModel.__subclasses__():
             ModelType = cls.get_subtype(obj['type'])

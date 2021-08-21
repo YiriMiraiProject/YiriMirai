@@ -49,9 +49,9 @@ class ModelEventBus(EventBus):
         """注册事件处理器。
 
         Args:
-            event (`Type[Event]`): 事件类型。
-            func (`Callable`): 事件处理器。
-            priority (`int`): 优先级，小者优先。
+            event: 事件类型。
+            func: 事件处理器。
+            priority: 优先级，小者优先。
         """
         if isinstance(event_type, str):
             event_type = cast(Type[Event], Event.get_subtype(event_type))
@@ -72,8 +72,8 @@ class ModelEventBus(EventBus):
         """移除事件处理器。
 
         Args:
-            event_type (`Type[Event]`): 事件类型。
-            func (`Callable`): 事件处理器。
+            event_type: 事件类型。
+            func: 事件处理器。
         """
         if isinstance(event_type, str):
             event_type = cast(Type[Event], Event.get_subtype(event_type))
@@ -97,8 +97,8 @@ class ModelEventBus(EventBus):
         ```
 
         Args:
-            event_type (`Union[Type[Event], str]`): 事件类型或事件名。
-            priority (`int`): 优先级，小者优先。
+            event_type: 事件类型或事件名。
+            priority: 优先级，小者优先。
         """
         def decorator(func: Callable) -> Callable:
             self.subscribe(event_type, func, priority)
@@ -111,8 +111,9 @@ class ModelEventBus(EventBus):
         """触发一个事件。
 
         Args:
-            event (`Event`): 要触发的事件。
-            *args, **kwargs: 参数。
+            event: 要触发的事件。
+            *args: 参数。
+            **kwargs: 参数。
         """
         if isinstance(event, str):
             return await super().emit(event, *args, **kwargs)

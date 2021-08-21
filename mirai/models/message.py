@@ -27,10 +27,10 @@ def serialize(s: str) -> str:
     """mirai 码转义。
 
     Args:
-        s (`str`): 待转义的字符串。
+        s: 待转义的字符串。
 
     Returns:
-        `str`: 去转义后的字符串。
+        str: 去转义后的字符串。
     """
     return re.sub(r'[\[\]:,\\]', lambda match: '\\' + match.group(0),
                   s).replace('\n', '\\n').replace('\r', '\\r')
@@ -40,10 +40,10 @@ def deserialize(s: str) -> str:
     """mirai 码去转义。
 
     Args:
-        s (`str`): 待去转义的字符串。
+        s: 待去转义的字符串。
 
     Returns:
-        `str`: 去转义后的字符串。
+        str: 去转义后的字符串。
     """
     return re.sub(
         r'\\([\[\]:,\\])', lambda match: match.group(1),
@@ -283,7 +283,7 @@ class MessageChain(MiraiBaseModel):
         """通过列表形式的消息链，构造对应的 `MessageChain` 对象。
 
         Args:
-            msg_chain (`Iterable`): 列表形式的消息链。
+            msg_chain: 列表形式的消息链。
         """
         result = cls._parse_message_chain(msg_chain)
         return cls(__root__=result)
@@ -334,12 +334,12 @@ class MessageChain(MiraiBaseModel):
                 如果为 `Type[TMessageComponent]`，则返回该类型的全部消息组件。
                 如果为 `Tuple[Type[TMessageComponent], int]`，则返回该类型的至多 `index[1]` 个消息组件。
 
-            count (`Optional[int]`): 如果为 `int`，则返回至多 `count` 个消息组件。
+            count: 如果为 `int`，则返回至多 `count` 个消息组件。
 
         Returns:
-            `MessageComponent`: 返回指定索引处的消息组件。
-            `List[MessageComponent]`: 返回指定索引范围的消息组件。
-            `List[TMessageComponent]`: 返回指定类型的消息组件构成的列表。
+            MessageComponent: 返回指定索引处的消息组件。
+            List[MessageComponent]: 返回指定索引范围的消息组件。
+            List[TMessageComponent]: 返回指定类型的消息组件构成的列表。
         """
         # 正常索引
         if isinstance(index, int):
@@ -511,8 +511,8 @@ class MessageChain(MiraiBaseModel):
         Args:
             x (`Union[MessageComponent, Type[MessageComponent]]`):
                 要查找的消息元素或消息元素类型。
-            i (`int`): 从哪个位置开始查找。
-            j (`int`): 查找到哪个位置结束。
+            i: 从哪个位置开始查找。
+            j: 查找到哪个位置结束。
 
         Returns:
             int: 如果找到，则返回索引号。
@@ -559,7 +559,7 @@ class MessageChain(MiraiBaseModel):
         """将另一个消息链中的元素添加到消息链末尾。
 
         Args:
-            x (`Iterable[Union[MessageComponent, str]]`): 另一个消息链，也可为消息元素或字符串元素的序列。
+            x: 另一个消息链，也可为消息元素或字符串元素的序列。
         """
         self.__root__.extend(Plain(c) if isinstance(c, str) else c for c in x)
 
@@ -567,7 +567,7 @@ class MessageChain(MiraiBaseModel):
         """将一个消息元素或字符串元素添加到消息链末尾。
 
         Args:
-            x (`Union[MessageComponent, str]`): 消息元素或字符串元素。
+            x: 消息元素或字符串元素。
         """
         self.__root__.append(Plain(x) if isinstance(x, str) else x)
 
@@ -575,8 +575,8 @@ class MessageChain(MiraiBaseModel):
         """将一个消息元素或字符串添加到消息链中指定位置。
 
         Args:
-            i (`int`): 插入位置。
-            x (`Union[MessageComponent, str]`): 消息元素或字符串元素。
+            i: 插入位置。
+            x: 消息元素或字符串元素。
         """
         self.__root__.insert(i, Plain(x) if isinstance(x, str) else x)
 
@@ -584,7 +584,7 @@ class MessageChain(MiraiBaseModel):
         """从消息链中移除并返回指定位置的元素。
 
         Args:
-            i (`int`): 移除位置。默认为末尾。
+            i: 移除位置。默认为末尾。
 
         Returns:
             MessageComponent: 移除的元素。
@@ -595,7 +595,7 @@ class MessageChain(MiraiBaseModel):
         """从消息链中移除指定元素或指定类型的一个元素。
 
         Args:
-            x (`Union[MessageComponent, Type[MessageComponent]]`): 指定的元素或元素类型。
+            x: 指定的元素或元素类型。
         """
         if isinstance(x, type):
             self.pop(self.index(x))
@@ -610,8 +610,8 @@ class MessageChain(MiraiBaseModel):
         """返回移除指定元素或指定类型的元素后剩余的消息链。
 
         Args:
-            x (`Union[MessageComponent, Type[MessageComponent]]`): 指定的元素或元素类型。
-            count (`int`): 至多移除的数量。默认为全部移除。
+            x: 指定的元素或元素类型。
+            count: 至多移除的数量。默认为全部移除。
 
         Returns:
             MessageChain: 剩余的消息链。
@@ -808,9 +808,9 @@ class Image(MessageComponent):
         """下载图片到本地。
 
         Args:
-            filename (`Union[str, Path, None]`): 下载到本地的文件路径。与 `directory` 二选一。
-            directory (`Union[str, Path, None]`): 下载到本地的文件夹路径。与 `filename` 二选一。
-            determine_type (`bool`): 是否自动根据图片类型确定拓展名，默认为 True。
+            filename: 下载到本地的文件路径。与 `directory` 二选一。
+            directory: 下载到本地的文件夹路径。与 `filename` 二选一。
+            determine_type: 是否自动根据图片类型确定拓展名，默认为 True。
         """
         if not self.url:
             logger.warning(f'图片 `{self.uuid}` 无 url 参数，下载失败。')
@@ -853,11 +853,11 @@ class Image(MessageComponent):
         """从本地文件路径加载图片，以 base64 的形式传递。
 
         Args:
-            filename (`Union[str, Path, None]`): 从本地文件路径加载图片，与 `content` 二选一。
-            content (`Optional[bytes]`): 从本地文件内容加载图片，与 `filename` 二选一。
+            filename: 从本地文件路径加载图片，与 `content` 二选一。
+            content: 从本地文件内容加载图片，与 `filename` 二选一。
 
         Returns:
-            `Image`: 图片对象。
+            Image: 图片对象。
         """
         if content:
             pass
@@ -877,10 +877,10 @@ class Image(MessageComponent):
         """从不安全的路径加载图片。
 
         Args:
-            path (`Union[str, Path]`): 从不安全的路径加载图片。
+            path: 从不安全的路径加载图片。
 
         Returns:
-            `Image`: 图片对象。
+            Image: 图片对象。
         """
         return cls.construct(path=str(path))
 
@@ -1054,8 +1054,8 @@ class Voice(MessageComponent):
         语音采用 silk v3 格式，silk 格式的编码解码请使用 [graiax-silkcoder](https://pypi.org/project/graiax-silkcoder/)。
 
         Args:
-            filename (`Union[str, Path, None]`): 下载到本地的文件路径。与 `directory` 二选一。
-            directory (`Union[str, Path, None]`): 下载到本地的文件夹路径。与 `filename` 二选一。
+            filename: 下载到本地的文件路径。与 `directory` 二选一。
+            directory: 下载到本地的文件夹路径。与 `filename` 二选一。
         """
         if not self.url:
             logger.warning(f'语音 `{self.voice_id}` 无 url 参数，下载失败。')
@@ -1090,8 +1090,8 @@ class Voice(MessageComponent):
         """从本地文件路径加载语音，以 base64 的形式传递。
 
         Args:
-            filename (`Union[str, Path, None]`): 从本地文件路径加载语音，与 `content` 二选一。
-            content (`Optional[bytes]`): 从本地文件内容加载语音，与 `filename` 二选一。
+            filename: 从本地文件路径加载语音，与 `content` 二选一。
+            content: 从本地文件内容加载语音，与 `filename` 二选一。
         """
         if content:
             pass
@@ -1171,11 +1171,11 @@ class ForwardMessageNode(MiraiBaseModel):
         """从生成转发消息。
 
         Args:
-            sender (`Union[Friend, GroupMember]`): 发送人。
-            message (`MessageChain`): 消息内容。
+            sender: 发送人。
+            message: 消息内容。
 
         Returns:
-            `ForwardMessageNode`: 生成的一条消息。
+            ForwardMessageNode: 生成的一条消息。
         """
         return ForwardMessageNode(
             sender_id=sender.id,

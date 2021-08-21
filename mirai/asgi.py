@@ -50,12 +50,12 @@ class ASGI(Singleton):
         """添加路由。
 
         Args:
-            path (`str`): 路由的路径。
-            endpoint (`Callable`): 路由的处理函数。
-            methods (`Optional[List[str]]`): 路由的请求方法。默认为 `['GET']`。
+            path: 路由的路径。
+            endpoint: 路由的处理函数。
+            methods: 路由的请求方法。默认为 `['GET']`。
 
         Returns:
-            `ASGI`: 返回自身。
+            ASGI: 返回自身。
         """
         methods = methods or ['GET']
 
@@ -82,11 +82,11 @@ class ASGI(Singleton):
         """挂载另一个 ASGI 服务器。通过这个方法，可以同时运行 FastAPI 之类的服务。
 
         Args:
-            path (`str`): 要挂载的路径。
-            app (`Callable`): 要挂载的 ASGI 服务器。
+            path: 要挂载的路径。
+            app: 要挂载的 ASGI 服务器。
 
         Returns:
-            `ASGI`: 返回自身。
+            ASGI: 返回自身。
         """
         if not path.startswith('/'):
             path = '/' + path
@@ -110,9 +110,9 @@ def asgi_serve(
 
     Args:
         app: ASGI 应用程序。
-        host (`str`): 服务器地址，默认为 127.0.0.1。
-        port (`int`): 服务器端口，默认为 8000。
-        asgi_server (`str`): ASGI 服务器，可选的有 `hypercorn` `uvicorn` 和 `auto`。
+        host: 服务器地址，默认为 127.0.0.1。
+        port: 服务器端口，默认为 8000。
+        asgi_server: ASGI 服务器，可选的有 `hypercorn` `uvicorn` 和 `auto`。
             如果设置为 `auto`，自动寻找是否已安装可用的 ASGI 服务（`unicorn` 或 `hypercorn`），并运行。
     """
     if asgi_server == 'auto':

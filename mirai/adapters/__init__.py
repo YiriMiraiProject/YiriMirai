@@ -28,6 +28,7 @@ def __getattr__(name):
         module_name = MODULES[name]
         module = importlib.import_module(module_name, __name__)
         return getattr(module, name)
+    raise AttributeError(f'Module {__name__} has no attribute {name}')
 
 
 __all__ = [

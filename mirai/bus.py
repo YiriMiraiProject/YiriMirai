@@ -37,7 +37,7 @@ def event_chain_single(event: str):
     yield event
 
 
-class AbstractEventBus:
+class AbstractEventBus():
     """抽象事件总线。
 
     事件总线的基类。
@@ -48,8 +48,8 @@ class AbstractEventBus:
 
         Args:
             event: 事件名。
-            func (`Callable`): 事件处理器。
-            priority (`int`): 优先级，小者优先。
+            func: 事件处理器。
+            priority: 优先级，小者优先。
         """
 
     @abc.abstractmethod
@@ -58,7 +58,7 @@ class AbstractEventBus:
 
         Args:
             event: 事件名。
-            func (`Callable`): 事件处理器。
+            func: 事件处理器。
         """
 
     @abc.abstractmethod
@@ -74,7 +74,7 @@ class AbstractEventBus:
 
         Args:
             event: 事件名。
-            priority (`int`): 优先级，小者优先。
+            priority: 优先级，小者优先。
         """
 
     @abc.abstractmethod
@@ -85,10 +85,11 @@ class AbstractEventBus:
 
         Args:
             event: 要触发的事件名称。
-            *args, **kwargs: 传递给事件处理器的参数。
+            *args: 传递给事件处理器的参数。
+            **kwargs: 传递给事件处理器的参数。
 
         Returns:
-            `List[Awaitable[Any]]`: 所有事件处理器的快速响应协程的 Task。
+            List[Awaitable[Any]]: 所有事件处理器的快速响应协程的 Task。
         """
 
 
@@ -110,7 +111,7 @@ class EventBus(AbstractEventBus):
     ):
         """
         Args:
-            event_chain_generator (`Callable[[str], Iterable[str]]`): 一个函数，
+            event_chain_generator: 一个函数，
                 输入事件名，返回一个生成此事件所在事件链的全部事件的事件名的生成器，
                 默认行为是事件链只包含单一事件。
         """
@@ -122,9 +123,9 @@ class EventBus(AbstractEventBus):
         """注册事件处理器。
 
         Args:
-            event (`str`): 事件名。
-            func (`Callable`): 事件处理器。
-            priority (`int`): 优先级，小者优先。
+            event: 事件名。
+            func: 事件处理器。
+            priority: 优先级，小者优先。
         """
         self._subscribers[event].add(priority, func)
 
@@ -132,8 +133,8 @@ class EventBus(AbstractEventBus):
         """移除事件处理器。
 
         Args:
-            event (`str`): 事件名。
-            func (`Callable`): 事件处理器。
+            event: 事件名。
+            func: 事件处理器。
         """
         try:
             self._subscribers[event].remove(func)
@@ -151,8 +152,8 @@ class EventBus(AbstractEventBus):
         ```
 
         Args:
-            event (`str`): 事件名。
-            priority (`int`): 优先级，小者优先。
+            event: 事件名。
+            priority: 优先级，小者优先。
         """
         def decorator(func: Callable) -> Callable:
             self.subscribe(event, func, priority)
@@ -166,11 +167,12 @@ class EventBus(AbstractEventBus):
         异步执行说明：`await emit` 时执行事件处理器，所有事件处理器执行完后，并行运行所有快速响应。
 
         Args:
-            event (`str`): 要触发的事件名称。
-            *args, **kwargs: 传递给事件处理器的参数。
+            event: 要触发的事件名称。
+            *args: 传递给事件处理器的参数。
+            **kwargs: 传递给事件处理器的参数。
 
         Returns:
-            `List[Awaitable[Any]]`: 所有事件处理器的快速响应协程的 Task。
+            List[Awaitable[Any]]: 所有事件处理器的快速响应协程的 Task。
         """
         async def call(f) -> Optional[Awaitable[Any]]:
             result = await async_with_exception(f(*args, **kwargs))
@@ -200,4 +202,4 @@ class EventBus(AbstractEventBus):
         return [asyncio.create_task(coro) for coro in filter(None, coros)]
 
 
-__all__ = ['EventBus', 'event_chain_separator', 'event_chain_single']
+__all__ = ['AbstractEventBus', 'EventBus', 'event_chain_separator', 'event_chain_single']

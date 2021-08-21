@@ -39,7 +39,7 @@ class ColoredFormatter(logging.Formatter):
     ):
         """
         Args:
-            colors (`Dict[str, ConsoleColor]`): 一个字典，键是日志级别名称，值是颜色。
+            colors: 一个字典，键是日志级别名称，值是颜色。
         """
         super().__init__(*args, **kwargs)
         self.colors = colors

@@ -35,7 +35,7 @@ class PriorityDict(Generic[T]):
         """增加一个元素。
 
         Args:
-            priority (`int`): 优先级，小者优先。
+            priority: 优先级，小者优先。
             value: 元素。
         """
         self._data[priority].add(value)

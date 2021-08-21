@@ -58,8 +58,8 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
     def __init__(self, qq: int, adapter: Adapter):
         """
         Args:
-            qq (`int`): QQ 号。启用 Single Mode 时，可以随便传入，登陆后会自动获取正确的 QQ 号。
-            adapter (`Adapter`): 适配器，负责与 mirai-api-http 沟通，详见模块`mirai.adapters。
+            qq: QQ 号。启用 Single Mode 时，可以随便传入，登陆后会自动获取正确的 QQ 号。
+            adapter: 适配器，负责与 mirai-api-http 沟通，详见模块`mirai.adapters。
         """
         self.qq = qq
 
@@ -84,8 +84,9 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
         """调用 API。
 
         Args:
-            api (`str`): API 名称。
-            *args, **kwargs: 参数。
+            api: API 名称。
+            *args: 参数。
+            **kwargs: 参数。
         """
         return await self._adapter.call_api(api, *args, **kwargs)
 
@@ -100,8 +101,8 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
         ```
 
         Args:
-            event (`str`): 事件名。
-            priority (`int`): 优先级，小者优先。
+            event: 事件名。
+            priority: 优先级，小者优先。
         """
         return self._bus.on(event, priority=priority)
 
@@ -120,7 +121,7 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
         ```
 
         Args:
-            adapter (`Adapter`): 使用的适配器。
+            adapter: 使用的适配器。
         """
         origin_adapter = self._adapter
         await adapter.login(self.qq)
@@ -157,7 +158,7 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
         """获取 session key，可用于调试。
 
         Returns:
-            `str`: session key。
+            str: session key。
         """
         return self._adapter.session
 
@@ -178,9 +179,9 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
         一般情况下，此函数会进入主循环，不再返回。
 
         Args:
-            host (`str`): YiriMirai 作为服务器的地址，默认为 127.0.0.1。
-            port (`int`): YiriMirai 作为服务器的端口，默认为 8000。
-            asgi_server (`str`): ASGI 服务器类型，可选项有 `'uvicorn'` `'hypercorn'` 和 `'auto'`。
+            host: YiriMirai 作为服务器的地址，默认为 127.0.0.1。
+            port: YiriMirai 作为服务器的端口，默认为 8000。
+            asgi_server: ASGI 服务器类型，可选项有 `'uvicorn'` `'hypercorn'` 和 `'auto'`。
             **kwargs: 可选参数。多余的参数将传递给 `uvicorn.run` 和 `hypercorn.run`。
         """
         MiraiRunner(self).run(host, port, asgi_server, **kwargs)
@@ -202,7 +203,7 @@ class MiraiRunner(Singleton):
     def __init__(self, *bots: SimpleMirai):
         """
         Args:
-            *bots (`SimpleMirai`): 要运行的机器人。
+            *bots: 要运行的机器人。
         """
         self.bots = bots
         self._asgi = ASGI()
@@ -311,8 +312,8 @@ class Mirai(SimpleMirai):
         ```
 
         Args:
-            event_type (`Union[Type[Event], str]`): 事件类或事件名。
-            priority (`int`): 优先级，较小者优先。
+            event_type: 事件类或事件名。
+            priority: 优先级，较小者优先。
         """
         return self._bus.on(event_type, priority)
 
@@ -324,10 +325,10 @@ class Mirai(SimpleMirai):
         `Mirai` 的 `__getattr__` 与此方法完全相同，可支持直接在对象上调用 API。
 
         Args:
-            api (`str`): API 名称。
+            api: API 名称。
 
         Returns:
-            `ApiModel.Proxy`: API Proxy 对象。
+            ApiModel.Proxy: API Proxy 对象。
         """
         api_type = ApiModel.get_subtype(api)
         return api_type.Proxy(self, api_type)
@@ -344,9 +345,9 @@ class Mirai(SimpleMirai):
         """发送消息。可以从 `Friend` `Group` 等对象，或者从 `MessageEvent` 中自动识别消息发送对象。
 
         Args:
-            target (`Union[Entity, MessageEvent]`): 目标对象。
-            message (`TMessage`): 发送的消息。
-            quote (`bool`): 是否以回复消息的形式发送，默认为 False。
+            target: 目标对象。
+            message: 发送的消息。
+            quote: 是否以回复消息的形式发送，默认为 False。
 
         Returns:
             int: 发送的消息的 message_id。
@@ -391,11 +392,11 @@ class Mirai(SimpleMirai):
         """获取好友对象。
 
         Args:
-            id (`int`): 好友 QQ 号。
+            id: 好友 QQ 号。
 
         Returns:
-            `Friend`: 好友对象。
-            `None`: 好友不存在。
+            Friend: 好友对象。
+            None: 好友不存在。
         """
         friend_list = await self.friend_list.get()
         if not friend_list:
@@ -409,11 +410,11 @@ class Mirai(SimpleMirai):
         """获取群组对象。
 
         Args:
-            id (`int`): 群号。
+            id: 群号。
 
         Returns:
-            `Group`: 群组对象。
-            `None`: 群组不存在或 bot 未入群。
+            Group: 群组对象。
+            None: 群组不存在或 bot 未入群。
         """
         group_list = await self.group_list.get()
         if not group_list:
@@ -428,12 +429,12 @@ class Mirai(SimpleMirai):
         """获取群成员对象。
 
         Args:
-            group (`Union[Group, int]`): 群组对象或群号。
-            id (`int`): 群成员 QQ 号。
+            group: 群组对象或群号。
+            id: 群成员 QQ 号。
 
         Returns:
-            `GroupMember`: 群成员对象。
-            `None`: 群成员不存在。
+            GroupMember: 群成员对象。
+            None: 群成员不存在。
         """
         if isinstance(group, Group):
             group = group.id
@@ -449,11 +450,11 @@ class Mirai(SimpleMirai):
         """获取实体对象。
 
         Args:
-            subject (`Subject`): 以 `Subject` 表示的实体对象。
+            subject: 以 `Subject` 表示的实体对象。
 
         Returns:
-            `Entity`: 实体对象。
-            `None`: 实体不存在。
+            Entity: 实体对象。
+            None: 实体不存在。
         """
         if subject.kind == 'Friend':
             return await self.get_friend(subject.id)
@@ -465,10 +466,10 @@ class Mirai(SimpleMirai):
         """判断机器人在群组中是否是管理员。
 
         Args:
-            group (`Group`): 群组对象。
+            group: 群组对象。
 
         Returns:
-            `bool`: 是否是管理员。
+            bool: 是否是管理员。
         """
         return group.permission in (Permission.Administrator, Permission.Owner)
 
@@ -481,9 +482,9 @@ class Mirai(SimpleMirai):
         """处理申请。
 
         Args:
-            event (`RequestEvent`): 申请事件。
-            operate (`Union[int, RespOperate]`): 处理操作。
-            message (`str`): 回复的信息。
+            event: 申请事件。
+            operate: 处理操作。
+            message: 回复的信息。
         """
         api_type = cast(
             Type[RespEvent], getattr(mirai.models.api, 'Resp' + event.type)
@@ -495,8 +496,8 @@ class Mirai(SimpleMirai):
         """允许申请。
 
         Args:
-            event (`RequestEvent`): 申请事件。
-            message (`str`): 回复的信息。
+            event: 申请事件。
+            message: 回复的信息。
         """
         await self.process_request(event, RespOperate.ALLOW, message)
 
@@ -506,8 +507,8 @@ class Mirai(SimpleMirai):
         """拒绝申请。
 
         Args:
-            event (`RequestEvent`): 申请事件。
-            message (`str`): 回复的信息。
+            event: 申请事件。
+            message: 回复的信息。
         """
         await self.process_request(
             event, RespOperate.DECLINE
@@ -520,8 +521,8 @@ class Mirai(SimpleMirai):
         """忽略申请。
 
         Args:
-            event (`RequestEvent`): 申请事件。
-            message (`str`): 回复的信息。
+            event: 申请事件。
+            message: 回复的信息。
         """
         await self.process_request(
             event, RespOperate.IGNORE

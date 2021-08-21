@@ -81,8 +81,8 @@ class Adapter(ApiProvider, AdapterInterface):
     def __init__(self, verify_key: Optional[str], single_mode: bool = False):
         """
         Args:
-            verify_key (`Optional[str]`): mirai-api-http 配置的认证 key，关闭认证时为 None。
-            single_mode (`bool`): 是否开启 single_mode，开启后与 session 将无效。
+            verify_key: mirai-api-http 配置的认证 key，关闭认证时为 None。
+            single_mode: 是否开启 single_mode，开启后与 session 将无效。
         """
         self.verify_key = verify_key
         self.single_mode = single_mode
@@ -103,10 +103,10 @@ class Adapter(ApiProvider, AdapterInterface):
         """从适配器接口创建适配器。
 
         Args:
-            adapter_interface (`AdapterInterface`): 适配器接口。
+            adapter_interface: 适配器接口。
 
         Returns:
-            `Adapter`: 创建的适配器。
+            Adapter: 创建的适配器。
         """
         info = adapter_interface.adapter_info
         adapter = cls(
@@ -123,7 +123,7 @@ class Adapter(ApiProvider, AdapterInterface):
         """注册事件总线。
 
         Args:
-            *buses (`AbstractEventBus`): 一个或多个事件总线。
+            *buses: 一个或多个事件总线。
         """
         self.buses |= set(buses)
 
@@ -131,7 +131,7 @@ class Adapter(ApiProvider, AdapterInterface):
         """解除注册事件总线。
 
         Args:
-            *buses (`AbstractEventBus`): 一个或多个事件总线。
+            *buses: 一个或多个事件总线。
         """
         self.buses -= set(buses)
 
@@ -148,8 +148,8 @@ class Adapter(ApiProvider, AdapterInterface):
         """调用 API。
 
         Args:
-            api (`str`): API 名称，需与 mirai-api-http 中的定义一致。
-            method (`Method`): 调用方法。默认为 GET。
+            api: API 名称，需与 mirai-api-http 中的定义一致。
+            method: 调用方法。默认为 GET。
             **params: 参数。
         """
 
@@ -175,8 +175,9 @@ class Adapter(ApiProvider, AdapterInterface):
         """向事件总线发送一个事件。
 
         Args:
-            event (`str`): 事件名称。
-            *args, **kwargs: 事件参数。
+            event: 事件名称。
+            *args: 事件参数。
+            **kwargs: 事件参数。
         """
         coros = [bus.emit(event, *args, **kwargs) for bus in self.buses]
         return sum(await asyncio.gather(*coros), [])

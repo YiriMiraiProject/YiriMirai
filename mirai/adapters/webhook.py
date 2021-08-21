@@ -42,11 +42,11 @@ class WebHookAdapter(Adapter):
     ):
         """
         Args:
-            verify_key (`str`): mirai-api-http 配置的认证 key，关闭认证时为 None。
-            route (`str = '/'`): 适配器的路由，默认在根目录上提供服务。
-            extra_headers (`Optional[Mapping[str, str]]`): 额外请求头，与 mirai-api-http 的配置一致。
-            enable_quick_response (`bool`): 是否启用快速响应，当与其他适配器混合使用时，禁用可以提高响应速度。
-            single_mode (`bool = False`): 是否启用单例模式。
+            verify_key: mirai-api-http 配置的认证 key，关闭认证时为 None。
+            route: 适配器的路由，默认在根目录上提供服务。
+            extra_headers: 额外请求头，与 mirai-api-http 的配置一致。
+            enable_quick_response: 是否启用快速响应，当与其他适配器混合使用时，禁用可以提高响应速度。
+            single_mode: 是否启用单例模式。
         """
         super().__init__(verify_key=verify_key, single_mode=single_mode)
         self.route = route

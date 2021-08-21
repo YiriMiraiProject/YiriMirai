@@ -29,7 +29,7 @@ class ApiError(RuntimeError):
     """调用 API 出错。
 
     Args:
-        code (`int`): mirai-api-http 的 API 状态码。
+        code: mirai-api-http 的 API 状态码。
     """
     def __init__(self, response: dict):
         code = response['code']

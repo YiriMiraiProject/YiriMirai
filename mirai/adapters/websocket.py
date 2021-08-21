@@ -54,12 +54,12 @@ class WebSocketAdapter(Adapter):
     ):
         """
         Args:
-            verify_key (`str`): mirai-api-http 配置的认证 key，关闭认证时为 None。
-            host (`str`): WebSocket Server 的地址。
-            port (`int`): WebSocket Server 的端口。
-            sync_id (`int`): mirai-api-http 配置的同步 ID。
-            single_mode (`bool`): 是否启用单例模式。
-            heartbeat_interval (`float`): 每隔多久发送心跳包，单位秒。
+            verify_key: mirai-api-http 配置的认证 key，关闭认证时为 None。
+            host: WebSocket Server 的地址。
+            port: WebSocket Server 的端口。
+            sync_id: mirai-api-http 配置的同步 ID。
+            single_mode: 是否启用单例模式。
+            heartbeat_interval: 每隔多久发送心跳包，单位秒。
         """
         super().__init__(verify_key=verify_key, single_mode=single_mode)
 

@@ -22,7 +22,7 @@ class Tasks:
             coro: 异步任务的coroutine。
 
         Returns:
-            `asyncio.Task`: 创建的任务。
+            asyncio.Task: 创建的任务。
         """
         task = asyncio.create_task(coro)
         self._tasks.add(task)
@@ -39,7 +39,7 @@ class Tasks:
         """取消一个任务。此方法会等待到任务取消成功。
 
         Args:
-            task (`asyncio.Task`): 任务。
+            task: 任务。
         """
         task.cancel()
         try:
