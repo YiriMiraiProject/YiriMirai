@@ -48,7 +48,7 @@ if __name__ == '__main__':
     bot.run()
 ```
 
-更多信息参看[文档](https://yiri-mirai.vercel.app/)。
+更多信息参看[文档](https://yiri-mirai.wybxc.cc/)或[文档镜像](https://yiri-mirai.vercel.app)。
 
 ## 社区
 
