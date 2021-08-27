@@ -3,7 +3,7 @@
 此模块提供事件模型。
 """
 from datetime import datetime
-from typing import TYPE_CHECKING, Any, Optional, Union
+from typing import TYPE_CHECKING, Any, Optional, Union, cast
 
 if TYPE_CHECKING:
     from typing import Literal
@@ -37,6 +37,13 @@ class Event(MiraiIndexedModel):
                 for k, v in self.__dict__.items() if k != 'type' and v
             )
         ) + ')'
+
+    @classmethod
+    def parse_obj(cls, obj: dict) -> 'Event':
+        try:
+            return cast(Event, super().parse_obj(obj))
+        except ValueError:
+            return Event(type=obj['type'])
 
 
 ###############################
