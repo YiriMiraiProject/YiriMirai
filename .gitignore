@@ -158,3 +158,6 @@ yarn-error.log*
 
 # PyCharm
 .idea/
+
+# TabNine
+.tabnine.model
