@@ -6,7 +6,7 @@ from datetime import datetime
 from typing import TYPE_CHECKING, Any, Optional, Union, cast
 
 if TYPE_CHECKING:
-    from typing import Literal
+    from typing_extensions import Literal
 else:
     try:
         from typing import Literal

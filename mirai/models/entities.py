@@ -8,7 +8,7 @@ from enum import Enum
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from typing import Literal
+    from typing_extensions import Literal
 else:
     try:
         from typing import Literal
@@ -85,9 +85,9 @@ class GroupMember(Entity):
     """群。"""
     special_title: str = ''
     """群头衔。"""
-    join_timestamp: datetime = datetime.fromtimestamp(0)
+    join_timestamp: datetime = datetime.utcfromtimestamp(0)
     """加入群的时间。"""
-    last_speak_timestamp: datetime = datetime.fromtimestamp(0)
+    last_speak_timestamp: datetime = datetime.utcfromtimestamp(0)
     """最后一次发言的时间。"""
     mute_time_remaining: int = 0
     """禁言剩余时间。"""

@@ -11,10 +11,7 @@ from typing import (
 from mirai.asgi import ASGI
 from mirai.models.base import MiraiBaseModel
 
-try:
-    from typing import Literal
-except ImportError:
-    from typing_extensions import Literal
+from typing_extensions import Literal
 
 from mirai.adapters.base import Adapter, AdapterInterface, ApiProvider
 from mirai.bus import AbstractEventBus

@@ -861,7 +861,7 @@ class Image(MessageComponent):
         """
         if content:
             pass
-        if filename:
+        elif filename:
             path = Path(filename)
             import aiofiles
             async with aiofiles.open(path, 'rb') as f:
