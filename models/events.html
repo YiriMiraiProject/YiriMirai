@@ -32,10 +32,10 @@
 此模块提供事件模型。
 &#34;&#34;&#34;
 from datetime import datetime
-from typing import TYPE_CHECKING, Any, Optional, Union
+from typing import TYPE_CHECKING, Any, Optional, Union, cast
 
 if TYPE_CHECKING:
-    from typing import Literal
+    from typing_extensions import Literal
 else:
     try:
         from typing import Literal
@@ -66,6 +66,13 @@ class Event(MiraiIndexedModel):
                 for k, v in self.__dict__.items() if k != &#39;type&#39; and v
             )
         ) + &#39;)&#39;
+
+    @classmethod
+    def parse_obj(cls, obj: dict) -&gt; &#39;Event&#39;:
+        try:
+            return cast(Event, super().parse_obj(obj))
+        except ValueError:
+            return Event(type=obj[&#39;type&#39;])
 
 
 ###############################
@@ -1900,7 +1907,14 @@ __all__ = [
                 f&#39;{k}={repr(v)}&#39;
                 for k, v in self.__dict__.items() if k != &#39;type&#39; and v
             )
-        ) + &#39;)&#39;</code></pre>
+        ) + &#39;)&#39;
+
+    @classmethod
+    def parse_obj(cls, obj: dict) -&gt; &#39;Event&#39;:
+        try:
+            return cast(Event, super().parse_obj(obj))
+        except ValueError:
+            return Event(type=obj[&#39;type&#39;])</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">

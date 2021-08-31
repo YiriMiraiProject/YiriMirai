@@ -37,7 +37,7 @@
 
 更多信息请看[文档](https://yiri-mirai.vercel.app/)。
 &#34;&#34;&#34;
-__version__ = &#39;0.2.4&#39;
+__version__ = &#39;0.2.4.1&#39;
 __author__ = &#39;忘忧北萱草&#39;
 
 import logging
@@ -959,7 +959,14 @@ async def logout(self, terminate: bool = True):
                 f&#39;{k}={repr(v)}&#39;
                 for k, v in self.__dict__.items() if k != &#39;type&#39; and v
             )
-        ) + &#39;)&#39;</code></pre>
+        ) + &#39;)&#39;
+
+    @classmethod
+    def parse_obj(cls, obj: dict) -&gt; &#39;Event&#39;:
+        try:
+            return cast(Event, super().parse_obj(obj))
+        except ValueError:
+            return Event(type=obj[&#39;type&#39;])</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1780,7 +1787,7 @@ def group(self) -&gt; Group:
         &#34;&#34;&#34;
         if content:
             pass
-        if filename:
+        elif filename:
             path = Path(filename)
             import aiofiles
             async with aiofiles.open(path, &#39;rb&#39;) as f:
@@ -1874,7 +1881,7 @@ async def from_local(
     &#34;&#34;&#34;
     if content:
         pass
-    if filename:
+    elif filename:
         path = Path(filename)
         import aiofiles
         async with aiofiles.open(path, &#39;rb&#39;) as f:

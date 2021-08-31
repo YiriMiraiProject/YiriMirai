@@ -37,7 +37,7 @@ from enum import Enum
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from typing import Literal
+    from typing_extensions import Literal
 else:
     try:
         from typing import Literal
@@ -114,9 +114,9 @@ class GroupMember(Entity):
     &#34;&#34;&#34;群。&#34;&#34;&#34;
     special_title: str = &#39;&#39;
     &#34;&#34;&#34;群头衔。&#34;&#34;&#34;
-    join_timestamp: datetime = datetime.fromtimestamp(0)
+    join_timestamp: datetime = datetime.utcfromtimestamp(0)
     &#34;&#34;&#34;加入群的时间。&#34;&#34;&#34;
-    last_speak_timestamp: datetime = datetime.fromtimestamp(0)
+    last_speak_timestamp: datetime = datetime.utcfromtimestamp(0)
     &#34;&#34;&#34;最后一次发言的时间。&#34;&#34;&#34;
     mute_time_remaining: int = 0
     &#34;&#34;&#34;禁言剩余时间。&#34;&#34;&#34;
@@ -528,9 +528,9 @@ def get_name(self) -&gt; str:
     &#34;&#34;&#34;群。&#34;&#34;&#34;
     special_title: str = &#39;&#39;
     &#34;&#34;&#34;群头衔。&#34;&#34;&#34;
-    join_timestamp: datetime = datetime.fromtimestamp(0)
+    join_timestamp: datetime = datetime.utcfromtimestamp(0)
     &#34;&#34;&#34;加入群的时间。&#34;&#34;&#34;
-    last_speak_timestamp: datetime = datetime.fromtimestamp(0)
+    last_speak_timestamp: datetime = datetime.utcfromtimestamp(0)
     &#34;&#34;&#34;最后一次发言的时间。&#34;&#34;&#34;
     mute_time_remaining: int = 0
     &#34;&#34;&#34;禁言剩余时间。&#34;&#34;&#34;

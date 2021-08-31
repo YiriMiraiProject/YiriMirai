@@ -890,7 +890,7 @@ class Image(MessageComponent):
         &#34;&#34;&#34;
         if content:
             pass
-        if filename:
+        elif filename:
             path = Path(filename)
             import aiofiles
             async with aiofiles.open(path, &#39;rb&#39;) as f:
@@ -2053,7 +2053,7 @@ def create(
         &#34;&#34;&#34;
         if content:
             pass
-        if filename:
+        elif filename:
             path = Path(filename)
             import aiofiles
             async with aiofiles.open(path, &#39;rb&#39;) as f:
@@ -2147,7 +2147,7 @@ async def from_local(
     &#34;&#34;&#34;
     if content:
         pass
-    if filename:
+    elif filename:
         path = Path(filename)
         import aiofiles
         async with aiofiles.open(path, &#39;rb&#39;) as f:
