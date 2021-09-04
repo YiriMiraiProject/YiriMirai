@@ -291,7 +291,7 @@ class MiraiRunner(Singleton):
             )
             try:
                 asyncio.run(self._run())
-            except KeyboardInterrupt:
+            except (KeyboardInterrupt, SystemExit):
                 exit()
 
 
@@ -1537,7 +1537,7 @@ runner.run(host='127.0.0.1', port=8000)
             )
             try:
                 asyncio.run(self._run())
-            except KeyboardInterrupt:
+            except (KeyboardInterrupt, SystemExit):
                 exit()</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -1594,7 +1594,7 @@ runner.run(host='127.0.0.1', port=8000)
         )
         try:
             asyncio.run(self._run())
-        except KeyboardInterrupt:
+        except (KeyboardInterrupt, SystemExit):
             exit()</code></pre>
 </details>
 </dd>

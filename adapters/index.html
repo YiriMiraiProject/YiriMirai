@@ -1339,12 +1339,11 @@ async def logout(self, terminate: bool = True):
             except KeyError:
                 logger.error(f&#39;[WebSocket] 不正确的数据：{response}&#39;)
             except ConnectionClosedOK:
-                return
+                raise SystemExit()
             except ConnectionClosed as e:
-                logger.error(
-                    f&#39;[WebSocket] WebSocket 通道意外关闭。code: {e.code}, reason: {e.reason}&#39;
-                )
-                return
+                exit_message = f&#39;[WebSocket] WebSocket 通道意外关闭。code: {e.code}, reason: {e.reason}&#39;
+                logger.error(exit_message)
+                raise SystemExit(exit_message)
 
     async def _recv(self, sync_id: str = &#39;-1&#39;, timeout: int = 600) -&gt; dict:
         &#34;&#34;&#34;接收并解析 websocket 数据。&#34;&#34;&#34;
