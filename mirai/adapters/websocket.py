@@ -148,12 +148,11 @@ class WebSocketAdapter(Adapter):
             except KeyError:
                 logger.error(f'[WebSocket] 不正确的数据：{response}')
             except ConnectionClosedOK:
-                return
+                raise SystemExit()
             except ConnectionClosed as e:
-                logger.error(
-                    f'[WebSocket] WebSocket 通道意外关闭。code: {e.code}, reason: {e.reason}'
-                )
-                return
+                exit_message = f'[WebSocket] WebSocket 通道意外关闭。code: {e.code}, reason: {e.reason}'
+                logger.error(exit_message)
+                raise SystemExit(exit_message)
 
     async def _recv(self, sync_id: str = '-1', timeout: int = 600) -> dict:
         """接收并解析 websocket 数据。"""
