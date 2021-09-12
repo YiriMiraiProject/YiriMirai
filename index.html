@@ -966,7 +966,14 @@ async def logout(self, terminate: bool = True):
         try:
             return cast(Event, super().parse_obj(obj))
         except ValueError:
-            return Event(type=obj[&#39;type&#39;])</code></pre>
+            return Event(type=obj[&#39;type&#39;])
+
+    @classmethod
+    def get_subtype(cls, name: str) -&gt; Type[&#39;Event&#39;]:
+        try:
+            return cast(Type[Event], super().get_subtype(name))
+        except ValueError:
+            return Event</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
