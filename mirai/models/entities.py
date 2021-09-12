@@ -98,14 +98,14 @@ class GroupMember(Entity):
         return self.member_name
 
 
-class Sender(Entity):
+class Client(Entity):
     """来自其他客户端的用户。"""
     id: int
-    """QQ 号。"""
+    """识别 id。"""
     platform: str
     """来源平台。"""
     def get_avatar_url(self) -> str:
-        return f'http://q4.qlogo.cn/g?b=qq&nk={self.id}&s=140'
+        raise NotImplementedError
 
     def get_name(self) -> str:
         return self.platform
@@ -135,8 +135,6 @@ class GroupConfigModel(Config):
     """群配置。"""
     name: str
     """群名称。"""
-    announcement: str
-    """群公告。"""
     confess_talk: bool
     """是否允许坦白说。"""
     allow_member_invite: bool
@@ -145,6 +143,8 @@ class GroupConfigModel(Config):
     """是否开启自动审批入群。"""
     anonymous_chat: bool
     """是否开启匿名聊天。"""
+    announcement: str = ''
+    """群公告。"""
 
 
 class MemberInfoModel(Config, GroupMember):

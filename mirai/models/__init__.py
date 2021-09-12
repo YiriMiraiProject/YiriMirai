@@ -9,13 +9,13 @@ model 层使用 pydantic 进行数据解析。
 """
 from mirai.models.bus import ModelEventBus
 from mirai.models.entities import (
-    Entity, Friend, Group, GroupMember, Permission, Sender
+    Client, Entity, Friend, Group, GroupMember, Permission
 )
 from mirai.models.events import (
     BotEvent, BotGroupPermissionChangeEvent, BotInvitedJoinGroupRequestEvent,
     BotJoinGroupEvent, BotLeaveEventActive, BotLeaveEventKick, BotMuteEvent,
     BotOfflineEventActive, BotOfflineEventDropped, BotOfflineEventForce,
-    BotOnlineEvent, BotReloginEvent, BotUnmuteEvent, CommandEvent,
+    BotOnlineEvent, BotReloginEvent, BotUnmuteEvent, ClientKind, CommandEvent,
     CommandExecutedEvent, Event, FriendEvent, FriendInputStatusChangedEvent,
     FriendMessage, FriendNickChangedEvent, FriendRecallEvent,
     GroupAllowAnonymousChatEvent, GroupAllowConfessTalkEvent,
@@ -25,7 +25,8 @@ from mirai.models.events import (
     MemberJoinEvent, MemberJoinRequestEvent, MemberLeaveEventKick,
     MemberLeaveEventQuit, MemberMuteEvent, MemberPermissionChangeEvent,
     MemberSpecialTitleChangeEvent, MemberUnmuteEvent, MessageEvent,
-    NewFriendRequestEvent, NudgeEvent, OtherClientMessage, RequestEvent,
+    NewFriendRequestEvent, NudgeEvent, OtherClientEvent, OtherClientMessage,
+    OtherClientOfflineEvent, OtherClientOnlineEvent, RequestEvent,
     StrangerMessage, TempMessage
 )
 from mirai.models.message import (
@@ -41,7 +42,7 @@ __all__ = [
     'Group',
     'GroupMember',
     'Permission',
-    'Sender',
+    'Client',
     'BotEvent',
     'BotGroupPermissionChangeEvent',
     'BotInvitedJoinGroupRequestEvent',
@@ -85,7 +86,11 @@ __all__ = [
     'MessageEvent',
     'NudgeEvent',
     'NewFriendRequestEvent',
+    'OtherClientEvent',
     'OtherClientMessage',
+    'OtherClientOnlineEvent',
+    'OtherClientOfflineEvent',
+    'ClientKind',
     'RequestEvent',
     'StrangerMessage',
     'TempMessage',

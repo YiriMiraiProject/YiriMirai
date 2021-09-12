@@ -2,8 +2,8 @@
 """
 此模块提供 API 调用与返回数据解析相关。
 """
-import abc
 import logging
+from datetime import datetime
 from enum import Enum, Flag
 from pathlib import Path
 from typing import (
@@ -156,6 +156,14 @@ class DownloadInfo(MiraiBaseModel):
     """文件的 MD5。"""
     url: str
     """文件的下载地址。"""
+    downloadTimes: Optional[int]
+    """文件被下载过的次数。"""
+    uploaderId: Optional[int]
+    """上传者的 QQ 号。"""
+    uploadTime: Optional[datetime]
+    """上传时间。"""
+    lastModifyTime: Optional[datetime]
+    """最后修改时间。"""
 
 
 class FileProperties(MiraiBaseModel):
@@ -165,7 +173,7 @@ class FileProperties(MiraiBaseModel):
     id: Optional[str]
     """文件 ID。"""
     path: str
-    """文件路径。"""
+    """所在目录路径。"""
     parent: Optional['FileProperties'] = None
     """父文件对象，递归类型。None 为存在根目录。"""
     contact: Union[Group, Friend]
@@ -635,6 +643,12 @@ class FileList(ApiGet):
     """群号或好友 QQ 号。"""
     with_download_info: Optional[bool] = None
     """是否携带下载信息。"""
+    path: Optional[str] = None
+    """可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。"""
+    offset: Optional[int] = None
+    """可选。分页偏移。"""
+    size: Optional[int] = None
+    """可选。分页大小。"""
     class Info(ApiGet.Info):
         name = "file/list"
         alias = "file_list"
@@ -649,6 +663,8 @@ class FileInfo(ApiGet):
     """群号或好友 QQ 号。"""
     with_download_info: Optional[bool] = None
     """是否携带下载信息。"""
+    path: Optional[str] = None
+    """可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。"""
     class Info(ApiGet.Info):
         name = "file/info"
         alias = "file_info"
@@ -663,6 +679,8 @@ class FileMkdir(ApiPost):
     """群号或好友 QQ 号。"""
     directory_name: str
     """新建文件夹名。"""
+    path: Optional[str] = None
+    """可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。"""
     class Info(ApiPost.Info):
         name = "file/mkdir"
         alias = "file_mkdir"
@@ -675,6 +693,8 @@ class FileDelete(ApiPost):
     """欲删除的文件 id。"""
     target: int
     """群号或好友 QQ 号。"""
+    path: Optional[str] = None
+    """可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。"""
     class Info(ApiPost.Info):
         name = "file/delete"
         alias = "file_delete"
@@ -689,6 +709,10 @@ class FileMove(ApiPost):
     """群号或好友 QQ 号。"""
     move_to: str
     """移动目标文件夹 id。"""
+    path: Optional[str] = None
+    """可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。"""
+    move_to_path: Optional[str] = None
+    """可选。移动目标文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。"""
     class Info(ApiPost.Info):
         name = "file/move"
         alias = "file_move"
@@ -703,6 +727,8 @@ class FileRename(ApiPost):
     """群号或好友 QQ 号。"""
     rename_to: str
     """新文件名。"""
+    path: Optional[str] = None
+    """可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。"""
     class Info(ApiPost.Info):
         name = "file/rename"
         alias = "file_rename"
@@ -775,7 +801,7 @@ class UploadImage(ApiPost):
 
 class UploadVoice(ApiPost):
     """语音文件上传。"""
-    type: Literal["group"]
+    type: Literal["group", "friend", "temp"]
     """上传的语音类型。"""
     voice: Union[str, Path]
     """上传的语音的本地路径。"""
@@ -917,6 +943,20 @@ class MemberInfo(ApiRest):
         alias = "member_info"
         response_type = MemberInfoModel
         response_type_post = Response
+
+
+class MemberAdmin(ApiPost):
+    """设置或取消群成员管理员。"""
+    target: int
+    """群号。"""
+    member_id: int
+    """指定群成员的 QQ 号。"""
+    assign: bool
+    """是否设置管理员。"""
+    class Info(ApiPost.Info):
+        name = "memberAdmin"
+        alias = "member_admin"
+        response_type = Response
 
 
 class RespOperate(Flag):
@@ -1087,3 +1127,80 @@ class CmdRegister(ApiPost):
         name = "cmd/register"
         alias = "cmd_register"
         response_type = Response
+
+
+__all__ = [
+    'About',
+    'AboutResponse',
+    'ApiBaseModel',
+    'ApiGet',
+    'ApiMetaclass',
+    'ApiModel',
+    'ApiPost',
+    'ApiProvider',
+    'ApiRest',
+    'BotProfile',
+    'CmdExecute',
+    'CmdRegister',
+    'DeleteFriend',
+    'DownloadInfo',
+    'FileDelete',
+    'FileInfo',
+    'FileInfoResponse',
+    'FileList',
+    'FileListResponse',
+    'FileMkdir',
+    'FileMkdirResponse',
+    'FileMove',
+    'FileProperties',
+    'FileRename',
+    'FileUpload',
+    'FriendList',
+    'FriendListResponse',
+    'FriendMessage',
+    'FriendProfile',
+    'GroupConfig',
+    'GroupConfigModel',
+    'GroupList',
+    'GroupListResponse',
+    'GroupMember',
+    'GroupMessage',
+    'Kick',
+    'MemberAdmin',
+    'MemberInfo',
+    'MemberInfoModel',
+    'MemberList',
+    'MemberListResponse',
+    'MemberProfile',
+    'MessageFromId',
+    'MessageFromIdResponse',
+    'MessageResponse',
+    'Mute',
+    'MuteAll',
+    'OtherClientMessage',
+    'ProfileResponse',
+    'Quit',
+    'Recall',
+    'RequestEvent',
+    'RespBotInvitedJoinGroupRequestEvent',
+    'RespEvent',
+    'RespMemberJoinRequestEvent',
+    'RespNewFriendRequestEvent',
+    'RespOperate',
+    'Response',
+    'SendFriendMessage',
+    'SendGroupMessage',
+    'SendMessage',
+    'SendNudge',
+    'SendTempMessage',
+    'SessionInfo',
+    'SessionInfoResponse',
+    'SetEssence',
+    'Sex',
+    'StrangerMessage',
+    'TempMessage',
+    'Unmute',
+    'UnmuteAll',
+    'UploadImage',
+    'UploadVoice',
+]

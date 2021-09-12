@@ -1033,6 +1033,8 @@ class Voice(MessageComponent):
     """语音的路径，发送本地语音。"""
     base64: Optional[str] = None
     """语音的 Base64 编码。"""
+    length: Optional[int] = None
+    """语音的长度，单位为秒。"""
     @validator('path')
     def validate_path(cls, path: Optional[str]):
         """修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。"""
