@@ -1062,6 +1062,8 @@ class Voice(MessageComponent):
     &#34;&#34;&#34;语音的路径，发送本地语音。&#34;&#34;&#34;
     base64: Optional[str] = None
     &#34;&#34;&#34;语音的 Base64 编码。&#34;&#34;&#34;
+    length: Optional[int] = None
+    &#34;&#34;&#34;语音的长度，单位为秒。&#34;&#34;&#34;
     @validator(&#39;path&#39;)
     def validate_path(cls, path: Optional[str]):
         &#34;&#34;&#34;修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。&#34;&#34;&#34;
@@ -1177,13 +1179,13 @@ class MusicShare(MessageComponent):
 
 class ForwardMessageNode(MiraiBaseModel):
     &#34;&#34;&#34;合并转发中的一条消息。&#34;&#34;&#34;
-    sender_id: int
+    sender_id: Optional[int] = None
     &#34;&#34;&#34;发送人QQ号。&#34;&#34;&#34;
-    sender_name: str
+    sender_name: Optional[str] = None
     &#34;&#34;&#34;显示名称。&#34;&#34;&#34;
-    message_chain: MessageChain
+    message_chain: Optional[MessageChain] = None
     &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
-    source_id: Optional[int] = None
+    message_id: Optional[int] = None
     &#34;&#34;&#34;消息的 message_id，可以只使用此属性，从缓存中读取消息内容。&#34;&#34;&#34;
     time: Optional[datetime] = None
     &#34;&#34;&#34;发送时间。&#34;&#34;&#34;
@@ -1197,7 +1199,7 @@ class ForwardMessageNode(MiraiBaseModel):
     def create(
         cls, sender: Union[Friend, GroupMember], message: MessageChain
     ) -&gt; &#39;ForwardMessageNode&#39;:
-        &#34;&#34;&#34;从生成转发消息。
+        &#34;&#34;&#34;从消息链生成转发消息。
 
         Args:
             sender: 发送人。
@@ -1818,13 +1820,13 @@ __all__ = [
 </summary>
 <pre><code class="python">class ForwardMessageNode(MiraiBaseModel):
     &#34;&#34;&#34;合并转发中的一条消息。&#34;&#34;&#34;
-    sender_id: int
+    sender_id: Optional[int] = None
     &#34;&#34;&#34;发送人QQ号。&#34;&#34;&#34;
-    sender_name: str
+    sender_name: Optional[str] = None
     &#34;&#34;&#34;显示名称。&#34;&#34;&#34;
-    message_chain: MessageChain
+    message_chain: Optional[MessageChain] = None
     &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
-    source_id: Optional[int] = None
+    message_id: Optional[int] = None
     &#34;&#34;&#34;消息的 message_id，可以只使用此属性，从缓存中读取消息内容。&#34;&#34;&#34;
     time: Optional[datetime] = None
     &#34;&#34;&#34;发送时间。&#34;&#34;&#34;
@@ -1838,7 +1840,7 @@ __all__ = [
     def create(
         cls, sender: Union[Friend, GroupMember], message: MessageChain
     ) -&gt; &#39;ForwardMessageNode&#39;:
-        &#34;&#34;&#34;从生成转发消息。
+        &#34;&#34;&#34;从消息链生成转发消息。
 
         Args:
             sender: 发送人。
@@ -1861,21 +1863,21 @@ __all__ = [
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.message.ForwardMessageNode.message_chain"><code class="name">var <span class="ident">message_chain</span> : <a title="mirai.models.message.MessageChain" href="#mirai.models.message.MessageChain">MessageChain</a></code></dt>
+<dt id="mirai.models.message.ForwardMessageNode.message_chain"><code class="name">var <span class="ident">message_chain</span> : Union[<a title="mirai.models.message.MessageChain" href="#mirai.models.message.MessageChain">MessageChain</a>, NoneType]</code></dt>
 <dd>
 <div class="desc"><p>消息内容。</p></div>
 </dd>
-<dt id="mirai.models.message.ForwardMessageNode.sender_id"><code class="name">var <span class="ident">sender_id</span> : int</code></dt>
+<dt id="mirai.models.message.ForwardMessageNode.message_id"><code class="name">var <span class="ident">message_id</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>消息的 message_id，可以只使用此属性，从缓存中读取消息内容。</p></div>
+</dd>
+<dt id="mirai.models.message.ForwardMessageNode.sender_id"><code class="name">var <span class="ident">sender_id</span> : Union[int, NoneType]</code></dt>
 <dd>
 <div class="desc"><p>发送人QQ号。</p></div>
 </dd>
-<dt id="mirai.models.message.ForwardMessageNode.sender_name"><code class="name">var <span class="ident">sender_name</span> : str</code></dt>
+<dt id="mirai.models.message.ForwardMessageNode.sender_name"><code class="name">var <span class="ident">sender_name</span> : Union[str, NoneType]</code></dt>
 <dd>
 <div class="desc"><p>显示名称。</p></div>
-</dd>
-<dt id="mirai.models.message.ForwardMessageNode.source_id"><code class="name">var <span class="ident">source_id</span> : Union[int, NoneType]</code></dt>
-<dd>
-<div class="desc"><p>消息的 message_id，可以只使用此属性，从缓存中读取消息内容。</p></div>
 </dd>
 <dt id="mirai.models.message.ForwardMessageNode.time"><code class="name">var <span class="ident">time</span> : Union[datetime.datetime, NoneType]</code></dt>
 <dd>
@@ -1888,7 +1890,7 @@ __all__ = [
 <span>def <span class="ident">create</span></span>(<span>sender: Union[<a title="mirai.models.entities.Friend" href="entities.html#mirai.models.entities.Friend">Friend</a>, <a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>], message: <a title="mirai.models.message.MessageChain" href="#mirai.models.message.MessageChain">MessageChain</a>) ‑> <a title="mirai.models.message.ForwardMessageNode" href="#mirai.models.message.ForwardMessageNode">ForwardMessageNode</a></span>
 </code></dt>
 <dd>
-<div class="desc"><p>从生成转发消息。</p>
+<div class="desc"><p>从消息链生成转发消息。</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>sender</code></strong></dt>
@@ -1909,7 +1911,7 @@ __all__ = [
 def create(
     cls, sender: Union[Friend, GroupMember], message: MessageChain
 ) -&gt; &#39;ForwardMessageNode&#39;:
-    &#34;&#34;&#34;从生成转发消息。
+    &#34;&#34;&#34;从消息链生成转发消息。
 
     Args:
         sender: 发送人。
@@ -4249,6 +4251,8 @@ def origin_formater(cls, v):
     &#34;&#34;&#34;语音的路径，发送本地语音。&#34;&#34;&#34;
     base64: Optional[str] = None
     &#34;&#34;&#34;语音的 Base64 编码。&#34;&#34;&#34;
+    length: Optional[int] = None
+    &#34;&#34;&#34;语音的长度，单位为秒。&#34;&#34;&#34;
     @validator(&#39;path&#39;)
     def validate_path(cls, path: Optional[str]):
         &#34;&#34;&#34;修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。&#34;&#34;&#34;
@@ -4335,6 +4339,10 @@ def origin_formater(cls, v):
 <dt id="mirai.models.message.Voice.base64"><code class="name">var <span class="ident">base64</span> : Union[str, NoneType]</code></dt>
 <dd>
 <div class="desc"><p>语音的 Base64 编码。</p></div>
+</dd>
+<dt id="mirai.models.message.Voice.length"><code class="name">var <span class="ident">length</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>语音的长度，单位为秒。</p></div>
 </dd>
 <dt id="mirai.models.message.Voice.path"><code class="name">var <span class="ident">path</span> : Union[str, NoneType]</code></dt>
 <dd>
@@ -4609,9 +4617,9 @@ def validate_path(cls, path: Optional[str]):
 <ul class="two-column">
 <li><code><a title="mirai.models.message.ForwardMessageNode.create" href="#mirai.models.message.ForwardMessageNode.create">create</a></code></li>
 <li><code><a title="mirai.models.message.ForwardMessageNode.message_chain" href="#mirai.models.message.ForwardMessageNode.message_chain">message_chain</a></code></li>
+<li><code><a title="mirai.models.message.ForwardMessageNode.message_id" href="#mirai.models.message.ForwardMessageNode.message_id">message_id</a></code></li>
 <li><code><a title="mirai.models.message.ForwardMessageNode.sender_id" href="#mirai.models.message.ForwardMessageNode.sender_id">sender_id</a></code></li>
 <li><code><a title="mirai.models.message.ForwardMessageNode.sender_name" href="#mirai.models.message.ForwardMessageNode.sender_name">sender_name</a></code></li>
-<li><code><a title="mirai.models.message.ForwardMessageNode.source_id" href="#mirai.models.message.ForwardMessageNode.source_id">source_id</a></code></li>
 <li><code><a title="mirai.models.message.ForwardMessageNode.time" href="#mirai.models.message.ForwardMessageNode.time">time</a></code></li>
 </ul>
 </li>
@@ -4753,6 +4761,7 @@ def validate_path(cls, path: Optional[str]):
 <li><code><a title="mirai.models.message.Voice.base64" href="#mirai.models.message.Voice.base64">base64</a></code></li>
 <li><code><a title="mirai.models.message.Voice.download" href="#mirai.models.message.Voice.download">download</a></code></li>
 <li><code><a title="mirai.models.message.Voice.from_local" href="#mirai.models.message.Voice.from_local">from_local</a></code></li>
+<li><code><a title="mirai.models.message.Voice.length" href="#mirai.models.message.Voice.length">length</a></code></li>
 <li><code><a title="mirai.models.message.Voice.path" href="#mirai.models.message.Voice.path">path</a></code></li>
 <li><code><a title="mirai.models.message.Voice.url" href="#mirai.models.message.Voice.url">url</a></code></li>
 <li><code><a title="mirai.models.message.Voice.validate_path" href="#mirai.models.message.Voice.validate_path">validate_path</a></code></li>

@@ -31,8 +31,8 @@
 &#34;&#34;&#34;
 此模块提供 API 调用与返回数据解析相关。
 &#34;&#34;&#34;
-import abc
 import logging
+from datetime import datetime
 from enum import Enum, Flag
 from pathlib import Path
 from typing import (
@@ -185,6 +185,14 @@ class DownloadInfo(MiraiBaseModel):
     &#34;&#34;&#34;文件的 MD5。&#34;&#34;&#34;
     url: str
     &#34;&#34;&#34;文件的下载地址。&#34;&#34;&#34;
+    downloadTimes: Optional[int]
+    &#34;&#34;&#34;文件被下载过的次数。&#34;&#34;&#34;
+    uploaderId: Optional[int]
+    &#34;&#34;&#34;上传者的 QQ 号。&#34;&#34;&#34;
+    uploadTime: Optional[datetime]
+    &#34;&#34;&#34;上传时间。&#34;&#34;&#34;
+    lastModifyTime: Optional[datetime]
+    &#34;&#34;&#34;最后修改时间。&#34;&#34;&#34;
 
 
 class FileProperties(MiraiBaseModel):
@@ -194,7 +202,7 @@ class FileProperties(MiraiBaseModel):
     id: Optional[str]
     &#34;&#34;&#34;文件 ID。&#34;&#34;&#34;
     path: str
-    &#34;&#34;&#34;文件路径。&#34;&#34;&#34;
+    &#34;&#34;&#34;所在目录路径。&#34;&#34;&#34;
     parent: Optional[&#39;FileProperties&#39;] = None
     &#34;&#34;&#34;父文件对象，递归类型。None 为存在根目录。&#34;&#34;&#34;
     contact: Union[Group, Friend]
@@ -664,6 +672,12 @@ class FileList(ApiGet):
     &#34;&#34;&#34;群号或好友 QQ 号。&#34;&#34;&#34;
     with_download_info: Optional[bool] = None
     &#34;&#34;&#34;是否携带下载信息。&#34;&#34;&#34;
+    path: Optional[str] = None
+    &#34;&#34;&#34;可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。&#34;&#34;&#34;
+    offset: Optional[int] = None
+    &#34;&#34;&#34;可选。分页偏移。&#34;&#34;&#34;
+    size: Optional[int] = None
+    &#34;&#34;&#34;可选。分页大小。&#34;&#34;&#34;
     class Info(ApiGet.Info):
         name = &#34;file/list&#34;
         alias = &#34;file_list&#34;
@@ -678,6 +692,8 @@ class FileInfo(ApiGet):
     &#34;&#34;&#34;群号或好友 QQ 号。&#34;&#34;&#34;
     with_download_info: Optional[bool] = None
     &#34;&#34;&#34;是否携带下载信息。&#34;&#34;&#34;
+    path: Optional[str] = None
+    &#34;&#34;&#34;可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。&#34;&#34;&#34;
     class Info(ApiGet.Info):
         name = &#34;file/info&#34;
         alias = &#34;file_info&#34;
@@ -692,6 +708,8 @@ class FileMkdir(ApiPost):
     &#34;&#34;&#34;群号或好友 QQ 号。&#34;&#34;&#34;
     directory_name: str
     &#34;&#34;&#34;新建文件夹名。&#34;&#34;&#34;
+    path: Optional[str] = None
+    &#34;&#34;&#34;可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。&#34;&#34;&#34;
     class Info(ApiPost.Info):
         name = &#34;file/mkdir&#34;
         alias = &#34;file_mkdir&#34;
@@ -704,6 +722,8 @@ class FileDelete(ApiPost):
     &#34;&#34;&#34;欲删除的文件 id。&#34;&#34;&#34;
     target: int
     &#34;&#34;&#34;群号或好友 QQ 号。&#34;&#34;&#34;
+    path: Optional[str] = None
+    &#34;&#34;&#34;可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。&#34;&#34;&#34;
     class Info(ApiPost.Info):
         name = &#34;file/delete&#34;
         alias = &#34;file_delete&#34;
@@ -718,6 +738,10 @@ class FileMove(ApiPost):
     &#34;&#34;&#34;群号或好友 QQ 号。&#34;&#34;&#34;
     move_to: str
     &#34;&#34;&#34;移动目标文件夹 id。&#34;&#34;&#34;
+    path: Optional[str] = None
+    &#34;&#34;&#34;可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。&#34;&#34;&#34;
+    move_to_path: Optional[str] = None
+    &#34;&#34;&#34;可选。移动目标文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。&#34;&#34;&#34;
     class Info(ApiPost.Info):
         name = &#34;file/move&#34;
         alias = &#34;file_move&#34;
@@ -732,6 +756,8 @@ class FileRename(ApiPost):
     &#34;&#34;&#34;群号或好友 QQ 号。&#34;&#34;&#34;
     rename_to: str
     &#34;&#34;&#34;新文件名。&#34;&#34;&#34;
+    path: Optional[str] = None
+    &#34;&#34;&#34;可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。&#34;&#34;&#34;
     class Info(ApiPost.Info):
         name = &#34;file/rename&#34;
         alias = &#34;file_rename&#34;
@@ -804,7 +830,7 @@ class UploadImage(ApiPost):
 
 class UploadVoice(ApiPost):
     &#34;&#34;&#34;语音文件上传。&#34;&#34;&#34;
-    type: Literal[&#34;group&#34;]
+    type: Literal[&#34;group&#34;, &#34;friend&#34;, &#34;temp&#34;]
     &#34;&#34;&#34;上传的语音类型。&#34;&#34;&#34;
     voice: Union[str, Path]
     &#34;&#34;&#34;上传的语音的本地路径。&#34;&#34;&#34;
@@ -946,6 +972,20 @@ class MemberInfo(ApiRest):
         alias = &#34;member_info&#34;
         response_type = MemberInfoModel
         response_type_post = Response
+
+
+class MemberAdmin(ApiPost):
+    &#34;&#34;&#34;设置或取消群成员管理员。&#34;&#34;&#34;
+    target: int
+    &#34;&#34;&#34;群号。&#34;&#34;&#34;
+    member_id: int
+    &#34;&#34;&#34;指定群成员的 QQ 号。&#34;&#34;&#34;
+    assign: bool
+    &#34;&#34;&#34;是否设置管理员。&#34;&#34;&#34;
+    class Info(ApiPost.Info):
+        name = &#34;memberAdmin&#34;
+        alias = &#34;member_admin&#34;
+        response_type = Response
 
 
 class RespOperate(Flag):
@@ -1115,7 +1155,84 @@ class CmdRegister(ApiPost):
     class Info(ApiPost.Info):
         name = &#34;cmd/register&#34;
         alias = &#34;cmd_register&#34;
-        response_type = Response</code></pre>
+        response_type = Response
+
+
+__all__ = [
+    &#39;About&#39;,
+    &#39;AboutResponse&#39;,
+    &#39;ApiBaseModel&#39;,
+    &#39;ApiGet&#39;,
+    &#39;ApiMetaclass&#39;,
+    &#39;ApiModel&#39;,
+    &#39;ApiPost&#39;,
+    &#39;ApiProvider&#39;,
+    &#39;ApiRest&#39;,
+    &#39;BotProfile&#39;,
+    &#39;CmdExecute&#39;,
+    &#39;CmdRegister&#39;,
+    &#39;DeleteFriend&#39;,
+    &#39;DownloadInfo&#39;,
+    &#39;FileDelete&#39;,
+    &#39;FileInfo&#39;,
+    &#39;FileInfoResponse&#39;,
+    &#39;FileList&#39;,
+    &#39;FileListResponse&#39;,
+    &#39;FileMkdir&#39;,
+    &#39;FileMkdirResponse&#39;,
+    &#39;FileMove&#39;,
+    &#39;FileProperties&#39;,
+    &#39;FileRename&#39;,
+    &#39;FileUpload&#39;,
+    &#39;FriendList&#39;,
+    &#39;FriendListResponse&#39;,
+    &#39;FriendMessage&#39;,
+    &#39;FriendProfile&#39;,
+    &#39;GroupConfig&#39;,
+    &#39;GroupConfigModel&#39;,
+    &#39;GroupList&#39;,
+    &#39;GroupListResponse&#39;,
+    &#39;GroupMember&#39;,
+    &#39;GroupMessage&#39;,
+    &#39;Kick&#39;,
+    &#39;MemberAdmin&#39;,
+    &#39;MemberInfo&#39;,
+    &#39;MemberInfoModel&#39;,
+    &#39;MemberList&#39;,
+    &#39;MemberListResponse&#39;,
+    &#39;MemberProfile&#39;,
+    &#39;MessageFromId&#39;,
+    &#39;MessageFromIdResponse&#39;,
+    &#39;MessageResponse&#39;,
+    &#39;Mute&#39;,
+    &#39;MuteAll&#39;,
+    &#39;OtherClientMessage&#39;,
+    &#39;ProfileResponse&#39;,
+    &#39;Quit&#39;,
+    &#39;Recall&#39;,
+    &#39;RequestEvent&#39;,
+    &#39;RespBotInvitedJoinGroupRequestEvent&#39;,
+    &#39;RespEvent&#39;,
+    &#39;RespMemberJoinRequestEvent&#39;,
+    &#39;RespNewFriendRequestEvent&#39;,
+    &#39;RespOperate&#39;,
+    &#39;Response&#39;,
+    &#39;SendFriendMessage&#39;,
+    &#39;SendGroupMessage&#39;,
+    &#39;SendMessage&#39;,
+    &#39;SendNudge&#39;,
+    &#39;SendTempMessage&#39;,
+    &#39;SessionInfo&#39;,
+    &#39;SessionInfoResponse&#39;,
+    &#39;SetEssence&#39;,
+    &#39;Sex&#39;,
+    &#39;StrangerMessage&#39;,
+    &#39;TempMessage&#39;,
+    &#39;Unmute&#39;,
+    &#39;UnmuteAll&#39;,
+    &#39;UploadImage&#39;,
+    &#39;UploadVoice&#39;,
+]</code></pre>
 </details>
 </section>
 <section>
@@ -1623,6 +1740,7 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
 <li><a title="mirai.models.api.FileRename" href="#mirai.models.api.FileRename">FileRename</a></li>
 <li><a title="mirai.models.api.FileUpload" href="#mirai.models.api.FileUpload">FileUpload</a></li>
 <li><a title="mirai.models.api.Kick" href="#mirai.models.api.Kick">Kick</a></li>
+<li><a title="mirai.models.api.MemberAdmin" href="#mirai.models.api.MemberAdmin">MemberAdmin</a></li>
 <li><a title="mirai.models.api.Mute" href="#mirai.models.api.Mute">Mute</a></li>
 <li><a title="mirai.models.api.MuteAll" href="#mirai.models.api.MuteAll">MuteAll</a></li>
 <li><a title="mirai.models.api.Quit" href="#mirai.models.api.Quit">Quit</a></li>
@@ -1652,6 +1770,77 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
 </ul>
 </li>
 </ul>
+</dd>
+<dt id="mirai.models.api.ApiProvider"><code class="flex name class">
+<span>class <span class="ident">ApiProvider</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>支持从属性调用 API 的类。</p>
+<p>使用了 <code>__getattr__</code>，可以直接通过属性调用 API。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ApiProvider(abc.ABC):
+    &#34;&#34;&#34;支持从属性调用 API 的类。
+
+    使用了 `__getattr__`，可以直接通过属性调用 API。
+    &#34;&#34;&#34;
+    @abc.abstractmethod
+    async def call_api(self, api: str, method: Method = Method.GET, **params):
+        &#34;&#34;&#34;调用 API。此处为抽象方法，具体实现由子类决定。
+
+        Args:
+            api: API 名称。
+            method: 调用方法。默认为 GET。
+            **params: 参数。
+        &#34;&#34;&#34;
+
+    def __getattr__(self,
+                    api: str) -&gt; Callable[..., Union[Awaitable[Any], Any]]:
+        return functools.partial(self.call_api, api)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mirai.adapters.base.Adapter" href="../adapters/base.html#mirai.adapters.base.Adapter">Adapter</a></li>
+<li><a title="mirai.bot.SimpleMirai" href="../bot.html#mirai.bot.SimpleMirai">SimpleMirai</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="mirai.models.api.ApiProvider.call_api"><code class="name flex">
+<span>async def <span class="ident">call_api</span></span>(<span>self, api: str, method: <a title="mirai.api_provider.Method" href="../api_provider.html#mirai.api_provider.Method">Method</a> = Method.GET, **params)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>调用 API。此处为抽象方法，具体实现由子类决定。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>api</code></strong></dt>
+<dd>API 名称。</dd>
+<dt><strong><code>method</code></strong></dt>
+<dd>调用方法。默认为 GET。</dd>
+<dt><strong><code>**params</code></strong></dt>
+<dd>参数。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abc.abstractmethod
+async def call_api(self, api: str, method: Method = Method.GET, **params):
+    &#34;&#34;&#34;调用 API。此处为抽象方法，具体实现由子类决定。
+
+    Args:
+        api: API 名称。
+        method: 调用方法。默认为 GET。
+        **params: 参数。
+    &#34;&#34;&#34;</code></pre>
+</details>
+</dd>
+</dl>
 </dd>
 <dt id="mirai.models.api.ApiRest"><code class="flex name class">
 <span>class <span class="ident">ApiRest</span></span>
@@ -1976,7 +2165,15 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
     md5: str
     &#34;&#34;&#34;文件的 MD5。&#34;&#34;&#34;
     url: str
-    &#34;&#34;&#34;文件的下载地址。&#34;&#34;&#34;</code></pre>
+    &#34;&#34;&#34;文件的下载地址。&#34;&#34;&#34;
+    downloadTimes: Optional[int]
+    &#34;&#34;&#34;文件被下载过的次数。&#34;&#34;&#34;
+    uploaderId: Optional[int]
+    &#34;&#34;&#34;上传者的 QQ 号。&#34;&#34;&#34;
+    uploadTime: Optional[datetime]
+    &#34;&#34;&#34;上传时间。&#34;&#34;&#34;
+    lastModifyTime: Optional[datetime]
+    &#34;&#34;&#34;最后修改时间。&#34;&#34;&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1986,6 +2183,14 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
 </ul>
 <h3>Class variables</h3>
 <dl>
+<dt id="mirai.models.api.DownloadInfo.downloadTimes"><code class="name">var <span class="ident">downloadTimes</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>文件被下载过的次数。</p></div>
+</dd>
+<dt id="mirai.models.api.DownloadInfo.lastModifyTime"><code class="name">var <span class="ident">lastModifyTime</span> : Union[datetime.datetime, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>最后修改时间。</p></div>
+</dd>
 <dt id="mirai.models.api.DownloadInfo.md5"><code class="name">var <span class="ident">md5</span> : str</code></dt>
 <dd>
 <div class="desc"><p>文件的 MD5。</p></div>
@@ -1993,6 +2198,14 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
 <dt id="mirai.models.api.DownloadInfo.sha1"><code class="name">var <span class="ident">sha1</span> : str</code></dt>
 <dd>
 <div class="desc"><p>文件的 SHA1。</p></div>
+</dd>
+<dt id="mirai.models.api.DownloadInfo.uploadTime"><code class="name">var <span class="ident">uploadTime</span> : Union[datetime.datetime, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>上传时间。</p></div>
+</dd>
+<dt id="mirai.models.api.DownloadInfo.uploaderId"><code class="name">var <span class="ident">uploaderId</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>上传者的 QQ 号。</p></div>
 </dd>
 <dt id="mirai.models.api.DownloadInfo.url"><code class="name">var <span class="ident">url</span> : str</code></dt>
 <dd>
@@ -2016,6 +2229,8 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
     &#34;&#34;&#34;欲删除的文件 id。&#34;&#34;&#34;
     target: int
     &#34;&#34;&#34;群号或好友 QQ 号。&#34;&#34;&#34;
+    path: Optional[str] = None
+    &#34;&#34;&#34;可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。&#34;&#34;&#34;
     class Info(ApiPost.Info):
         name = &#34;file/delete&#34;
         alias = &#34;file_delete&#34;
@@ -2036,6 +2251,10 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
 <dt id="mirai.models.api.FileDelete.id"><code class="name">var <span class="ident">id</span> : str</code></dt>
 <dd>
 <div class="desc"><p>欲删除的文件 id。</p></div>
+</dd>
+<dt id="mirai.models.api.FileDelete.path"><code class="name">var <span class="ident">path</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。</p></div>
 </dd>
 <dt id="mirai.models.api.FileDelete.target"><code class="name">var <span class="ident">target</span> : int</code></dt>
 <dd>
@@ -2073,6 +2292,8 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
     &#34;&#34;&#34;群号或好友 QQ 号。&#34;&#34;&#34;
     with_download_info: Optional[bool] = None
     &#34;&#34;&#34;是否携带下载信息。&#34;&#34;&#34;
+    path: Optional[str] = None
+    &#34;&#34;&#34;可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。&#34;&#34;&#34;
     class Info(ApiGet.Info):
         name = &#34;file/info&#34;
         alias = &#34;file_info&#34;
@@ -2093,6 +2314,10 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
 <dt id="mirai.models.api.FileInfo.id"><code class="name">var <span class="ident">id</span> : str</code></dt>
 <dd>
 <div class="desc"><p>文件 id。</p></div>
+</dd>
+<dt id="mirai.models.api.FileInfo.path"><code class="name">var <span class="ident">path</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。</p></div>
 </dd>
 <dt id="mirai.models.api.FileInfo.target"><code class="name">var <span class="ident">target</span> : int</code></dt>
 <dd>
@@ -2166,6 +2391,12 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
     &#34;&#34;&#34;群号或好友 QQ 号。&#34;&#34;&#34;
     with_download_info: Optional[bool] = None
     &#34;&#34;&#34;是否携带下载信息。&#34;&#34;&#34;
+    path: Optional[str] = None
+    &#34;&#34;&#34;可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。&#34;&#34;&#34;
+    offset: Optional[int] = None
+    &#34;&#34;&#34;可选。分页偏移。&#34;&#34;&#34;
+    size: Optional[int] = None
+    &#34;&#34;&#34;可选。分页大小。&#34;&#34;&#34;
     class Info(ApiGet.Info):
         name = &#34;file/list&#34;
         alias = &#34;file_list&#34;
@@ -2186,6 +2417,18 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
 <dt id="mirai.models.api.FileList.id"><code class="name">var <span class="ident">id</span> : str</code></dt>
 <dd>
 <div class="desc"><p>文件夹 id，空串为根目录。</p></div>
+</dd>
+<dt id="mirai.models.api.FileList.offset"><code class="name">var <span class="ident">offset</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>可选。分页偏移。</p></div>
+</dd>
+<dt id="mirai.models.api.FileList.path"><code class="name">var <span class="ident">path</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。</p></div>
+</dd>
+<dt id="mirai.models.api.FileList.size"><code class="name">var <span class="ident">size</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>可选。分页大小。</p></div>
 </dd>
 <dt id="mirai.models.api.FileList.target"><code class="name">var <span class="ident">target</span> : int</code></dt>
 <dd>
@@ -2301,6 +2544,8 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
     &#34;&#34;&#34;群号或好友 QQ 号。&#34;&#34;&#34;
     directory_name: str
     &#34;&#34;&#34;新建文件夹名。&#34;&#34;&#34;
+    path: Optional[str] = None
+    &#34;&#34;&#34;可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。&#34;&#34;&#34;
     class Info(ApiPost.Info):
         name = &#34;file/mkdir&#34;
         alias = &#34;file_mkdir&#34;
@@ -2325,6 +2570,10 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
 <dt id="mirai.models.api.FileMkdir.id"><code class="name">var <span class="ident">id</span> : str</code></dt>
 <dd>
 <div class="desc"><p>父目录 id。</p></div>
+</dd>
+<dt id="mirai.models.api.FileMkdir.path"><code class="name">var <span class="ident">path</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。</p></div>
 </dd>
 <dt id="mirai.models.api.FileMkdir.target"><code class="name">var <span class="ident">target</span> : int</code></dt>
 <dd>
@@ -2394,6 +2643,10 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
     &#34;&#34;&#34;群号或好友 QQ 号。&#34;&#34;&#34;
     move_to: str
     &#34;&#34;&#34;移动目标文件夹 id。&#34;&#34;&#34;
+    path: Optional[str] = None
+    &#34;&#34;&#34;可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。&#34;&#34;&#34;
+    move_to_path: Optional[str] = None
+    &#34;&#34;&#34;可选。移动目标文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。&#34;&#34;&#34;
     class Info(ApiPost.Info):
         name = &#34;file/move&#34;
         alias = &#34;file_move&#34;
@@ -2418,6 +2671,14 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
 <dt id="mirai.models.api.FileMove.move_to"><code class="name">var <span class="ident">move_to</span> : str</code></dt>
 <dd>
 <div class="desc"><p>移动目标文件夹 id。</p></div>
+</dd>
+<dt id="mirai.models.api.FileMove.move_to_path"><code class="name">var <span class="ident">move_to_path</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>可选。移动目标文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。</p></div>
+</dd>
+<dt id="mirai.models.api.FileMove.path"><code class="name">var <span class="ident">path</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。</p></div>
 </dd>
 <dt id="mirai.models.api.FileMove.target"><code class="name">var <span class="ident">target</span> : int</code></dt>
 <dd>
@@ -2454,7 +2715,7 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
     id: Optional[str]
     &#34;&#34;&#34;文件 ID。&#34;&#34;&#34;
     path: str
-    &#34;&#34;&#34;文件路径。&#34;&#34;&#34;
+    &#34;&#34;&#34;所在目录路径。&#34;&#34;&#34;
     parent: Optional[&#39;FileProperties&#39;] = None
     &#34;&#34;&#34;父文件对象，递归类型。None 为存在根目录。&#34;&#34;&#34;
     contact: Union[Group, Friend]
@@ -2504,7 +2765,7 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
 </dd>
 <dt id="mirai.models.api.FileProperties.path"><code class="name">var <span class="ident">path</span> : str</code></dt>
 <dd>
-<div class="desc"><p>文件路径。</p></div>
+<div class="desc"><p>所在目录路径。</p></div>
 </dd>
 </dl>
 </dd>
@@ -2526,6 +2787,8 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
     &#34;&#34;&#34;群号或好友 QQ 号。&#34;&#34;&#34;
     rename_to: str
     &#34;&#34;&#34;新文件名。&#34;&#34;&#34;
+    path: Optional[str] = None
+    &#34;&#34;&#34;可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。&#34;&#34;&#34;
     class Info(ApiPost.Info):
         name = &#34;file/rename&#34;
         alias = &#34;file_rename&#34;
@@ -2546,6 +2809,10 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
 <dt id="mirai.models.api.FileRename.id"><code class="name">var <span class="ident">id</span> : str</code></dt>
 <dd>
 <div class="desc"><p>欲重命名的文件 id。</p></div>
+</dd>
+<dt id="mirai.models.api.FileRename.path"><code class="name">var <span class="ident">path</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。</p></div>
 </dd>
 <dt id="mirai.models.api.FileRename.rename_to"><code class="name">var <span class="ident">rename_to</span> : str</code></dt>
 <dd>
@@ -2731,6 +2998,62 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
 </li>
 </ul>
 </dd>
+<dt id="mirai.models.api.FriendMessage"><code class="flex name class">
+<span>class <span class="ident">FriendMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>好友消息。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>sender</code></strong></dt>
+<dd>发送消息的好友。</dd>
+<dt><strong><code>message_chain</code></strong></dt>
+<dd>消息内容。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FriendMessage(MessageEvent):
+    &#34;&#34;&#34;好友消息。
+
+    Args:
+        type: 事件名。
+        sender: 发送消息的好友。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;FriendMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    sender: Friend
+    &#34;&#34;&#34;发送消息的好友。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.MessageEvent" href="events.html#mirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="mirai.models.events.Event" href="events.html#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.MessageEvent" href="events.html#mirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.message_chain" href="events.html#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.sender" href="events.html#mirai.models.events.MessageEvent.sender">sender</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.type" href="events.html#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="mirai.models.api.FriendProfile"><code class="flex name class">
 <span>class <span class="ident">FriendProfile</span></span>
 <span>(</span><span>*args, **kwargs)</span>
@@ -2836,6 +3159,74 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
 </li>
 </ul>
 </dd>
+<dt id="mirai.models.api.GroupConfigModel"><code class="flex name class">
+<span>class <span class="ident">GroupConfigModel</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群配置。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupConfigModel(Config):
+    &#34;&#34;&#34;群配置。&#34;&#34;&#34;
+    name: str
+    &#34;&#34;&#34;群名称。&#34;&#34;&#34;
+    confess_talk: bool
+    &#34;&#34;&#34;是否允许坦白说。&#34;&#34;&#34;
+    allow_member_invite: bool
+    &#34;&#34;&#34;是否允许成员邀请好友入群。&#34;&#34;&#34;
+    auto_approve: bool
+    &#34;&#34;&#34;是否开启自动审批入群。&#34;&#34;&#34;
+    anonymous_chat: bool
+    &#34;&#34;&#34;是否开启匿名聊天。&#34;&#34;&#34;
+    announcement: str = &#39;&#39;
+    &#34;&#34;&#34;群公告。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.entities.Config" href="entities.html#mirai.models.entities.Config">Config</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.api.GroupConfigModel.allow_member_invite"><code class="name">var <span class="ident">allow_member_invite</span> : bool</code></dt>
+<dd>
+<div class="desc"><p>是否允许成员邀请好友入群。</p></div>
+</dd>
+<dt id="mirai.models.api.GroupConfigModel.announcement"><code class="name">var <span class="ident">announcement</span> : str</code></dt>
+<dd>
+<div class="desc"><p>群公告。</p></div>
+</dd>
+<dt id="mirai.models.api.GroupConfigModel.anonymous_chat"><code class="name">var <span class="ident">anonymous_chat</span> : bool</code></dt>
+<dd>
+<div class="desc"><p>是否开启匿名聊天。</p></div>
+</dd>
+<dt id="mirai.models.api.GroupConfigModel.auto_approve"><code class="name">var <span class="ident">auto_approve</span> : bool</code></dt>
+<dd>
+<div class="desc"><p>是否开启自动审批入群。</p></div>
+</dd>
+<dt id="mirai.models.api.GroupConfigModel.confess_talk"><code class="name">var <span class="ident">confess_talk</span> : bool</code></dt>
+<dd>
+<div class="desc"><p>是否允许坦白说。</p></div>
+</dd>
+<dt id="mirai.models.api.GroupConfigModel.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>群名称。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.entities.Config" href="entities.html#mirai.models.entities.Config">Config</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.entities.Config.modify" href="entities.html#mirai.models.entities.Config.modify">modify</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="mirai.models.api.GroupList"><code class="flex name class">
 <span>class <span class="ident">GroupList</span></span>
 <span>(</span><span>*args, **kwargs)</span>
@@ -2911,6 +3302,167 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
 </li>
 </ul>
 </dd>
+<dt id="mirai.models.api.GroupMember"><code class="flex name class">
+<span>class <span class="ident">GroupMember</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群成员。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupMember(Entity):
+    &#34;&#34;&#34;群成员。&#34;&#34;&#34;
+    id: int
+    &#34;&#34;&#34;QQ 号。&#34;&#34;&#34;
+    member_name: str
+    &#34;&#34;&#34;群成员名称。&#34;&#34;&#34;
+    permission: Permission
+    &#34;&#34;&#34;Bot 在群中的权限。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;群。&#34;&#34;&#34;
+    special_title: str = &#39;&#39;
+    &#34;&#34;&#34;群头衔。&#34;&#34;&#34;
+    join_timestamp: datetime = datetime.utcfromtimestamp(0)
+    &#34;&#34;&#34;加入群的时间。&#34;&#34;&#34;
+    last_speak_timestamp: datetime = datetime.utcfromtimestamp(0)
+    &#34;&#34;&#34;最后一次发言的时间。&#34;&#34;&#34;
+    mute_time_remaining: int = 0
+    &#34;&#34;&#34;禁言剩余时间。&#34;&#34;&#34;
+    def get_avatar_url(self) -&gt; str:
+        return f&#39;http://q4.qlogo.cn/g?b=qq&amp;nk={self.id}&amp;s=140&#39;
+
+    def get_name(self) -&gt; str:
+        return self.member_name</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.entities.Entity" href="entities.html#mirai.models.entities.Entity">Entity</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mirai.models.entities.MemberInfoModel" href="entities.html#mirai.models.entities.MemberInfoModel">MemberInfoModel</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.api.GroupMember.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"><p>群。</p></div>
+</dd>
+<dt id="mirai.models.api.GroupMember.join_timestamp"><code class="name">var <span class="ident">join_timestamp</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"><p>加入群的时间。</p></div>
+</dd>
+<dt id="mirai.models.api.GroupMember.last_speak_timestamp"><code class="name">var <span class="ident">last_speak_timestamp</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"><p>最后一次发言的时间。</p></div>
+</dd>
+<dt id="mirai.models.api.GroupMember.member_name"><code class="name">var <span class="ident">member_name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>群成员名称。</p></div>
+</dd>
+<dt id="mirai.models.api.GroupMember.mute_time_remaining"><code class="name">var <span class="ident">mute_time_remaining</span> : int</code></dt>
+<dd>
+<div class="desc"><p>禁言剩余时间。</p></div>
+</dd>
+<dt id="mirai.models.api.GroupMember.permission"><code class="name">var <span class="ident">permission</span> : <a title="mirai.models.entities.Permission" href="entities.html#mirai.models.entities.Permission">Permission</a></code></dt>
+<dd>
+<div class="desc"><p>Bot 在群中的权限。</p></div>
+</dd>
+<dt id="mirai.models.api.GroupMember.special_title"><code class="name">var <span class="ident">special_title</span> : str</code></dt>
+<dd>
+<div class="desc"><p>群头衔。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.entities.Entity" href="entities.html#mirai.models.entities.Entity">Entity</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.entities.Entity.get_avatar_url" href="entities.html#mirai.models.entities.Entity.get_avatar_url">get_avatar_url</a></code></li>
+<li><code><a title="mirai.models.entities.Entity.get_name" href="entities.html#mirai.models.entities.Entity.get_name">get_name</a></code></li>
+<li><code><a title="mirai.models.entities.Entity.id" href="entities.html#mirai.models.entities.Entity.id">id</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.api.GroupMessage"><code class="flex name class">
+<span>class <span class="ident">GroupMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群消息。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>sender</code></strong></dt>
+<dd>发送消息的群成员。</dd>
+<dt><strong><code>message_chain</code></strong></dt>
+<dd>消息内容。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupMessage(MessageEvent):
+    &#34;&#34;&#34;群消息。
+
+    Args:
+        type: 事件名。
+        sender: 发送消息的群成员。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;GroupMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    sender: GroupMember
+    &#34;&#34;&#34;发送消息的群成员。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
+    @property
+    def group(self) -&gt; Group:
+        return self.sender.group</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.MessageEvent" href="events.html#mirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="mirai.models.events.Event" href="events.html#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="mirai.models.api.GroupMessage.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def group(self) -&gt; Group:
+    return self.sender.group</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.MessageEvent" href="events.html#mirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.message_chain" href="events.html#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.sender" href="events.html#mirai.models.events.MessageEvent.sender">sender</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.type" href="events.html#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="mirai.models.api.Kick"><code class="flex name class">
 <span>class <span class="ident">Kick</span></span>
 <span>(</span><span>*args, **kwargs)</span>
@@ -2957,6 +3509,67 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
 <dt id="mirai.models.api.Kick.target"><code class="name">var <span class="ident">target</span> : int</code></dt>
 <dd>
 <div class="desc"><p>指定群的群号。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.api.ApiPost" href="#mirai.models.api.ApiPost">ApiPost</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.api.ApiPost.Info" href="#mirai.models.api.ApiModel.Info">Info</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.api.MemberAdmin"><code class="flex name class">
+<span>class <span class="ident">MemberAdmin</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>设置或取消群成员管理员。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberAdmin(ApiPost):
+    &#34;&#34;&#34;设置或取消群成员管理员。&#34;&#34;&#34;
+    target: int
+    &#34;&#34;&#34;群号。&#34;&#34;&#34;
+    member_id: int
+    &#34;&#34;&#34;指定群成员的 QQ 号。&#34;&#34;&#34;
+    assign: bool
+    &#34;&#34;&#34;是否设置管理员。&#34;&#34;&#34;
+    class Info(ApiPost.Info):
+        name = &#34;memberAdmin&#34;
+        alias = &#34;member_admin&#34;
+        response_type = Response</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.api.ApiPost" href="#mirai.models.api.ApiPost">ApiPost</a></li>
+<li><a title="mirai.models.api.ApiModel" href="#mirai.models.api.ApiModel">ApiModel</a></li>
+<li><a title="mirai.models.api.ApiBaseModel" href="#mirai.models.api.ApiBaseModel">ApiBaseModel</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.api.MemberAdmin.assign"><code class="name">var <span class="ident">assign</span> : bool</code></dt>
+<dd>
+<div class="desc"><p>是否设置管理员。</p></div>
+</dd>
+<dt id="mirai.models.api.MemberAdmin.member_id"><code class="name">var <span class="ident">member_id</span> : int</code></dt>
+<dd>
+<div class="desc"><p>指定群成员的 QQ 号。</p></div>
+</dd>
+<dt id="mirai.models.api.MemberAdmin.target"><code class="name">var <span class="ident">target</span> : int</code></dt>
+<dd>
+<div class="desc"><p>群号。</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -3030,6 +3643,55 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
 <li><code><a title="mirai.models.api.ApiRest.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiRest.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.api.ApiRest.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.api.MemberInfoModel"><code class="flex name class">
+<span>class <span class="ident">MemberInfoModel</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群成员信息。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemberInfoModel(Config, GroupMember):
+    &#34;&#34;&#34;群成员信息。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.entities.Config" href="entities.html#mirai.models.entities.Config">Config</a></li>
+<li><a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a></li>
+<li><a title="mirai.models.entities.Entity" href="entities.html#mirai.models.entities.Entity">Entity</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.entities.Config" href="entities.html#mirai.models.entities.Config">Config</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.entities.Config.modify" href="entities.html#mirai.models.entities.Config.modify">modify</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.entities.GroupMember.group" href="entities.html#mirai.models.entities.GroupMember.group">group</a></code></li>
+<li><code><a title="mirai.models.entities.GroupMember.id" href="entities.html#mirai.models.entities.Entity.id">id</a></code></li>
+<li><code><a title="mirai.models.entities.GroupMember.join_timestamp" href="entities.html#mirai.models.entities.GroupMember.join_timestamp">join_timestamp</a></code></li>
+<li><code><a title="mirai.models.entities.GroupMember.last_speak_timestamp" href="entities.html#mirai.models.entities.GroupMember.last_speak_timestamp">last_speak_timestamp</a></code></li>
+<li><code><a title="mirai.models.entities.GroupMember.member_name" href="entities.html#mirai.models.entities.GroupMember.member_name">member_name</a></code></li>
+<li><code><a title="mirai.models.entities.GroupMember.mute_time_remaining" href="entities.html#mirai.models.entities.GroupMember.mute_time_remaining">mute_time_remaining</a></code></li>
+<li><code><a title="mirai.models.entities.GroupMember.permission" href="entities.html#mirai.models.entities.GroupMember.permission">permission</a></code></li>
+<li><code><a title="mirai.models.entities.GroupMember.special_title" href="entities.html#mirai.models.entities.GroupMember.special_title">special_title</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.entities.GroupMember.get_avatar_url" href="entities.html#mirai.models.entities.Entity.get_avatar_url">get_avatar_url</a></code></li>
+<li><code><a title="mirai.models.entities.GroupMember.get_name" href="entities.html#mirai.models.entities.Entity.get_name">get_name</a></code></li>
 </ul>
 </li>
 </ul>
@@ -3406,6 +4068,62 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
 </li>
 </ul>
 </dd>
+<dt id="mirai.models.api.OtherClientMessage"><code class="flex name class">
+<span>class <span class="ident">OtherClientMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>其他客户端消息。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>sender</code></strong></dt>
+<dd>发送消息的人。</dd>
+<dt><strong><code>message_chain</code></strong></dt>
+<dd>消息内容。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class OtherClientMessage(MessageEvent):
+    &#34;&#34;&#34;其他客户端消息。
+
+    Args:
+        type: 事件名。
+        sender: 发送消息的人。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;OtherClientMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    sender: Client
+    &#34;&#34;&#34;发送消息的人。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.MessageEvent" href="events.html#mirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="mirai.models.events.Event" href="events.html#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.MessageEvent" href="events.html#mirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.message_chain" href="events.html#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.sender" href="events.html#mirai.models.events.MessageEvent.sender">sender</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.type" href="events.html#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="mirai.models.api.ProfileResponse"><code class="flex name class">
 <span>class <span class="ident">ProfileResponse</span></span>
 <span>(</span><span>*args, **kwargs)</span>
@@ -3559,6 +4277,79 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.api.RequestEvent"><code class="flex name class">
+<span>class <span class="ident">RequestEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>申请事件。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>event_id</code></strong></dt>
+<dd>事件标识，响应该事件时的标识。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RequestEvent(Event):
+    &#34;&#34;&#34;申请事件。
+
+    Args:
+        type: 事件名。
+        event_id: 事件标识，响应该事件时的标识。
+    &#34;&#34;&#34;
+    type: str
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    event_id: int
+    &#34;&#34;&#34;事件标识，响应该事件时的标识。&#34;&#34;&#34;
+    from_id: int
+    &#34;&#34;&#34;申请人 QQ 号。&#34;&#34;&#34;
+    group_id: int
+    &#34;&#34;&#34;申请人群号，可能为0。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.Event" href="events.html#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.BotInvitedJoinGroupRequestEvent" href="events.html#mirai.models.events.BotInvitedJoinGroupRequestEvent">BotInvitedJoinGroupRequestEvent</a></li>
+<li><a title="mirai.models.events.MemberJoinRequestEvent" href="events.html#mirai.models.events.MemberJoinRequestEvent">MemberJoinRequestEvent</a></li>
+<li><a title="mirai.models.events.NewFriendRequestEvent" href="events.html#mirai.models.events.NewFriendRequestEvent">NewFriendRequestEvent</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.api.RequestEvent.event_id"><code class="name">var <span class="ident">event_id</span> : int</code></dt>
+<dd>
+<div class="desc"><p>事件标识，响应该事件时的标识。</p></div>
+</dd>
+<dt id="mirai.models.api.RequestEvent.from_id"><code class="name">var <span class="ident">from_id</span> : int</code></dt>
+<dd>
+<div class="desc"><p>申请人 QQ 号。</p></div>
+</dd>
+<dt id="mirai.models.api.RequestEvent.group_id"><code class="name">var <span class="ident">group_id</span> : int</code></dt>
+<dd>
+<div class="desc"><p>申请人群号，可能为0。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.Event" href="events.html#mirai.models.events.Event">Event</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.Event.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.type" href="events.html#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
 </ul>
@@ -4534,6 +5325,136 @@ def qq(self):
 </dd>
 </dl>
 </dd>
+<dt id="mirai.models.api.StrangerMessage"><code class="flex name class">
+<span>class <span class="ident">StrangerMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>陌生人消息。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>sender</code></strong></dt>
+<dd>发送消息的人。</dd>
+<dt><strong><code>message_chain</code></strong></dt>
+<dd>消息内容。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class StrangerMessage(MessageEvent):
+    &#34;&#34;&#34;陌生人消息。
+
+    Args:
+        type: 事件名。
+        sender: 发送消息的人。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;StrangerMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    sender: Friend
+    &#34;&#34;&#34;发送消息的人。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.MessageEvent" href="events.html#mirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="mirai.models.events.Event" href="events.html#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.MessageEvent" href="events.html#mirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.message_chain" href="events.html#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.sender" href="events.html#mirai.models.events.MessageEvent.sender">sender</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.type" href="events.html#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.api.TempMessage"><code class="flex name class">
+<span>class <span class="ident">TempMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>群临时消息。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>sender</code></strong></dt>
+<dd>发送消息的群成员。</dd>
+<dt><strong><code>message_chain</code></strong></dt>
+<dd>消息内容。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TempMessage(MessageEvent):
+    &#34;&#34;&#34;群临时消息。
+
+    Args:
+        type: 事件名。
+        sender: 发送消息的群成员。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;TempMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    sender: GroupMember
+    &#34;&#34;&#34;发送消息的群成员。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
+    @property
+    def group(self) -&gt; Group:
+        return self.sender.group</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.MessageEvent" href="events.html#mirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="mirai.models.events.Event" href="events.html#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="mirai.models.api.TempMessage.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def group(self) -&gt; Group:
+    return self.sender.group</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.MessageEvent" href="events.html#mirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.message_chain" href="events.html#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.sender" href="events.html#mirai.models.events.MessageEvent.sender">sender</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.type" href="events.html#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="mirai.models.api.Unmute"><code class="flex name class">
 <span>class <span class="ident">Unmute</span></span>
 <span>(</span><span>*args, **kwargs)</span>
@@ -4721,7 +5642,7 @@ def qq(self):
 </summary>
 <pre><code class="python">class UploadVoice(ApiPost):
     &#34;&#34;&#34;语音文件上传。&#34;&#34;&#34;
-    type: Literal[&#34;group&#34;]
+    type: Literal[&#34;group&#34;, &#34;friend&#34;, &#34;temp&#34;]
     &#34;&#34;&#34;上传的语音类型。&#34;&#34;&#34;
     voice: Union[str, Path]
     &#34;&#34;&#34;上传的语音的本地路径。&#34;&#34;&#34;
@@ -4758,7 +5679,7 @@ def qq(self):
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.api.UploadVoice.type"><code class="name">var <span class="ident">type</span> : typing_extensions.Literal['group']</code></dt>
+<dt id="mirai.models.api.UploadVoice.type"><code class="name">var <span class="ident">type</span> : typing_extensions.Literal['group', 'friend', 'temp']</code></dt>
 <dd>
 <div class="desc"><p>上传的语音类型。</p></div>
 </dd>
@@ -4823,6 +5744,12 @@ def qq(self):
 <h4><code><a title="mirai.models.api.ApiPost" href="#mirai.models.api.ApiPost">ApiPost</a></code></h4>
 </li>
 <li>
+<h4><code><a title="mirai.models.api.ApiProvider" href="#mirai.models.api.ApiProvider">ApiProvider</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.api.ApiProvider.call_api" href="#mirai.models.api.ApiProvider.call_api">call_api</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="mirai.models.api.ApiRest" href="#mirai.models.api.ApiRest">ApiRest</a></code></h4>
 </li>
 <li>
@@ -4851,9 +5778,13 @@ def qq(self):
 </li>
 <li>
 <h4><code><a title="mirai.models.api.DownloadInfo" href="#mirai.models.api.DownloadInfo">DownloadInfo</a></code></h4>
-<ul class="">
+<ul class="two-column">
+<li><code><a title="mirai.models.api.DownloadInfo.downloadTimes" href="#mirai.models.api.DownloadInfo.downloadTimes">downloadTimes</a></code></li>
+<li><code><a title="mirai.models.api.DownloadInfo.lastModifyTime" href="#mirai.models.api.DownloadInfo.lastModifyTime">lastModifyTime</a></code></li>
 <li><code><a title="mirai.models.api.DownloadInfo.md5" href="#mirai.models.api.DownloadInfo.md5">md5</a></code></li>
 <li><code><a title="mirai.models.api.DownloadInfo.sha1" href="#mirai.models.api.DownloadInfo.sha1">sha1</a></code></li>
+<li><code><a title="mirai.models.api.DownloadInfo.uploadTime" href="#mirai.models.api.DownloadInfo.uploadTime">uploadTime</a></code></li>
+<li><code><a title="mirai.models.api.DownloadInfo.uploaderId" href="#mirai.models.api.DownloadInfo.uploaderId">uploaderId</a></code></li>
 <li><code><a title="mirai.models.api.DownloadInfo.url" href="#mirai.models.api.DownloadInfo.url">url</a></code></li>
 </ul>
 </li>
@@ -4861,6 +5792,7 @@ def qq(self):
 <h4><code><a title="mirai.models.api.FileDelete" href="#mirai.models.api.FileDelete">FileDelete</a></code></h4>
 <ul class="">
 <li><code><a title="mirai.models.api.FileDelete.id" href="#mirai.models.api.FileDelete.id">id</a></code></li>
+<li><code><a title="mirai.models.api.FileDelete.path" href="#mirai.models.api.FileDelete.path">path</a></code></li>
 <li><code><a title="mirai.models.api.FileDelete.target" href="#mirai.models.api.FileDelete.target">target</a></code></li>
 </ul>
 </li>
@@ -4868,6 +5800,7 @@ def qq(self):
 <h4><code><a title="mirai.models.api.FileInfo" href="#mirai.models.api.FileInfo">FileInfo</a></code></h4>
 <ul class="">
 <li><code><a title="mirai.models.api.FileInfo.id" href="#mirai.models.api.FileInfo.id">id</a></code></li>
+<li><code><a title="mirai.models.api.FileInfo.path" href="#mirai.models.api.FileInfo.path">path</a></code></li>
 <li><code><a title="mirai.models.api.FileInfo.target" href="#mirai.models.api.FileInfo.target">target</a></code></li>
 <li><code><a title="mirai.models.api.FileInfo.with_download_info" href="#mirai.models.api.FileInfo.with_download_info">with_download_info</a></code></li>
 </ul>
@@ -4877,8 +5810,11 @@ def qq(self):
 </li>
 <li>
 <h4><code><a title="mirai.models.api.FileList" href="#mirai.models.api.FileList">FileList</a></code></h4>
-<ul class="">
+<ul class="two-column">
 <li><code><a title="mirai.models.api.FileList.id" href="#mirai.models.api.FileList.id">id</a></code></li>
+<li><code><a title="mirai.models.api.FileList.offset" href="#mirai.models.api.FileList.offset">offset</a></code></li>
+<li><code><a title="mirai.models.api.FileList.path" href="#mirai.models.api.FileList.path">path</a></code></li>
+<li><code><a title="mirai.models.api.FileList.size" href="#mirai.models.api.FileList.size">size</a></code></li>
 <li><code><a title="mirai.models.api.FileList.target" href="#mirai.models.api.FileList.target">target</a></code></li>
 <li><code><a title="mirai.models.api.FileList.with_download_info" href="#mirai.models.api.FileList.with_download_info">with_download_info</a></code></li>
 </ul>
@@ -4895,6 +5831,7 @@ def qq(self):
 <ul class="">
 <li><code><a title="mirai.models.api.FileMkdir.directory_name" href="#mirai.models.api.FileMkdir.directory_name">directory_name</a></code></li>
 <li><code><a title="mirai.models.api.FileMkdir.id" href="#mirai.models.api.FileMkdir.id">id</a></code></li>
+<li><code><a title="mirai.models.api.FileMkdir.path" href="#mirai.models.api.FileMkdir.path">path</a></code></li>
 <li><code><a title="mirai.models.api.FileMkdir.target" href="#mirai.models.api.FileMkdir.target">target</a></code></li>
 </ul>
 </li>
@@ -4906,6 +5843,8 @@ def qq(self):
 <ul class="">
 <li><code><a title="mirai.models.api.FileMove.id" href="#mirai.models.api.FileMove.id">id</a></code></li>
 <li><code><a title="mirai.models.api.FileMove.move_to" href="#mirai.models.api.FileMove.move_to">move_to</a></code></li>
+<li><code><a title="mirai.models.api.FileMove.move_to_path" href="#mirai.models.api.FileMove.move_to_path">move_to_path</a></code></li>
+<li><code><a title="mirai.models.api.FileMove.path" href="#mirai.models.api.FileMove.path">path</a></code></li>
 <li><code><a title="mirai.models.api.FileMove.target" href="#mirai.models.api.FileMove.target">target</a></code></li>
 </ul>
 </li>
@@ -4926,6 +5865,7 @@ def qq(self):
 <h4><code><a title="mirai.models.api.FileRename" href="#mirai.models.api.FileRename">FileRename</a></code></h4>
 <ul class="">
 <li><code><a title="mirai.models.api.FileRename.id" href="#mirai.models.api.FileRename.id">id</a></code></li>
+<li><code><a title="mirai.models.api.FileRename.path" href="#mirai.models.api.FileRename.path">path</a></code></li>
 <li><code><a title="mirai.models.api.FileRename.rename_to" href="#mirai.models.api.FileRename.rename_to">rename_to</a></code></li>
 <li><code><a title="mirai.models.api.FileRename.target" href="#mirai.models.api.FileRename.target">target</a></code></li>
 </ul>
@@ -4946,6 +5886,9 @@ def qq(self):
 <h4><code><a title="mirai.models.api.FriendListResponse" href="#mirai.models.api.FriendListResponse">FriendListResponse</a></code></h4>
 </li>
 <li>
+<h4><code><a title="mirai.models.api.FriendMessage" href="#mirai.models.api.FriendMessage">FriendMessage</a></code></h4>
+</li>
+<li>
 <h4><code><a title="mirai.models.api.FriendProfile" href="#mirai.models.api.FriendProfile">FriendProfile</a></code></h4>
 <ul class="">
 <li><code><a title="mirai.models.api.FriendProfile.target" href="#mirai.models.api.FriendProfile.target">target</a></code></li>
@@ -4959,10 +5902,39 @@ def qq(self):
 </ul>
 </li>
 <li>
+<h4><code><a title="mirai.models.api.GroupConfigModel" href="#mirai.models.api.GroupConfigModel">GroupConfigModel</a></code></h4>
+<ul class="two-column">
+<li><code><a title="mirai.models.api.GroupConfigModel.allow_member_invite" href="#mirai.models.api.GroupConfigModel.allow_member_invite">allow_member_invite</a></code></li>
+<li><code><a title="mirai.models.api.GroupConfigModel.announcement" href="#mirai.models.api.GroupConfigModel.announcement">announcement</a></code></li>
+<li><code><a title="mirai.models.api.GroupConfigModel.anonymous_chat" href="#mirai.models.api.GroupConfigModel.anonymous_chat">anonymous_chat</a></code></li>
+<li><code><a title="mirai.models.api.GroupConfigModel.auto_approve" href="#mirai.models.api.GroupConfigModel.auto_approve">auto_approve</a></code></li>
+<li><code><a title="mirai.models.api.GroupConfigModel.confess_talk" href="#mirai.models.api.GroupConfigModel.confess_talk">confess_talk</a></code></li>
+<li><code><a title="mirai.models.api.GroupConfigModel.name" href="#mirai.models.api.GroupConfigModel.name">name</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="mirai.models.api.GroupList" href="#mirai.models.api.GroupList">GroupList</a></code></h4>
 </li>
 <li>
 <h4><code><a title="mirai.models.api.GroupListResponse" href="#mirai.models.api.GroupListResponse">GroupListResponse</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mirai.models.api.GroupMember" href="#mirai.models.api.GroupMember">GroupMember</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.api.GroupMember.group" href="#mirai.models.api.GroupMember.group">group</a></code></li>
+<li><code><a title="mirai.models.api.GroupMember.join_timestamp" href="#mirai.models.api.GroupMember.join_timestamp">join_timestamp</a></code></li>
+<li><code><a title="mirai.models.api.GroupMember.last_speak_timestamp" href="#mirai.models.api.GroupMember.last_speak_timestamp">last_speak_timestamp</a></code></li>
+<li><code><a title="mirai.models.api.GroupMember.member_name" href="#mirai.models.api.GroupMember.member_name">member_name</a></code></li>
+<li><code><a title="mirai.models.api.GroupMember.mute_time_remaining" href="#mirai.models.api.GroupMember.mute_time_remaining">mute_time_remaining</a></code></li>
+<li><code><a title="mirai.models.api.GroupMember.permission" href="#mirai.models.api.GroupMember.permission">permission</a></code></li>
+<li><code><a title="mirai.models.api.GroupMember.special_title" href="#mirai.models.api.GroupMember.special_title">special_title</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.api.GroupMessage" href="#mirai.models.api.GroupMessage">GroupMessage</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.api.GroupMessage.group" href="#mirai.models.api.GroupMessage.group">group</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="mirai.models.api.Kick" href="#mirai.models.api.Kick">Kick</a></code></h4>
@@ -4973,12 +5945,23 @@ def qq(self):
 </ul>
 </li>
 <li>
+<h4><code><a title="mirai.models.api.MemberAdmin" href="#mirai.models.api.MemberAdmin">MemberAdmin</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.api.MemberAdmin.assign" href="#mirai.models.api.MemberAdmin.assign">assign</a></code></li>
+<li><code><a title="mirai.models.api.MemberAdmin.member_id" href="#mirai.models.api.MemberAdmin.member_id">member_id</a></code></li>
+<li><code><a title="mirai.models.api.MemberAdmin.target" href="#mirai.models.api.MemberAdmin.target">target</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="mirai.models.api.MemberInfo" href="#mirai.models.api.MemberInfo">MemberInfo</a></code></h4>
 <ul class="">
 <li><code><a title="mirai.models.api.MemberInfo.info" href="#mirai.models.api.MemberInfo.info">info</a></code></li>
 <li><code><a title="mirai.models.api.MemberInfo.member_id" href="#mirai.models.api.MemberInfo.member_id">member_id</a></code></li>
 <li><code><a title="mirai.models.api.MemberInfo.target" href="#mirai.models.api.MemberInfo.target">target</a></code></li>
 </ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.api.MemberInfoModel" href="#mirai.models.api.MemberInfoModel">MemberInfoModel</a></code></h4>
 </li>
 <li>
 <h4><code><a title="mirai.models.api.MemberList" href="#mirai.models.api.MemberList">MemberList</a></code></h4>
@@ -5026,6 +6009,9 @@ def qq(self):
 </ul>
 </li>
 <li>
+<h4><code><a title="mirai.models.api.OtherClientMessage" href="#mirai.models.api.OtherClientMessage">OtherClientMessage</a></code></h4>
+</li>
+<li>
 <h4><code><a title="mirai.models.api.ProfileResponse" href="#mirai.models.api.ProfileResponse">ProfileResponse</a></code></h4>
 <ul class="two-column">
 <li><code><a title="mirai.models.api.ProfileResponse.age" href="#mirai.models.api.ProfileResponse.age">age</a></code></li>
@@ -5046,6 +6032,14 @@ def qq(self):
 <h4><code><a title="mirai.models.api.Recall" href="#mirai.models.api.Recall">Recall</a></code></h4>
 <ul class="">
 <li><code><a title="mirai.models.api.Recall.target" href="#mirai.models.api.Recall.target">target</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.api.RequestEvent" href="#mirai.models.api.RequestEvent">RequestEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.api.RequestEvent.event_id" href="#mirai.models.api.RequestEvent.event_id">event_id</a></code></li>
+<li><code><a title="mirai.models.api.RequestEvent.from_id" href="#mirai.models.api.RequestEvent.from_id">from_id</a></code></li>
+<li><code><a title="mirai.models.api.RequestEvent.group_id" href="#mirai.models.api.RequestEvent.group_id">group_id</a></code></li>
 </ul>
 </li>
 <li>
@@ -5144,6 +6138,15 @@ def qq(self):
 <li><code><a title="mirai.models.api.Sex.Female" href="#mirai.models.api.Sex.Female">Female</a></code></li>
 <li><code><a title="mirai.models.api.Sex.Male" href="#mirai.models.api.Sex.Male">Male</a></code></li>
 <li><code><a title="mirai.models.api.Sex.Unknown" href="#mirai.models.api.Sex.Unknown">Unknown</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.api.StrangerMessage" href="#mirai.models.api.StrangerMessage">StrangerMessage</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mirai.models.api.TempMessage" href="#mirai.models.api.TempMessage">TempMessage</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.api.TempMessage.group" href="#mirai.models.api.TempMessage.group">group</a></code></li>
 </ul>
 </li>
 <li>

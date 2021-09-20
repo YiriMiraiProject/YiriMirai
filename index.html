@@ -37,7 +37,7 @@
 
 更多信息请看[文档](https://yiri-mirai.vercel.app/)。
 &#34;&#34;&#34;
-__version__ = &#39;0.2.4.3&#39;
+__version__ = &#39;0.2.5&#39;
 __author__ = &#39;忘忧北萱草&#39;
 
 import logging
@@ -992,6 +992,7 @@ async def logout(self, terminate: bool = True):
 <li><a title="mirai.models.events.GroupEvent" href="models/events.html#mirai.models.events.GroupEvent">GroupEvent</a></li>
 <li><a title="mirai.models.events.MessageEvent" href="models/events.html#mirai.models.events.MessageEvent">MessageEvent</a></li>
 <li><a title="mirai.models.events.NudgeEvent" href="models/events.html#mirai.models.events.NudgeEvent">NudgeEvent</a></li>
+<li>mirai.models.events.OtherClientEvent</li>
 <li><a title="mirai.models.events.RequestEvent" href="models/events.html#mirai.models.events.RequestEvent">RequestEvent</a></li>
 </ul>
 <h3>Class variables</h3>
@@ -5479,6 +5480,8 @@ def group(self) -&gt; Group:
     &#34;&#34;&#34;语音的路径，发送本地语音。&#34;&#34;&#34;
     base64: Optional[str] = None
     &#34;&#34;&#34;语音的 Base64 编码。&#34;&#34;&#34;
+    length: Optional[int] = None
+    &#34;&#34;&#34;语音的长度，单位为秒。&#34;&#34;&#34;
     @validator(&#39;path&#39;)
     def validate_path(cls, path: Optional[str]):
         &#34;&#34;&#34;修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。&#34;&#34;&#34;
@@ -5565,6 +5568,10 @@ def group(self) -&gt; Group:
 <dt id="mirai.Voice.base64"><code class="name">var <span class="ident">base64</span> : Union[str, NoneType]</code></dt>
 <dd>
 <div class="desc"><p>语音的 Base64 编码。</p></div>
+</dd>
+<dt id="mirai.Voice.length"><code class="name">var <span class="ident">length</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>语音的长度，单位为秒。</p></div>
 </dd>
 <dt id="mirai.Voice.path"><code class="name">var <span class="ident">path</span> : Union[str, NoneType]</code></dt>
 <dd>
@@ -6597,6 +6604,7 @@ def validate_path(cls, path: Optional[str]):
 <li><code><a title="mirai.Voice.base64" href="#mirai.Voice.base64">base64</a></code></li>
 <li><code><a title="mirai.Voice.download" href="#mirai.Voice.download">download</a></code></li>
 <li><code><a title="mirai.Voice.from_local" href="#mirai.Voice.from_local">from_local</a></code></li>
+<li><code><a title="mirai.Voice.length" href="#mirai.Voice.length">length</a></code></li>
 <li><code><a title="mirai.Voice.path" href="#mirai.Voice.path">path</a></code></li>
 <li><code><a title="mirai.Voice.url" href="#mirai.Voice.url">url</a></code></li>
 <li><code><a title="mirai.Voice.validate_path" href="#mirai.Voice.validate_path">validate_path</a></code></li>

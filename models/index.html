@@ -41,13 +41,13 @@ model 层使用 pydantic 进行数据解析。
 &#34;&#34;&#34;
 from mirai.models.bus import ModelEventBus
 from mirai.models.entities import (
-    Entity, Friend, Group, GroupMember, Permission, Sender
+    Client, Entity, Friend, Group, GroupMember, Permission
 )
 from mirai.models.events import (
     BotEvent, BotGroupPermissionChangeEvent, BotInvitedJoinGroupRequestEvent,
     BotJoinGroupEvent, BotLeaveEventActive, BotLeaveEventKick, BotMuteEvent,
     BotOfflineEventActive, BotOfflineEventDropped, BotOfflineEventForce,
-    BotOnlineEvent, BotReloginEvent, BotUnmuteEvent, CommandEvent,
+    BotOnlineEvent, BotReloginEvent, BotUnmuteEvent, ClientKind, CommandEvent,
     CommandExecutedEvent, Event, FriendEvent, FriendInputStatusChangedEvent,
     FriendMessage, FriendNickChangedEvent, FriendRecallEvent,
     GroupAllowAnonymousChatEvent, GroupAllowConfessTalkEvent,
@@ -57,7 +57,8 @@ from mirai.models.events import (
     MemberJoinEvent, MemberJoinRequestEvent, MemberLeaveEventKick,
     MemberLeaveEventQuit, MemberMuteEvent, MemberPermissionChangeEvent,
     MemberSpecialTitleChangeEvent, MemberUnmuteEvent, MessageEvent,
-    NewFriendRequestEvent, NudgeEvent, OtherClientMessage, RequestEvent,
+    NewFriendRequestEvent, NudgeEvent, OtherClientEvent, OtherClientMessage,
+    OtherClientOfflineEvent, OtherClientOnlineEvent, RequestEvent,
     StrangerMessage, TempMessage
 )
 from mirai.models.message import (
@@ -73,7 +74,7 @@ __all__ = [
     &#39;Group&#39;,
     &#39;GroupMember&#39;,
     &#39;Permission&#39;,
-    &#39;Sender&#39;,
+    &#39;Client&#39;,
     &#39;BotEvent&#39;,
     &#39;BotGroupPermissionChangeEvent&#39;,
     &#39;BotInvitedJoinGroupRequestEvent&#39;,
@@ -117,7 +118,11 @@ __all__ = [
     &#39;MessageEvent&#39;,
     &#39;NudgeEvent&#39;,
     &#39;NewFriendRequestEvent&#39;,
+    &#39;OtherClientEvent&#39;,
     &#39;OtherClientMessage&#39;,
+    &#39;OtherClientOnlineEvent&#39;,
+    &#39;OtherClientOfflineEvent&#39;,
+    &#39;ClientKind&#39;,
     &#39;RequestEvent&#39;,
     &#39;StrangerMessage&#39;,
     &#39;TempMessage&#39;,
@@ -668,7 +673,9 @@ __all__ = [
     type: str = &#39;BotJoinGroupEvent&#39;
     &#34;&#34;&#34;事件名。&#34;&#34;&#34;
     group: Group
-    &#34;&#34;&#34;Bot 加入的群。&#34;&#34;&#34;</code></pre>
+    &#34;&#34;&#34;Bot 加入的群。&#34;&#34;&#34;
+    invitor: Optional[GroupMember] = None
+    &#34;&#34;&#34;邀请者。&#34;&#34;&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -684,6 +691,10 @@ __all__ = [
 <dt id="mirai.models.BotJoinGroupEvent.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
 <dd>
 <div class="desc"><p>Bot 加入的群。</p></div>
+</dd>
+<dt id="mirai.models.BotJoinGroupEvent.invitor"><code class="name">var <span class="ident">invitor</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>邀请者。</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -780,7 +791,9 @@ __all__ = [
     type: str = &#39;BotLeaveEventKick&#39;
     &#34;&#34;&#34;事件名。&#34;&#34;&#34;
     group: Group
-    &#34;&#34;&#34;Bot 被踢出的群。&#34;&#34;&#34;</code></pre>
+    &#34;&#34;&#34;Bot 被踢出的群。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;踢出 Bot 的管理员。&#34;&#34;&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -796,6 +809,10 @@ __all__ = [
 <dt id="mirai.models.BotLeaveEventKick.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
 <dd>
 <div class="desc"><p>Bot 被踢出的群。</p></div>
+</dd>
+<dt id="mirai.models.BotLeaveEventKick.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>踢出 Bot 的管理员。</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -1180,6 +1197,200 @@ __all__ = [
 </li>
 </ul>
 </dd>
+<dt id="mirai.models.Client"><code class="flex name class">
+<span>class <span class="ident">Client</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>来自其他客户端的用户。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Client(Entity):
+    &#34;&#34;&#34;来自其他客户端的用户。&#34;&#34;&#34;
+    id: int
+    &#34;&#34;&#34;识别 id。&#34;&#34;&#34;
+    platform: str
+    &#34;&#34;&#34;来源平台。&#34;&#34;&#34;
+    def get_avatar_url(self) -&gt; str:
+        raise NotImplementedError
+
+    def get_name(self) -&gt; str:
+        return self.platform</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.entities.Entity" href="entities.html#mirai.models.entities.Entity">Entity</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.Client.platform"><code class="name">var <span class="ident">platform</span> : str</code></dt>
+<dd>
+<div class="desc"><p>来源平台。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.entities.Entity" href="entities.html#mirai.models.entities.Entity">Entity</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.entities.Entity.get_avatar_url" href="entities.html#mirai.models.entities.Entity.get_avatar_url">get_avatar_url</a></code></li>
+<li><code><a title="mirai.models.entities.Entity.get_name" href="entities.html#mirai.models.entities.Entity.get_name">get_name</a></code></li>
+<li><code><a title="mirai.models.entities.Entity.id" href="entities.html#mirai.models.entities.Entity.id">id</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.ClientKind"><code class="flex name class">
+<span>class <span class="ident">ClientKind</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>详细设备类型。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ClientKind(int, Enum):
+    &#34;&#34;&#34;详细设备类型。&#34;&#34;&#34;
+    ANDROID_PAD = 68104
+    AOL_CHAOJIHUIYUAN = 73730
+    AOL_HUIYUAN = 73474
+    AOL_SQQ = 69378
+    CAR = 65806
+    HRTX_IPHONE = 66566
+    HRTX_PC = 66561
+    MC_3G = 65795
+    MISRO_MSG = 69634
+    MOBILE_ANDROID = 65799
+    MOBILE_ANDROID_NEW = 72450
+    MOBILE_HD = 65805
+    MOBILE_HD_NEW = 71426
+    MOBILE_IPAD = 68361
+    MOBILE_IPAD_NEW = 72194
+    MOBILE_IPHONE = 67586
+    MOBILE_OTHER = 65794
+    MOBILE_PC_QQ = 65793
+    MOBILE_PC_TIM = 77313
+    MOBILE_WINPHONE_NEW = 72706
+    QQ_FORELDER = 70922
+    QQ_SERVICE = 71170
+    TV_QQ = 69130
+    WIN8 = 69899
+    WINPHONE = 65804</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.int</li>
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.ClientKind.ANDROID_PAD"><code class="name">var <span class="ident">ANDROID_PAD</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.AOL_CHAOJIHUIYUAN"><code class="name">var <span class="ident">AOL_CHAOJIHUIYUAN</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.AOL_HUIYUAN"><code class="name">var <span class="ident">AOL_HUIYUAN</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.AOL_SQQ"><code class="name">var <span class="ident">AOL_SQQ</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.CAR"><code class="name">var <span class="ident">CAR</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.HRTX_IPHONE"><code class="name">var <span class="ident">HRTX_IPHONE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.HRTX_PC"><code class="name">var <span class="ident">HRTX_PC</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.MC_3G"><code class="name">var <span class="ident">MC_3G</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.MISRO_MSG"><code class="name">var <span class="ident">MISRO_MSG</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.MOBILE_ANDROID"><code class="name">var <span class="ident">MOBILE_ANDROID</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.MOBILE_ANDROID_NEW"><code class="name">var <span class="ident">MOBILE_ANDROID_NEW</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.MOBILE_HD"><code class="name">var <span class="ident">MOBILE_HD</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.MOBILE_HD_NEW"><code class="name">var <span class="ident">MOBILE_HD_NEW</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.MOBILE_IPAD"><code class="name">var <span class="ident">MOBILE_IPAD</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.MOBILE_IPAD_NEW"><code class="name">var <span class="ident">MOBILE_IPAD_NEW</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.MOBILE_IPHONE"><code class="name">var <span class="ident">MOBILE_IPHONE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.MOBILE_OTHER"><code class="name">var <span class="ident">MOBILE_OTHER</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.MOBILE_PC_QQ"><code class="name">var <span class="ident">MOBILE_PC_QQ</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.MOBILE_PC_TIM"><code class="name">var <span class="ident">MOBILE_PC_TIM</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.MOBILE_WINPHONE_NEW"><code class="name">var <span class="ident">MOBILE_WINPHONE_NEW</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.QQ_FORELDER"><code class="name">var <span class="ident">QQ_FORELDER</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.QQ_SERVICE"><code class="name">var <span class="ident">QQ_SERVICE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.TV_QQ"><code class="name">var <span class="ident">TV_QQ</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.WIN8"><code class="name">var <span class="ident">WIN8</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mirai.models.ClientKind.WINPHONE"><code class="name">var <span class="ident">WINPHONE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
 <dt id="mirai.models.CommandEvent"><code class="flex name class">
 <span>class <span class="ident">CommandEvent</span></span>
 <span>(</span><span>*args, **kwargs)</span>
@@ -1385,10 +1596,10 @@ __all__ = [
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
+<li>mirai.models.entities.Client</li>
 <li><a title="mirai.models.entities.Friend" href="entities.html#mirai.models.entities.Friend">Friend</a></li>
 <li><a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></li>
 <li><a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a></li>
-<li><a title="mirai.models.entities.Sender" href="entities.html#mirai.models.entities.Sender">Sender</a></li>
 </ul>
 <h3>Class variables</h3>
 <dl>
@@ -1491,6 +1702,7 @@ def get_name(self) -&gt; str:
 <li><a title="mirai.models.events.GroupEvent" href="events.html#mirai.models.events.GroupEvent">GroupEvent</a></li>
 <li><a title="mirai.models.events.MessageEvent" href="events.html#mirai.models.events.MessageEvent">MessageEvent</a></li>
 <li><a title="mirai.models.events.NudgeEvent" href="events.html#mirai.models.events.NudgeEvent">NudgeEvent</a></li>
+<li>mirai.models.events.OtherClientEvent</li>
 <li><a title="mirai.models.events.RequestEvent" href="events.html#mirai.models.events.RequestEvent">RequestEvent</a></li>
 </ul>
 <h3>Class variables</h3>
@@ -1761,13 +1973,13 @@ def get_name(self) -&gt; str:
 </summary>
 <pre><code class="python">class ForwardMessageNode(MiraiBaseModel):
     &#34;&#34;&#34;合并转发中的一条消息。&#34;&#34;&#34;
-    sender_id: int
+    sender_id: Optional[int] = None
     &#34;&#34;&#34;发送人QQ号。&#34;&#34;&#34;
-    sender_name: str
+    sender_name: Optional[str] = None
     &#34;&#34;&#34;显示名称。&#34;&#34;&#34;
-    message_chain: MessageChain
+    message_chain: Optional[MessageChain] = None
     &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
-    source_id: Optional[int] = None
+    message_id: Optional[int] = None
     &#34;&#34;&#34;消息的 message_id，可以只使用此属性，从缓存中读取消息内容。&#34;&#34;&#34;
     time: Optional[datetime] = None
     &#34;&#34;&#34;发送时间。&#34;&#34;&#34;
@@ -1781,7 +1993,7 @@ def get_name(self) -&gt; str:
     def create(
         cls, sender: Union[Friend, GroupMember], message: MessageChain
     ) -&gt; &#39;ForwardMessageNode&#39;:
-        &#34;&#34;&#34;从生成转发消息。
+        &#34;&#34;&#34;从消息链生成转发消息。
 
         Args:
             sender: 发送人。
@@ -1804,21 +2016,21 @@ def get_name(self) -&gt; str:
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.ForwardMessageNode.message_chain"><code class="name">var <span class="ident">message_chain</span> : <a title="mirai.models.message.MessageChain" href="message.html#mirai.models.message.MessageChain">MessageChain</a></code></dt>
+<dt id="mirai.models.ForwardMessageNode.message_chain"><code class="name">var <span class="ident">message_chain</span> : Union[<a title="mirai.models.message.MessageChain" href="message.html#mirai.models.message.MessageChain">MessageChain</a>, NoneType]</code></dt>
 <dd>
 <div class="desc"><p>消息内容。</p></div>
 </dd>
-<dt id="mirai.models.ForwardMessageNode.sender_id"><code class="name">var <span class="ident">sender_id</span> : int</code></dt>
+<dt id="mirai.models.ForwardMessageNode.message_id"><code class="name">var <span class="ident">message_id</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>消息的 message_id，可以只使用此属性，从缓存中读取消息内容。</p></div>
+</dd>
+<dt id="mirai.models.ForwardMessageNode.sender_id"><code class="name">var <span class="ident">sender_id</span> : Union[int, NoneType]</code></dt>
 <dd>
 <div class="desc"><p>发送人QQ号。</p></div>
 </dd>
-<dt id="mirai.models.ForwardMessageNode.sender_name"><code class="name">var <span class="ident">sender_name</span> : str</code></dt>
+<dt id="mirai.models.ForwardMessageNode.sender_name"><code class="name">var <span class="ident">sender_name</span> : Union[str, NoneType]</code></dt>
 <dd>
 <div class="desc"><p>显示名称。</p></div>
-</dd>
-<dt id="mirai.models.ForwardMessageNode.source_id"><code class="name">var <span class="ident">source_id</span> : Union[int, NoneType]</code></dt>
-<dd>
-<div class="desc"><p>消息的 message_id，可以只使用此属性，从缓存中读取消息内容。</p></div>
 </dd>
 <dt id="mirai.models.ForwardMessageNode.time"><code class="name">var <span class="ident">time</span> : Union[datetime.datetime, NoneType]</code></dt>
 <dd>
@@ -1831,7 +2043,7 @@ def get_name(self) -&gt; str:
 <span>def <span class="ident">create</span></span>(<span>sender: Union[<a title="mirai.models.entities.Friend" href="entities.html#mirai.models.entities.Friend">Friend</a>, <a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>], message: <a title="mirai.models.message.MessageChain" href="message.html#mirai.models.message.MessageChain">MessageChain</a>) ‑> <a title="mirai.models.message.ForwardMessageNode" href="message.html#mirai.models.message.ForwardMessageNode">ForwardMessageNode</a></span>
 </code></dt>
 <dd>
-<div class="desc"><p>从生成转发消息。</p>
+<div class="desc"><p>从消息链生成转发消息。</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>sender</code></strong></dt>
@@ -1852,7 +2064,7 @@ def get_name(self) -&gt; str:
 def create(
     cls, sender: Union[Friend, GroupMember], message: MessageChain
 ) -&gt; &#39;ForwardMessageNode&#39;:
-    &#34;&#34;&#34;从生成转发消息。
+    &#34;&#34;&#34;从消息链生成转发消息。
 
     Args:
         sender: 发送人。
@@ -3796,7 +4008,9 @@ def uuid(self):
     type: str = &#39;MemberJoinEvent&#39;
     &#34;&#34;&#34;事件名。&#34;&#34;&#34;
     member: GroupMember
-    &#34;&#34;&#34;加入的群成员。&#34;&#34;&#34;</code></pre>
+    &#34;&#34;&#34;加入的群成员。&#34;&#34;&#34;
+    invitor: Optional[GroupMember]
+    &#34;&#34;&#34;邀请者。&#34;&#34;&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -3809,6 +4023,10 @@ def uuid(self):
 </ul>
 <h3>Class variables</h3>
 <dl>
+<dt id="mirai.models.MemberJoinEvent.invitor"><code class="name">var <span class="ident">invitor</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>邀请者。</p></div>
+</dd>
 <dt id="mirai.models.MemberJoinEvent.member"><code class="name">var <span class="ident">member</span> : <a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a></code></dt>
 <dd>
 <div class="desc"><p>加入的群成员。</p></div>
@@ -6295,6 +6513,66 @@ def my_event_handler(event: FriendMessage):
 </li>
 </ul>
 </dd>
+<dt id="mirai.models.OtherClientEvent"><code class="flex name class">
+<span>class <span class="ident">OtherClientEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>其它客户端事件。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>client</code></strong></dt>
+<dd>其他设备。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class OtherClientEvent(Event):
+    &#34;&#34;&#34;其它客户端事件。
+
+    Args:
+        type: 事件名。
+        client: 其他设备。
+    &#34;&#34;&#34;
+    type: str
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    client: Client
+    &#34;&#34;&#34;其他设备。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.Event" href="events.html#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li>mirai.models.events.OtherClientOfflineEvent</li>
+<li>mirai.models.events.OtherClientOnlineEvent</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.OtherClientEvent.client"><code class="name">var <span class="ident">client</span> : mirai.models.entities.Client</code></dt>
+<dd>
+<div class="desc"><p>其他设备。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.Event" href="events.html#mirai.models.events.Event">Event</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.Event.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.type" href="events.html#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="mirai.models.OtherClientMessage"><code class="flex name class">
 <span>class <span class="ident">OtherClientMessage</span></span>
 <span>(</span><span>*args, **kwargs)</span>
@@ -6324,7 +6602,7 @@ def my_event_handler(event: FriendMessage):
     &#34;&#34;&#34;
     type: str = &#39;OtherClientMessage&#39;
     &#34;&#34;&#34;事件名。&#34;&#34;&#34;
-    sender: Sender
+    sender: Client
     &#34;&#34;&#34;发送消息的人。&#34;&#34;&#34;
     message_chain: MessageChain
     &#34;&#34;&#34;消息内容。&#34;&#34;&#34;</code></pre>
@@ -6347,6 +6625,127 @@ def my_event_handler(event: FriendMessage):
 <li><code><a title="mirai.models.events.MessageEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.sender" href="events.html#mirai.models.events.MessageEvent.sender">sender</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.type" href="events.html#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.OtherClientOfflineEvent"><code class="flex name class">
+<span>class <span class="ident">OtherClientOfflineEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>其它客户端下线事件。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>client</code></strong></dt>
+<dd>其他设备。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class OtherClientOfflineEvent(OtherClientEvent):
+    &#34;&#34;&#34;其它客户端下线事件。
+
+    Args:
+        type: 事件名。
+        client: 其他设备。
+    &#34;&#34;&#34;
+    type: str = &#39;OtherClientOfflineEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    client: Client
+    &#34;&#34;&#34;其他设备。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>mirai.models.events.OtherClientEvent</li>
+<li><a title="mirai.models.events.Event" href="events.html#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.OtherClientOfflineEvent.client"><code class="name">var <span class="ident">client</span> : mirai.models.entities.Client</code></dt>
+<dd>
+<div class="desc"><p>其他设备。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.Event" href="events.html#mirai.models.events.Event">Event</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.Event.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.type" href="events.html#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.OtherClientOnlineEvent"><code class="flex name class">
+<span>class <span class="ident">OtherClientOnlineEvent</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>其它客户端上线事件。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>client</code></strong></dt>
+<dd>其他设备。</dd>
+<dt><strong><code>kind</code></strong></dt>
+<dd>详细设备类型。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class OtherClientOnlineEvent(OtherClientEvent):
+    &#34;&#34;&#34;其它客户端上线事件。
+
+    Args:
+        type: 事件名。
+        client: 其他设备。
+        kind: 详细设备类型。
+    &#34;&#34;&#34;
+    type: str = &#39;OtherClientOnlineEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    client: Client
+    &#34;&#34;&#34;其他设备。&#34;&#34;&#34;
+    kind: Optional[ClientKind] = None
+    &#34;&#34;&#34;详细设备类型。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>mirai.models.events.OtherClientEvent</li>
+<li><a title="mirai.models.events.Event" href="events.html#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.OtherClientOnlineEvent.client"><code class="name">var <span class="ident">client</span> : mirai.models.entities.Client</code></dt>
+<dd>
+<div class="desc"><p>其他设备。</p></div>
+</dd>
+<dt id="mirai.models.OtherClientOnlineEvent.kind"><code class="name">var <span class="ident">kind</span> : Union[mirai.models.events.ClientKind, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>详细设备类型。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.Event" href="events.html#mirai.models.events.Event">Event</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.Event.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.type" href="events.html#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
 </ul>
@@ -6802,53 +7201,6 @@ def origin_formater(cls, v):
 </li>
 </ul>
 </dd>
-<dt id="mirai.models.Sender"><code class="flex name class">
-<span>class <span class="ident">Sender</span></span>
-<span>(</span><span>*args, **kwargs)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>来自其他客户端的用户。</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class Sender(Entity):
-    &#34;&#34;&#34;来自其他客户端的用户。&#34;&#34;&#34;
-    id: int
-    &#34;&#34;&#34;QQ 号。&#34;&#34;&#34;
-    platform: str
-    &#34;&#34;&#34;来源平台。&#34;&#34;&#34;
-    def get_avatar_url(self) -&gt; str:
-        return f&#39;http://q4.qlogo.cn/g?b=qq&amp;nk={self.id}&amp;s=140&#39;
-
-    def get_name(self) -&gt; str:
-        return self.platform</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="mirai.models.entities.Entity" href="entities.html#mirai.models.entities.Entity">Entity</a></li>
-<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
-<li>pydantic.main.BaseModel</li>
-<li>pydantic.utils.Representation</li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="mirai.models.Sender.platform"><code class="name">var <span class="ident">platform</span> : str</code></dt>
-<dd>
-<div class="desc"><p>来源平台。</p></div>
-</dd>
-</dl>
-<h3>Inherited members</h3>
-<ul class="hlist">
-<li><code><b><a title="mirai.models.entities.Entity" href="entities.html#mirai.models.entities.Entity">Entity</a></b></code>:
-<ul class="hlist">
-<li><code><a title="mirai.models.entities.Entity.get_avatar_url" href="entities.html#mirai.models.entities.Entity.get_avatar_url">get_avatar_url</a></code></li>
-<li><code><a title="mirai.models.entities.Entity.get_name" href="entities.html#mirai.models.entities.Entity.get_name">get_name</a></code></li>
-<li><code><a title="mirai.models.entities.Entity.id" href="entities.html#mirai.models.entities.Entity.id">id</a></code></li>
-</ul>
-</li>
-</ul>
-</dd>
 <dt id="mirai.models.Source"><code class="flex name class">
 <span>class <span class="ident">Source</span></span>
 <span>(</span><span>*args, **kwargs)</span>
@@ -7093,6 +7445,8 @@ def group(self) -&gt; Group:
     &#34;&#34;&#34;语音的路径，发送本地语音。&#34;&#34;&#34;
     base64: Optional[str] = None
     &#34;&#34;&#34;语音的 Base64 编码。&#34;&#34;&#34;
+    length: Optional[int] = None
+    &#34;&#34;&#34;语音的长度，单位为秒。&#34;&#34;&#34;
     @validator(&#39;path&#39;)
     def validate_path(cls, path: Optional[str]):
         &#34;&#34;&#34;修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。&#34;&#34;&#34;
@@ -7179,6 +7533,10 @@ def group(self) -&gt; Group:
 <dt id="mirai.models.Voice.base64"><code class="name">var <span class="ident">base64</span> : Union[str, NoneType]</code></dt>
 <dd>
 <div class="desc"><p>语音的 Base64 编码。</p></div>
+</dd>
+<dt id="mirai.models.Voice.length"><code class="name">var <span class="ident">length</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>语音的长度，单位为秒。</p></div>
 </dd>
 <dt id="mirai.models.Voice.path"><code class="name">var <span class="ident">path</span> : Union[str, NoneType]</code></dt>
 <dd>
@@ -7446,6 +7804,7 @@ def validate_path(cls, path: Optional[str]):
 <h4><code><a title="mirai.models.BotJoinGroupEvent" href="#mirai.models.BotJoinGroupEvent">BotJoinGroupEvent</a></code></h4>
 <ul class="">
 <li><code><a title="mirai.models.BotJoinGroupEvent.group" href="#mirai.models.BotJoinGroupEvent.group">group</a></code></li>
+<li><code><a title="mirai.models.BotJoinGroupEvent.invitor" href="#mirai.models.BotJoinGroupEvent.invitor">invitor</a></code></li>
 </ul>
 </li>
 <li>
@@ -7458,6 +7817,7 @@ def validate_path(cls, path: Optional[str]):
 <h4><code><a title="mirai.models.BotLeaveEventKick" href="#mirai.models.BotLeaveEventKick">BotLeaveEventKick</a></code></h4>
 <ul class="">
 <li><code><a title="mirai.models.BotLeaveEventKick.group" href="#mirai.models.BotLeaveEventKick.group">group</a></code></li>
+<li><code><a title="mirai.models.BotLeaveEventKick.operator" href="#mirai.models.BotLeaveEventKick.operator">operator</a></code></li>
 </ul>
 </li>
 <li>
@@ -7486,6 +7846,42 @@ def validate_path(cls, path: Optional[str]):
 <h4><code><a title="mirai.models.BotUnmuteEvent" href="#mirai.models.BotUnmuteEvent">BotUnmuteEvent</a></code></h4>
 <ul class="">
 <li><code><a title="mirai.models.BotUnmuteEvent.operator" href="#mirai.models.BotUnmuteEvent.operator">operator</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.Client" href="#mirai.models.Client">Client</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.Client.platform" href="#mirai.models.Client.platform">platform</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.ClientKind" href="#mirai.models.ClientKind">ClientKind</a></code></h4>
+<ul class="two-column">
+<li><code><a title="mirai.models.ClientKind.ANDROID_PAD" href="#mirai.models.ClientKind.ANDROID_PAD">ANDROID_PAD</a></code></li>
+<li><code><a title="mirai.models.ClientKind.AOL_CHAOJIHUIYUAN" href="#mirai.models.ClientKind.AOL_CHAOJIHUIYUAN">AOL_CHAOJIHUIYUAN</a></code></li>
+<li><code><a title="mirai.models.ClientKind.AOL_HUIYUAN" href="#mirai.models.ClientKind.AOL_HUIYUAN">AOL_HUIYUAN</a></code></li>
+<li><code><a title="mirai.models.ClientKind.AOL_SQQ" href="#mirai.models.ClientKind.AOL_SQQ">AOL_SQQ</a></code></li>
+<li><code><a title="mirai.models.ClientKind.CAR" href="#mirai.models.ClientKind.CAR">CAR</a></code></li>
+<li><code><a title="mirai.models.ClientKind.HRTX_IPHONE" href="#mirai.models.ClientKind.HRTX_IPHONE">HRTX_IPHONE</a></code></li>
+<li><code><a title="mirai.models.ClientKind.HRTX_PC" href="#mirai.models.ClientKind.HRTX_PC">HRTX_PC</a></code></li>
+<li><code><a title="mirai.models.ClientKind.MC_3G" href="#mirai.models.ClientKind.MC_3G">MC_3G</a></code></li>
+<li><code><a title="mirai.models.ClientKind.MISRO_MSG" href="#mirai.models.ClientKind.MISRO_MSG">MISRO_MSG</a></code></li>
+<li><code><a title="mirai.models.ClientKind.MOBILE_ANDROID" href="#mirai.models.ClientKind.MOBILE_ANDROID">MOBILE_ANDROID</a></code></li>
+<li><code><a title="mirai.models.ClientKind.MOBILE_ANDROID_NEW" href="#mirai.models.ClientKind.MOBILE_ANDROID_NEW">MOBILE_ANDROID_NEW</a></code></li>
+<li><code><a title="mirai.models.ClientKind.MOBILE_HD" href="#mirai.models.ClientKind.MOBILE_HD">MOBILE_HD</a></code></li>
+<li><code><a title="mirai.models.ClientKind.MOBILE_HD_NEW" href="#mirai.models.ClientKind.MOBILE_HD_NEW">MOBILE_HD_NEW</a></code></li>
+<li><code><a title="mirai.models.ClientKind.MOBILE_IPAD" href="#mirai.models.ClientKind.MOBILE_IPAD">MOBILE_IPAD</a></code></li>
+<li><code><a title="mirai.models.ClientKind.MOBILE_IPAD_NEW" href="#mirai.models.ClientKind.MOBILE_IPAD_NEW">MOBILE_IPAD_NEW</a></code></li>
+<li><code><a title="mirai.models.ClientKind.MOBILE_IPHONE" href="#mirai.models.ClientKind.MOBILE_IPHONE">MOBILE_IPHONE</a></code></li>
+<li><code><a title="mirai.models.ClientKind.MOBILE_OTHER" href="#mirai.models.ClientKind.MOBILE_OTHER">MOBILE_OTHER</a></code></li>
+<li><code><a title="mirai.models.ClientKind.MOBILE_PC_QQ" href="#mirai.models.ClientKind.MOBILE_PC_QQ">MOBILE_PC_QQ</a></code></li>
+<li><code><a title="mirai.models.ClientKind.MOBILE_PC_TIM" href="#mirai.models.ClientKind.MOBILE_PC_TIM">MOBILE_PC_TIM</a></code></li>
+<li><code><a title="mirai.models.ClientKind.MOBILE_WINPHONE_NEW" href="#mirai.models.ClientKind.MOBILE_WINPHONE_NEW">MOBILE_WINPHONE_NEW</a></code></li>
+<li><code><a title="mirai.models.ClientKind.QQ_FORELDER" href="#mirai.models.ClientKind.QQ_FORELDER">QQ_FORELDER</a></code></li>
+<li><code><a title="mirai.models.ClientKind.QQ_SERVICE" href="#mirai.models.ClientKind.QQ_SERVICE">QQ_SERVICE</a></code></li>
+<li><code><a title="mirai.models.ClientKind.TV_QQ" href="#mirai.models.ClientKind.TV_QQ">TV_QQ</a></code></li>
+<li><code><a title="mirai.models.ClientKind.WIN8" href="#mirai.models.ClientKind.WIN8">WIN8</a></code></li>
+<li><code><a title="mirai.models.ClientKind.WINPHONE" href="#mirai.models.ClientKind.WINPHONE">WINPHONE</a></code></li>
 </ul>
 </li>
 <li>
@@ -7552,9 +7948,9 @@ def validate_path(cls, path: Optional[str]):
 <ul class="two-column">
 <li><code><a title="mirai.models.ForwardMessageNode.create" href="#mirai.models.ForwardMessageNode.create">create</a></code></li>
 <li><code><a title="mirai.models.ForwardMessageNode.message_chain" href="#mirai.models.ForwardMessageNode.message_chain">message_chain</a></code></li>
+<li><code><a title="mirai.models.ForwardMessageNode.message_id" href="#mirai.models.ForwardMessageNode.message_id">message_id</a></code></li>
 <li><code><a title="mirai.models.ForwardMessageNode.sender_id" href="#mirai.models.ForwardMessageNode.sender_id">sender_id</a></code></li>
 <li><code><a title="mirai.models.ForwardMessageNode.sender_name" href="#mirai.models.ForwardMessageNode.sender_name">sender_name</a></code></li>
-<li><code><a title="mirai.models.ForwardMessageNode.source_id" href="#mirai.models.ForwardMessageNode.source_id">source_id</a></code></li>
 <li><code><a title="mirai.models.ForwardMessageNode.time" href="#mirai.models.ForwardMessageNode.time">time</a></code></li>
 </ul>
 </li>
@@ -7730,6 +8126,7 @@ def validate_path(cls, path: Optional[str]):
 <li>
 <h4><code><a title="mirai.models.MemberJoinEvent" href="#mirai.models.MemberJoinEvent">MemberJoinEvent</a></code></h4>
 <ul class="">
+<li><code><a title="mirai.models.MemberJoinEvent.invitor" href="#mirai.models.MemberJoinEvent.invitor">invitor</a></code></li>
 <li><code><a title="mirai.models.MemberJoinEvent.member" href="#mirai.models.MemberJoinEvent.member">member</a></code></li>
 </ul>
 </li>
@@ -7872,7 +8269,26 @@ def validate_path(cls, path: Optional[str]):
 </ul>
 </li>
 <li>
+<h4><code><a title="mirai.models.OtherClientEvent" href="#mirai.models.OtherClientEvent">OtherClientEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.OtherClientEvent.client" href="#mirai.models.OtherClientEvent.client">client</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="mirai.models.OtherClientMessage" href="#mirai.models.OtherClientMessage">OtherClientMessage</a></code></h4>
+</li>
+<li>
+<h4><code><a title="mirai.models.OtherClientOfflineEvent" href="#mirai.models.OtherClientOfflineEvent">OtherClientOfflineEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.OtherClientOfflineEvent.client" href="#mirai.models.OtherClientOfflineEvent.client">client</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.OtherClientOnlineEvent" href="#mirai.models.OtherClientOnlineEvent">OtherClientOnlineEvent</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.OtherClientOnlineEvent.client" href="#mirai.models.OtherClientOnlineEvent.client">client</a></code></li>
+<li><code><a title="mirai.models.OtherClientOnlineEvent.kind" href="#mirai.models.OtherClientOnlineEvent.kind">kind</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="mirai.models.Permission" href="#mirai.models.Permission">Permission</a></code></h4>
@@ -7938,12 +8354,6 @@ def validate_path(cls, path: Optional[str]):
 </ul>
 </li>
 <li>
-<h4><code><a title="mirai.models.Sender" href="#mirai.models.Sender">Sender</a></code></h4>
-<ul class="">
-<li><code><a title="mirai.models.Sender.platform" href="#mirai.models.Sender.platform">platform</a></code></li>
-</ul>
-</li>
-<li>
 <h4><code><a title="mirai.models.Source" href="#mirai.models.Source">Source</a></code></h4>
 <ul class="">
 <li><code><a title="mirai.models.Source.id" href="#mirai.models.Source.id">id</a></code></li>
@@ -7971,6 +8381,7 @@ def validate_path(cls, path: Optional[str]):
 <li><code><a title="mirai.models.Voice.base64" href="#mirai.models.Voice.base64">base64</a></code></li>
 <li><code><a title="mirai.models.Voice.download" href="#mirai.models.Voice.download">download</a></code></li>
 <li><code><a title="mirai.models.Voice.from_local" href="#mirai.models.Voice.from_local">from_local</a></code></li>
+<li><code><a title="mirai.models.Voice.length" href="#mirai.models.Voice.length">length</a></code></li>
 <li><code><a title="mirai.models.Voice.path" href="#mirai.models.Voice.path">path</a></code></li>
 <li><code><a title="mirai.models.Voice.url" href="#mirai.models.Voice.url">url</a></code></li>
 <li><code><a title="mirai.models.Voice.validate_path" href="#mirai.models.Voice.validate_path">validate_path</a></code></li>

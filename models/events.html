@@ -32,6 +32,7 @@
 此模块提供事件模型。
 &#34;&#34;&#34;
 from datetime import datetime
+from enum import Enum
 from typing import TYPE_CHECKING, Any, Optional, Type, Union, cast
 
 if TYPE_CHECKING:
@@ -42,11 +43,9 @@ else:
     except ImportError:
         from typing_extensions import Literal
 
-from pydantic import Field
-
 from mirai.models.base import MiraiIndexedModel
 from mirai.models.entities import (
-    Entity, Friend, Group, GroupMember, Permission, Sender, Subject
+    Client, Entity, Friend, Group, GroupMember, Permission, Subject
 )
 from mirai.models.message import MessageChain
 
@@ -298,6 +297,8 @@ class BotJoinGroupEvent(GroupEvent):
     &#34;&#34;&#34;事件名。&#34;&#34;&#34;
     group: Group
     &#34;&#34;&#34;Bot 加入的群。&#34;&#34;&#34;
+    invitor: Optional[GroupMember] = None
+    &#34;&#34;&#34;邀请者。&#34;&#34;&#34;
 
 
 class BotLeaveEventActive(GroupEvent):
@@ -324,6 +325,8 @@ class BotLeaveEventKick(GroupEvent):
     &#34;&#34;&#34;事件名。&#34;&#34;&#34;
     group: Group
     &#34;&#34;&#34;Bot 被踢出的群。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;踢出 Bot 的管理员。&#34;&#34;&#34;
 
 
 class GroupRecallEvent(GroupEvent):
@@ -519,6 +522,8 @@ class MemberJoinEvent(GroupEvent):
     &#34;&#34;&#34;事件名。&#34;&#34;&#34;
     member: GroupMember
     &#34;&#34;&#34;加入的群成员。&#34;&#34;&#34;
+    invitor: Optional[GroupMember]
+    &#34;&#34;&#34;邀请者。&#34;&#34;&#34;
 
 
 class MemberLeaveEventKick(GroupEvent):
@@ -789,6 +794,81 @@ class NudgeEvent(Event):
 
 
 ###############################
+# Other Client Event
+
+
+class OtherClientEvent(Event):
+    &#34;&#34;&#34;其它客户端事件。
+
+    Args:
+        type: 事件名。
+        client: 其他设备。
+    &#34;&#34;&#34;
+    type: str
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    client: Client
+    &#34;&#34;&#34;其他设备。&#34;&#34;&#34;
+
+
+class ClientKind(int, Enum):
+    &#34;&#34;&#34;详细设备类型。&#34;&#34;&#34;
+    ANDROID_PAD = 68104
+    AOL_CHAOJIHUIYUAN = 73730
+    AOL_HUIYUAN = 73474
+    AOL_SQQ = 69378
+    CAR = 65806
+    HRTX_IPHONE = 66566
+    HRTX_PC = 66561
+    MC_3G = 65795
+    MISRO_MSG = 69634
+    MOBILE_ANDROID = 65799
+    MOBILE_ANDROID_NEW = 72450
+    MOBILE_HD = 65805
+    MOBILE_HD_NEW = 71426
+    MOBILE_IPAD = 68361
+    MOBILE_IPAD_NEW = 72194
+    MOBILE_IPHONE = 67586
+    MOBILE_OTHER = 65794
+    MOBILE_PC_QQ = 65793
+    MOBILE_PC_TIM = 77313
+    MOBILE_WINPHONE_NEW = 72706
+    QQ_FORELDER = 70922
+    QQ_SERVICE = 71170
+    TV_QQ = 69130
+    WIN8 = 69899
+    WINPHONE = 65804
+
+
+class OtherClientOnlineEvent(OtherClientEvent):
+    &#34;&#34;&#34;其它客户端上线事件。
+
+    Args:
+        type: 事件名。
+        client: 其他设备。
+        kind: 详细设备类型。
+    &#34;&#34;&#34;
+    type: str = &#39;OtherClientOnlineEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    client: Client
+    &#34;&#34;&#34;其他设备。&#34;&#34;&#34;
+    kind: Optional[ClientKind] = None
+    &#34;&#34;&#34;详细设备类型。&#34;&#34;&#34;
+
+
+class OtherClientOfflineEvent(OtherClientEvent):
+    &#34;&#34;&#34;其它客户端下线事件。
+
+    Args:
+        type: 事件名。
+        client: 其他设备。
+    &#34;&#34;&#34;
+    type: str = &#39;OtherClientOfflineEvent&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    client: Client
+    &#34;&#34;&#34;其他设备。&#34;&#34;&#34;
+
+
+###############################
 # Command Event
 
 
@@ -921,7 +1001,7 @@ class OtherClientMessage(MessageEvent):
     &#34;&#34;&#34;
     type: str = &#39;OtherClientMessage&#39;
     &#34;&#34;&#34;事件名。&#34;&#34;&#34;
-    sender: Sender
+    sender: Client
     &#34;&#34;&#34;发送消息的人。&#34;&#34;&#34;
     message_chain: MessageChain
     &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
@@ -1243,7 +1323,9 @@ __all__ = [
     type: str = &#39;BotJoinGroupEvent&#39;
     &#34;&#34;&#34;事件名。&#34;&#34;&#34;
     group: Group
-    &#34;&#34;&#34;Bot 加入的群。&#34;&#34;&#34;</code></pre>
+    &#34;&#34;&#34;Bot 加入的群。&#34;&#34;&#34;
+    invitor: Optional[GroupMember] = None
+    &#34;&#34;&#34;邀请者。&#34;&#34;&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1259,6 +1341,10 @@ __all__ = [
 <dt id="mirai.models.events.BotJoinGroupEvent.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
 <dd>
 <div class="desc"><p>Bot 加入的群。</p></div>
+</dd>
+<dt id="mirai.models.events.BotJoinGroupEvent.invitor"><code class="name">var <span class="ident">invitor</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>邀请者。</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -1355,7 +1441,9 @@ __all__ = [
     type: str = &#39;BotLeaveEventKick&#39;
     &#34;&#34;&#34;事件名。&#34;&#34;&#34;
     group: Group
-    &#34;&#34;&#34;Bot 被踢出的群。&#34;&#34;&#34;</code></pre>
+    &#34;&#34;&#34;Bot 被踢出的群。&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;踢出 Bot 的管理员。&#34;&#34;&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1371,6 +1459,10 @@ __all__ = [
 <dt id="mirai.models.events.BotLeaveEventKick.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
 <dd>
 <div class="desc"><p>Bot 被踢出的群。</p></div>
+</dd>
+<dt id="mirai.models.events.BotLeaveEventKick.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>踢出 Bot 的管理员。</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -1947,6 +2039,7 @@ __all__ = [
 <li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
 <li><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></li>
 <li><a title="mirai.models.events.NudgeEvent" href="#mirai.models.events.NudgeEvent">NudgeEvent</a></li>
+<li>mirai.models.events.OtherClientEvent</li>
 <li><a title="mirai.models.events.RequestEvent" href="#mirai.models.events.RequestEvent">RequestEvent</a></li>
 </ul>
 <h3>Class variables</h3>
@@ -3228,7 +3321,9 @@ def group(self) -&gt; Group:
     type: str = &#39;MemberJoinEvent&#39;
     &#34;&#34;&#34;事件名。&#34;&#34;&#34;
     member: GroupMember
-    &#34;&#34;&#34;加入的群成员。&#34;&#34;&#34;</code></pre>
+    &#34;&#34;&#34;加入的群成员。&#34;&#34;&#34;
+    invitor: Optional[GroupMember]
+    &#34;&#34;&#34;邀请者。&#34;&#34;&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -3241,6 +3336,10 @@ def group(self) -&gt; Group:
 </ul>
 <h3>Class variables</h3>
 <dl>
+<dt id="mirai.models.events.MemberJoinEvent.invitor"><code class="name">var <span class="ident">invitor</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>邀请者。</p></div>
+</dd>
 <dt id="mirai.models.events.MemberJoinEvent.member"><code class="name">var <span class="ident">member</span> : <a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a></code></dt>
 <dd>
 <div class="desc"><p>加入的群成员。</p></div>
@@ -4023,7 +4122,7 @@ def group(self) -&gt; Group:
     &#34;&#34;&#34;
     type: str = &#39;OtherClientMessage&#39;
     &#34;&#34;&#34;事件名。&#34;&#34;&#34;
-    sender: Sender
+    sender: Client
     &#34;&#34;&#34;发送消息的人。&#34;&#34;&#34;
     message_chain: MessageChain
     &#34;&#34;&#34;消息内容。&#34;&#34;&#34;</code></pre>
@@ -4295,6 +4394,7 @@ def group(self) -&gt; Group:
 <h4><code><a title="mirai.models.events.BotJoinGroupEvent" href="#mirai.models.events.BotJoinGroupEvent">BotJoinGroupEvent</a></code></h4>
 <ul class="">
 <li><code><a title="mirai.models.events.BotJoinGroupEvent.group" href="#mirai.models.events.BotJoinGroupEvent.group">group</a></code></li>
+<li><code><a title="mirai.models.events.BotJoinGroupEvent.invitor" href="#mirai.models.events.BotJoinGroupEvent.invitor">invitor</a></code></li>
 </ul>
 </li>
 <li>
@@ -4307,6 +4407,7 @@ def group(self) -&gt; Group:
 <h4><code><a title="mirai.models.events.BotLeaveEventKick" href="#mirai.models.events.BotLeaveEventKick">BotLeaveEventKick</a></code></h4>
 <ul class="">
 <li><code><a title="mirai.models.events.BotLeaveEventKick.group" href="#mirai.models.events.BotLeaveEventKick.group">group</a></code></li>
+<li><code><a title="mirai.models.events.BotLeaveEventKick.operator" href="#mirai.models.events.BotLeaveEventKick.operator">operator</a></code></li>
 </ul>
 </li>
 <li>
@@ -4478,6 +4579,7 @@ def group(self) -&gt; Group:
 <li>
 <h4><code><a title="mirai.models.events.MemberJoinEvent" href="#mirai.models.events.MemberJoinEvent">MemberJoinEvent</a></code></h4>
 <ul class="">
+<li><code><a title="mirai.models.events.MemberJoinEvent.invitor" href="#mirai.models.events.MemberJoinEvent.invitor">invitor</a></code></li>
 <li><code><a title="mirai.models.events.MemberJoinEvent.member" href="#mirai.models.events.MemberJoinEvent.member">member</a></code></li>
 </ul>
 </li>

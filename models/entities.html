@@ -127,14 +127,14 @@ class GroupMember(Entity):
         return self.member_name
 
 
-class Sender(Entity):
+class Client(Entity):
     &#34;&#34;&#34;来自其他客户端的用户。&#34;&#34;&#34;
     id: int
-    &#34;&#34;&#34;QQ 号。&#34;&#34;&#34;
+    &#34;&#34;&#34;识别 id。&#34;&#34;&#34;
     platform: str
     &#34;&#34;&#34;来源平台。&#34;&#34;&#34;
     def get_avatar_url(self) -&gt; str:
-        return f&#39;http://q4.qlogo.cn/g?b=qq&amp;nk={self.id}&amp;s=140&#39;
+        raise NotImplementedError
 
     def get_name(self) -&gt; str:
         return self.platform
@@ -164,8 +164,6 @@ class GroupConfigModel(Config):
     &#34;&#34;&#34;群配置。&#34;&#34;&#34;
     name: str
     &#34;&#34;&#34;群名称。&#34;&#34;&#34;
-    announcement: str
-    &#34;&#34;&#34;群公告。&#34;&#34;&#34;
     confess_talk: bool
     &#34;&#34;&#34;是否允许坦白说。&#34;&#34;&#34;
     allow_member_invite: bool
@@ -174,6 +172,8 @@ class GroupConfigModel(Config):
     &#34;&#34;&#34;是否开启自动审批入群。&#34;&#34;&#34;
     anonymous_chat: bool
     &#34;&#34;&#34;是否开启匿名聊天。&#34;&#34;&#34;
+    announcement: str = &#39;&#39;
+    &#34;&#34;&#34;群公告。&#34;&#34;&#34;
 
 
 class MemberInfoModel(Config, GroupMember):
@@ -288,10 +288,10 @@ __all__ = [
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
+<li>mirai.models.entities.Client</li>
 <li><a title="mirai.models.entities.Friend" href="#mirai.models.entities.Friend">Friend</a></li>
 <li><a title="mirai.models.entities.Group" href="#mirai.models.entities.Group">Group</a></li>
 <li><a title="mirai.models.entities.GroupMember" href="#mirai.models.entities.GroupMember">GroupMember</a></li>
-<li><a title="mirai.models.entities.Sender" href="#mirai.models.entities.Sender">Sender</a></li>
 </ul>
 <h3>Class variables</h3>
 <dl>
@@ -452,8 +452,6 @@ def get_name(self) -&gt; str:
     &#34;&#34;&#34;群配置。&#34;&#34;&#34;
     name: str
     &#34;&#34;&#34;群名称。&#34;&#34;&#34;
-    announcement: str
-    &#34;&#34;&#34;群公告。&#34;&#34;&#34;
     confess_talk: bool
     &#34;&#34;&#34;是否允许坦白说。&#34;&#34;&#34;
     allow_member_invite: bool
@@ -461,7 +459,9 @@ def get_name(self) -&gt; str:
     auto_approve: bool
     &#34;&#34;&#34;是否开启自动审批入群。&#34;&#34;&#34;
     anonymous_chat: bool
-    &#34;&#34;&#34;是否开启匿名聊天。&#34;&#34;&#34;</code></pre>
+    &#34;&#34;&#34;是否开启匿名聊天。&#34;&#34;&#34;
+    announcement: str = &#39;&#39;
+    &#34;&#34;&#34;群公告。&#34;&#34;&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -684,52 +684,47 @@ def get_name(self) -&gt; str:
 </dd>
 </dl>
 </dd>
-<dt id="mirai.models.entities.Sender"><code class="flex name class">
+<dt id="mirai.models.entities.Permission"><code class="flex name class">
 <span>class <span class="ident">Sender</span></span>
-<span>(</span><span>*args, **kwargs)</span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>来自其他客户端的用户。</p></div>
+<div class="desc"><p>群成员身份权限。</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class Sender(Entity):
-    &#34;&#34;&#34;来自其他客户端的用户。&#34;&#34;&#34;
-    id: int
-    &#34;&#34;&#34;QQ 号。&#34;&#34;&#34;
-    platform: str
-    &#34;&#34;&#34;来源平台。&#34;&#34;&#34;
-    def get_avatar_url(self) -&gt; str:
-        return f&#39;http://q4.qlogo.cn/g?b=qq&amp;nk={self.id}&amp;s=140&#39;
-
-    def get_name(self) -&gt; str:
-        return self.platform</code></pre>
+<pre><code class="python">class Permission(str, Enum):
+    &#34;&#34;&#34;群成员身份权限。&#34;&#34;&#34;
+    Member = &#34;MEMBER&#34;
+    &#34;&#34;&#34;成员。&#34;&#34;&#34;
+    Administrator = &#34;ADMINISTRATOR&#34;
+    &#34;&#34;&#34;管理员。&#34;&#34;&#34;
+    Owner = &#34;OWNER&#34;
+    &#34;&#34;&#34;群主。&#34;&#34;&#34;
+    def __repr__(self) -&gt; str:
+        return repr(self.value)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="mirai.models.entities.Entity" href="#mirai.models.entities.Entity">Entity</a></li>
-<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
-<li>pydantic.main.BaseModel</li>
-<li>pydantic.utils.Representation</li>
+<li>builtins.str</li>
+<li>enum.Enum</li>
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.entities.Sender.platform"><code class="name">var <span class="ident">platform</span> : str</code></dt>
+<dt id="mirai.models.entities.Permission.Administrator"><code class="name">var <span class="ident">Administrator</span></code></dt>
 <dd>
-<div class="desc"><p>来源平台。</p></div>
+<div class="desc"><p>管理员。</p></div>
+</dd>
+<dt id="mirai.models.entities.Permission.Member"><code class="name">var <span class="ident">Member</span></code></dt>
+<dd>
+<div class="desc"><p>成员。</p></div>
+</dd>
+<dt id="mirai.models.entities.Permission.Owner"><code class="name">var <span class="ident">Owner</span></code></dt>
+<dd>
+<div class="desc"><p>群主。</p></div>
 </dd>
 </dl>
-<h3>Inherited members</h3>
-<ul class="hlist">
-<li><code><b><a title="mirai.models.entities.Entity" href="#mirai.models.entities.Entity">Entity</a></b></code>:
-<ul class="hlist">
-<li><code><a title="mirai.models.entities.Entity.get_avatar_url" href="#mirai.models.entities.Entity.get_avatar_url">get_avatar_url</a></code></li>
-<li><code><a title="mirai.models.entities.Entity.get_name" href="#mirai.models.entities.Entity.get_name">get_name</a></code></li>
-<li><code><a title="mirai.models.entities.Entity.id" href="#mirai.models.entities.Entity.id">id</a></code></li>
-</ul>
-</li>
-</ul>
 </dd>
 <dt id="mirai.models.entities.Subject"><code class="flex name class">
 <span>class <span class="ident">Subject</span></span>
@@ -845,9 +840,11 @@ def get_name(self) -&gt; str:
 </ul>
 </li>
 <li>
-<h4><code><a title="mirai.models.entities.Sender" href="#mirai.models.entities.Sender">Sender</a></code></h4>
+<h4><code><a title="mirai.models.entities.Permission" href="#mirai.models.entities.Permission">Permission</a></code></h4>
 <ul class="">
-<li><code><a title="mirai.models.entities.Sender.platform" href="#mirai.models.entities.Sender.platform">platform</a></code></li>
+<li><code><a title="mirai.models.entities.Permission.Administrator" href="#mirai.models.entities.Permission.Administrator">Administrator</a></code></li>
+<li><code><a title="mirai.models.entities.Permission.Member" href="#mirai.models.entities.Permission.Member">Member</a></code></li>
+<li><code><a title="mirai.models.entities.Permission.Owner" href="#mirai.models.entities.Permission.Owner">Owner</a></code></li>
 </ul>
 </li>
 <li>
