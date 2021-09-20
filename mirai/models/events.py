@@ -3,6 +3,7 @@
 此模块提供事件模型。
 """
 from datetime import datetime
+from enum import Enum
 from typing import TYPE_CHECKING, Any, Optional, Type, Union, cast
 
 if TYPE_CHECKING:
@@ -13,11 +14,9 @@ else:
     except ImportError:
         from typing_extensions import Literal
 
-from pydantic import Field
-
 from mirai.models.base import MiraiIndexedModel
 from mirai.models.entities import (
-    Entity, Friend, Group, GroupMember, Permission, Sender, Subject
+    Client, Entity, Friend, Group, GroupMember, Permission, Subject
 )
 from mirai.models.message import MessageChain
 
@@ -269,6 +268,8 @@ class BotJoinGroupEvent(GroupEvent):
     """事件名。"""
     group: Group
     """Bot 加入的群。"""
+    invitor: Optional[GroupMember] = None
+    """邀请者。"""
 
 
 class BotLeaveEventActive(GroupEvent):
@@ -295,6 +296,8 @@ class BotLeaveEventKick(GroupEvent):
     """事件名。"""
     group: Group
     """Bot 被踢出的群。"""
+    operator: Optional[GroupMember]
+    """踢出 Bot 的管理员。"""
 
 
 class GroupRecallEvent(GroupEvent):
@@ -490,6 +493,8 @@ class MemberJoinEvent(GroupEvent):
     """事件名。"""
     member: GroupMember
     """加入的群成员。"""
+    invitor: Optional[GroupMember]
+    """邀请者。"""
 
 
 class MemberLeaveEventKick(GroupEvent):
@@ -760,6 +765,81 @@ class NudgeEvent(Event):
 
 
 ###############################
+# Other Client Event
+
+
+class OtherClientEvent(Event):
+    """其它客户端事件。
+
+    Args:
+        type: 事件名。
+        client: 其他设备。
+    """
+    type: str
+    """事件名。"""
+    client: Client
+    """其他设备。"""
+
+
+class ClientKind(int, Enum):
+    """详细设备类型。"""
+    ANDROID_PAD = 68104
+    AOL_CHAOJIHUIYUAN = 73730
+    AOL_HUIYUAN = 73474
+    AOL_SQQ = 69378
+    CAR = 65806
+    HRTX_IPHONE = 66566
+    HRTX_PC = 66561
+    MC_3G = 65795
+    MISRO_MSG = 69634
+    MOBILE_ANDROID = 65799
+    MOBILE_ANDROID_NEW = 72450
+    MOBILE_HD = 65805
+    MOBILE_HD_NEW = 71426
+    MOBILE_IPAD = 68361
+    MOBILE_IPAD_NEW = 72194
+    MOBILE_IPHONE = 67586
+    MOBILE_OTHER = 65794
+    MOBILE_PC_QQ = 65793
+    MOBILE_PC_TIM = 77313
+    MOBILE_WINPHONE_NEW = 72706
+    QQ_FORELDER = 70922
+    QQ_SERVICE = 71170
+    TV_QQ = 69130
+    WIN8 = 69899
+    WINPHONE = 65804
+
+
+class OtherClientOnlineEvent(OtherClientEvent):
+    """其它客户端上线事件。
+
+    Args:
+        type: 事件名。
+        client: 其他设备。
+        kind: 详细设备类型。
+    """
+    type: str = 'OtherClientOnlineEvent'
+    """事件名。"""
+    client: Client
+    """其他设备。"""
+    kind: Optional[ClientKind] = None
+    """详细设备类型。"""
+
+
+class OtherClientOfflineEvent(OtherClientEvent):
+    """其它客户端下线事件。
+
+    Args:
+        type: 事件名。
+        client: 其他设备。
+    """
+    type: str = 'OtherClientOfflineEvent'
+    """事件名。"""
+    client: Client
+    """其他设备。"""
+
+
+###############################
 # Command Event
 
 
@@ -892,7 +972,7 @@ class OtherClientMessage(MessageEvent):
     """
     type: str = 'OtherClientMessage'
     """事件名。"""
-    sender: Sender
+    sender: Client
     """发送消息的人。"""
     message_chain: MessageChain
     """消息内容。"""

@@ -8,12 +8,10 @@ from typing import (
     overload, type_check_only
 )
 
-from mirai.asgi import ASGI
-from mirai.models.base import MiraiBaseModel
-
 from typing_extensions import Literal
 
 from mirai.adapters.base import Adapter, AdapterInterface, ApiProvider
+from mirai.asgi import ASGI
 from mirai.bus import AbstractEventBus
 from mirai.models.api import (
     AboutResponse, ApiModel, FileInfoResponse, FileListResponse,
@@ -21,6 +19,7 @@ from mirai.models.api import (
     MemberListResponse, MessageFromIdResponse, MessageResponse,
     ProfileResponse, Response, RespOperate, SessionInfoResponse
 )
+from mirai.models.base import MiraiBaseModel
 from mirai.models.entities import (
     Entity, Friend, Group, GroupConfigModel, GroupMember, MemberInfoModel,
     Subject
@@ -232,7 +231,7 @@ class Mirai(SimpleMirai):
             """执行命令。
 
             Args:
-                command: 命令。
+                command (`Union[MessageChain,Iterable[Union[MessageComponent,str]],str]`): 命令。
             """
 
     @overload
@@ -247,7 +246,7 @@ class Mirai(SimpleMirai):
         """执行命令。
 
         Args:
-            command: 命令。
+            command (`Union[MessageChain,Iterable[Union[MessageComponent,str]],str]`): 命令。
         """
 
     # CmdRegister
@@ -264,10 +263,10 @@ class Mirai(SimpleMirai):
             """注册命令。
 
             Args:
-                name: 命令名称。
-                usage: 使用说明。
-                description: 命令描述。
-                alias: 可选。命令别名，默认值 None。
+                name (`str`): 命令名称。
+                usage (`str`): 使用说明。
+                description (`str`): 命令描述。
+                alias (`Union[List[str],None]`): 可选。命令别名，默认值 None。
             """
 
     @overload
@@ -285,10 +284,10 @@ class Mirai(SimpleMirai):
         """注册命令。
 
         Args:
-            name: 命令名称。
-            usage: 使用说明。
-            description: 命令描述。
-            alias: 可选。命令别名，默认值 None。
+            name (`str`): 命令名称。
+            usage (`str`): 使用说明。
+            description (`str`): 命令描述。
+            alias (`Union[List[str],None]`): 可选。命令别名，默认值 None。
         """
 
     # DeleteFriend
@@ -299,7 +298,7 @@ class Mirai(SimpleMirai):
             """删除好友。
 
             Args:
-                target: 需要删除的好友 QQ 号。
+                target (`int`): 需要删除的好友 QQ 号。
             """
 
     @overload
@@ -311,19 +310,25 @@ class Mirai(SimpleMirai):
         """删除好友。
 
         Args:
-            target: 需要删除的好友 QQ 号。
+            target (`int`): 需要删除的好友 QQ 号。
         """
 
     # FileDelete
 
     @type_check_only
     class __FileDeleteProxy():
-        async def set(self, id: str, target: int) -> Response:
+        async def set(
+            self,
+            id: str,
+            target: int,
+            path: Union[str, None] = None
+        ) -> Response:
             """删除文件。
 
             Args:
-                id: 欲删除的文件 id。
-                target: 群号或好友 QQ 号。
+                id (`str`): 欲删除的文件 id。
+                target (`int`): 群号或好友 QQ 号。
+                path (`Union[str,None]`): 可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id，默认值 None。
             """
 
     @overload
@@ -331,12 +336,15 @@ class Mirai(SimpleMirai):
         """删除文件。"""
 
     @overload
-    async def file_delete(self, id: str, target: int) -> Response:
+    async def file_delete(
+        self, id: str, target: int, path: Union[str, None] = None
+    ) -> Response:
         """删除文件。
 
         Args:
-            id: 欲删除的文件 id。
-            target: 群号或好友 QQ 号。
+            id (`str`): 欲删除的文件 id。
+            target (`int`): 群号或好友 QQ 号。
+            path (`Union[str,None]`): 可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id，默认值 None。
         """
 
     # FileInfo
@@ -347,14 +355,16 @@ class Mirai(SimpleMirai):
             self,
             id: str,
             target: int,
-            with_download_info: Union[bool, None] = None
+            with_download_info: Union[bool, None] = None,
+            path: Union[str, None] = None
         ) -> FileInfoResponse:
             """查看文件信息。
 
             Args:
-                id: 文件 id。
-                target: 群号或好友 QQ 号。
-                with_download_info: 是否携带下载信息，默认值 None。
+                id (`str`): 文件 id。
+                target (`int`): 群号或好友 QQ 号。
+                with_download_info (`Union[bool,None]`): 是否携带下载信息，默认值 None。
+                path (`Union[str,None]`): 可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id，默认值 None。
             """
 
     @overload
@@ -366,14 +376,16 @@ class Mirai(SimpleMirai):
         self,
         id: str,
         target: int,
-        with_download_info: Union[bool, None] = None
+        with_download_info: Union[bool, None] = None,
+        path: Union[str, None] = None
     ) -> FileInfoResponse:
         """查看文件信息。
 
         Args:
-            id: 文件 id。
-            target: 群号或好友 QQ 号。
-            with_download_info: 是否携带下载信息，默认值 None。
+            id (`str`): 文件 id。
+            target (`int`): 群号或好友 QQ 号。
+            with_download_info (`Union[bool,None]`): 是否携带下载信息，默认值 None。
+            path (`Union[str,None]`): 可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id，默认值 None。
         """
 
     # FileList
@@ -384,14 +396,20 @@ class Mirai(SimpleMirai):
             self,
             id: str,
             target: int,
-            with_download_info: Union[bool, None] = None
+            with_download_info: Union[bool, None] = None,
+            path: Union[str, None] = None,
+            offset: Union[int, None] = None,
+            size: Union[int, None] = None
         ) -> FileListResponse:
             """查看文件列表。
 
             Args:
-                id: 文件夹 id，空串为根目录。
-                target: 群号或好友 QQ 号。
-                with_download_info: 是否携带下载信息，默认值 None。
+                id (`str`): 文件夹 id，空串为根目录。
+                target (`int`): 群号或好友 QQ 号。
+                with_download_info (`Union[bool,None]`): 是否携带下载信息，默认值 None。
+                path (`Union[str,None]`): 可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id，默认值 None。
+                offset (`Union[int,None]`): 可选。分页偏移，默认值 None。
+                size (`Union[int,None]`): 可选。分页大小，默认值 None。
             """
 
     @overload
@@ -403,14 +421,20 @@ class Mirai(SimpleMirai):
         self,
         id: str,
         target: int,
-        with_download_info: Union[bool, None] = None
+        with_download_info: Union[bool, None] = None,
+        path: Union[str, None] = None,
+        offset: Union[int, None] = None,
+        size: Union[int, None] = None
     ) -> FileListResponse:
         """查看文件列表。
 
         Args:
-            id: 文件夹 id，空串为根目录。
-            target: 群号或好友 QQ 号。
-            with_download_info: 是否携带下载信息，默认值 None。
+            id (`str`): 文件夹 id，空串为根目录。
+            target (`int`): 群号或好友 QQ 号。
+            with_download_info (`Union[bool,None]`): 是否携带下载信息，默认值 None。
+            path (`Union[str,None]`): 可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id，默认值 None。
+            offset (`Union[int,None]`): 可选。分页偏移，默认值 None。
+            size (`Union[int,None]`): 可选。分页大小，默认值 None。
         """
 
     # FileMkdir
@@ -418,14 +442,19 @@ class Mirai(SimpleMirai):
     @type_check_only
     class __FileMkdirProxy():
         async def set(
-            self, id: str, target: int, directory_name: str
+            self,
+            id: str,
+            target: int,
+            directory_name: str,
+            path: Union[str, None] = None
         ) -> FileMkdirResponse:
             """创建文件夹。
 
             Args:
-                id: 父目录 id。
-                target: 群号或好友 QQ 号。
-                directory_name: 新建文件夹名。
+                id (`str`): 父目录 id。
+                target (`int`): 群号或好友 QQ 号。
+                directory_name (`str`): 新建文件夹名。
+                path (`Union[str,None]`): 可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id，默认值 None。
             """
 
     @overload
@@ -434,27 +463,41 @@ class Mirai(SimpleMirai):
 
     @overload
     async def file_mkdir(
-        self, id: str, target: int, directory_name: str
+        self,
+        id: str,
+        target: int,
+        directory_name: str,
+        path: Union[str, None] = None
     ) -> FileMkdirResponse:
         """创建文件夹。
 
         Args:
-            id: 父目录 id。
-            target: 群号或好友 QQ 号。
-            directory_name: 新建文件夹名。
+            id (`str`): 父目录 id。
+            target (`int`): 群号或好友 QQ 号。
+            directory_name (`str`): 新建文件夹名。
+            path (`Union[str,None]`): 可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id，默认值 None。
         """
 
     # FileMove
 
     @type_check_only
     class __FileMoveProxy():
-        async def set(self, id: str, target: int, move_to: str) -> Response:
+        async def set(
+            self,
+            id: str,
+            target: int,
+            move_to: str,
+            path: Union[str, None] = None,
+            move_to_path: Union[str, None] = None
+        ) -> Response:
             """移动文件。
 
             Args:
-                id: 欲移动的文件 id。
-                target: 群号或好友 QQ 号。
-                move_to: 移动目标文件夹 id。
+                id (`str`): 欲移动的文件 id。
+                target (`int`): 群号或好友 QQ 号。
+                move_to (`str`): 移动目标文件夹 id。
+                path (`Union[str,None]`): 可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id，默认值 None。
+                move_to_path (`Union[str,None]`): 可选。移动目标文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id，默认值 None。
             """
 
     @overload
@@ -462,26 +505,42 @@ class Mirai(SimpleMirai):
         """移动文件。"""
 
     @overload
-    async def file_move(self, id: str, target: int, move_to: str) -> Response:
+    async def file_move(
+        self,
+        id: str,
+        target: int,
+        move_to: str,
+        path: Union[str, None] = None,
+        move_to_path: Union[str, None] = None
+    ) -> Response:
         """移动文件。
 
         Args:
-            id: 欲移动的文件 id。
-            target: 群号或好友 QQ 号。
-            move_to: 移动目标文件夹 id。
+            id (`str`): 欲移动的文件 id。
+            target (`int`): 群号或好友 QQ 号。
+            move_to (`str`): 移动目标文件夹 id。
+            path (`Union[str,None]`): 可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id，默认值 None。
+            move_to_path (`Union[str,None]`): 可选。移动目标文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id，默认值 None。
         """
 
     # FileRename
 
     @type_check_only
     class __FileRenameProxy():
-        async def set(self, id: str, target: int, rename_to: str) -> Response:
+        async def set(
+            self,
+            id: str,
+            target: int,
+            rename_to: str,
+            path: Union[str, None] = None
+        ) -> Response:
             """重命名文件。
 
             Args:
-                id: 欲重命名的文件 id。
-                target: 群号或好友 QQ 号。
-                rename_to: 新文件名。
+                id (`str`): 欲重命名的文件 id。
+                target (`int`): 群号或好友 QQ 号。
+                rename_to (`str`): 新文件名。
+                path (`Union[str,None]`): 可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id，默认值 None。
             """
 
     @overload
@@ -490,14 +549,19 @@ class Mirai(SimpleMirai):
 
     @overload
     async def file_rename(
-        self, id: str, target: int, rename_to: str
+        self,
+        id: str,
+        target: int,
+        rename_to: str,
+        path: Union[str, None] = None
     ) -> Response:
         """重命名文件。
 
         Args:
-            id: 欲重命名的文件 id。
-            target: 群号或好友 QQ 号。
-            rename_to: 新文件名。
+            id (`str`): 欲重命名的文件 id。
+            target (`int`): 群号或好友 QQ 号。
+            rename_to (`str`): 新文件名。
+            path (`Union[str,None]`): 可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id，默认值 None。
         """
 
     # FileUpload
@@ -514,10 +578,10 @@ class Mirai(SimpleMirai):
             """文件上传。（暂时不可用）
 
             Args:
-                type: 上传的文件类型。
-                target: 群号。
-                file: 上传的文件的本地路径。
-                path: 上传目录的 id，空串为上传到根目录，默认值 ''。
+                type (`Literal['group']`): 上传的文件类型。
+                target (`int`): 群号。
+                file (`Union[str,Path]`): 上传的文件的本地路径。
+                path (`str`): 上传目录的 id，空串为上传到根目录，默认值 ''。
             """
 
     @overload
@@ -535,10 +599,10 @@ class Mirai(SimpleMirai):
         """文件上传。（暂时不可用）
 
         Args:
-            type: 上传的文件类型。
-            target: 群号。
-            file: 上传的文件的本地路径。
-            path: 上传目录的 id，空串为上传到根目录，默认值 ''。
+            type (`Literal['group']`): 上传的文件类型。
+            target (`int`): 群号。
+            file (`Union[str,Path]`): 上传的文件的本地路径。
+            path (`str`): 上传目录的 id，空串为上传到根目录，默认值 ''。
         """
 
     # FriendList
@@ -564,7 +628,7 @@ class Mirai(SimpleMirai):
             """获取好友资料。
 
             Args:
-                target: 好友 QQ 号。
+                target (`int`): 好友 QQ 号。
             """
 
     @overload
@@ -576,7 +640,7 @@ class Mirai(SimpleMirai):
         """获取好友资料。
 
         Args:
-            target: 好友 QQ 号。
+            target (`int`): 好友 QQ 号。
         """
 
     # GroupConfig
@@ -591,8 +655,8 @@ class Mirai(SimpleMirai):
             """获取或修改群设置。
 
             Args:
-                target: 群号。
-                config: 仅修改时可用。群设置，默认值 None。
+                target (`int`): 群号。
+                config (`Union[GroupConfigModel,None]`): 仅修改时可用。群设置，默认值 None。
             """
 
         async def set(
@@ -603,8 +667,8 @@ class Mirai(SimpleMirai):
             """获取或修改群设置。
 
             Args:
-                target: 群号。
-                config: 仅修改时可用。群设置，默认值 None。
+                target (`int`): 群号。
+                config (`Union[GroupConfigModel,None]`): 仅修改时可用。群设置，默认值 None。
             """
 
     @overload
@@ -620,8 +684,8 @@ class Mirai(SimpleMirai):
         """获取或修改群设置。
 
         Args:
-            target: 群号。
-            config: 仅修改时可用。群设置，默认值 None。
+            target (`int`): 群号。
+            config (`Union[GroupConfigModel,None]`): 仅修改时可用。群设置，默认值 None。
         """
 
     # GroupList
@@ -649,9 +713,9 @@ class Mirai(SimpleMirai):
             """移出群成员。
 
             Args:
-                target: 指定群的群号。
-                member_id: 指定群成员的 QQ 号。
-                msg: 可选。信息，默认值 ''。
+                target (`int`): 指定群的群号。
+                member_id (`int`): 指定群成员的 QQ 号。
+                msg (`str`): 可选。信息，默认值 ''。
             """
 
     @overload
@@ -665,9 +729,40 @@ class Mirai(SimpleMirai):
         """移出群成员。
 
         Args:
-            target: 指定群的群号。
-            member_id: 指定群成员的 QQ 号。
-            msg: 可选。信息，默认值 ''。
+            target (`int`): 指定群的群号。
+            member_id (`int`): 指定群成员的 QQ 号。
+            msg (`str`): 可选。信息，默认值 ''。
+        """
+
+    # MemberAdmin
+
+    @type_check_only
+    class __MemberAdminProxy():
+        async def set(
+            self, target: int, member_id: int, assign: bool
+        ) -> Response:
+            """设置或取消群成员管理员。
+
+            Args:
+                target (`int`): 群号。
+                member_id (`int`): 指定群成员的 QQ 号。
+                assign (`bool`): 是否设置管理员。
+            """
+
+    @overload
+    def member_admin(self) -> __MemberAdminProxy:
+        """设置或取消群成员管理员。"""
+
+    @overload
+    async def member_admin(
+        self, target: int, member_id: int, assign: bool
+    ) -> Response:
+        """设置或取消群成员管理员。
+
+        Args:
+            target (`int`): 群号。
+            member_id (`int`): 指定群成员的 QQ 号。
+            assign (`bool`): 是否设置管理员。
         """
 
     # MemberInfo
@@ -683,9 +778,9 @@ class Mirai(SimpleMirai):
             """获取或修改群成员资料。
 
             Args:
-                target: 群号。
-                member_id: 指定群成员的 QQ 号。
-                info: 仅修改时可用。群成员资料，默认值 None。
+                target (`int`): 群号。
+                member_id (`int`): 指定群成员的 QQ 号。
+                info (`Union[MemberInfoModel,None]`): 仅修改时可用。群成员资料，默认值 None。
             """
 
         async def set(
@@ -697,9 +792,9 @@ class Mirai(SimpleMirai):
             """获取或修改群成员资料。
 
             Args:
-                target: 群号。
-                member_id: 指定群成员的 QQ 号。
-                info: 仅修改时可用。群成员资料，默认值 None。
+                target (`int`): 群号。
+                member_id (`int`): 指定群成员的 QQ 号。
+                info (`Union[MemberInfoModel,None]`): 仅修改时可用。群成员资料，默认值 None。
             """
 
     @overload
@@ -716,9 +811,9 @@ class Mirai(SimpleMirai):
         """获取或修改群成员资料。
 
         Args:
-            target: 群号。
-            member_id: 指定群成员的 QQ 号。
-            info: 仅修改时可用。群成员资料，默认值 None。
+            target (`int`): 群号。
+            member_id (`int`): 指定群成员的 QQ 号。
+            info (`Union[MemberInfoModel,None]`): 仅修改时可用。群成员资料，默认值 None。
         """
 
     # MemberList
@@ -729,7 +824,7 @@ class Mirai(SimpleMirai):
             """获取群成员列表。
 
             Args:
-                target: 指定群的群号。
+                target (`int`): 指定群的群号。
             """
 
     @overload
@@ -741,7 +836,7 @@ class Mirai(SimpleMirai):
         """获取群成员列表。
 
         Args:
-            target: 指定群的群号。
+            target (`int`): 指定群的群号。
         """
 
     # MemberProfile
@@ -752,8 +847,8 @@ class Mirai(SimpleMirai):
             """获取群成员资料。
 
             Args:
-                target: 指定群的群号。
-                member_id: 指定群成员的 QQ 号。
+                target (`int`): 指定群的群号。
+                member_id (`int`): 指定群成员的 QQ 号。
             """
 
     @overload
@@ -767,8 +862,8 @@ class Mirai(SimpleMirai):
         """获取群成员资料。
 
         Args:
-            target: 指定群的群号。
-            member_id: 指定群成员的 QQ 号。
+            target (`int`): 指定群的群号。
+            member_id (`int`): 指定群成员的 QQ 号。
         """
 
     # MessageFromId
@@ -779,7 +874,7 @@ class Mirai(SimpleMirai):
             """通过 message_id 获取消息。
 
             Args:
-                id: 获取消息的 message_id。
+                id (`int`): 获取消息的 message_id。
             """
 
     @overload
@@ -791,7 +886,7 @@ class Mirai(SimpleMirai):
         """通过 message_id 获取消息。
 
         Args:
-            id: 获取消息的 message_id。
+            id (`int`): 获取消息的 message_id。
         """
 
     # Mute
@@ -804,9 +899,9 @@ class Mirai(SimpleMirai):
             """禁言群成员。
 
             Args:
-                target: 指定群的群号。
-                member_id: 指定群成员的 QQ 号。
-                time: 禁言时间，单位为秒，最多30天，默认为0。
+                target (`int`): 指定群的群号。
+                member_id (`int`): 指定群成员的 QQ 号。
+                time (`int`): 禁言时间，单位为秒，最多30天，默认为0。
             """
 
     @overload
@@ -818,9 +913,9 @@ class Mirai(SimpleMirai):
         """禁言群成员。
 
         Args:
-            target: 指定群的群号。
-            member_id: 指定群成员的 QQ 号。
-            time: 禁言时间，单位为秒，最多30天，默认为0。
+            target (`int`): 指定群的群号。
+            member_id (`int`): 指定群成员的 QQ 号。
+            time (`int`): 禁言时间，单位为秒，最多30天，默认为0。
         """
 
     # MuteAll
@@ -831,7 +926,7 @@ class Mirai(SimpleMirai):
             """全体禁言。
 
             Args:
-                target: 指定群的群号。
+                target (`int`): 指定群的群号。
             """
 
     @overload
@@ -843,7 +938,7 @@ class Mirai(SimpleMirai):
         """全体禁言。
 
         Args:
-            target: 指定群的群号。
+            target (`int`): 指定群的群号。
         """
 
     # Quit
@@ -854,7 +949,7 @@ class Mirai(SimpleMirai):
             """退出群聊。
 
             Args:
-                target: 指定群的群号。
+                target (`int`): 指定群的群号。
             """
 
     @overload
@@ -866,7 +961,7 @@ class Mirai(SimpleMirai):
         """退出群聊。
 
         Args:
-            target: 指定群的群号。
+            target (`int`): 指定群的群号。
         """
 
     # Recall
@@ -877,7 +972,7 @@ class Mirai(SimpleMirai):
             """撤回消息。
 
             Args:
-                target: 需要撤回的消息的 message_id。
+                target (`int`): 需要撤回的消息的 message_id。
             """
 
     @overload
@@ -889,7 +984,7 @@ class Mirai(SimpleMirai):
         """撤回消息。
 
         Args:
-            target: 需要撤回的消息的 message_id。
+            target (`int`): 需要撤回的消息的 message_id。
         """
 
     # RespBotInvitedJoinGroupRequestEvent
@@ -903,11 +998,11 @@ class Mirai(SimpleMirai):
             """响应被邀请入群申请。
 
             Args:
-                event_id: 响应申请事件的标识。
-                from_id: 事件对应申请人 QQ 号。
-                group_id: 事件对应申请人的群号，可能为0。
-                operate: 响应的操作类型。
-                message: 回复的信息。
+                event_id (`int`): 响应申请事件的标识。
+                from_id (`int`): 事件对应申请人 QQ 号。
+                group_id (`int`): 事件对应申请人的群号，可能为0。
+                operate (`Union[int,RespOperate]`): 响应的操作类型。
+                message (`str`): 回复的信息。
             """
 
     @overload
@@ -924,11 +1019,11 @@ class Mirai(SimpleMirai):
         """响应被邀请入群申请。
 
         Args:
-            event_id: 响应申请事件的标识。
-            from_id: 事件对应申请人 QQ 号。
-            group_id: 事件对应申请人的群号，可能为0。
-            operate: 响应的操作类型。
-            message: 回复的信息。
+            event_id (`int`): 响应申请事件的标识。
+            from_id (`int`): 事件对应申请人 QQ 号。
+            group_id (`int`): 事件对应申请人的群号，可能为0。
+            operate (`Union[int,RespOperate]`): 响应的操作类型。
+            message (`str`): 回复的信息。
         """
 
     # RespMemberJoinRequestEvent
@@ -942,11 +1037,11 @@ class Mirai(SimpleMirai):
             """响应用户入群申请。
 
             Args:
-                event_id: 响应申请事件的标识。
-                from_id: 事件对应申请人 QQ 号。
-                group_id: 事件对应申请人的群号。
-                operate: 响应的操作类型。
-                message: 回复的信息。
+                event_id (`int`): 响应申请事件的标识。
+                from_id (`int`): 事件对应申请人 QQ 号。
+                group_id (`int`): 事件对应申请人的群号。
+                operate (`Union[int,RespOperate]`): 响应的操作类型。
+                message (`str`): 回复的信息。
             """
 
     @overload
@@ -963,11 +1058,11 @@ class Mirai(SimpleMirai):
         """响应用户入群申请。
 
         Args:
-            event_id: 响应申请事件的标识。
-            from_id: 事件对应申请人 QQ 号。
-            group_id: 事件对应申请人的群号。
-            operate: 响应的操作类型。
-            message: 回复的信息。
+            event_id (`int`): 响应申请事件的标识。
+            from_id (`int`): 事件对应申请人 QQ 号。
+            group_id (`int`): 事件对应申请人的群号。
+            operate (`Union[int,RespOperate]`): 响应的操作类型。
+            message (`str`): 回复的信息。
         """
 
     # RespNewFriendRequestEvent
@@ -981,11 +1076,11 @@ class Mirai(SimpleMirai):
             """响应添加好友申请。
 
             Args:
-                event_id: 响应申请事件的标识。
-                from_id: 事件对应申请人 QQ 号。
-                group_id: 事件对应申请人的群号，可能为0。
-                operate: 响应的操作类型。
-                message: 回复的信息。
+                event_id (`int`): 响应申请事件的标识。
+                from_id (`int`): 事件对应申请人 QQ 号。
+                group_id (`int`): 事件对应申请人的群号，可能为0。
+                operate (`Union[int,RespOperate]`): 响应的操作类型。
+                message (`str`): 回复的信息。
             """
 
     @overload
@@ -1002,11 +1097,11 @@ class Mirai(SimpleMirai):
         """响应添加好友申请。
 
         Args:
-            event_id: 响应申请事件的标识。
-            from_id: 事件对应申请人 QQ 号。
-            group_id: 事件对应申请人的群号，可能为0。
-            operate: 响应的操作类型。
-            message: 回复的信息。
+            event_id (`int`): 响应申请事件的标识。
+            from_id (`int`): 事件对应申请人 QQ 号。
+            group_id (`int`): 事件对应申请人的群号，可能为0。
+            operate (`Union[int,RespOperate]`): 响应的操作类型。
+            message (`str`): 回复的信息。
         """
 
     # SendFriendMessage
@@ -1024,9 +1119,9 @@ class Mirai(SimpleMirai):
             """发送好友消息。
 
             Args:
-                target: 发送消息目标好友的 QQ 号。
-                message_chain: 消息链。
-                quote: 可选。引用一条消息的 message_id 进行回复，默认值 None。
+                target (`int`): 发送消息目标好友的 QQ 号。
+                message_chain (`Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str]`): 消息链。
+                quote (`Union[int,None]`): 可选。引用一条消息的 message_id 进行回复，默认值 None。
             """
 
     @overload
@@ -1045,9 +1140,9 @@ class Mirai(SimpleMirai):
         """发送好友消息。
 
         Args:
-            target: 发送消息目标好友的 QQ 号。
-            message_chain: 消息链。
-            quote: 可选。引用一条消息的 message_id 进行回复，默认值 None。
+            target (`int`): 发送消息目标好友的 QQ 号。
+            message_chain (`Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str]`): 消息链。
+            quote (`Union[int,None]`): 可选。引用一条消息的 message_id 进行回复，默认值 None。
         """
 
     # SendGroupMessage
@@ -1065,9 +1160,9 @@ class Mirai(SimpleMirai):
             """发送群消息。
 
             Args:
-                target: 发送消息目标群的群号。
-                message_chain: 消息链。
-                quote: 可选。引用一条消息的 message_id 进行回复，默认值 None。
+                target (`int`): 发送消息目标群的群号。
+                message_chain (`Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str]`): 消息链。
+                quote (`Union[int,None]`): 可选。引用一条消息的 message_id 进行回复，默认值 None。
             """
 
     @overload
@@ -1086,9 +1181,9 @@ class Mirai(SimpleMirai):
         """发送群消息。
 
         Args:
-            target: 发送消息目标群的群号。
-            message_chain: 消息链。
-            quote: 可选。引用一条消息的 message_id 进行回复，默认值 None。
+            target (`int`): 发送消息目标群的群号。
+            message_chain (`Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str]`): 消息链。
+            quote (`Union[int,None]`): 可选。引用一条消息的 message_id 进行回复，默认值 None。
         """
 
     # SendNudge
@@ -1102,9 +1197,9 @@ class Mirai(SimpleMirai):
             """发送头像戳一戳消息。
 
             Args:
-                target: 戳一戳的目标 QQ 号，可以为 bot QQ 号。
-                subject: 戳一戳接受主体（上下文），戳一戳信息会发送至该主体，为群号或好友 QQ 号。
-                kind: 上下文类型，可选值 `Friend`, `Group`, `Stranger`。
+                target (`int`): 戳一戳的目标 QQ 号，可以为 bot QQ 号。
+                subject (`int`): 戳一戳接受主体（上下文），戳一戳信息会发送至该主体，为群号或好友 QQ 号。
+                kind (`Literal['Friend','Group','Stranger']`): 上下文类型，可选值 `Friend`, `Group`, `Stranger`。
             """
 
     @overload
@@ -1119,9 +1214,9 @@ class Mirai(SimpleMirai):
         """发送头像戳一戳消息。
 
         Args:
-            target: 戳一戳的目标 QQ 号，可以为 bot QQ 号。
-            subject: 戳一戳接受主体（上下文），戳一戳信息会发送至该主体，为群号或好友 QQ 号。
-            kind: 上下文类型，可选值 `Friend`, `Group`, `Stranger`。
+            target (`int`): 戳一戳的目标 QQ 号，可以为 bot QQ 号。
+            subject (`int`): 戳一戳接受主体（上下文），戳一戳信息会发送至该主体，为群号或好友 QQ 号。
+            kind (`Literal['Friend','Group','Stranger']`): 上下文类型，可选值 `Friend`, `Group`, `Stranger`。
         """
 
     # SendTempMessage
@@ -1140,10 +1235,10 @@ class Mirai(SimpleMirai):
             """发送临时消息。
 
             Args:
-                qq: 临时会话对象 QQ 号。
-                group: 临时会话对象群号。
-                message_chain: 消息链。
-                quote: 可选。引用一条消息的 message_id 进行回复，默认值 None。
+                qq (`int`): 临时会话对象 QQ 号。
+                group (`int`): 临时会话对象群号。
+                message_chain (`Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str]`): 消息链。
+                quote (`Union[int,None]`): 可选。引用一条消息的 message_id 进行回复，默认值 None。
             """
 
     @overload
@@ -1163,10 +1258,10 @@ class Mirai(SimpleMirai):
         """发送临时消息。
 
         Args:
-            qq: 临时会话对象 QQ 号。
-            group: 临时会话对象群号。
-            message_chain: 消息链。
-            quote: 可选。引用一条消息的 message_id 进行回复，默认值 None。
+            qq (`int`): 临时会话对象 QQ 号。
+            group (`int`): 临时会话对象群号。
+            message_chain (`Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str]`): 消息链。
+            quote (`Union[int,None]`): 可选。引用一条消息的 message_id 进行回复，默认值 None。
         """
 
     # SessionInfo
@@ -1192,7 +1287,7 @@ class Mirai(SimpleMirai):
             """设置群精华消息。
 
             Args:
-                target: 精华消息的 message_id。
+                target (`int`): 精华消息的 message_id。
             """
 
     @overload
@@ -1204,7 +1299,7 @@ class Mirai(SimpleMirai):
         """设置群精华消息。
 
         Args:
-            target: 精华消息的 message_id。
+            target (`int`): 精华消息的 message_id。
         """
 
     # Unmute
@@ -1215,8 +1310,8 @@ class Mirai(SimpleMirai):
             """解除群成员禁言。
 
             Args:
-                target: 指定群的群号。
-                member_id: 指定群成员的 QQ 号。
+                target (`int`): 指定群的群号。
+                member_id (`int`): 指定群成员的 QQ 号。
             """
 
     @overload
@@ -1228,8 +1323,8 @@ class Mirai(SimpleMirai):
         """解除群成员禁言。
 
         Args:
-            target: 指定群的群号。
-            member_id: 指定群成员的 QQ 号。
+            target (`int`): 指定群的群号。
+            member_id (`int`): 指定群成员的 QQ 号。
         """
 
     # UnmuteAll
@@ -1240,7 +1335,7 @@ class Mirai(SimpleMirai):
             """解除全体禁言。
 
             Args:
-                target: 指定群的群号。
+                target (`int`): 指定群的群号。
             """
 
     @overload
@@ -1252,7 +1347,7 @@ class Mirai(SimpleMirai):
         """解除全体禁言。
 
         Args:
-            target: 指定群的群号。
+            target (`int`): 指定群的群号。
         """
 
     # UploadImage
@@ -1266,8 +1361,8 @@ class Mirai(SimpleMirai):
             """图片文件上传。
 
             Args:
-                type: 上传的图片类型。
-                img: 上传的图片的本地路径。
+                type (`Literal['friend','group','temp']`): 上传的图片类型。
+                img (`Union[str,Path]`): 上传的图片的本地路径。
             """
 
     @overload
@@ -1281,8 +1376,8 @@ class Mirai(SimpleMirai):
         """图片文件上传。
 
         Args:
-            type: 上传的图片类型。
-            img: 上传的图片的本地路径。
+            type (`Literal['friend','group','temp']`): 上传的图片类型。
+            img (`Union[str,Path]`): 上传的图片的本地路径。
         """
 
     # UploadVoice
@@ -1290,13 +1385,14 @@ class Mirai(SimpleMirai):
     @type_check_only
     class __UploadVoiceProxy():
         async def set(
-            self, type: Literal['group'], voice: Union[str, Path]
+            self, type: Literal['group', 'friend', 'temp'], voice: Union[str,
+                                                                         Path]
         ) -> Voice:
             """语音文件上传。
 
             Args:
-                type: 上传的语音类型。
-                voice: 上传的语音的本地路径。
+                type (`Literal['group','friend','temp']`): 上传的语音类型。
+                voice (`Union[str,Path]`): 上传的语音的本地路径。
             """
 
     @overload
@@ -1305,11 +1401,11 @@ class Mirai(SimpleMirai):
 
     @overload
     async def upload_voice(
-        self, type: Literal['group'], voice: Union[str, Path]
+        self, type: Literal['group', 'friend', 'temp'], voice: Union[str, Path]
     ) -> Voice:
         """语音文件上传。
 
         Args:
-            type: 上传的语音类型。
-            voice: 上传的语音的本地路径。
+            type (`Literal['group','friend','temp']`): 上传的语音类型。
+            voice (`Union[str,Path]`): 上传的语音的本地路径。
         """

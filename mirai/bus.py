@@ -202,4 +202,7 @@ class EventBus(AbstractEventBus):
         return [asyncio.create_task(coro) for coro in filter(None, coros)]
 
 
-__all__ = ['AbstractEventBus', 'EventBus', 'event_chain_separator', 'event_chain_single']
+__all__ = [
+    'AbstractEventBus', 'EventBus', 'event_chain_separator',
+    'event_chain_single'
+]

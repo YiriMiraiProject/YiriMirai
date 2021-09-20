@@ -1033,6 +1033,8 @@ class Voice(MessageComponent):
     """语音的路径，发送本地语音。"""
     base64: Optional[str] = None
     """语音的 Base64 编码。"""
+    length: Optional[int] = None
+    """语音的长度，单位为秒。"""
     @validator('path')
     def validate_path(cls, path: Optional[str]):
         """修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。"""
@@ -1148,13 +1150,13 @@ class MusicShare(MessageComponent):
 
 class ForwardMessageNode(MiraiBaseModel):
     """合并转发中的一条消息。"""
-    sender_id: int
+    sender_id: Optional[int] = None
     """发送人QQ号。"""
-    sender_name: str
+    sender_name: Optional[str] = None
     """显示名称。"""
-    message_chain: MessageChain
+    message_chain: Optional[MessageChain] = None
     """消息内容。"""
-    source_id: Optional[int] = None
+    message_id: Optional[int] = None
     """消息的 message_id，可以只使用此属性，从缓存中读取消息内容。"""
     time: Optional[datetime] = None
     """发送时间。"""
@@ -1168,7 +1170,7 @@ class ForwardMessageNode(MiraiBaseModel):
     def create(
         cls, sender: Union[Friend, GroupMember], message: MessageChain
     ) -> 'ForwardMessageNode':
-        """从生成转发消息。
+        """从消息链生成转发消息。
 
         Args:
             sender: 发送人。
