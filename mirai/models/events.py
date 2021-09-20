@@ -283,8 +283,6 @@ class BotLeaveEventActive(GroupEvent):
     """事件名。"""
     group: Group
     """Bot 退出的群。"""
-    operator: Optional[GroupMember]
-    """操作者。（意义不明）"""
 
 
 class BotLeaveEventKick(GroupEvent):
