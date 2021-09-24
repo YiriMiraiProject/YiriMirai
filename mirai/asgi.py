@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """此模块提供公共 ASGI 前端。"""
-
+import asyncio
 import functools
 import logging
-from typing import Callable, Dict, List, Optional, Tuple
+from typing import Awaitable, Callable, Dict, List, Literal, Optional, Tuple, Union, cast
+from inspect import iscoroutinefunction
 
 from starlette.applications import Starlette
 from starlette.requests import Request
@@ -73,10 +74,65 @@ class ASGI(Singleton):
 
         return self
 
-    def add_event_handler(self, event_type: str, handler: Callable):
-        """注册生命周期事件处理函数。"""
-        self.app.add_event_handler(event_type, handler)
-        return self
+    def add_event_handler(
+        self,
+        event_type: Literal["startup", "shutdown"],
+        handler: Optional[Callable] = None
+    ):
+        """注册生命周期事件处理函数。
+
+        Args:
+            event_type(`Literal["startup", "shutdown"]`): 事件类型，可选值为 `"startup"` 或 `"shutdown"`。
+            handler(`Optional[Callable]`): 事件处理函数，省略此参数以作为装饰器调用。
+        """
+        if handler:
+            self.app.add_event_handler(event_type, handler)
+            return self
+        else:  # 装饰器用法
+
+            def decorator(func):
+                self.app.add_event_handler(event_type, func)
+                return func
+
+            return decorator
+
+    def add_background_task(
+        self, func: Union[Callable, Awaitable, None] = None
+    ):
+        """注册背景任务，将在 bot 启动后自动运行。
+
+        Args:
+            func(`Union[Callable, Awaitable, None]`): 背景任务，可以是函数或者协程，省略参数以作为装饰器调用。
+        """
+        if func is None:
+
+            def decorator(func_):
+                self.add_background_task(func_)
+                return func_
+
+            return decorator
+
+        if iscoroutinefunction(func):  # 异步调用转化为传入协程
+            func = cast(Callable[..., Awaitable], func)()
+
+        if callable(func):
+            self.app.add_event_handler('startup', func)
+        else:
+            _task: Optional[asyncio.Task] = None
+
+            async def _startup():
+                nonlocal _task
+                _task = asyncio.create_task(func)
+                # 不阻塞
+
+            async def _shutdown():
+                if _task and not _task.done():
+                    _task.cancel()
+
+            self.app.add_event_handler('startup', _startup)
+            self.app.add_event_handler('shutdown', _shutdown)
+
+        return func
 
     def mount(self, path: str, app: Callable) -> 'ASGI':
         """挂载另一个 ASGI 服务器。通过这个方法，可以同时运行 FastAPI 之类的服务。

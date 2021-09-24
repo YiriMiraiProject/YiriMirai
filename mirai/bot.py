@@ -167,6 +167,17 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
         """ASGI 对象，用于使用 uvicorn 等启动。"""
         return MiraiRunner(self)
 
+    def add_background_task(
+        self, func: Union[Callable, Awaitable, None] = None
+    ):
+        """注册背景任务，将在 bot 启动后自动运行。
+
+        Args:
+            func(`Union[Callable, Awaitable, None]`): 背景任务，可以是函数或者协程，省略参数以作为装饰器调用。
+        """
+        asgi = ASGI()
+        return asgi.add_background_task(func)
+
     def run(
         self,
         host: str = '127.0.0.1',

@@ -90,6 +90,18 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
     def asgi(self) -> MiraiRunner:
         ...
 
+    @overload
+    def add_background_task(self) -> Callable[[Callable], Callable]:
+        ...
+
+    @overload
+    def add_background_task(self, func: Callable) -> Callable:
+        ...
+
+    @overload
+    def add_background_task(self, func: Awaitable) -> Awaitable:
+        ...
+
     def run(
         self,
         host: str = ...,
