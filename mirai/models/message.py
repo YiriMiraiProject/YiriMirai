@@ -83,6 +83,10 @@ class MessageComponent(MiraiIndexedModel, metaclass=MessageComponentMetaclass):
     def __str__(self):
         return ''
 
+    def as_mirai_code(self) -> str:
+        """转化为 mirai 码。"""
+        return ''
+
     def __repr__(self):
         return self.__class__.__name__ + '(' + ', '.join(
             (
@@ -293,6 +297,18 @@ class MessageChain(MiraiBaseModel):
 
     def __str__(self):
         return "".join(str(component) for component in self.__root__)
+
+    def as_mirai_code(self) -> str:
+        """将消息链转换为 mirai 码字符串。
+
+        该方法会自动转换消息链中的元素。
+
+        Returns:
+            mirai 码字符串。
+        """
+        return "".join(
+            component.as_mirai_code() for component in self.__root__
+        )
 
     def __repr__(self):
         return f'{self.__class__.__name__}({self.__root__!r})'
@@ -672,6 +688,9 @@ class Plain(MessageComponent):
     text: str
     """文字消息。"""
     def __str__(self):
+        return self.text
+
+    def as_mirai_code(self) -> str:
         return serialize(self.text)
 
     def __repr__(self):
@@ -709,6 +728,9 @@ class At(MessageComponent):
         return isinstance(other, At) and self.target == other.target
 
     def __str__(self):
+        return f"@{self.display or self.target}"
+
+    def as_mirai_code(self) -> str:
         return f"[mirai:at:{self.target}]"
 
 
@@ -717,6 +739,9 @@ class AtAll(MessageComponent):
     type: str = "AtAll"
     """消息组件类型。"""
     def __str__(self):
+        return "@全体成员"
+
+    def as_mirai_code(self) -> str:
         return f"[mirai:atall]"
 
 
@@ -742,6 +767,11 @@ class Face(MessageComponent):
             (self.face_id == other.face_id or self.name == other.name)
 
     def __str__(self):
+        if self.name:
+            return f'[{self.name}]'
+        return '[表情]'
+
+    def as_mirai_code(self):
         return f"[mirai:face:{self.face_id}]"
 
 
@@ -763,6 +793,9 @@ class Image(MessageComponent):
         ) and self.type == other.type and self.uuid == other.uuid
 
     def __str__(self):
+        return '[图片]'
+
+    def as_mirai_code(self) -> str:
         return f"[mirai:image:{self.image_id}]"
 
     @validator('path')
@@ -912,6 +945,13 @@ class App(MessageComponent):
         return json_loads(self.content)
 
     def __str__(self):
+        try:
+            json = self.as_json()
+            return json.get('prompt', '[应用消息]')
+        except:
+            return '[应用消息]'
+
+    def as_mirai_code(self) -> str:
         return f'[mirai:app:{serialize(self.content)}]'
 
 
@@ -950,6 +990,24 @@ POKE_ID = {
     "ZhuaYiXia": 2001,
     "SuiPing": 2002,
     "QiaoMen": 2002,
+}
+POKE_NAME = {
+    "ChuoYiChuo": '戳一戳',
+    "BiXin": '比心',
+    "DianZan": '点赞',
+    "XinSui": '心碎',
+    "LiuLiuLiu": '666',
+    "FangDaZhao": '放大招',
+    "BaoBeiQiu": '宝贝球',
+    "Rose": '玫瑰花',
+    "ZhaoHuanShu": '召唤术',
+    "RangNiPi": '让你皮',
+    "JeiYin": '结印',
+    "ShouLei": '手雷',
+    "GouYin": '勾引',
+    "ZhuaYiXia": '抓一下',
+    "SuiPing": '碎屏',
+    "QiaoMen": '敲门',
 }
 
 
@@ -991,6 +1049,9 @@ class Poke(MessageComponent):
         return POKE_ID[self.name]
 
     def __str__(self):
+        return f'[{POKE_NAME[self.name]}]'
+
+    def as_mirai_code(self) -> str:
         return f'[mirai:poke:{self.name},{self.poke_type},{self.poke_id}]'
 
 
@@ -1015,6 +1076,9 @@ class FlashImage(Image):
     base64: Optional[str] = None
     """图片的 Base64 编码。"""
     def __str__(self):
+        return '[闪照]'
+
+    def as_mirai_code(self) -> str:
         return f"[mirai:flash:{self.image_id}]"
 
     def as_image(self) -> Image:
@@ -1045,6 +1109,9 @@ class Voice(MessageComponent):
                 raise ValueError(f"无效路径：{path}")
         else:
             return path
+
+    def __str__(self):
+        return '[语音]'
 
     async def download(
         self,
@@ -1116,6 +1183,9 @@ class Dice(MessageComponent):
     value: int
     """点数。"""
     def __str__(self):
+        return f'[骰子{self.value}]'
+
+    def as_mirai_code(self) -> str:
         return f'[mirai:dice:{self.value}]'
 
 
@@ -1146,6 +1216,8 @@ class MusicShare(MessageComponent):
     """音源路径。"""
     brief: str = ""
     """在消息列表中显示的内容。"""
+    def __str__(self):
+        return self.brief
 
 
 class ForwardMessageNode(MiraiBaseModel):
@@ -1198,6 +1270,9 @@ class Forward(MessageComponent):
             super().__init__(**kwargs)
         super().__init__(*args, **kwargs)
 
+    def __str__(self):
+        return '[聊天记录]'
+
 
 class File(MessageComponent):
     """文件。"""
@@ -1209,6 +1284,8 @@ class File(MessageComponent):
     """文件名称。"""
     size: int
     """文件大小。"""
+    def __str__(self):
+        return f'[文件]{self.name}'
 
 
 class MiraiCode(MessageComponent):
