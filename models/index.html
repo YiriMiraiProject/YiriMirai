@@ -282,6 +282,13 @@ __all__ = [
         return json_loads(self.content)
 
     def __str__(self):
+        try:
+            json = self.as_json()
+            return json.get(&#39;prompt&#39;, &#39;[应用消息]&#39;)
+        except:
+            return &#39;[应用消息]&#39;
+
+    def as_mirai_code(self) -&gt; str:
         return f&#39;[mirai:app:{serialize(self.content)}]&#39;</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -320,6 +327,7 @@ __all__ = [
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -349,6 +357,9 @@ __all__ = [
         return isinstance(other, At) and self.target == other.target
 
     def __str__(self):
+        return f&#34;@{self.display or self.target}&#34;
+
+    def as_mirai_code(self) -&gt; str:
         return f&#34;[mirai:at:{self.target}]&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -374,6 +385,7 @@ __all__ = [
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -396,6 +408,9 @@ __all__ = [
     type: str = &#34;AtAll&#34;
     &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
     def __str__(self):
+        return &#34;@全体成员&#34;
+
+    def as_mirai_code(self) -&gt; str:
         return f&#34;[mirai:atall]&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -410,6 +425,7 @@ __all__ = [
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -1538,6 +1554,9 @@ __all__ = [
     value: int
     &#34;&#34;&#34;点数。&#34;&#34;&#34;
     def __str__(self):
+        return f&#39;[骰子{self.value}]&#39;
+
+    def as_mirai_code(self) -&gt; str:
         return f&#39;[mirai:dice:{self.value}]&#39;</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -1559,6 +1578,7 @@ __all__ = [
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -1754,6 +1774,11 @@ def get_name(self) -&gt; str:
             (self.face_id == other.face_id or self.name == other.name)
 
     def __str__(self):
+        if self.name:
+            return f&#39;[{self.name}]&#39;
+        return &#39;[表情]&#39;
+
+    def as_mirai_code(self):
         return f&#34;[mirai:face:{self.face_id}]&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -1779,6 +1804,7 @@ def get_name(self) -&gt; str:
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -1805,7 +1831,9 @@ def get_name(self) -&gt; str:
     name: str
     &#34;&#34;&#34;文件名称。&#34;&#34;&#34;
     size: int
-    &#34;&#34;&#34;文件大小。&#34;&#34;&#34;</code></pre>
+    &#34;&#34;&#34;文件大小。&#34;&#34;&#34;
+    def __str__(self):
+        return f&#39;[文件]{self.name}&#39;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1834,6 +1862,7 @@ def get_name(self) -&gt; str:
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -1864,6 +1893,9 @@ def get_name(self) -&gt; str:
     base64: Optional[str] = None
     &#34;&#34;&#34;图片的 Base64 编码。&#34;&#34;&#34;
     def __str__(self):
+        return &#39;[闪照]&#39;
+
+    def as_mirai_code(self) -&gt; str:
         return f&#34;[mirai:flash:{self.image_id}]&#34;
 
     def as_image(self) -&gt; Image:
@@ -1898,6 +1930,7 @@ def get_name(self) -&gt; str:
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.Image" href="message.html#mirai.models.message.Image">Image</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.Image.as_mirai_code" href="message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.Image.base64" href="message.html#mirai.models.message.Image.base64">base64</a></code></li>
 <li><code><a title="mirai.models.message.Image.download" href="message.html#mirai.models.message.Image.download">download</a></code></li>
 <li><code><a title="mirai.models.message.Image.from_local" href="message.html#mirai.models.message.Image.from_local">from_local</a></code></li>
@@ -1933,7 +1966,10 @@ def get_name(self) -&gt; str:
         if len(args) == 1:
             self.node_list = args[0]
             super().__init__(**kwargs)
-        super().__init__(*args, **kwargs)</code></pre>
+        super().__init__(*args, **kwargs)
+
+    def __str__(self):
+        return &#39;[聊天记录]&#39;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1954,6 +1990,7 @@ def get_name(self) -&gt; str:
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -3381,6 +3418,9 @@ def group(self) -&gt; Group:
         ) and self.type == other.type and self.uuid == other.uuid
 
     def __str__(self):
+        return &#39;[图片]&#39;
+
+    def as_mirai_code(self) -&gt; str:
         return f&#34;[mirai:image:{self.image_id}]&#34;
 
     @validator(&#39;path&#39;)
@@ -3774,6 +3814,7 @@ def uuid(self):
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -3817,6 +3858,7 @@ def uuid(self):
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -4836,6 +4878,18 @@ message_chain.count(Plain)
     def __str__(self):
         return &#34;&#34;.join(str(component) for component in self.__root__)
 
+    def as_mirai_code(self) -&gt; str:
+        &#34;&#34;&#34;将消息链转换为 mirai 码字符串。
+
+        该方法会自动转换消息链中的元素。
+
+        Returns:
+            mirai 码字符串。
+        &#34;&#34;&#34;
+        return &#34;&#34;.join(
+            component.as_mirai_code() for component in self.__root__
+        )
+
     def __repr__(self):
         return f&#39;{self.__class__.__name__}({self.__root__!r})&#39;
 
@@ -5297,6 +5351,31 @@ def source(self) -&gt; Optional[&#39;Source&#39;]:
     self.__root__.append(Plain(x) if isinstance(x, str) else x)</code></pre>
 </details>
 </dd>
+<dt id="mirai.models.MessageChain.as_mirai_code"><code class="name flex">
+<span>def <span class="ident">as_mirai_code</span></span>(<span>self) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>将消息链转换为 mirai 码字符串。</p>
+<p>该方法会自动转换消息链中的元素。</p>
+<h2 id="returns">Returns</h2>
+<p>mirai 码字符串。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def as_mirai_code(self) -&gt; str:
+    &#34;&#34;&#34;将消息链转换为 mirai 码字符串。
+
+    该方法会自动转换消息链中的元素。
+
+    Returns:
+        mirai 码字符串。
+    &#34;&#34;&#34;
+    return &#34;&#34;.join(
+        component.as_mirai_code() for component in self.__root__
+    )</code></pre>
+</details>
+</dd>
 <dt id="mirai.models.MessageChain.count"><code class="name flex">
 <span>def <span class="ident">count</span></span>(<span>self, x: Union[<a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a>, Type[<a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a>]]) ‑> int</span>
 </code></dt>
@@ -5745,6 +5824,10 @@ def source(self) -&gt; Optional[&#39;Source&#39;]:
     def __str__(self):
         return &#39;&#39;
 
+    def as_mirai_code(self) -&gt; str:
+        &#34;&#34;&#34;转化为 mirai 码。&#34;&#34;&#34;
+        return &#39;&#39;
+
     def __repr__(self):
         return self.__class__.__name__ + &#39;(&#39; + &#39;, &#39;.join(
             (
@@ -5800,6 +5883,23 @@ def source(self) -&gt; Optional[&#39;Source&#39;]:
 <dt id="mirai.models.MessageComponent.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
 <dd>
 <div class="desc"><p>消息组件类型。</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="mirai.models.MessageComponent.as_mirai_code"><code class="name flex">
+<span>def <span class="ident">as_mirai_code</span></span>(<span>self) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>转化为 mirai 码。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def as_mirai_code(self) -&gt; str:
+    &#34;&#34;&#34;转化为 mirai 码。&#34;&#34;&#34;
+    return &#39;&#39;</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -5922,6 +6022,7 @@ def source(self) -&gt; Optional[&#39;Source&#39;]:
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -6240,7 +6341,9 @@ def my_event_handler(event: FriendMessage):
     music_url: HttpUrl
     &#34;&#34;&#34;音源路径。&#34;&#34;&#34;
     brief: str = &#34;&#34;
-    &#34;&#34;&#34;在消息列表中显示的内容。&#34;&#34;&#34;</code></pre>
+    &#34;&#34;&#34;在消息列表中显示的内容。&#34;&#34;&#34;
+    def __str__(self):
+        return self.brief</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -6285,6 +6388,7 @@ def my_event_handler(event: FriendMessage):
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -6809,6 +6913,9 @@ def my_event_handler(event: FriendMessage):
     text: str
     &#34;&#34;&#34;文字消息。&#34;&#34;&#34;
     def __str__(self):
+        return self.text
+
+    def as_mirai_code(self) -&gt; str:
         return serialize(self.text)
 
     def __repr__(self):
@@ -6833,6 +6940,7 @@ def my_event_handler(event: FriendMessage):
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -6865,6 +6973,9 @@ def my_event_handler(event: FriendMessage):
         return POKE_ID[self.name]
 
     def __str__(self):
+        return f&#39;[{POKE_NAME[self.name]}]&#39;
+
+    def as_mirai_code(self) -&gt; str:
         return f&#39;[mirai:poke:{self.name},{self.poke_type},{self.poke_id}]&#39;</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -6913,6 +7024,7 @@ def poke_type(self):
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -7121,6 +7233,7 @@ def origin_formater(cls, v):
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -7243,6 +7356,7 @@ def origin_formater(cls, v):
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -7416,6 +7530,7 @@ def group(self) -&gt; Group:
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -7457,6 +7572,9 @@ def group(self) -&gt; Group:
                 raise ValueError(f&#34;无效路径：{path}&#34;)
         else:
             return path
+
+    def __str__(self):
+        return &#39;[语音]&#39;
 
     async def download(
         self,
@@ -7679,6 +7797,7 @@ def validate_path(cls, path: Optional[str]):
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -7722,6 +7841,7 @@ def validate_path(cls, path: Optional[str]):
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -8184,6 +8304,7 @@ def validate_path(cls, path: Optional[str]):
 <h4><code><a title="mirai.models.MessageChain" href="#mirai.models.MessageChain">MessageChain</a></code></h4>
 <ul class="two-column">
 <li><code><a title="mirai.models.MessageChain.append" href="#mirai.models.MessageChain.append">append</a></code></li>
+<li><code><a title="mirai.models.MessageChain.as_mirai_code" href="#mirai.models.MessageChain.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.MessageChain.count" href="#mirai.models.MessageChain.count">count</a></code></li>
 <li><code><a title="mirai.models.MessageChain.exclude" href="#mirai.models.MessageChain.exclude">exclude</a></code></li>
 <li><code><a title="mirai.models.MessageChain.extend" href="#mirai.models.MessageChain.extend">extend</a></code></li>
@@ -8204,6 +8325,7 @@ def validate_path(cls, path: Optional[str]):
 <li>
 <h4><code><a title="mirai.models.MessageComponent" href="#mirai.models.MessageComponent">MessageComponent</a></code></h4>
 <ul class="">
+<li><code><a title="mirai.models.MessageComponent.as_mirai_code" href="#mirai.models.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.MessageComponent.type" href="#mirai.models.MessageComponent.type">type</a></code></li>
 </ul>
 </li>

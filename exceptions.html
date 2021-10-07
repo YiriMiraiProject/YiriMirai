@@ -55,12 +55,12 @@ API_ERROR_FMT = {
 
 
 class ApiError(RuntimeError):
-    &#34;&#34;&#34;调用 API 出错。
-
-    Args:
-        code: mirai-api-http 的 API 状态码。
-    &#34;&#34;&#34;
+    &#34;&#34;&#34;调用 API 出错。&#34;&#34;&#34;
     def __init__(self, response: dict):
+        &#34;&#34;&#34;
+        Args:
+            response(`dict`): mirai-api-http 的 API 返回结果。
+        &#34;&#34;&#34;
         code = response[&#39;code&#39;]
         self.code = code
         self.args = (
@@ -125,21 +125,18 @@ __all__ = [
 <dd>
 <div class="desc"><p>调用 API 出错。</p>
 <h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>code</code></strong></dt>
-<dd>mirai-api-http 的 API 状态码。</dd>
-</dl></div>
+<p>response(<code>dict</code>): mirai-api-http 的 API 返回结果。</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class ApiError(RuntimeError):
-    &#34;&#34;&#34;调用 API 出错。
-
-    Args:
-        code: mirai-api-http 的 API 状态码。
-    &#34;&#34;&#34;
+    &#34;&#34;&#34;调用 API 出错。&#34;&#34;&#34;
     def __init__(self, response: dict):
+        &#34;&#34;&#34;
+        Args:
+            response(`dict`): mirai-api-http 的 API 返回结果。
+        &#34;&#34;&#34;
         code = response[&#39;code&#39;]
         self.code = code
         self.args = (

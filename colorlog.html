@@ -36,7 +36,6 @@
 &#34;&#34;&#34;
 import logging
 from enum import IntEnum
-from typing import Dict
 
 __all__ = [&#39;ConsoleColor&#39;, &#39;ColoredFormatter&#39;]
 
@@ -64,14 +63,14 @@ COLORS = {
 
 class ColoredFormatter(logging.Formatter):
     &#34;&#34;&#34;带颜色的日志格式化器。&#34;&#34;&#34;
-    def __init__(
-        self, *args, colors: Dict[str, ConsoleColor] = COLORS, **kwargs
-    ):
+    def __init__(self, *args, colors=None, **kwargs):
         &#34;&#34;&#34;
         Args:
             colors: 一个字典，键是日志级别名称，值是颜色。
         &#34;&#34;&#34;
         super().__init__(*args, **kwargs)
+        if colors is None:
+            colors = COLORS
         self.colors = colors
 
     def format(self, record):
@@ -93,7 +92,7 @@ class ColoredFormatter(logging.Formatter):
 <dl>
 <dt id="mirai.colorlog.ColoredFormatter"><code class="flex name class">
 <span>class <span class="ident">ColoredFormatter</span></span>
-<span>(</span><span>*args, colors: Dict[str, <a title="mirai.colorlog.ConsoleColor" href="#mirai.colorlog.ConsoleColor">ConsoleColor</a>] = {&#x27;DEBUG&#x27;: &lt;ConsoleColor.GREEN: 2&gt;, &#x27;INFO&#x27;: &lt;ConsoleColor.WHITE: 7&gt;, &#x27;WARNING&#x27;: &lt;ConsoleColor.YELLOW: 3&gt;, &#x27;ERROR&#x27;: &lt;ConsoleColor.RED: 1&gt;, &#x27;CRITICAL&#x27;: &lt;ConsoleColor.RED_BOLD: 9&gt;}, **kwargs)</span>
+<span>(</span><span>*args, colors=None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>带颜色的日志格式化器。</p>
@@ -108,14 +107,14 @@ class ColoredFormatter(logging.Formatter):
 </summary>
 <pre><code class="python">class ColoredFormatter(logging.Formatter):
     &#34;&#34;&#34;带颜色的日志格式化器。&#34;&#34;&#34;
-    def __init__(
-        self, *args, colors: Dict[str, ConsoleColor] = COLORS, **kwargs
-    ):
+    def __init__(self, *args, colors=None, **kwargs):
         &#34;&#34;&#34;
         Args:
             colors: 一个字典，键是日志级别名称，值是颜色。
         &#34;&#34;&#34;
         super().__init__(*args, **kwargs)
+        if colors is None:
+            colors = COLORS
         self.colors = colors
 
     def format(self, record):

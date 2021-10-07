@@ -37,7 +37,7 @@
 
 更多信息请看[文档](https://yiri-mirai.vercel.app/)。
 &#34;&#34;&#34;
-__version__ = &#39;0.2.5&#39;
+__version__ = &#39;0.2.6.1&#39;
 __author__ = &#39;忘忧北萱草&#39;
 
 import logging
@@ -660,21 +660,18 @@ async def logout(self, terminate: bool = True):
 <dd>
 <div class="desc"><p>调用 API 出错。</p>
 <h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>code</code></strong></dt>
-<dd>mirai-api-http 的 API 状态码。</dd>
-</dl></div>
+<p>response(<code>dict</code>): mirai-api-http 的 API 返回结果。</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class ApiError(RuntimeError):
-    &#34;&#34;&#34;调用 API 出错。
-
-    Args:
-        code: mirai-api-http 的 API 状态码。
-    &#34;&#34;&#34;
+    &#34;&#34;&#34;调用 API 出错。&#34;&#34;&#34;
     def __init__(self, response: dict):
+        &#34;&#34;&#34;
+        Args:
+            response(`dict`): mirai-api-http 的 API 返回结果。
+        &#34;&#34;&#34;
         code = response[&#39;code&#39;]
         self.code = code
         self.args = (
@@ -711,6 +708,9 @@ async def logout(self, terminate: bool = True):
         return isinstance(other, At) and self.target == other.target
 
     def __str__(self):
+        return f&#34;@{self.display or self.target}&#34;
+
+    def as_mirai_code(self) -&gt; str:
         return f&#34;[mirai:at:{self.target}]&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -736,6 +736,7 @@ async def logout(self, terminate: bool = True):
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="models/message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="models/message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="models/base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="models/base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="models/message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -758,6 +759,9 @@ async def logout(self, terminate: bool = True):
     type: str = &#34;AtAll&#34;
     &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
     def __str__(self):
+        return &#34;@全体成员&#34;
+
+    def as_mirai_code(self) -&gt; str:
         return f&#34;[mirai:atall]&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -772,6 +776,7 @@ async def logout(self, terminate: bool = True):
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="models/message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="models/message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="models/base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="models/base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="models/message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -902,6 +907,9 @@ async def logout(self, terminate: bool = True):
     value: int
     &#34;&#34;&#34;点数。&#34;&#34;&#34;
     def __str__(self):
+        return f&#39;[骰子{self.value}]&#39;
+
+    def as_mirai_code(self) -&gt; str:
         return f&#39;[mirai:dice:{self.value}]&#39;</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -923,6 +931,7 @@ async def logout(self, terminate: bool = True):
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="models/message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="models/message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="models/base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="models/base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="models/message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -1130,6 +1139,7 @@ async def logout(self, terminate: bool = True):
                     # 使用 list 避免 _subscribers 被改变引起错误。
                     for listeners in list(self._subscribers[m_event]):
                         try:
+                            # noinspection PyTypeChecker
                             callee = (call(f) for f in listeners)
                             coros += await asyncio.gather(*callee)
                         except SkipExecution:
@@ -1194,6 +1204,11 @@ async def logout(self, terminate: bool = True):
             (self.face_id == other.face_id or self.name == other.name)
 
     def __str__(self):
+        if self.name:
+            return f&#39;[{self.name}]&#39;
+        return &#39;[表情]&#39;
+
+    def as_mirai_code(self):
         return f&#34;[mirai:face:{self.face_id}]&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -1219,6 +1234,7 @@ async def logout(self, terminate: bool = True):
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="models/message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="models/message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="models/base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="models/base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="models/message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -1697,6 +1713,9 @@ def group(self) -&gt; Group:
         ) and self.type == other.type and self.uuid == other.uuid
 
     def __str__(self):
+        return &#39;[图片]&#39;
+
+    def as_mirai_code(self) -&gt; str:
         return f&#34;[mirai:image:{self.image_id}]&#34;
 
     @validator(&#39;path&#39;)
@@ -2090,6 +2109,7 @@ def uuid(self):
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="models/message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="models/message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="models/base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="models/base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="models/message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -2434,6 +2454,18 @@ message_chain.count(Plain)
 
     def __str__(self):
         return &#34;&#34;.join(str(component) for component in self.__root__)
+
+    def as_mirai_code(self) -&gt; str:
+        &#34;&#34;&#34;将消息链转换为 mirai 码字符串。
+
+        该方法会自动转换消息链中的元素。
+
+        Returns:
+            mirai 码字符串。
+        &#34;&#34;&#34;
+        return &#34;&#34;.join(
+            component.as_mirai_code() for component in self.__root__
+        )
 
     def __repr__(self):
         return f&#39;{self.__class__.__name__}({self.__root__!r})&#39;
@@ -2894,6 +2926,31 @@ def source(self) -&gt; Optional[&#39;Source&#39;]:
         x: 消息元素或字符串元素。
     &#34;&#34;&#34;
     self.__root__.append(Plain(x) if isinstance(x, str) else x)</code></pre>
+</details>
+</dd>
+<dt id="mirai.MessageChain.as_mirai_code"><code class="name flex">
+<span>def <span class="ident">as_mirai_code</span></span>(<span>self) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>将消息链转换为 mirai 码字符串。</p>
+<p>该方法会自动转换消息链中的元素。</p>
+<h2 id="returns">Returns</h2>
+<p>mirai 码字符串。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def as_mirai_code(self) -&gt; str:
+    &#34;&#34;&#34;将消息链转换为 mirai 码字符串。
+
+    该方法会自动转换消息链中的元素。
+
+    Returns:
+        mirai 码字符串。
+    &#34;&#34;&#34;
+    return &#34;&#34;.join(
+        component.as_mirai_code() for component in self.__root__
+    )</code></pre>
 </details>
 </dd>
 <dt id="mirai.MessageChain.count"><code class="name flex">
@@ -3604,7 +3661,7 @@ API 参数可以使用具名参数，也可以使用位置参数，关于 API �
         &#34;&#34;&#34;获取好友对象。
 
         Args:
-            id: 好友 QQ 号。
+            id_: 好友 QQ 号。
 
         Returns:
             Friend: 好友对象。
@@ -3622,7 +3679,7 @@ API 参数可以使用具名参数，也可以使用位置参数，关于 API �
         &#34;&#34;&#34;获取群组对象。
 
         Args:
-            id: 群号。
+            id_: 群号。
 
         Returns:
             Group: 群组对象。
@@ -3642,7 +3699,7 @@ API 参数可以使用具名参数，也可以使用位置参数，关于 API �
 
         Args:
             group: 群组对象或群号。
-            id: 群成员 QQ 号。
+            id_: 群成员 QQ 号。
 
         Returns:
             GroupMember: 群成员对象。
@@ -3674,7 +3731,8 @@ API 参数可以使用具名参数，也可以使用位置参数，关于 API �
             return await self.get_group(subject.id)
         return None
 
-    async def is_admin(self, group: Group) -&gt; bool:
+    @staticmethod
+    async def is_admin(group: Group) -&gt; bool:
         &#34;&#34;&#34;判断机器人在群组中是否是管理员。
 
         Args:
@@ -3721,6 +3779,7 @@ API 参数可以使用具名参数，也可以使用位置参数，关于 API �
         Args:
             event: 申请事件。
             message: 回复的信息。
+            ban: 是否拉黑，默认为 False。
         &#34;&#34;&#34;
         await self.process_request(
             event, RespOperate.DECLINE
@@ -3735,6 +3794,7 @@ API 参数可以使用具名参数，也可以使用位置参数，关于 API �
         Args:
             event: 申请事件。
             message: 回复的信息。
+            ban: 是否拉黑，默认为 False。
         &#34;&#34;&#34;
         await self.process_request(
             event, RespOperate.IGNORE
@@ -3754,6 +3814,41 @@ API 参数可以使用具名参数，也可以使用位置参数，关于 API �
 <dt id="mirai.Mirai.qq"><code class="name">var <span class="ident">qq</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="mirai.Mirai.is_admin"><code class="name flex">
+<span>async def <span class="ident">is_admin</span></span>(<span>group: <a title="mirai.models.entities.Group" href="models/entities.html#mirai.models.entities.Group">Group</a>) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>判断机器人在群组中是否是管理员。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>group</code></strong></dt>
+<dd>群组对象。</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>是否是管理员。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+async def is_admin(group: Group) -&gt; bool:
+    &#34;&#34;&#34;判断机器人在群组中是否是管理员。
+
+    Args:
+        group: 群组对象。
+
+    Returns:
+        bool: 是否是管理员。
+    &#34;&#34;&#34;
+    return group.permission in (Permission.Administrator, Permission.Owner)</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Instance variables</h3>
@@ -3848,6 +3943,8 @@ def bus(self) -&gt; ModelEventBus:
 <dd>申请事件。</dd>
 <dt><strong><code>message</code></strong></dt>
 <dd>回复的信息。</dd>
+<dt><strong><code>ban</code></strong></dt>
+<dd>是否拉黑，默认为 False。</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -3861,6 +3958,7 @@ def bus(self) -&gt; ModelEventBus:
     Args:
         event: 申请事件。
         message: 回复的信息。
+        ban: 是否拉黑，默认为 False。
     &#34;&#34;&#34;
     await self.process_request(
         event, RespOperate.DECLINE
@@ -3913,7 +4011,7 @@ def bus(self) -&gt; ModelEventBus:
 <div class="desc"><p>获取好友对象。</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>id</code></strong></dt>
+<dt><strong><code>id_</code></strong></dt>
 <dd>好友 QQ 号。</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -3931,7 +4029,7 @@ def bus(self) -&gt; ModelEventBus:
     &#34;&#34;&#34;获取好友对象。
 
     Args:
-        id: 好友 QQ 号。
+        id_: 好友 QQ 号。
 
     Returns:
         Friend: 好友对象。
@@ -3953,7 +4051,7 @@ def bus(self) -&gt; ModelEventBus:
 <div class="desc"><p>获取群组对象。</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>id</code></strong></dt>
+<dt><strong><code>id_</code></strong></dt>
 <dd>群号。</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -3971,7 +4069,7 @@ def bus(self) -&gt; ModelEventBus:
     &#34;&#34;&#34;获取群组对象。
 
     Args:
-        id: 群号。
+        id_: 群号。
 
     Returns:
         Group: 群组对象。
@@ -3995,7 +4093,7 @@ def bus(self) -&gt; ModelEventBus:
 <dl>
 <dt><strong><code>group</code></strong></dt>
 <dd>群组对象或群号。</dd>
-<dt><strong><code>id</code></strong></dt>
+<dt><strong><code>id_</code></strong></dt>
 <dd>群成员 QQ 号。</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -4015,7 +4113,7 @@ def bus(self) -&gt; ModelEventBus:
 
     Args:
         group: 群组对象或群号。
-        id: 群成员 QQ 号。
+        id_: 群成员 QQ 号。
 
     Returns:
         GroupMember: 群成员对象。
@@ -4043,6 +4141,8 @@ def bus(self) -&gt; ModelEventBus:
 <dd>申请事件。</dd>
 <dt><strong><code>message</code></strong></dt>
 <dd>回复的信息。</dd>
+<dt><strong><code>ban</code></strong></dt>
+<dd>是否拉黑，默认为 False。</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -4056,42 +4156,12 @@ def bus(self) -&gt; ModelEventBus:
     Args:
         event: 申请事件。
         message: 回复的信息。
+        ban: 是否拉黑，默认为 False。
     &#34;&#34;&#34;
     await self.process_request(
         event, RespOperate.IGNORE
         &amp; RespOperate.BAN if ban else RespOperate.DECLINE, message
     )</code></pre>
-</details>
-</dd>
-<dt id="mirai.Mirai.is_admin"><code class="name flex">
-<span>async def <span class="ident">is_admin</span></span>(<span>self, group: <a title="mirai.models.entities.Group" href="models/entities.html#mirai.models.entities.Group">Group</a>) ‑> bool</span>
-</code></dt>
-<dd>
-<div class="desc"><p>判断机器人在群组中是否是管理员。</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>group</code></strong></dt>
-<dd>群组对象。</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>bool</code></dt>
-<dd>是否是管理员。</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">async def is_admin(self, group: Group) -&gt; bool:
-    &#34;&#34;&#34;判断机器人在群组中是否是管理员。
-
-    Args:
-        group: 群组对象。
-
-    Returns:
-        bool: 是否是管理员。
-    &#34;&#34;&#34;
-    return group.permission in (Permission.Administrator, Permission.Owner)</code></pre>
 </details>
 </dd>
 <dt id="mirai.Mirai.on"><code class="name flex">
@@ -4256,6 +4326,7 @@ async def on_friend_message(event: FriendMessage):
 <li><code><b><a title="mirai.bot.SimpleMirai" href="bot.html#mirai.bot.SimpleMirai">SimpleMirai</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.bot.SimpleMirai.adapter_info" href="adapters/base.html#mirai.adapters.base.AdapterInterface.adapter_info">adapter_info</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.add_background_task" href="bot.html#mirai.bot.SimpleMirai.add_background_task">add_background_task</a></code></li>
 <li><code><a title="mirai.bot.SimpleMirai.asgi" href="bot.html#mirai.bot.SimpleMirai.asgi">asgi</a></code></li>
 <li><code><a title="mirai.bot.SimpleMirai.background" href="bot.html#mirai.bot.SimpleMirai.background">background</a></code></li>
 <li><code><a title="mirai.bot.SimpleMirai.call_api" href="bot.html#mirai.bot.SimpleMirai.call_api">call_api</a></code></li>
@@ -4273,7 +4344,7 @@ async def on_friend_message(event: FriendMessage):
 </dd>
 <dt id="mirai.MiraiRunner"><code class="flex name class">
 <span>class <span class="ident">MiraiRunner</span></span>
-<span>(</span><span>*args, **kwargs)</span>
+<span>(</span><span>*args, **kwargs_)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>运行 SimpleMirai 对象的托管类。</p>
@@ -4491,6 +4562,9 @@ runner.run(host='127.0.0.1', port=8000)
     text: str
     &#34;&#34;&#34;文字消息。&#34;&#34;&#34;
     def __str__(self):
+        return self.text
+
+    def as_mirai_code(self) -&gt; str:
         return serialize(self.text)
 
     def __repr__(self):
@@ -4515,6 +4589,7 @@ runner.run(host='127.0.0.1', port=8000)
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="models/message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="models/message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="models/base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="models/base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="models/message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -4547,6 +4622,9 @@ runner.run(host='127.0.0.1', port=8000)
         return POKE_ID[self.name]
 
     def __str__(self):
+        return f&#39;[{POKE_NAME[self.name]}]&#39;
+
+    def as_mirai_code(self) -&gt; str:
         return f&#39;[mirai:poke:{self.name},{self.poke_type},{self.poke_id}]&#39;</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -4595,6 +4673,7 @@ def poke_type(self):
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="models/message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="models/message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="models/base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="models/base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="models/message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -4930,6 +5009,16 @@ def poke_type(self):
         &#34;&#34;&#34;ASGI 对象，用于使用 uvicorn 等启动。&#34;&#34;&#34;
         return MiraiRunner(self)
 
+    @staticmethod
+    def add_background_task(func: Union[Callable, Awaitable, None] = None):
+        &#34;&#34;&#34;注册背景任务，将在 bot 启动后自动运行。
+
+        Args:
+            func(`Union[Callable, Awaitable, None]`): 背景任务，可以是函数或者协程，省略参数以作为装饰器调用。
+        &#34;&#34;&#34;
+        asgi = ASGI()
+        return asgi.add_background_task(func)
+
     def run(
         self,
         host: str = &#39;127.0.0.1&#39;,
@@ -4965,6 +5054,31 @@ def poke_type(self):
 <dt id="mirai.SimpleMirai.qq"><code class="name">var <span class="ident">qq</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="mirai.SimpleMirai.add_background_task"><code class="name flex">
+<span>def <span class="ident">add_background_task</span></span>(<span>func: Union[Callable, Awaitable, NoneType] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>注册背景任务，将在 bot 启动后自动运行。</p>
+<h2 id="args">Args</h2>
+<p>func(<code>Union[Callable, Awaitable, None]</code>): 背景任务，可以是函数或者协程，省略参数以作为装饰器调用。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def add_background_task(func: Union[Callable, Awaitable, None] = None):
+    &#34;&#34;&#34;注册背景任务，将在 bot 启动后自动运行。
+
+    Args:
+        func(`Union[Callable, Awaitable, None]`): 背景任务，可以是函数或者协程，省略参数以作为装饰器调用。
+    &#34;&#34;&#34;
+    asgi = ASGI()
+    return asgi.add_background_task(func)</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Instance variables</h3>
@@ -5493,6 +5607,9 @@ def group(self) -&gt; Group:
         else:
             return path
 
+    def __str__(self):
+        return &#39;[语音]&#39;
+
     async def download(
         self,
         filename: Union[str, Path, None] = None,
@@ -5714,6 +5831,7 @@ def validate_path(cls, path: Optional[str]):
 <ul class="hlist">
 <li><code><b><a title="mirai.models.message.MessageComponent" href="models/message.html#mirai.models.message.MessageComponent">MessageComponent</a></b></code>:
 <ul class="hlist">
+<li><code><a title="mirai.models.message.MessageComponent.as_mirai_code" href="models/message.html#mirai.models.message.MessageComponent.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.get_subtype" href="models/base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.parse_obj" href="models/base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
 <li><code><a title="mirai.models.message.MessageComponent.type" href="models/message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
@@ -6457,6 +6575,7 @@ def validate_path(cls, path: Optional[str]):
 <h4><code><a title="mirai.MessageChain" href="#mirai.MessageChain">MessageChain</a></code></h4>
 <ul class="two-column">
 <li><code><a title="mirai.MessageChain.append" href="#mirai.MessageChain.append">append</a></code></li>
+<li><code><a title="mirai.MessageChain.as_mirai_code" href="#mirai.MessageChain.as_mirai_code">as_mirai_code</a></code></li>
 <li><code><a title="mirai.MessageChain.count" href="#mirai.MessageChain.count">count</a></code></li>
 <li><code><a title="mirai.MessageChain.exclude" href="#mirai.MessageChain.exclude">exclude</a></code></li>
 <li><code><a title="mirai.MessageChain.extend" href="#mirai.MessageChain.extend">extend</a></code></li>
@@ -6564,6 +6683,7 @@ def validate_path(cls, path: Optional[str]):
 <li>
 <h4><code><a title="mirai.SimpleMirai" href="#mirai.SimpleMirai">SimpleMirai</a></code></h4>
 <ul class="two-column">
+<li><code><a title="mirai.SimpleMirai.add_background_task" href="#mirai.SimpleMirai.add_background_task">add_background_task</a></code></li>
 <li><code><a title="mirai.SimpleMirai.asgi" href="#mirai.SimpleMirai.asgi">asgi</a></code></li>
 <li><code><a title="mirai.SimpleMirai.background" href="#mirai.SimpleMirai.background">background</a></code></li>
 <li><code><a title="mirai.SimpleMirai.bus" href="#mirai.SimpleMirai.bus">bus</a></code></li>

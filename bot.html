@@ -196,6 +196,16 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
         &#34;&#34;&#34;ASGI 对象，用于使用 uvicorn 等启动。&#34;&#34;&#34;
         return MiraiRunner(self)
 
+    @staticmethod
+    def add_background_task(func: Union[Callable, Awaitable, None] = None):
+        &#34;&#34;&#34;注册背景任务，将在 bot 启动后自动运行。
+
+        Args:
+            func(`Union[Callable, Awaitable, None]`): 背景任务，可以是函数或者协程，省略参数以作为装饰器调用。
+        &#34;&#34;&#34;
+        asgi = ASGI()
+        return asgi.add_background_task(func)
+
     def run(
         self,
         host: str = &#39;127.0.0.1&#39;,
@@ -421,7 +431,7 @@ class Mirai(SimpleMirai):
         &#34;&#34;&#34;获取好友对象。
 
         Args:
-            id: 好友 QQ 号。
+            id_: 好友 QQ 号。
 
         Returns:
             Friend: 好友对象。
@@ -439,7 +449,7 @@ class Mirai(SimpleMirai):
         &#34;&#34;&#34;获取群组对象。
 
         Args:
-            id: 群号。
+            id_: 群号。
 
         Returns:
             Group: 群组对象。
@@ -459,7 +469,7 @@ class Mirai(SimpleMirai):
 
         Args:
             group: 群组对象或群号。
-            id: 群成员 QQ 号。
+            id_: 群成员 QQ 号。
 
         Returns:
             GroupMember: 群成员对象。
@@ -491,7 +501,8 @@ class Mirai(SimpleMirai):
             return await self.get_group(subject.id)
         return None
 
-    async def is_admin(self, group: Group) -&gt; bool:
+    @staticmethod
+    async def is_admin(group: Group) -&gt; bool:
         &#34;&#34;&#34;判断机器人在群组中是否是管理员。
 
         Args:
@@ -538,6 +549,7 @@ class Mirai(SimpleMirai):
         Args:
             event: 申请事件。
             message: 回复的信息。
+            ban: 是否拉黑，默认为 False。
         &#34;&#34;&#34;
         await self.process_request(
             event, RespOperate.DECLINE
@@ -552,6 +564,7 @@ class Mirai(SimpleMirai):
         Args:
             event: 申请事件。
             message: 回复的信息。
+            ban: 是否拉黑，默认为 False。
         &#34;&#34;&#34;
         await self.process_request(
             event, RespOperate.IGNORE
@@ -780,7 +793,7 @@ API 参数可以使用具名参数，也可以使用位置参数，关于 API �
         &#34;&#34;&#34;获取好友对象。
 
         Args:
-            id: 好友 QQ 号。
+            id_: 好友 QQ 号。
 
         Returns:
             Friend: 好友对象。
@@ -798,7 +811,7 @@ API 参数可以使用具名参数，也可以使用位置参数，关于 API �
         &#34;&#34;&#34;获取群组对象。
 
         Args:
-            id: 群号。
+            id_: 群号。
 
         Returns:
             Group: 群组对象。
@@ -818,7 +831,7 @@ API 参数可以使用具名参数，也可以使用位置参数，关于 API �
 
         Args:
             group: 群组对象或群号。
-            id: 群成员 QQ 号。
+            id_: 群成员 QQ 号。
 
         Returns:
             GroupMember: 群成员对象。
@@ -850,7 +863,8 @@ API 参数可以使用具名参数，也可以使用位置参数，关于 API �
             return await self.get_group(subject.id)
         return None
 
-    async def is_admin(self, group: Group) -&gt; bool:
+    @staticmethod
+    async def is_admin(group: Group) -&gt; bool:
         &#34;&#34;&#34;判断机器人在群组中是否是管理员。
 
         Args:
@@ -897,6 +911,7 @@ API 参数可以使用具名参数，也可以使用位置参数，关于 API �
         Args:
             event: 申请事件。
             message: 回复的信息。
+            ban: 是否拉黑，默认为 False。
         &#34;&#34;&#34;
         await self.process_request(
             event, RespOperate.DECLINE
@@ -911,6 +926,7 @@ API 参数可以使用具名参数，也可以使用位置参数，关于 API �
         Args:
             event: 申请事件。
             message: 回复的信息。
+            ban: 是否拉黑，默认为 False。
         &#34;&#34;&#34;
         await self.process_request(
             event, RespOperate.IGNORE
@@ -930,6 +946,41 @@ API 参数可以使用具名参数，也可以使用位置参数，关于 API �
 <dt id="mirai.bot.Mirai.qq"><code class="name">var <span class="ident">qq</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="mirai.bot.Mirai.is_admin"><code class="name flex">
+<span>async def <span class="ident">is_admin</span></span>(<span>group: <a title="mirai.models.entities.Group" href="models/entities.html#mirai.models.entities.Group">Group</a>) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>判断机器人在群组中是否是管理员。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>group</code></strong></dt>
+<dd>群组对象。</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>是否是管理员。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+async def is_admin(group: Group) -&gt; bool:
+    &#34;&#34;&#34;判断机器人在群组中是否是管理员。
+
+    Args:
+        group: 群组对象。
+
+    Returns:
+        bool: 是否是管理员。
+    &#34;&#34;&#34;
+    return group.permission in (Permission.Administrator, Permission.Owner)</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Instance variables</h3>
@@ -1024,6 +1075,8 @@ def bus(self) -&gt; ModelEventBus:
 <dd>申请事件。</dd>
 <dt><strong><code>message</code></strong></dt>
 <dd>回复的信息。</dd>
+<dt><strong><code>ban</code></strong></dt>
+<dd>是否拉黑，默认为 False。</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -1037,6 +1090,7 @@ def bus(self) -&gt; ModelEventBus:
     Args:
         event: 申请事件。
         message: 回复的信息。
+        ban: 是否拉黑，默认为 False。
     &#34;&#34;&#34;
     await self.process_request(
         event, RespOperate.DECLINE
@@ -1089,7 +1143,7 @@ def bus(self) -&gt; ModelEventBus:
 <div class="desc"><p>获取好友对象。</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>id</code></strong></dt>
+<dt><strong><code>id_</code></strong></dt>
 <dd>好友 QQ 号。</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -1107,7 +1161,7 @@ def bus(self) -&gt; ModelEventBus:
     &#34;&#34;&#34;获取好友对象。
 
     Args:
-        id: 好友 QQ 号。
+        id_: 好友 QQ 号。
 
     Returns:
         Friend: 好友对象。
@@ -1129,7 +1183,7 @@ def bus(self) -&gt; ModelEventBus:
 <div class="desc"><p>获取群组对象。</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>id</code></strong></dt>
+<dt><strong><code>id_</code></strong></dt>
 <dd>群号。</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -1147,7 +1201,7 @@ def bus(self) -&gt; ModelEventBus:
     &#34;&#34;&#34;获取群组对象。
 
     Args:
-        id: 群号。
+        id_: 群号。
 
     Returns:
         Group: 群组对象。
@@ -1171,7 +1225,7 @@ def bus(self) -&gt; ModelEventBus:
 <dl>
 <dt><strong><code>group</code></strong></dt>
 <dd>群组对象或群号。</dd>
-<dt><strong><code>id</code></strong></dt>
+<dt><strong><code>id_</code></strong></dt>
 <dd>群成员 QQ 号。</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -1191,7 +1245,7 @@ def bus(self) -&gt; ModelEventBus:
 
     Args:
         group: 群组对象或群号。
-        id: 群成员 QQ 号。
+        id_: 群成员 QQ 号。
 
     Returns:
         GroupMember: 群成员对象。
@@ -1219,6 +1273,8 @@ def bus(self) -&gt; ModelEventBus:
 <dd>申请事件。</dd>
 <dt><strong><code>message</code></strong></dt>
 <dd>回复的信息。</dd>
+<dt><strong><code>ban</code></strong></dt>
+<dd>是否拉黑，默认为 False。</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -1232,42 +1288,12 @@ def bus(self) -&gt; ModelEventBus:
     Args:
         event: 申请事件。
         message: 回复的信息。
+        ban: 是否拉黑，默认为 False。
     &#34;&#34;&#34;
     await self.process_request(
         event, RespOperate.IGNORE
         &amp; RespOperate.BAN if ban else RespOperate.DECLINE, message
     )</code></pre>
-</details>
-</dd>
-<dt id="mirai.bot.Mirai.is_admin"><code class="name flex">
-<span>async def <span class="ident">is_admin</span></span>(<span>self, group: <a title="mirai.models.entities.Group" href="models/entities.html#mirai.models.entities.Group">Group</a>) ‑> bool</span>
-</code></dt>
-<dd>
-<div class="desc"><p>判断机器人在群组中是否是管理员。</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>group</code></strong></dt>
-<dd>群组对象。</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>bool</code></dt>
-<dd>是否是管理员。</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">async def is_admin(self, group: Group) -&gt; bool:
-    &#34;&#34;&#34;判断机器人在群组中是否是管理员。
-
-    Args:
-        group: 群组对象。
-
-    Returns:
-        bool: 是否是管理员。
-    &#34;&#34;&#34;
-    return group.permission in (Permission.Administrator, Permission.Owner)</code></pre>
 </details>
 </dd>
 <dt id="mirai.bot.Mirai.on"><code class="name flex">
@@ -1432,6 +1458,7 @@ async def on_friend_message(event: FriendMessage):
 <li><code><b><a title="mirai.bot.SimpleMirai" href="#mirai.bot.SimpleMirai">SimpleMirai</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.bot.SimpleMirai.adapter_info" href="adapters/base.html#mirai.adapters.base.AdapterInterface.adapter_info">adapter_info</a></code></li>
+<li><code><a title="mirai.bot.SimpleMirai.add_background_task" href="#mirai.bot.SimpleMirai.add_background_task">add_background_task</a></code></li>
 <li><code><a title="mirai.bot.SimpleMirai.asgi" href="#mirai.bot.SimpleMirai.asgi">asgi</a></code></li>
 <li><code><a title="mirai.bot.SimpleMirai.background" href="#mirai.bot.SimpleMirai.background">background</a></code></li>
 <li><code><a title="mirai.bot.SimpleMirai.call_api" href="#mirai.bot.SimpleMirai.call_api">call_api</a></code></li>
@@ -1449,7 +1476,7 @@ async def on_friend_message(event: FriendMessage):
 </dd>
 <dt id="mirai.bot.MiraiRunner"><code class="flex name class">
 <span>class <span class="ident">MiraiRunner</span></span>
-<span>(</span><span>*args, **kwargs)</span>
+<span>(</span><span>*args, **kwargs_)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>运行 SimpleMirai 对象的托管类。</p>
@@ -1837,6 +1864,16 @@ runner.run(host='127.0.0.1', port=8000)
         &#34;&#34;&#34;ASGI 对象，用于使用 uvicorn 等启动。&#34;&#34;&#34;
         return MiraiRunner(self)
 
+    @staticmethod
+    def add_background_task(func: Union[Callable, Awaitable, None] = None):
+        &#34;&#34;&#34;注册背景任务，将在 bot 启动后自动运行。
+
+        Args:
+            func(`Union[Callable, Awaitable, None]`): 背景任务，可以是函数或者协程，省略参数以作为装饰器调用。
+        &#34;&#34;&#34;
+        asgi = ASGI()
+        return asgi.add_background_task(func)
+
     def run(
         self,
         host: str = &#39;127.0.0.1&#39;,
@@ -1872,6 +1909,31 @@ runner.run(host='127.0.0.1', port=8000)
 <dt id="mirai.bot.SimpleMirai.qq"><code class="name">var <span class="ident">qq</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="mirai.bot.SimpleMirai.add_background_task"><code class="name flex">
+<span>def <span class="ident">add_background_task</span></span>(<span>func: Union[Callable, Awaitable, NoneType] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>注册背景任务，将在 bot 启动后自动运行。</p>
+<h2 id="args">Args</h2>
+<p>func(<code>Union[Callable, Awaitable, None]</code>): 背景任务，可以是函数或者协程，省略参数以作为装饰器调用。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def add_background_task(func: Union[Callable, Awaitable, None] = None):
+    &#34;&#34;&#34;注册背景任务，将在 bot 启动后自动运行。
+
+    Args:
+        func(`Union[Callable, Awaitable, None]`): 背景任务，可以是函数或者协程，省略参数以作为装饰器调用。
+    &#34;&#34;&#34;
+    asgi = ASGI()
+    return asgi.add_background_task(func)</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Instance variables</h3>
@@ -2231,6 +2293,7 @@ async def use_adapter(self, adapter: Adapter):
 <li>
 <h4><code><a title="mirai.bot.SimpleMirai" href="#mirai.bot.SimpleMirai">SimpleMirai</a></code></h4>
 <ul class="two-column">
+<li><code><a title="mirai.bot.SimpleMirai.add_background_task" href="#mirai.bot.SimpleMirai.add_background_task">add_background_task</a></code></li>
 <li><code><a title="mirai.bot.SimpleMirai.asgi" href="#mirai.bot.SimpleMirai.asgi">asgi</a></code></li>
 <li><code><a title="mirai.bot.SimpleMirai.background" href="#mirai.bot.SimpleMirai.background">background</a></code></li>
 <li><code><a title="mirai.bot.SimpleMirai.bus" href="#mirai.bot.SimpleMirai.bus">bus</a></code></li>

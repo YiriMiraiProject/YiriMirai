@@ -29,10 +29,22 @@
 </summary>
 <pre><code class="python"># -*- coding: utf-8 -*-
 &#34;&#34;&#34;此模块提供公共 ASGI 前端。&#34;&#34;&#34;
-
+import asyncio
 import functools
 import logging
-from typing import Callable, Dict, List, Optional, Tuple
+from inspect import iscoroutinefunction
+from typing import (
+    TYPE_CHECKING, Awaitable, Callable, Dict, List, Optional, Tuple, Union,
+    cast
+)
+
+if TYPE_CHECKING:
+    from typing_extensions import Literal
+else:
+    try:
+        from typing import Literal
+    except ImportError:
+        from typing_extensions import Literal
 
 from starlette.applications import Starlette
 from starlette.requests import Request
@@ -102,10 +114,65 @@ class ASGI(Singleton):
 
         return self
 
-    def add_event_handler(self, event_type: str, handler: Callable):
-        &#34;&#34;&#34;注册生命周期事件处理函数。&#34;&#34;&#34;
-        self.app.add_event_handler(event_type, handler)
-        return self
+    def add_event_handler(
+        self,
+        event_type: Literal[&#34;startup&#34;, &#34;shutdown&#34;],
+        handler: Optional[Callable] = None
+    ):
+        &#34;&#34;&#34;注册生命周期事件处理函数。
+
+        Args:
+            event_type(`Literal[&#34;startup&#34;, &#34;shutdown&#34;]`): 事件类型，可选值为 `&#34;startup&#34;` 或 `&#34;shutdown&#34;`。
+            handler(`Optional[Callable]`): 事件处理函数，省略此参数以作为装饰器调用。
+        &#34;&#34;&#34;
+        if handler:
+            self.app.add_event_handler(event_type, handler)
+            return self
+        else:  # 装饰器用法
+
+            def decorator(func):
+                self.app.add_event_handler(event_type, func)
+                return func
+
+            return decorator
+
+    def add_background_task(
+        self, func: Union[Callable, Awaitable, None] = None
+    ):
+        &#34;&#34;&#34;注册背景任务，将在 bot 启动后自动运行。
+
+        Args:
+            func(`Union[Callable, Awaitable, None]`): 背景任务，可以是函数或者协程，省略参数以作为装饰器调用。
+        &#34;&#34;&#34;
+        if func is None:
+
+            def decorator(func_):
+                self.add_background_task(func_)
+                return func_
+
+            return decorator
+
+        if iscoroutinefunction(func):  # 异步调用转化为传入协程
+            func = cast(Callable[..., Awaitable], func)()
+
+        if callable(func):
+            self.app.add_event_handler(&#39;startup&#39;, func)
+        else:
+            _task: Optional[asyncio.Task] = None
+
+            async def _startup():
+                nonlocal _task
+                _task = asyncio.create_task(func)
+                # 不阻塞
+
+            async def _shutdown():
+                if _task and not _task.done():
+                    _task.cancel()
+
+            self.app.add_event_handler(&#39;startup&#39;, _startup)
+            self.app.add_event_handler(&#39;shutdown&#39;, _shutdown)
+
+        return func
 
     def mount(self, path: str, app: Callable) -&gt; &#39;ASGI&#39;:
         &#34;&#34;&#34;挂载另一个 ASGI 服务器。通过这个方法，可以同时运行 FastAPI 之类的服务。
@@ -127,7 +194,7 @@ class ASGI(Singleton):
         await self.app(scope, recv, send)
 
 
-# noinspection PyUnboundLocalVariable
+# noinspection PyUnresolvedReferences
 def asgi_serve(
     app,
     host: str = &#39;127.0.0.1&#39;,
@@ -144,14 +211,15 @@ def asgi_serve(
         asgi_server: ASGI 服务器，可选的有 `hypercorn` `uvicorn` 和 `auto`。
             如果设置为 `auto`，自动寻找是否已安装可用的 ASGI 服务（`unicorn` 或 `hypercorn`），并运行。
     &#34;&#34;&#34;
+    run = serve = config = None
     if asgi_server == &#39;auto&#39;:
         try:
             from uvicorn import run
             asgi = &#39;uvicorn&#39;
         except ImportError:
             try:
+                import hypercorn.config as config
                 from hypercorn.asyncio import serve
-                from hypercorn.config import Config
                 asgi = &#39;hypercorn&#39;
             except ImportError:
                 asgi = &#39;none&#39;
@@ -160,15 +228,15 @@ def asgi_serve(
         if asgi_server == &#39;uvicorn&#39;:
             from uvicorn import run
         elif asgi_server == &#39;hypercorn&#39;:
+            import hypercorn.config as config
             from hypercorn.asyncio import serve
-            from hypercorn.config import Config
 
     if asgi == &#39;uvicorn&#39;:
         run(app, host=host, port=port, debug=True, **kwargs)
         return True
     if asgi == &#39;hypercorn&#39;:
         import asyncio
-        config = Config().from_mapping(bind=f&#39;{host}:{port}&#39;, **kwargs)
+        config = config.Config().from_mapping(bind=f&#39;{host}:{port}&#39;, **kwargs)
         asyncio.run(serve(app, config), debug=True)
         return True
     return False</code></pre>
@@ -218,14 +286,15 @@ def asgi_serve(
         asgi_server: ASGI 服务器，可选的有 `hypercorn` `uvicorn` 和 `auto`。
             如果设置为 `auto`，自动寻找是否已安装可用的 ASGI 服务（`unicorn` 或 `hypercorn`），并运行。
     &#34;&#34;&#34;
+    run = serve = config = None
     if asgi_server == &#39;auto&#39;:
         try:
             from uvicorn import run
             asgi = &#39;uvicorn&#39;
         except ImportError:
             try:
+                import hypercorn.config as config
                 from hypercorn.asyncio import serve
-                from hypercorn.config import Config
                 asgi = &#39;hypercorn&#39;
             except ImportError:
                 asgi = &#39;none&#39;
@@ -234,15 +303,15 @@ def asgi_serve(
         if asgi_server == &#39;uvicorn&#39;:
             from uvicorn import run
         elif asgi_server == &#39;hypercorn&#39;:
+            import hypercorn.config as config
             from hypercorn.asyncio import serve
-            from hypercorn.config import Config
 
     if asgi == &#39;uvicorn&#39;:
         run(app, host=host, port=port, debug=True, **kwargs)
         return True
     if asgi == &#39;hypercorn&#39;:
         import asyncio
-        config = Config().from_mapping(bind=f&#39;{host}:{port}&#39;, **kwargs)
+        config = config.Config().from_mapping(bind=f&#39;{host}:{port}&#39;, **kwargs)
         asyncio.run(serve(app, config), debug=True)
         return True
     return False</code></pre>
@@ -268,7 +337,7 @@ def asgi_serve(
 <dl>
 <dt id="mirai.asgi.ASGI"><code class="flex name class">
 <span>class <span class="ident">ASGI</span></span>
-<span>(</span><span>*args, **kwargs)</span>
+<span>(</span><span>*args, **kwargs_)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>单例类。公共 ASGI 前端。</p>
@@ -332,10 +401,65 @@ def asgi_serve(
 
         return self
 
-    def add_event_handler(self, event_type: str, handler: Callable):
-        &#34;&#34;&#34;注册生命周期事件处理函数。&#34;&#34;&#34;
-        self.app.add_event_handler(event_type, handler)
-        return self
+    def add_event_handler(
+        self,
+        event_type: Literal[&#34;startup&#34;, &#34;shutdown&#34;],
+        handler: Optional[Callable] = None
+    ):
+        &#34;&#34;&#34;注册生命周期事件处理函数。
+
+        Args:
+            event_type(`Literal[&#34;startup&#34;, &#34;shutdown&#34;]`): 事件类型，可选值为 `&#34;startup&#34;` 或 `&#34;shutdown&#34;`。
+            handler(`Optional[Callable]`): 事件处理函数，省略此参数以作为装饰器调用。
+        &#34;&#34;&#34;
+        if handler:
+            self.app.add_event_handler(event_type, handler)
+            return self
+        else:  # 装饰器用法
+
+            def decorator(func):
+                self.app.add_event_handler(event_type, func)
+                return func
+
+            return decorator
+
+    def add_background_task(
+        self, func: Union[Callable, Awaitable, None] = None
+    ):
+        &#34;&#34;&#34;注册背景任务，将在 bot 启动后自动运行。
+
+        Args:
+            func(`Union[Callable, Awaitable, None]`): 背景任务，可以是函数或者协程，省略参数以作为装饰器调用。
+        &#34;&#34;&#34;
+        if func is None:
+
+            def decorator(func_):
+                self.add_background_task(func_)
+                return func_
+
+            return decorator
+
+        if iscoroutinefunction(func):  # 异步调用转化为传入协程
+            func = cast(Callable[..., Awaitable], func)()
+
+        if callable(func):
+            self.app.add_event_handler(&#39;startup&#39;, func)
+        else:
+            _task: Optional[asyncio.Task] = None
+
+            async def _startup():
+                nonlocal _task
+                _task = asyncio.create_task(func)
+                # 不阻塞
+
+            async def _shutdown():
+                if _task and not _task.done():
+                    _task.cancel()
+
+            self.app.add_event_handler(&#39;startup&#39;, _startup)
+            self.app.add_event_handler(&#39;shutdown&#39;, _shutdown)
+
+        return func
 
     def mount(self, path: str, app: Callable) -&gt; &#39;ASGI&#39;:
         &#34;&#34;&#34;挂载另一个 ASGI 服务器。通过这个方法，可以同时运行 FastAPI 之类的服务。
@@ -369,19 +493,89 @@ def asgi_serve(
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="mirai.asgi.ASGI.add_event_handler"><code class="name flex">
-<span>def <span class="ident">add_event_handler</span></span>(<span>self, event_type: str, handler: Callable)</span>
+<dt id="mirai.asgi.ASGI.add_background_task"><code class="name flex">
+<span>def <span class="ident">add_background_task</span></span>(<span>self, func: Union[Callable, Awaitable, NoneType] = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>注册生命周期事件处理函数。</p></div>
+<div class="desc"><p>注册背景任务，将在 bot 启动后自动运行。</p>
+<h2 id="args">Args</h2>
+<p>func(<code>Union[Callable, Awaitable, None]</code>): 背景任务，可以是函数或者协程，省略参数以作为装饰器调用。</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def add_event_handler(self, event_type: str, handler: Callable):
-    &#34;&#34;&#34;注册生命周期事件处理函数。&#34;&#34;&#34;
-    self.app.add_event_handler(event_type, handler)
-    return self</code></pre>
+<pre><code class="python">def add_background_task(
+    self, func: Union[Callable, Awaitable, None] = None
+):
+    &#34;&#34;&#34;注册背景任务，将在 bot 启动后自动运行。
+
+    Args:
+        func(`Union[Callable, Awaitable, None]`): 背景任务，可以是函数或者协程，省略参数以作为装饰器调用。
+    &#34;&#34;&#34;
+    if func is None:
+
+        def decorator(func_):
+            self.add_background_task(func_)
+            return func_
+
+        return decorator
+
+    if iscoroutinefunction(func):  # 异步调用转化为传入协程
+        func = cast(Callable[..., Awaitable], func)()
+
+    if callable(func):
+        self.app.add_event_handler(&#39;startup&#39;, func)
+    else:
+        _task: Optional[asyncio.Task] = None
+
+        async def _startup():
+            nonlocal _task
+            _task = asyncio.create_task(func)
+            # 不阻塞
+
+        async def _shutdown():
+            if _task and not _task.done():
+                _task.cancel()
+
+        self.app.add_event_handler(&#39;startup&#39;, _startup)
+        self.app.add_event_handler(&#39;shutdown&#39;, _shutdown)
+
+    return func</code></pre>
+</details>
+</dd>
+<dt id="mirai.asgi.ASGI.add_event_handler"><code class="name flex">
+<span>def <span class="ident">add_event_handler</span></span>(<span>self, event_type: typing_extensions.Literal['startup', 'shutdown'], handler: Union[Callable, NoneType] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>注册生命周期事件处理函数。</p>
+<h2 id="args">Args</h2>
+<p>event_type(<code>Literal["startup", "shutdown"]</code>): 事件类型，可选值为 <code>"startup"</code> 或 <code>"shutdown"</code>。
+handler(<code>Optional[Callable]</code>): 事件处理函数，省略此参数以作为装饰器调用。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_event_handler(
+    self,
+    event_type: Literal[&#34;startup&#34;, &#34;shutdown&#34;],
+    handler: Optional[Callable] = None
+):
+    &#34;&#34;&#34;注册生命周期事件处理函数。
+
+    Args:
+        event_type(`Literal[&#34;startup&#34;, &#34;shutdown&#34;]`): 事件类型，可选值为 `&#34;startup&#34;` 或 `&#34;shutdown&#34;`。
+        handler(`Optional[Callable]`): 事件处理函数，省略此参数以作为装饰器调用。
+    &#34;&#34;&#34;
+    if handler:
+        self.app.add_event_handler(event_type, handler)
+        return self
+    else:  # 装饰器用法
+
+        def decorator(func):
+            self.app.add_event_handler(event_type, func)
+            return func
+
+        return decorator</code></pre>
 </details>
 </dd>
 <dt id="mirai.asgi.ASGI.add_route"><code class="name flex">
@@ -505,6 +699,7 @@ def asgi_serve(
 <li>
 <h4><code><a title="mirai.asgi.ASGI" href="#mirai.asgi.ASGI">ASGI</a></code></h4>
 <ul class="">
+<li><code><a title="mirai.asgi.ASGI.add_background_task" href="#mirai.asgi.ASGI.add_background_task">add_background_task</a></code></li>
 <li><code><a title="mirai.asgi.ASGI.add_event_handler" href="#mirai.asgi.ASGI.add_event_handler">add_event_handler</a></code></li>
 <li><code><a title="mirai.asgi.ASGI.add_route" href="#mirai.asgi.ASGI.add_route">add_route</a></code></li>
 <li><code><a title="mirai.asgi.ASGI.app" href="#mirai.asgi.ASGI.app">app</a></code></li>

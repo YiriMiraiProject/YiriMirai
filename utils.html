@@ -137,9 +137,9 @@ class SingletonMetaclass(type):
         # noinspection PyTypeChecker
         __init__ = new_cls.__init__
 
-        def __init__new(self, *args, **kwargs):
+        def __init__new(self, *args, **kwargs_):
             if self._instance is None:
-                __init__(self, *args, **kwargs)
+                __init__(self, *args, **kwargs_)
 
         new_cls.__init__ = __init__new
         return new_cls
@@ -376,7 +376,7 @@ class Singleton(metaclass=SingletonMetaclass):
 </dd>
 <dt id="mirai.utils.Singleton"><code class="flex name class">
 <span>class <span class="ident">Singleton</span></span>
-<span>(</span><span>*args, **kwargs)</span>
+<span>(</span><span>*args, **kwargs_)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>单例模式。</p></div>
@@ -429,9 +429,9 @@ class Singleton(metaclass=SingletonMetaclass):
         # noinspection PyTypeChecker
         __init__ = new_cls.__init__
 
-        def __init__new(self, *args, **kwargs):
+        def __init__new(self, *args, **kwargs_):
             if self._instance is None:
-                __init__(self, *args, **kwargs)
+                __init__(self, *args, **kwargs_)
 
         new_cls.__init__ = __init__new
         return new_cls</code></pre>
