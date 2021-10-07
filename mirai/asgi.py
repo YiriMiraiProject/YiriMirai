@@ -5,8 +5,17 @@ import functools
 import logging
 from inspect import iscoroutinefunction
 from typing import (
-    Awaitable, Callable, Dict, List, Literal, Optional, Tuple, Union, cast
+    TYPE_CHECKING, Awaitable, Callable, Dict, List, Optional, Tuple, Union,
+    cast
 )
+
+if TYPE_CHECKING:
+    from typing_extensions import Literal
+else:
+    try:
+        from typing import Literal
+    except ImportError:
+        from typing_extensions import Literal
 
 from starlette.applications import Starlette
 from starlette.requests import Request
