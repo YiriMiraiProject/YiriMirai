@@ -5,7 +5,7 @@
 
 更多信息请看[文档](https://yiri-mirai.vercel.app/)。
 """
-__version__ = '0.2.5'
+__version__ = '0.2.6'
 __author__ = '忘忧北萱草'
 
 import logging
