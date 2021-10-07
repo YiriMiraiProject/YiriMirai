@@ -108,9 +108,9 @@ class SingletonMetaclass(type):
         # noinspection PyTypeChecker
         __init__ = new_cls.__init__
 
-        def __init__new(self, *args, **kwargs):
+        def __init__new(self, *args, **kwargs_):
             if self._instance is None:
-                __init__(self, *args, **kwargs)
+                __init__(self, *args, **kwargs_)
 
         new_cls.__init__ = __init__new
         return new_cls

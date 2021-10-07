@@ -167,6 +167,16 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
         """ASGI 对象，用于使用 uvicorn 等启动。"""
         return MiraiRunner(self)
 
+    @staticmethod
+    def add_background_task(func: Union[Callable, Awaitable, None] = None):
+        """注册背景任务，将在 bot 启动后自动运行。
+
+        Args:
+            func(`Union[Callable, Awaitable, None]`): 背景任务，可以是函数或者协程，省略参数以作为装饰器调用。
+        """
+        asgi = ASGI()
+        return asgi.add_background_task(func)
+
     def run(
         self,
         host: str = '127.0.0.1',
@@ -392,7 +402,7 @@ class Mirai(SimpleMirai):
         """获取好友对象。
 
         Args:
-            id: 好友 QQ 号。
+            id_: 好友 QQ 号。
 
         Returns:
             Friend: 好友对象。
@@ -410,7 +420,7 @@ class Mirai(SimpleMirai):
         """获取群组对象。
 
         Args:
-            id: 群号。
+            id_: 群号。
 
         Returns:
             Group: 群组对象。
@@ -430,7 +440,7 @@ class Mirai(SimpleMirai):
 
         Args:
             group: 群组对象或群号。
-            id: 群成员 QQ 号。
+            id_: 群成员 QQ 号。
 
         Returns:
             GroupMember: 群成员对象。
@@ -462,7 +472,8 @@ class Mirai(SimpleMirai):
             return await self.get_group(subject.id)
         return None
 
-    async def is_admin(self, group: Group) -> bool:
+    @staticmethod
+    async def is_admin(group: Group) -> bool:
         """判断机器人在群组中是否是管理员。
 
         Args:
@@ -509,6 +520,7 @@ class Mirai(SimpleMirai):
         Args:
             event: 申请事件。
             message: 回复的信息。
+            ban: 是否拉黑，默认为 False。
         """
         await self.process_request(
             event, RespOperate.DECLINE
@@ -523,6 +535,7 @@ class Mirai(SimpleMirai):
         Args:
             event: 申请事件。
             message: 回复的信息。
+            ban: 是否拉黑，默认为 False。
         """
         await self.process_request(
             event, RespOperate.IGNORE

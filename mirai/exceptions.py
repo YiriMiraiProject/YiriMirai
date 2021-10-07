@@ -26,12 +26,12 @@ API_ERROR_FMT = {
 
 
 class ApiError(RuntimeError):
-    """调用 API 出错。
-
-    Args:
-        code: mirai-api-http 的 API 状态码。
-    """
+    """调用 API 出错。"""
     def __init__(self, response: dict):
+        """
+        Args:
+            response(`dict`): mirai-api-http 的 API 返回结果。
+        """
         code = response['code']
         self.code = code
         self.args = (

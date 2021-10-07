@@ -189,6 +189,7 @@ class EventBus(AbstractEventBus):
                     # 使用 list 避免 _subscribers 被改变引起错误。
                     for listeners in list(self._subscribers[m_event]):
                         try:
+                            # noinspection PyTypeChecker
                             callee = (call(f) for f in listeners)
                             coros += await asyncio.gather(*callee)
                         except SkipExecution:

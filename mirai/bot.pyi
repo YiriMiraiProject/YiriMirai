@@ -90,6 +90,18 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
     def asgi(self) -> MiraiRunner:
         ...
 
+    @overload
+    def add_background_task(self) -> Callable[[Callable], Callable]:
+        ...
+
+    @overload
+    def add_background_task(self, func: Callable) -> Callable:
+        ...
+
+    @overload
+    def add_background_task(self, func: Awaitable) -> Awaitable:
+        ...
+
     def run(
         self,
         host: str = ...,
@@ -123,6 +135,9 @@ class MiraiRunner(Singleton):
         asgi_server: str = ...,
         **kwargs
     ) -> None:
+        ...
+
+    async def _run(self):
         ...
 
 
@@ -198,6 +213,7 @@ class Mirai(SimpleMirai):
             """获取插件信息。"""
 
     @overload
+    @property
     def about(self) -> __AboutProxy:
         """获取插件信息。"""
 
@@ -213,6 +229,7 @@ class Mirai(SimpleMirai):
             """获取 Bot 资料。"""
 
     @overload
+    @property
     def bot_profile(self) -> __BotProfileProxy:
         """获取 Bot 资料。"""
 
@@ -235,6 +252,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def cmd_execute(self) -> __CmdExecuteProxy:
         """执行命令。"""
 
@@ -270,6 +288,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def cmd_register(self) -> __CmdRegisterProxy:
         """注册命令。"""
 
@@ -302,6 +321,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def delete_friend(self) -> __DeleteFriendProxy:
         """删除好友。"""
 
@@ -332,6 +352,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def file_delete(self) -> __FileDeleteProxy:
         """删除文件。"""
 
@@ -368,6 +389,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def file_info(self) -> __FileInfoProxy:
         """查看文件信息。"""
 
@@ -413,6 +435,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def file_list(self) -> __FileListProxy:
         """查看文件列表。"""
 
@@ -458,6 +481,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def file_mkdir(self) -> __FileMkdirProxy:
         """创建文件夹。"""
 
@@ -501,6 +525,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def file_move(self) -> __FileMoveProxy:
         """移动文件。"""
 
@@ -544,6 +569,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def file_rename(self) -> __FileRenameProxy:
         """重命名文件。"""
 
@@ -585,6 +611,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def file_upload(self) -> __FileUploadProxy:
         """文件上传。（暂时不可用）"""
 
@@ -613,6 +640,7 @@ class Mirai(SimpleMirai):
             """获取好友列表。"""
 
     @overload
+    @property
     def friend_list(self) -> __FriendListProxy:
         """获取好友列表。"""
 
@@ -632,6 +660,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def friend_profile(self) -> __FriendProfileProxy:
         """获取好友资料。"""
 
@@ -672,6 +701,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def group_config(self) -> __GroupConfigProxy:
         """获取或修改群设置。"""
 
@@ -696,6 +726,7 @@ class Mirai(SimpleMirai):
             """获取群列表。"""
 
     @overload
+    @property
     def group_list(self) -> __GroupListProxy:
         """获取群列表。"""
 
@@ -719,6 +750,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def kick(self) -> __KickProxy:
         """移出群成员。"""
 
@@ -750,6 +782,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def member_admin(self) -> __MemberAdminProxy:
         """设置或取消群成员管理员。"""
 
@@ -798,6 +831,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def member_info(self) -> __MemberInfoProxy:
         """获取或修改群成员资料。"""
 
@@ -828,6 +862,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def member_list(self) -> __MemberListProxy:
         """获取群成员列表。"""
 
@@ -852,6 +887,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def member_profile(self) -> __MemberProfileProxy:
         """获取群成员资料。"""
 
@@ -878,6 +914,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def message_from_id(self) -> __MessageFromIdProxy:
         """通过 message_id 获取消息。"""
 
@@ -905,6 +942,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def mute(self) -> __MuteProxy:
         """禁言群成员。"""
 
@@ -930,6 +968,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def mute_all(self) -> __MuteAllProxy:
         """全体禁言。"""
 
@@ -953,6 +992,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def quit(self) -> __QuitProxy:
         """退出群聊。"""
 
@@ -976,6 +1016,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def recall(self) -> __RecallProxy:
         """撤回消息。"""
 
@@ -1006,6 +1047,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def resp_bot_invited_join_group_request_event(
         self
     ) -> __RespBotInvitedJoinGroupRequestEventProxy:
@@ -1045,6 +1087,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def resp_member_join_request_event(
         self
     ) -> __RespMemberJoinRequestEventProxy:
@@ -1084,6 +1127,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def resp_new_friend_request_event(
         self
     ) -> __RespNewFriendRequestEventProxy:
@@ -1125,6 +1169,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def send_friend_message(self) -> __SendFriendMessageProxy:
         """发送好友消息。"""
 
@@ -1166,6 +1211,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def send_group_message(self) -> __SendGroupMessageProxy:
         """发送群消息。"""
 
@@ -1203,6 +1249,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def send_nudge(self) -> __SendNudgeProxy:
         """发送头像戳一戳消息。"""
 
@@ -1242,6 +1289,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def send_temp_message(self) -> __SendTempMessageProxy:
         """发送临时消息。"""
 
@@ -1272,6 +1320,7 @@ class Mirai(SimpleMirai):
             """获取机器人信息。"""
 
     @overload
+    @property
     def session_info(self) -> __SessionInfoProxy:
         """获取机器人信息。"""
 
@@ -1291,6 +1340,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def set_essence(self) -> __SetEssenceProxy:
         """设置群精华消息。"""
 
@@ -1315,6 +1365,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def unmute(self) -> __UnmuteProxy:
         """解除群成员禁言。"""
 
@@ -1339,6 +1390,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def unmute_all(self) -> __UnmuteAllProxy:
         """解除全体禁言。"""
 
@@ -1366,6 +1418,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def upload_image(self) -> __UploadImageProxy:
         """图片文件上传。"""
 
@@ -1396,6 +1449,7 @@ class Mirai(SimpleMirai):
             """
 
     @overload
+    @property
     def upload_voice(self) -> __UploadVoiceProxy:
         """语音文件上传。"""
 
