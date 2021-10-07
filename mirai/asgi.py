@@ -3,8 +3,10 @@
 import asyncio
 import functools
 import logging
-from typing import Awaitable, Callable, Dict, List, Literal, Optional, Tuple, Union, cast
 from inspect import iscoroutinefunction
+from typing import (
+    Awaitable, Callable, Dict, List, Literal, Optional, Tuple, Union, cast
+)
 
 from starlette.applications import Starlette
 from starlette.requests import Request
@@ -154,7 +156,7 @@ class ASGI(Singleton):
         await self.app(scope, recv, send)
 
 
-# noinspection PyUnboundLocalVariable
+# noinspection PyUnresolvedReferences
 def asgi_serve(
     app,
     host: str = '127.0.0.1',
@@ -171,14 +173,15 @@ def asgi_serve(
         asgi_server: ASGI 服务器，可选的有 `hypercorn` `uvicorn` 和 `auto`。
             如果设置为 `auto`，自动寻找是否已安装可用的 ASGI 服务（`unicorn` 或 `hypercorn`），并运行。
     """
+    run = serve = config = None
     if asgi_server == 'auto':
         try:
             from uvicorn import run
             asgi = 'uvicorn'
         except ImportError:
             try:
+                import hypercorn.config as config
                 from hypercorn.asyncio import serve
-                from hypercorn.config import Config
                 asgi = 'hypercorn'
             except ImportError:
                 asgi = 'none'
@@ -187,15 +190,15 @@ def asgi_serve(
         if asgi_server == 'uvicorn':
             from uvicorn import run
         elif asgi_server == 'hypercorn':
+            import hypercorn.config as config
             from hypercorn.asyncio import serve
-            from hypercorn.config import Config
 
     if asgi == 'uvicorn':
         run(app, host=host, port=port, debug=True, **kwargs)
         return True
     if asgi == 'hypercorn':
         import asyncio
-        config = Config().from_mapping(bind=f'{host}:{port}', **kwargs)
+        config = config.Config().from_mapping(bind=f'{host}:{port}', **kwargs)
         asyncio.run(serve(app, config), debug=True)
         return True
     return False
