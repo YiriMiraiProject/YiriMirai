@@ -173,7 +173,6 @@ def asgi_serve(
         asgi_server: ASGI 服务器，可选的有 `hypercorn` `uvicorn` 和 `auto`。
             如果设置为 `auto`，自动寻找是否已安装可用的 ASGI 服务（`unicorn` 或 `hypercorn`），并运行。
     """
-    run = serve = config = None
     if asgi_server == 'auto':
         try:
             from uvicorn import run
