@@ -182,6 +182,8 @@ class FileProperties(MiraiBaseModel):
     """是否是文件。"""
     is_directory: bool
     """是否是文件夹。"""
+    size: Optional[int] = None
+    """文件大小。"""
     download_info: Optional[DownloadInfo] = None
     """文件的下载信息。"""
 
@@ -292,6 +294,17 @@ class ApiModel(ApiBaseModel):
         except ValueError as e:
             raise ValueError(f'`{name}` 不是可用的 API！') from e
 
+    async def _call(
+        self,
+        api_provider: ApiProvider,
+        method: Method = Method.GET,
+    ):
+        return await api_provider.call_api(
+            api=self.Info.name,
+            method=method,
+            **self.dict(by_alias=True, exclude_none=True)
+        )
+
     async def call(
         self,
         api_provider: ApiProvider,
@@ -299,19 +312,16 @@ class ApiModel(ApiBaseModel):
         response_type: Optional[Type[TModel]] = None,
     ) -> Optional[TModel]:
         """调用 API。"""
-        info = self.Info
         logger.debug(f'调用 API：{repr(self)}')
-        raw_response = await api_provider.call_api(
-            api=info.name,
-            method=method,
-            **self.dict(by_alias=True, exclude_none=True)
-        )
+        raw_response = await self._call(api_provider, method)
 
         # 如果 API 无法调用，raw_response 为空
         if not raw_response:
             return None
         # 解析 API 返回数据
-        response_type = cast(Type[TModel], response_type or info.response_type)
+        response_type = cast(
+            Type[TModel], response_type or self.Info.response_type
+        )
         return response_type.parse_obj(raw_response)
 
     class Proxy(Generic[TModel]):
@@ -745,11 +755,10 @@ class FileUpload(ApiPost):
     """上传的文件的本地路径。"""
     path: str = ''
     """上传目录的 id，空串为上传到根目录。"""
-    async def call(
+    async def _call(
         self,
         api_provider: ApiProvider,
         method: Method = Method.GET,
-        response_type: Optional[Type[TModel]] = None,
     ):
         import aiofiles
         async with aiofiles.open(self.file, 'rb') as f:
@@ -768,7 +777,7 @@ class FileUpload(ApiPost):
     class Info(ApiPost.Info):
         name = "file/upload"
         alias = "file_upload"
-        response_type = FileProperties
+        response_type = MiraiBaseModel # TODO
 
 
 class UploadImage(ApiPost):
@@ -777,11 +786,10 @@ class UploadImage(ApiPost):
     """上传的图片类型。"""
     img: Union[str, Path]
     """上传的图片的本地路径。"""
-    async def call(
+    async def _call(
         self,
         api_provider: ApiProvider,
         method: Method = Method.GET,
-        response_type: Optional[Type[TModel]] = None,
     ):
         import aiofiles
         async with aiofiles.open(self.img, 'rb') as f:
@@ -805,11 +813,10 @@ class UploadVoice(ApiPost):
     """上传的语音类型。"""
     voice: Union[str, Path]
     """上传的语音的本地路径。"""
-    async def call(
+    async def _call(
         self,
         api_provider: ApiProvider,
         method: Method = Method.GET,
-        response_type: Optional[Type[TModel]] = None,
     ):
         import aiofiles
         async with aiofiles.open(self.voice, 'rb') as f:
