@@ -11,6 +11,8 @@ from typing import (
     Union, cast
 )
 
+from mirai.exceptions import ApiParametersError
+
 if TYPE_CHECKING:
     from typing_extensions import Literal
 else:
@@ -19,7 +21,7 @@ else:
     except ImportError:
         from typing_extensions import Literal
 
-from pydantic import validator
+from pydantic import validator, ValidationError
 
 from mirai.api_provider import ApiProvider, Method
 from mirai.models.base import (
@@ -275,7 +277,7 @@ class ApiModel(ApiBaseModel):
         parameter_names = self.Info.parameter_names
         if len(args) > len(parameter_names):
             raise TypeError(
-                f'`{self.Info.alias}`需要{len(parameter_names)}个参数，' +
+                f'`{self.Info.alias}` 需要{len(parameter_names)}个参数，' +
                 '但传入了{len(args)}个。'
             )
         for name, value in zip(parameter_names, args):
@@ -378,9 +380,11 @@ class ApiModel(ApiBaseModel):
             """
             args = args or []
             kwargs = kwargs or {}
-
-            api = self.api_type(*args, **kwargs)
-            return await api.call(self.api_provider, method, response_type)
+            try:
+                api = self.api_type(*args, **kwargs)
+                return await api.call(self.api_provider, method, response_type)
+            except ValidationError as e:
+                raise ApiParametersError(e) from None
 
         async def get(self, *args, **kwargs) -> Optional[TModel]:
             """获取。对于 GET 方法的 API，调用此方法。"""
@@ -777,7 +781,7 @@ class FileUpload(ApiPost):
     class Info(ApiPost.Info):
         name = "file/upload"
         alias = "file_upload"
-        response_type = MiraiBaseModel # TODO
+        response_type = MiraiBaseModel  # TODO
 
 
 class UploadImage(ApiPost):
