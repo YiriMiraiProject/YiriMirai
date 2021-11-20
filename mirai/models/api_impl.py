@@ -3,6 +3,7 @@
 """
 from pathlib import Path
 from typing import TYPE_CHECKING, Iterable, List, Optional, Union
+
 from mirai.api_provider import ApiProvider, Method
 
 if TYPE_CHECKING:
@@ -13,9 +14,16 @@ else:
     except ImportError:
         from typing_extensions import Literal
 
-from mirai.models.api import ApiBaseModel, ApiGet, ApiPost, ApiResponse, ApiRest
+from pydantic import Field, validator
+
+from mirai.models.api import (
+    ApiBaseModel, ApiGet, ApiPost, ApiResponse, ApiRest
+)
 from mirai.models.base import MiraiBaseModel
-from mirai.models.entities import FileProperties, Friend, Group, GroupConfigModel, GroupMember, MemberInfoModel, Profile, RespOperate, Sex
+from mirai.models.entities import (
+    FileProperties, Friend, Group, GroupConfigModel, GroupMember,
+    MemberInfoModel, Profile, RespOperate, Sex
+)
 from mirai.models.events import (
     FriendMessage, GroupMessage, OtherClientMessage, RequestEvent,
     StrangerMessage, TempMessage
@@ -23,7 +31,6 @@ from mirai.models.events import (
 from mirai.models.message import (
     Image, MessageChain, MessageComponent, TMessage, Voice
 )
-from pydantic import Field, validator
 
 
 class About(ApiGet):

@@ -945,10 +945,11 @@ class App(MessageComponent):
         return json_loads(self.content)
 
     def __str__(self):
+        from json import JSONDecodeError
         try:
             json = self.as_json()
             return json.get('prompt', '[应用消息]')
-        except:
+        except (JSONDecodeError, AttributeError):
             return '[应用消息]'
 
     def as_mirai_code(self) -> str:

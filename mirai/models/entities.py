@@ -186,6 +186,8 @@ class FileProperties(MiraiBaseModel):
 
 
 FileProperties.update_forward_refs()
+
+
 class RespOperate(Flag):
     """事件响应操作。
 
@@ -203,6 +205,7 @@ class RespOperate(Flag):
     """忽略请求。"""
     BAN = 4
     """拉黑。与前三个选项组合。"""
+
 
 class Config(MiraiBaseModel):
     """配置项类型。"""
@@ -242,9 +245,14 @@ __all__ = [
     'Group',
     'GroupMember',
     'Permission',
-    'Sender',
+    'Client',
     'Subject',
     'Config',
     'GroupConfigModel',
     'MemberInfoModel',
+    'Profile',
+    'Sex',
+    'FileProperties',
+    'DownloadInfo',
+    'RespOperate',
 ]

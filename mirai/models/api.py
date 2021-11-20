@@ -5,12 +5,13 @@
 import logging
 from typing import Any, Generic, List, Optional, Type, TypeVar, Union, cast
 
+from pydantic import ValidationError
+
 from mirai.api_provider import ApiProvider, Method
 from mirai.exceptions import ApiParametersError
 from mirai.models.base import (
     MiraiBaseModel, MiraiIndexedMetaclass, MiraiIndexedModel
 )
-from pydantic import ValidationError
 
 logger = logging.getLogger(__name__)
 

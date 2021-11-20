@@ -90,13 +90,13 @@ class ASGI(Singleton):
         if handler:
             self.app.add_event_handler(event_type, handler)
             return self
-        else:  # 装饰器用法
 
-            def decorator(func):
-                self.app.add_event_handler(event_type, func)
-                return func
+        # 装饰器用法
+        def decorator(func):
+            self.app.add_event_handler(event_type, func)
+            return func
 
-            return decorator
+        return decorator
 
     def add_background_task(
         self, func: Union[Callable, Awaitable, None] = None
