@@ -4,8 +4,8 @@
 """
 import abc
 from datetime import datetime
-from enum import Enum
-from typing import TYPE_CHECKING, Optional
+from enum import Enum, Flag
+from typing import TYPE_CHECKING, Optional, Union
 
 if TYPE_CHECKING:
     from typing_extensions import Literal
@@ -118,6 +118,91 @@ class Subject(MiraiBaseModel):
     kind: Literal['Friend', 'Group', 'Stranger']
     """类型。"""
 
+
+class Sex(str, Enum):
+    """性别。"""
+    Unknown = 'UNKNOWN'
+    Male = 'MALE'
+    Female = 'FEMALE'
+
+    def __repr__(self) -> str:
+        return repr(self.value)
+
+
+class Profile(MiraiBaseModel):
+    """用户资料。"""
+    nickname: str
+    """昵称。"""
+    email: str
+    """邮箱地址。"""
+    age: int
+    """年龄。"""
+    level: int
+    """QQ 等级。"""
+    sign: str
+    """个性签名。"""
+    sex: Sex
+    """性别。"""
+
+
+class DownloadInfo(MiraiBaseModel):
+    """文件的下载信息。"""
+    sha1: str
+    """文件的 SHA1。"""
+    md5: str
+    """文件的 MD5。"""
+    url: str
+    """文件的下载地址。"""
+    downloadTimes: Optional[int]
+    """文件被下载过的次数。"""
+    uploaderId: Optional[int]
+    """上传者的 QQ 号。"""
+    uploadTime: Optional[datetime]
+    """上传时间。"""
+    lastModifyTime: Optional[datetime]
+    """最后修改时间。"""
+
+
+class FileProperties(MiraiBaseModel):
+    """文件对象。"""
+    name: str
+    """文件名。"""
+    id: Optional[str]
+    """文件 ID。"""
+    path: str
+    """所在目录路径。"""
+    parent: Optional['FileProperties'] = None
+    """父文件对象，递归类型。None 为存在根目录。"""
+    contact: Union[Group, Friend]
+    """群信息或好友信息。"""
+    is_file: bool
+    """是否是文件。"""
+    is_directory: bool
+    """是否是文件夹。"""
+    size: Optional[int] = None
+    """文件大小。"""
+    download_info: Optional[DownloadInfo] = None
+    """文件的下载信息。"""
+
+
+FileProperties.update_forward_refs()
+class RespOperate(Flag):
+    """事件响应操作。
+
+    使用例：
+
+    `RespOperate.ALLOW` 允许请求
+
+    `RespOperate.DECLINE & RespOpearte.BAN` 拒绝并拉黑
+    """
+    ALLOW = 1
+    """允许请求。"""
+    DECLINE = 2
+    """拒绝请求。"""
+    IGNORE = 3
+    """忽略请求。"""
+    BAN = 4
+    """拉黑。与前三个选项组合。"""
 
 class Config(MiraiBaseModel):
     """配置项类型。"""

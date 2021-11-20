@@ -13,10 +13,10 @@ import mirai.models.api
 from mirai.adapters.base import Adapter, AdapterInterface, ApiProvider
 from mirai.asgi import ASGI, asgi_serve
 from mirai.bus import AbstractEventBus, EventBus
-from mirai.models.api import ApiModel, RespEvent, RespOperate
+from mirai.models.api import ApiModel
 from mirai.models.bus import ModelEventBus
 from mirai.models.entities import (
-    Entity, Friend, Group, GroupMember, Permission, Subject
+    Entity, Friend, Group, GroupMember, Permission, RespOperate, Subject
 )
 from mirai.models.events import Event, MessageEvent, RequestEvent, TempMessage
 from mirai.models.message import TMessage
@@ -396,7 +396,7 @@ class Mirai(SimpleMirai):
             target=id_, message_chain=message, quote=quoting
         )
 
-        return response.message_id if response else -1
+        return response
 
     async def get_friend(self, id_: int) -> Optional[Friend]:
         """获取好友对象。
@@ -497,9 +497,7 @@ class Mirai(SimpleMirai):
             operate: 处理操作。
             message: 回复的信息。
         """
-        api_type = cast(
-            Type[RespEvent], getattr(mirai.models.api, 'Resp' + event.type)
-        )
+        api_type = ApiModel.get_subtype('Resp' + event.type)
         api = api_type.from_event(event, operate, message)
         await api.call(self, 'POST')
 

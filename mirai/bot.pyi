@@ -13,16 +13,11 @@ from typing_extensions import Literal
 from mirai.adapters.base import Adapter, AdapterInterface, ApiProvider
 from mirai.asgi import ASGI
 from mirai.bus import AbstractEventBus
-from mirai.models.api import (
-    AboutResponse, ApiModel, FileInfoResponse, FileListResponse,
-    FileMkdirResponse, FileProperties, FriendListResponse, GroupListResponse,
-    MemberListResponse, MessageFromIdResponse, MessageResponse,
-    ProfileResponse, Response, RespOperate, SessionInfoResponse
-)
-from mirai.models.base import MiraiBaseModel
+from mirai.models.api import ApiModel, FileProperties, RespOperate
+from mirai.models.api_impl import *
 from mirai.models.entities import (
     Entity, Friend, Group, GroupConfigModel, GroupMember, MemberInfoModel,
-    Subject
+    Profile, Subject
 )
 from mirai.models.events import Event, MessageEvent, RequestEvent
 from mirai.models.message import Image, MessageChain, MessageComponent, Voice
@@ -209,7 +204,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __AboutProxy():
-        async def get(self) -> AboutResponse:
+        async def get(self) -> dict:
             """获取插件信息。"""
 
     @overload
@@ -218,14 +213,14 @@ class Mirai(SimpleMirai):
         """获取插件信息。"""
 
     @overload
-    async def about(self) -> AboutResponse:
+    async def about(self) -> dict:
         """获取插件信息。"""
 
     # BotProfile
 
     @type_check_only
     class __BotProfileProxy():
-        async def get(self) -> ProfileResponse:
+        async def get(self) -> Profile:
             """获取 Bot 资料。"""
 
     @overload
@@ -234,7 +229,7 @@ class Mirai(SimpleMirai):
         """获取 Bot 资料。"""
 
     @overload
-    async def bot_profile(self) -> ProfileResponse:
+    async def bot_profile(self) -> Profile:
         """获取 Bot 资料。"""
 
     # CmdExecute
@@ -244,7 +239,7 @@ class Mirai(SimpleMirai):
         async def set(
             self, command: Union[MessageChain, Iterable[Union[MessageComponent,
                                                               str]], str]
-        ) -> Response:
+        ) -> None:
             """执行命令。
 
             Args:
@@ -260,7 +255,7 @@ class Mirai(SimpleMirai):
     async def cmd_execute(
         self, command: Union[MessageChain, Iterable[Union[MessageComponent,
                                                           str]], str]
-    ) -> Response:
+    ) -> None:
         """执行命令。
 
         Args:
@@ -277,7 +272,7 @@ class Mirai(SimpleMirai):
             usage: str,
             description: str,
             alias: Union[List[str], None] = None
-        ) -> Response:
+        ) -> None:
             """注册命令。
 
             Args:
@@ -299,7 +294,7 @@ class Mirai(SimpleMirai):
         usage: str,
         description: str,
         alias: Union[List[str], None] = None
-    ) -> Response:
+    ) -> None:
         """注册命令。
 
         Args:
@@ -313,7 +308,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __DeleteFriendProxy():
-        async def set(self, target: int) -> Response:
+        async def set(self, target: int) -> None:
             """删除好友。
 
             Args:
@@ -326,7 +321,7 @@ class Mirai(SimpleMirai):
         """删除好友。"""
 
     @overload
-    async def delete_friend(self, target: int) -> Response:
+    async def delete_friend(self, target: int) -> None:
         """删除好友。
 
         Args:
@@ -338,11 +333,8 @@ class Mirai(SimpleMirai):
     @type_check_only
     class __FileDeleteProxy():
         async def set(
-            self,
-            id: str,
-            target: int,
-            path: Union[str, None] = None
-        ) -> Response:
+            self, id: str, target: int, path: Union[str, None] = None
+        ) -> None:
             """删除文件。
 
             Args:
@@ -359,7 +351,7 @@ class Mirai(SimpleMirai):
     @overload
     async def file_delete(
         self, id: str, target: int, path: Union[str, None] = None
-    ) -> Response:
+    ) -> None:
         """删除文件。
 
         Args:
@@ -378,7 +370,7 @@ class Mirai(SimpleMirai):
             target: int,
             with_download_info: Union[bool, None] = None,
             path: Union[str, None] = None
-        ) -> FileInfoResponse:
+        ) -> FileProperties:
             """查看文件信息。
 
             Args:
@@ -400,7 +392,7 @@ class Mirai(SimpleMirai):
         target: int,
         with_download_info: Union[bool, None] = None,
         path: Union[str, None] = None
-    ) -> FileInfoResponse:
+    ) -> FileProperties:
         """查看文件信息。
 
         Args:
@@ -422,7 +414,7 @@ class Mirai(SimpleMirai):
             path: Union[str, None] = None,
             offset: Union[int, None] = None,
             size: Union[int, None] = None
-        ) -> FileListResponse:
+        ) -> FileProperties:
             """查看文件列表。
 
             Args:
@@ -448,7 +440,7 @@ class Mirai(SimpleMirai):
         path: Union[str, None] = None,
         offset: Union[int, None] = None,
         size: Union[int, None] = None
-    ) -> FileListResponse:
+    ) -> FileProperties:
         """查看文件列表。
 
         Args:
@@ -470,7 +462,7 @@ class Mirai(SimpleMirai):
             target: int,
             directory_name: str,
             path: Union[str, None] = None
-        ) -> FileMkdirResponse:
+        ) -> FileProperties:
             """创建文件夹。
 
             Args:
@@ -492,7 +484,7 @@ class Mirai(SimpleMirai):
         target: int,
         directory_name: str,
         path: Union[str, None] = None
-    ) -> FileMkdirResponse:
+    ) -> FileProperties:
         """创建文件夹。
 
         Args:
@@ -513,7 +505,7 @@ class Mirai(SimpleMirai):
             move_to: str,
             path: Union[str, None] = None,
             move_to_path: Union[str, None] = None
-        ) -> Response:
+        ) -> None:
             """移动文件。
 
             Args:
@@ -537,7 +529,7 @@ class Mirai(SimpleMirai):
         move_to: str,
         path: Union[str, None] = None,
         move_to_path: Union[str, None] = None
-    ) -> Response:
+    ) -> None:
         """移动文件。
 
         Args:
@@ -558,7 +550,7 @@ class Mirai(SimpleMirai):
             target: int,
             rename_to: str,
             path: Union[str, None] = None
-        ) -> Response:
+        ) -> None:
             """重命名文件。
 
             Args:
@@ -580,7 +572,7 @@ class Mirai(SimpleMirai):
         target: int,
         rename_to: str,
         path: Union[str, None] = None
-    ) -> Response:
+    ) -> None:
         """重命名文件。
 
         Args:
@@ -601,7 +593,7 @@ class Mirai(SimpleMirai):
             file: Union[str, Path],
             path: str = ''
         ) -> FileProperties:
-            """文件上传。（暂时不可用）
+            """文件上传。
 
             Args:
                 type (`Literal['group']`): 上传的文件类型。
@@ -613,7 +605,7 @@ class Mirai(SimpleMirai):
     @overload
     @property
     def file_upload(self) -> __FileUploadProxy:
-        """文件上传。（暂时不可用）"""
+        """文件上传。"""
 
     @overload
     async def file_upload(
@@ -623,7 +615,7 @@ class Mirai(SimpleMirai):
         file: Union[str, Path],
         path: str = ''
     ) -> FileProperties:
-        """文件上传。（暂时不可用）
+        """文件上传。
 
         Args:
             type (`Literal['group']`): 上传的文件类型。
@@ -636,7 +628,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __FriendListProxy():
-        async def get(self) -> FriendListResponse:
+        async def get(self) -> Friend:
             """获取好友列表。"""
 
     @overload
@@ -645,14 +637,14 @@ class Mirai(SimpleMirai):
         """获取好友列表。"""
 
     @overload
-    async def friend_list(self) -> FriendListResponse:
+    async def friend_list(self) -> Friend:
         """获取好友列表。"""
 
     # FriendProfile
 
     @type_check_only
     class __FriendProfileProxy():
-        async def get(self, target: int) -> ProfileResponse:
+        async def get(self, target: int) -> Profile:
             """获取好友资料。
 
             Args:
@@ -665,7 +657,7 @@ class Mirai(SimpleMirai):
         """获取好友资料。"""
 
     @overload
-    async def friend_profile(self, target: int) -> ProfileResponse:
+    async def friend_profile(self, target: int) -> Profile:
         """获取好友资料。
 
         Args:
@@ -692,7 +684,7 @@ class Mirai(SimpleMirai):
             self,
             target: int,
             config: Union[GroupConfigModel, None] = None
-        ) -> Response:
+        ) -> None:
             """获取或修改群设置。
 
             Args:
@@ -722,7 +714,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __GroupListProxy():
-        async def get(self) -> GroupListResponse:
+        async def get(self) -> Group:
             """获取群列表。"""
 
     @overload
@@ -731,7 +723,7 @@ class Mirai(SimpleMirai):
         """获取群列表。"""
 
     @overload
-    async def group_list(self) -> GroupListResponse:
+    async def group_list(self) -> Group:
         """获取群列表。"""
 
     # Kick
@@ -740,7 +732,7 @@ class Mirai(SimpleMirai):
     class __KickProxy():
         async def set(
             self, target: int, member_id: int, msg: str = ''
-        ) -> Response:
+        ) -> None:
             """移出群成员。
 
             Args:
@@ -755,9 +747,7 @@ class Mirai(SimpleMirai):
         """移出群成员。"""
 
     @overload
-    async def kick(
-        self, target: int, member_id: int, msg: str = ''
-    ) -> Response:
+    async def kick(self, target: int, member_id: int, msg: str = '') -> None:
         """移出群成员。
 
         Args:
@@ -770,9 +760,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __MemberAdminProxy():
-        async def set(
-            self, target: int, member_id: int, assign: bool
-        ) -> Response:
+        async def set(self, target: int, member_id: int, assign: bool) -> None:
             """设置或取消群成员管理员。
 
             Args:
@@ -789,7 +777,7 @@ class Mirai(SimpleMirai):
     @overload
     async def member_admin(
         self, target: int, member_id: int, assign: bool
-    ) -> Response:
+    ) -> None:
         """设置或取消群成员管理员。
 
         Args:
@@ -821,7 +809,7 @@ class Mirai(SimpleMirai):
             target: int,
             member_id: int,
             info: Union[MemberInfoModel, None] = None
-        ) -> Response:
+        ) -> None:
             """获取或修改群成员资料。
 
             Args:
@@ -854,7 +842,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __MemberListProxy():
-        async def get(self, target: int) -> MemberListResponse:
+        async def get(self, target: int) -> GroupMember:
             """获取群成员列表。
 
             Args:
@@ -867,7 +855,7 @@ class Mirai(SimpleMirai):
         """获取群成员列表。"""
 
     @overload
-    async def member_list(self, target: int) -> MemberListResponse:
+    async def member_list(self, target: int) -> GroupMember:
         """获取群成员列表。
 
         Args:
@@ -878,7 +866,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __MemberProfileProxy():
-        async def get(self, target: int, member_id: int) -> ProfileResponse:
+        async def get(self, target: int, member_id: int) -> Profile:
             """获取群成员资料。
 
             Args:
@@ -892,9 +880,7 @@ class Mirai(SimpleMirai):
         """获取群成员资料。"""
 
     @overload
-    async def member_profile(
-        self, target: int, member_id: int
-    ) -> ProfileResponse:
+    async def member_profile(self, target: int, member_id: int) -> Profile:
         """获取群成员资料。
 
         Args:
@@ -906,7 +892,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __MessageFromIdProxy():
-        async def get(self, id: int) -> MessageFromIdResponse:
+        async def get(self, id: int) -> None:
             """通过 message_id 获取消息。
 
             Args:
@@ -919,7 +905,7 @@ class Mirai(SimpleMirai):
         """通过 message_id 获取消息。"""
 
     @overload
-    async def message_from_id(self, id: int) -> MessageFromIdResponse:
+    async def message_from_id(self, id: int) -> None:
         """通过 message_id 获取消息。
 
         Args:
@@ -930,9 +916,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __MuteProxy():
-        async def set(
-            self, target: int, member_id: int, time: int
-        ) -> Response:
+        async def set(self, target: int, member_id: int, time: int) -> None:
             """禁言群成员。
 
             Args:
@@ -947,7 +931,7 @@ class Mirai(SimpleMirai):
         """禁言群成员。"""
 
     @overload
-    async def mute(self, target: int, member_id: int, time: int) -> Response:
+    async def mute(self, target: int, member_id: int, time: int) -> None:
         """禁言群成员。
 
         Args:
@@ -960,7 +944,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __MuteAllProxy():
-        async def set(self, target: int) -> Response:
+        async def set(self, target: int) -> None:
             """全体禁言。
 
             Args:
@@ -973,7 +957,7 @@ class Mirai(SimpleMirai):
         """全体禁言。"""
 
     @overload
-    async def mute_all(self, target: int) -> Response:
+    async def mute_all(self, target: int) -> None:
         """全体禁言。
 
         Args:
@@ -984,7 +968,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __QuitProxy():
-        async def set(self, target: int) -> Response:
+        async def set(self, target: int) -> None:
             """退出群聊。
 
             Args:
@@ -997,7 +981,7 @@ class Mirai(SimpleMirai):
         """退出群聊。"""
 
     @overload
-    async def quit(self, target: int) -> Response:
+    async def quit(self, target: int) -> None:
         """退出群聊。
 
         Args:
@@ -1008,7 +992,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __RecallProxy():
-        async def set(self, target: int) -> Response:
+        async def set(self, target: int) -> None:
             """撤回消息。
 
             Args:
@@ -1021,7 +1005,7 @@ class Mirai(SimpleMirai):
         """撤回消息。"""
 
     @overload
-    async def recall(self, target: int) -> Response:
+    async def recall(self, target: int) -> None:
         """撤回消息。
 
         Args:
@@ -1035,7 +1019,7 @@ class Mirai(SimpleMirai):
         async def set(
             self, event_id: int, from_id: int, group_id: int,
             operate: Union[int, RespOperate], message: str
-        ) -> MiraiBaseModel:
+        ) -> None:
             """响应被邀请入群申请。
 
             Args:
@@ -1057,7 +1041,7 @@ class Mirai(SimpleMirai):
     async def resp_bot_invited_join_group_request_event(
         self, event_id: int, from_id: int, group_id: int,
         operate: Union[int, RespOperate], message: str
-    ) -> MiraiBaseModel:
+    ) -> None:
         """响应被邀请入群申请。
 
         Args:
@@ -1075,7 +1059,7 @@ class Mirai(SimpleMirai):
         async def set(
             self, event_id: int, from_id: int, group_id: int,
             operate: Union[int, RespOperate], message: str
-        ) -> MiraiBaseModel:
+        ) -> None:
             """响应用户入群申请。
 
             Args:
@@ -1097,7 +1081,7 @@ class Mirai(SimpleMirai):
     async def resp_member_join_request_event(
         self, event_id: int, from_id: int, group_id: int,
         operate: Union[int, RespOperate], message: str
-    ) -> MiraiBaseModel:
+    ) -> None:
         """响应用户入群申请。
 
         Args:
@@ -1115,7 +1099,7 @@ class Mirai(SimpleMirai):
         async def set(
             self, event_id: int, from_id: int, group_id: int,
             operate: Union[int, RespOperate], message: str
-        ) -> MiraiBaseModel:
+        ) -> None:
             """响应添加好友申请。
 
             Args:
@@ -1137,7 +1121,7 @@ class Mirai(SimpleMirai):
     async def resp_new_friend_request_event(
         self, event_id: int, from_id: int, group_id: int,
         operate: Union[int, RespOperate], message: str
-    ) -> MiraiBaseModel:
+    ) -> None:
         """响应添加好友申请。
 
         Args:
@@ -1159,7 +1143,7 @@ class Mirai(SimpleMirai):
                                                               str]],
                                  MessageComponent, str],
             quote: Union[int, None] = None
-        ) -> MessageResponse:
+        ) -> int:
             """发送好友消息。
 
             Args:
@@ -1181,7 +1165,7 @@ class Mirai(SimpleMirai):
                                                           str]],
                              MessageComponent, str],
         quote: Union[int, None] = None
-    ) -> MessageResponse:
+    ) -> int:
         """发送好友消息。
 
         Args:
@@ -1201,7 +1185,7 @@ class Mirai(SimpleMirai):
                                                               str]],
                                  MessageComponent, str],
             quote: Union[int, None] = None
-        ) -> MessageResponse:
+        ) -> int:
             """发送群消息。
 
             Args:
@@ -1223,7 +1207,7 @@ class Mirai(SimpleMirai):
                                                           str]],
                              MessageComponent, str],
         quote: Union[int, None] = None
-    ) -> MessageResponse:
+    ) -> int:
         """发送群消息。
 
         Args:
@@ -1239,7 +1223,7 @@ class Mirai(SimpleMirai):
         async def set(
             self, target: int, subject: int, kind: Literal['Friend', 'Group',
                                                            'Stranger']
-        ) -> Response:
+        ) -> None:
             """发送头像戳一戳消息。
 
             Args:
@@ -1257,7 +1241,7 @@ class Mirai(SimpleMirai):
     async def send_nudge(
         self, target: int, subject: int, kind: Literal['Friend', 'Group',
                                                        'Stranger']
-    ) -> Response:
+    ) -> None:
         """发送头像戳一戳消息。
 
         Args:
@@ -1278,7 +1262,7 @@ class Mirai(SimpleMirai):
                                                               str]],
                                  MessageComponent, str],
             quote: Union[int, None] = None
-        ) -> MessageResponse:
+        ) -> int:
             """发送临时消息。
 
             Args:
@@ -1302,7 +1286,7 @@ class Mirai(SimpleMirai):
                                                           str]],
                              MessageComponent, str],
         quote: Union[int, None] = None
-    ) -> MessageResponse:
+    ) -> int:
         """发送临时消息。
 
         Args:
@@ -1316,7 +1300,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __SessionInfoProxy():
-        async def get(self) -> SessionInfoResponse:
+        async def get(self) -> SessionInfo.Response.Data:
             """获取机器人信息。"""
 
     @overload
@@ -1325,14 +1309,14 @@ class Mirai(SimpleMirai):
         """获取机器人信息。"""
 
     @overload
-    async def session_info(self) -> SessionInfoResponse:
+    async def session_info(self) -> SessionInfo.Response.Data:
         """获取机器人信息。"""
 
     # SetEssence
 
     @type_check_only
     class __SetEssenceProxy():
-        async def set(self, target: int) -> Response:
+        async def set(self, target: int) -> None:
             """设置群精华消息。
 
             Args:
@@ -1345,7 +1329,7 @@ class Mirai(SimpleMirai):
         """设置群精华消息。"""
 
     @overload
-    async def set_essence(self, target: int) -> Response:
+    async def set_essence(self, target: int) -> None:
         """设置群精华消息。
 
         Args:
@@ -1356,7 +1340,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __UnmuteProxy():
-        async def set(self, target: int, member_id: int) -> Response:
+        async def set(self, target: int, member_id: int) -> None:
             """解除群成员禁言。
 
             Args:
@@ -1370,7 +1354,7 @@ class Mirai(SimpleMirai):
         """解除群成员禁言。"""
 
     @overload
-    async def unmute(self, target: int, member_id: int) -> Response:
+    async def unmute(self, target: int, member_id: int) -> None:
         """解除群成员禁言。
 
         Args:
@@ -1382,7 +1366,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __UnmuteAllProxy():
-        async def set(self, target: int) -> Response:
+        async def set(self, target: int) -> None:
             """解除全体禁言。
 
             Args:
@@ -1395,7 +1379,7 @@ class Mirai(SimpleMirai):
         """解除全体禁言。"""
 
     @overload
-    async def unmute_all(self, target: int) -> Response:
+    async def unmute_all(self, target: int) -> None:
         """解除全体禁言。
 
         Args:
