@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# mypy: ignore_errors
+# type: ignore
 
 import mirai
 import pdoc
@@ -26,7 +26,7 @@ for api in sorted(
                 "" if api.__fields__[k].
                 required else f" = {api.__fields__[k].default!r}"
             )
-        ) for k, v in anno.items() if k[0] != '_'
+        ) for k, v in anno.items() if k[0] != '_' and k != 'Info'
     )
 
     params_doc = '\n'.join(
@@ -36,7 +36,7 @@ for api in sorted(
                 "。" if api.__fields__[k].
                 required else f"，默认值 {api.__fields__[k].default!r}。"
             )
-        ) for k, v in anno.items() if k[0] != '_'
+        ) for k, v in anno.items() if k[0] != '_' and k != 'Info'
     )
 
     s += f'''

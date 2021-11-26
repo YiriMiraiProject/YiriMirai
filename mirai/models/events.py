@@ -14,14 +14,22 @@ else:
     except ImportError:
         from typing_extensions import Literal
 
-from mirai.models.base import MiraiIndexedModel
+from mirai.models.base import MiraiIndexedMetaclass, MiraiIndexedModel
 from mirai.models.entities import (
     Client, Entity, Friend, Group, GroupMember, Permission, Subject
 )
 from mirai.models.message import MessageChain
 
 
-class Event(MiraiIndexedModel):
+class EventMetaclass(MiraiIndexedMetaclass):
+    def get_subtype(cls, name: str) -> 'EventMetaclass':
+        try:
+            return cast(EventMetaclass, super().get_subtype(name))
+        except ValueError:
+            return Event
+
+
+class Event(MiraiIndexedModel, metaclass=EventMetaclass):
     """事件基类。
 
     Args:
@@ -38,13 +46,6 @@ class Event(MiraiIndexedModel):
             return cast(Event, super().parse_obj(obj))
         except ValueError:
             return Event(type=obj['type'])
-
-    @classmethod
-    def get_subtype(cls, name: str) -> Type['Event']:
-        try:
-            return cast(Type[Event], super().get_subtype(name))
-        except ValueError:
-            return Event
 
 
 ###############################
@@ -974,51 +975,21 @@ class OtherClientMessage(MessageEvent):
 
 
 __all__ = [
-    'BotEvent',
-    'BotGroupPermissionChangeEvent',
-    'BotInvitedJoinGroupRequestEvent',
-    'BotJoinGroupEvent',
-    'BotLeaveEventActive',
-    'BotLeaveEventKick',
-    'BotMuteEvent',
-    'BotOfflineEventActive',
-    'BotOfflineEventDropped',
-    'BotOfflineEventForce',
-    'BotOnlineEvent',
-    'BotReloginEvent',
-    'BotUnmuteEvent',
-    'CommandEvent',
-    'CommandExecutedEvent',
-    'Event',
-    'FriendEvent',
-    'FriendInputStatusChangedEvent',
-    'FriendMessage',
-    'FriendNickChangedEvent',
-    'FriendRecallEvent',
-    'GroupAllowAnonymousChatEvent',
-    'GroupAllowConfessTalkEvent',
-    'GroupAllowMemberInviteEvent',
-    'GroupEntranceAnnouncementChangeEvent',
-    'GroupEvent',
-    'GroupMessage',
-    'GroupMuteAllEvent',
-    'GroupNameChangeEvent',
-    'GroupRecallEvent',
-    'MemberCardChangeEvent',
-    'MemberHonorChangeEvent',
-    'MemberJoinEvent',
-    'MemberJoinRequestEvent',
-    'MemberLeaveEventKick',
-    'MemberLeaveEventQuit',
-    'MemberMuteEvent',
-    'MemberPermissionChangeEvent',
-    'MemberSpecialTitleChangeEvent',
-    'MemberUnmuteEvent',
-    'MessageEvent',
-    'NewFriendRequestEvent',
-    'NudgeEvent',
-    'OtherClientMessage',
-    'RequestEvent',
-    'StrangerMessage',
-    'TempMessage',
+    'BotEvent', 'BotGroupPermissionChangeEvent',
+    'BotInvitedJoinGroupRequestEvent', 'BotJoinGroupEvent',
+    'BotLeaveEventActive', 'BotLeaveEventKick', 'BotMuteEvent',
+    'BotOfflineEventActive', 'BotOfflineEventDropped', 'BotOfflineEventForce',
+    'BotOnlineEvent', 'BotReloginEvent', 'BotUnmuteEvent', 'CommandEvent',
+    'CommandExecutedEvent', 'ClientKind', 'Event', 'FriendEvent',
+    'FriendInputStatusChangedEvent', 'FriendMessage', 'FriendNickChangedEvent',
+    'FriendRecallEvent', 'GroupAllowAnonymousChatEvent',
+    'GroupAllowConfessTalkEvent', 'GroupAllowMemberInviteEvent',
+    'GroupEntranceAnnouncementChangeEvent', 'GroupEvent', 'GroupMessage',
+    'GroupMuteAllEvent', 'GroupNameChangeEvent', 'GroupRecallEvent',
+    'MemberCardChangeEvent', 'MemberHonorChangeEvent', 'MemberJoinEvent',
+    'MemberJoinRequestEvent', 'MemberLeaveEventKick', 'MemberLeaveEventQuit',
+    'MemberMuteEvent', 'MemberPermissionChangeEvent',
+    'MemberSpecialTitleChangeEvent', 'MemberUnmuteEvent', 'MessageEvent',
+    'NewFriendRequestEvent', 'NudgeEvent', 'OtherClientMessage',
+    'RequestEvent', 'StrangerMessage', 'TempMessage'
 ]

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# type: ignore
 """
 `mirai.bot` 模块的存根文件，用于补全代码提示。
 """
@@ -237,13 +238,13 @@ class Mirai(SimpleMirai):
     @type_check_only
     class __CmdExecuteProxy():
         async def set(
-            self, command: Union[MessageChain, Iterable[Union[MessageComponent,
-                                                              str]], str]
+            self, command: Union[MessageChain,
+                                 Iterable[Union[str, MessageComponent]], str]
         ) -> None:
             """执行命令。
 
             Args:
-                command (`Union[MessageChain,Iterable[Union[MessageComponent,str]],str]`): 命令。
+                command (`Union[MessageChain,Iterable[Union[str,MessageComponent]],str]`): 命令。
             """
 
     @overload
@@ -253,13 +254,13 @@ class Mirai(SimpleMirai):
 
     @overload
     async def cmd_execute(
-        self, command: Union[MessageChain, Iterable[Union[MessageComponent,
-                                                          str]], str]
+        self, command: Union[MessageChain,
+                             Iterable[Union[str, MessageComponent]], str]
     ) -> None:
         """执行命令。
 
         Args:
-            command (`Union[MessageChain,Iterable[Union[MessageComponent,str]],str]`): 命令。
+            command (`Union[MessageChain,Iterable[Union[str,MessageComponent]],str]`): 命令。
         """
 
     # CmdRegister
@@ -1139,8 +1140,8 @@ class Mirai(SimpleMirai):
         async def set(
             self,
             target: int,
-            message_chain: Union[MessageChain, Iterable[Union[MessageComponent,
-                                                              str]],
+            message_chain: Union[MessageChain,
+                                 Iterable[Union[str, MessageComponent]],
                                  MessageComponent, str],
             quote: Union[int, None] = None
         ) -> int:
@@ -1148,7 +1149,7 @@ class Mirai(SimpleMirai):
 
             Args:
                 target (`int`): 发送消息目标好友的 QQ 号。
-                message_chain (`Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str]`): 消息链。
+                message_chain (`Union[MessageChain,Iterable[Union[str,MessageComponent]],MessageComponent,str]`): 消息链。
                 quote (`Union[int,None]`): 可选。引用一条消息的 message_id 进行回复，默认值 None。
             """
 
@@ -1161,8 +1162,8 @@ class Mirai(SimpleMirai):
     async def send_friend_message(
         self,
         target: int,
-        message_chain: Union[MessageChain, Iterable[Union[MessageComponent,
-                                                          str]],
+        message_chain: Union[MessageChain, Iterable[Union[str,
+                                                          MessageComponent]],
                              MessageComponent, str],
         quote: Union[int, None] = None
     ) -> int:
@@ -1170,7 +1171,7 @@ class Mirai(SimpleMirai):
 
         Args:
             target (`int`): 发送消息目标好友的 QQ 号。
-            message_chain (`Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str]`): 消息链。
+            message_chain (`Union[MessageChain,Iterable[Union[str,MessageComponent]],MessageComponent,str]`): 消息链。
             quote (`Union[int,None]`): 可选。引用一条消息的 message_id 进行回复，默认值 None。
         """
 
@@ -1181,8 +1182,8 @@ class Mirai(SimpleMirai):
         async def set(
             self,
             target: int,
-            message_chain: Union[MessageChain, Iterable[Union[MessageComponent,
-                                                              str]],
+            message_chain: Union[MessageChain,
+                                 Iterable[Union[str, MessageComponent]],
                                  MessageComponent, str],
             quote: Union[int, None] = None
         ) -> int:
@@ -1190,7 +1191,7 @@ class Mirai(SimpleMirai):
 
             Args:
                 target (`int`): 发送消息目标群的群号。
-                message_chain (`Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str]`): 消息链。
+                message_chain (`Union[MessageChain,Iterable[Union[str,MessageComponent]],MessageComponent,str]`): 消息链。
                 quote (`Union[int,None]`): 可选。引用一条消息的 message_id 进行回复，默认值 None。
             """
 
@@ -1203,8 +1204,8 @@ class Mirai(SimpleMirai):
     async def send_group_message(
         self,
         target: int,
-        message_chain: Union[MessageChain, Iterable[Union[MessageComponent,
-                                                          str]],
+        message_chain: Union[MessageChain, Iterable[Union[str,
+                                                          MessageComponent]],
                              MessageComponent, str],
         quote: Union[int, None] = None
     ) -> int:
@@ -1212,7 +1213,7 @@ class Mirai(SimpleMirai):
 
         Args:
             target (`int`): 发送消息目标群的群号。
-            message_chain (`Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str]`): 消息链。
+            message_chain (`Union[MessageChain,Iterable[Union[str,MessageComponent]],MessageComponent,str]`): 消息链。
             quote (`Union[int,None]`): 可选。引用一条消息的 message_id 进行回复，默认值 None。
         """
 
@@ -1258,8 +1259,8 @@ class Mirai(SimpleMirai):
             self,
             qq: int,
             group: int,
-            message_chain: Union[MessageChain, Iterable[Union[MessageComponent,
-                                                              str]],
+            message_chain: Union[MessageChain,
+                                 Iterable[Union[str, MessageComponent]],
                                  MessageComponent, str],
             quote: Union[int, None] = None
         ) -> int:
@@ -1268,7 +1269,7 @@ class Mirai(SimpleMirai):
             Args:
                 qq (`int`): 临时会话对象 QQ 号。
                 group (`int`): 临时会话对象群号。
-                message_chain (`Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str]`): 消息链。
+                message_chain (`Union[MessageChain,Iterable[Union[str,MessageComponent]],MessageComponent,str]`): 消息链。
                 quote (`Union[int,None]`): 可选。引用一条消息的 message_id 进行回复，默认值 None。
             """
 
@@ -1282,8 +1283,8 @@ class Mirai(SimpleMirai):
         self,
         qq: int,
         group: int,
-        message_chain: Union[MessageChain, Iterable[Union[MessageComponent,
-                                                          str]],
+        message_chain: Union[MessageChain, Iterable[Union[str,
+                                                          MessageComponent]],
                              MessageComponent, str],
         quote: Union[int, None] = None
     ) -> int:
@@ -1292,7 +1293,7 @@ class Mirai(SimpleMirai):
         Args:
             qq (`int`): 临时会话对象 QQ 号。
             group (`int`): 临时会话对象群号。
-            message_chain (`Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str]`): 消息链。
+            message_chain (`Union[MessageChain,Iterable[Union[str,MessageComponent]],MessageComponent,str]`): 消息链。
             quote (`Union[int,None]`): 可选。引用一条消息的 message_id 进行回复，默认值 None。
         """
 
@@ -1447,3 +1448,7 @@ class Mirai(SimpleMirai):
             type (`Literal['group','friend','temp']`): 上传的语音类型。
             voice (`Union[str,Path]`): 上传的语音的本地路径。
         """
+
+
+def __getattr__(name) -> Any:
+    ...
