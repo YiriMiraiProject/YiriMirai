@@ -32,11 +32,6 @@ class MiraiBaseModel(BaseModel, metaclass=MiraiMetaclass):
         """"""
         super().__init__(*args, **kwargs)
 
-    def __repr__(self) -> str:
-        return self.__class__.__name__ + '(' + ', '.join(
-            (f'{k}={repr(v)}' for k, v in self.__dict__.items() if v)
-        ) + ')'
-
     class Config:
         extra = 'allow'
         allow_population_by_field_name = True

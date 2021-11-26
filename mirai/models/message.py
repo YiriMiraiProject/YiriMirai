@@ -87,13 +87,8 @@ class MessageComponent(MiraiIndexedModel, metaclass=MessageComponentMetaclass):
         """转化为 mirai 码。"""
         return ''
 
-    def __repr__(self):
-        return self.__class__.__name__ + '(' + ', '.join(
-            (
-                f'{k}={repr(v)}'
-                for k, v in self.__dict__.items() if k != 'type' and v
-            )
-        ) + ')'
+    def __repr_args__(self):
+        return [(k, v) for k, v in self.__dict__.items() if k != 'type' and v]
 
     def __init__(self, *args, **kwargs):
         # 解析参数列表，将位置参数转化为具名参数
@@ -310,8 +305,8 @@ class MessageChain(MiraiBaseModel):
             component.as_mirai_code() for component in self.__root__
         )
 
-    def __repr__(self):
-        return f'{self.__class__.__name__}({self.__root__!r})'
+    def __repr_str__(self, _):
+        return repr(self.__root__)
 
     def __iter__(self):
         yield from self.__root__
@@ -693,8 +688,8 @@ class Plain(MessageComponent):
     def as_mirai_code(self) -> str:
         return serialize(self.text)
 
-    def __repr__(self):
-        return f'Plain({self.text!r})'
+    def __repr_str__(self, _):
+        return repr(self.text)
 
 
 class Quote(MessageComponent):
@@ -1298,8 +1293,8 @@ class MiraiCode(MessageComponent):
     def __str__(self):
         return serialize(self.code)
 
-    def __repr__(self):
-        return f'MiraiCode({self.code!r})'
+    def __repr_str__(self, _):
+        return repr(self.code)
 
 
 __all__ = [
