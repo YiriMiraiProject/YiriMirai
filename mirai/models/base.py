@@ -2,14 +2,16 @@
 """
 此模块提供 YiriMirai 中使用的 pydantic 模型的基类。
 """
-from typing import Dict, List, Type
+from typing import Dict, List, Type, cast
 
 import pydantic.main as pdm
 from pydantic import BaseModel
+from pydantic.fields import ModelField
 
 
 class MiraiMetaclass(pdm.ModelMetaclass):
     """此类是 YiriMirai 中使用的 pydantic 模型的元类的基类。"""
+    __fields__: Dict[str, ModelField]
 
 
 def to_camel(name: str) -> str:
@@ -40,11 +42,14 @@ class MiraiBaseModel(BaseModel, metaclass=MiraiMetaclass):
 
 class MiraiIndexedMetaclass(MiraiMetaclass):
     """可以通过子类名获取子类的类的元类。"""
-    __indexedbases__: List[Type['MiraiIndexedModel']] = []
+    __indexes__: Dict[str, 'MiraiIndexedMetaclass']
+    __indexedbases__: List['MiraiIndexedMetaclass'] = []
     __indexedmodel__ = None
 
     def __new__(cls, name, bases, attrs, **kwargs):
-        new_cls = super().__new__(cls, name, bases, attrs, **kwargs)
+        new_cls: MiraiIndexedMetaclass = super().__new__(
+            cls, name, bases, attrs, **kwargs
+        )
         # 第一类：MiraiIndexedModel
         if name == 'MiraiIndexedModel':
             cls.__indexedmodel__ = new_cls
@@ -59,25 +64,19 @@ class MiraiIndexedMetaclass(MiraiMetaclass):
         for base in cls.__indexedbases__:
             if issubclass(new_cls, base):
                 base.__indexes__[name] = new_cls
-                return new_cls
+        return new_cls
 
     def __getitem__(cls, name):
         return cls.get_subtype(name)
 
-
-class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):
-    """可以通过子类名获取子类的类。"""
-    __indexes__: Dict[str, Type['MiraiIndexedModel']]
-
-    @classmethod
-    def get_subtype(cls, name: str) -> Type['MiraiIndexedModel']:
+    def get_subtype(cls, name: str) -> 'MiraiIndexedMetaclass':
         """根据类名称，获取相应的子类类型。
 
         Args:
             name: 类名称。
 
         Returns:
-            Type['MiraiIndexedModel']: 子类类型。
+            `MiraiIndexedMetaclass`: 子类类型。
         """
         try:
             type_ = cls.__indexes__.get(name)
@@ -87,6 +86,9 @@ class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):
         except AttributeError as e:
             raise ValueError(f'`{name}` 不是 `{cls.__name__}` 的子类！') from None
 
+
+class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):
+    """可以通过子类名获取子类的类。"""
     @classmethod
     def parse_obj(cls, obj: dict) -> 'MiraiIndexedModel':
         """通过字典，构造对应的模型对象。
@@ -98,6 +100,8 @@ class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):
             MiraiIndexedModel: 构造的对象。
         """
         if cls in MiraiIndexedModel.__subclasses__():
-            ModelType = cls.get_subtype(obj['type'])
+            ModelType = cast(
+                Type[MiraiIndexedModel], cls.get_subtype(obj['type'])
+            )
             return ModelType.parse_obj(obj)
         return super().parse_obj(obj)

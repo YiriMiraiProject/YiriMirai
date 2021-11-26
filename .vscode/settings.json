@@ -8,4 +8,5 @@
     "css.lint.unknownAtRules": "ignore",
     "python.formatting.provider": "yapf",
     "python.linting.mypyEnabled": true,
+    "python.analysis.typeCheckingMode": "basic",
 }

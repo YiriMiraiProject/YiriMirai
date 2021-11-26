@@ -39,18 +39,29 @@ class ApiResponse(MiraiBaseModel):
         return getattr(self.data, item)
 
     def __iter__(self):
-        return iter(self.data)
+        return iter(self.data or [])
 
     def __getitem__(self, item):
-        return self.data[item]
+        return self.data and self.data[item]
 
 
 class ApiMetaclass(MiraiIndexedMetaclass):
     """API 模型的元类。"""
     __apimodel__ = None
 
+    class ApiInfo():
+        """API 的信息。"""
+        name = ""
+        alias = ""
+        parameter_names: List[str] = []
+
+    Info: Type[ApiInfo]
+
     def __new__(cls, name, bases, attrs, **kwargs):
-        new_cls = super().__new__(cls, name, bases, attrs, **kwargs)
+        new_cls: ApiMetaclass = cast(
+            ApiMetaclass,
+            super().__new__(cls, name, bases, attrs, **kwargs)
+        )
 
         if name == 'ApiModel':
             cls.__apimodel__ = new_cls
@@ -77,6 +88,12 @@ class ApiMetaclass(MiraiIndexedMetaclass):
 
         return new_cls
 
+    def get_subtype(cls, name: str) -> 'ApiMetaclass':
+        try:
+            return cast(ApiMetaclass, super().get_subtype(name))
+        except ValueError as e:
+            raise ValueError(f'`{name}` 不是可用的 API！') from e
+
 
 class ApiBaseModel(MiraiIndexedModel, metaclass=ApiMetaclass):
     """API 模型基类。
@@ -91,7 +108,7 @@ TModel = TypeVar('TModel', bound=MiraiBaseModel)
 
 class ApiModel(ApiBaseModel):
     """API 模型。"""
-    class Info():
+    class Info(ApiMetaclass.ApiInfo):
         """API 的信息。"""
         name = ""
         alias = ""
@@ -115,13 +132,6 @@ class ApiModel(ApiBaseModel):
             kwargs[name] = value
 
         super().__init__(**kwargs)
-
-    @classmethod
-    def get_subtype(cls, name: str) -> Type['ApiModel']:
-        try:
-            return cast(Type['ApiModel'], super().get_subtype(name))
-        except ValueError as e:
-            raise ValueError(f'`{name}` 不是可用的 API！') from e
 
     async def _call(
         self,
@@ -254,6 +264,9 @@ class ApiPost(ApiModel):
             return await self.set(*args, **kwargs)
 
 
+TModel_ = TypeVar('TModel_', bound=MiraiBaseModel)
+
+
 class ApiRest(ApiModel):
     class Info(ApiModel.Info):
         """API 的信息。"""
@@ -275,7 +288,7 @@ class ApiRest(ApiModel):
                 kwargs
             )
 
-        class Partial(ApiModel.Proxy[TModel]):
+        class Partial(ApiModel.Proxy[TModel_]):
             """RESTful 的 API 代理对象（已传入公共参数）。"""
             api_type: Type['ApiRest']
 
@@ -287,7 +300,7 @@ class ApiRest(ApiModel):
                 self.partial_args = partial_args
                 self.partial_kwargs = partial_kwargs
 
-            async def get(self, *args, **kwargs) -> Optional[TModel]:
+            async def get(self, *args, **kwargs) -> Optional[TModel_]:
                 """获取。"""
                 return await self._call_api(
                     method=Method.RESTGET,
@@ -298,7 +311,7 @@ class ApiRest(ApiModel):
                     }
                 )
 
-            async def set(self, *args, **kwargs) -> Optional[TModel]:
+            async def set(self, *args, **kwargs) -> Optional[TModel_]:
                 """设置。"""
                 return await self._call_api(
                     method=Method.RESTPOST,
