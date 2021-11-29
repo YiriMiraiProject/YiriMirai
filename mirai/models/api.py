@@ -350,11 +350,10 @@ __all__ = [
 
 def __getattr__(name: str) -> Type[ApiModel]:
     """获取指定名称的 API。"""
-    if name.startswith('_'):
-        result = globals().get(name, None)
-        if result is not None:
-            return result
-        raise AttributeError(f'Failed to import {name} from {__name__}.')
+    result = globals().get(name, None)
     import mirai.models.api_impl as api
-    result = getattr(api, name, None) or ApiModel.get_subtype(name)
+    try:
+        result = result or getattr(api, name, None) or ApiModel.get_subtype(name)
+    except Exception as e:
+        raise AttributeError(f'{name} 不是一个 API。') from e
     return result
