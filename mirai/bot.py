@@ -12,7 +12,7 @@ from typing import (
 from mirai.adapters.base import Adapter, AdapterInterface
 from mirai.api_provider import ApiProvider, Method
 from mirai.asgi import ASGI, asgi_serve
-from mirai.bus import AbstractEventBus, EventBus
+from mirai.bus import AbstractEventBus
 from mirai.models.api import ApiModel
 from mirai.models.api_impl import RespEvent
 from mirai.models.bus import ModelEventBus
@@ -23,32 +23,35 @@ from mirai.models.events import Event, MessageEvent, RequestEvent, TempMessage
 from mirai.models.message import TMessage
 from mirai.utils import Singleton
 
-__all__ = [
-    'Mirai', 'SimpleMirai', 'MiraiRunner', 'LifeSpan', 'Startup', 'Shutdown'
-]
+__all__ = ['Mirai', 'MiraiRunner', 'LifeSpan', 'Startup', 'Shutdown']
 
 
-class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
+class Mirai(ApiProvider, AdapterInterface, AbstractEventBus):
     """
-    基于 adapter 和 bus，处于 model 层之下的机器人类。
+    机器人主类。
 
     使用了 `__getattr__` 魔术方法，可以直接在对象上调用 API。
 
-    通过 `SimpleMirai` 调用 API 时，需注意此类不含 model 层封装，
-    因此 API 名称与参数名称需与 mirai-api-http 中的定义相同，
+    `Mirai` 类包含 model 层封装，API 名称经过转写以符合命名规范，所有的 API 全部使用小写字母及下划线命名。
+    （API 名称也可使用原名。）
+    API 参数可以使用具名参数，也可以使用位置参数，关于 API 参数的更多信息请参见模块 `mirai.models.api`。
+
+    例如：
+    ```py
+    await bot.send_friend_message(12345678, [
+        Plain("Hello World!")
+    ])
+    ```
+
+    也可以使用 `call_api` 方法，此时 API 名称与参数名称需与 mirai-api-http 中的定义相同，
     参数需要全部以具名参数的形式给出，并且需要指明使用的方法（GET/POST）。
 
     例如：
     ```py
-    await bot.sendFriendMessage(target=12345678, messageChain=[
+    await bot.call_api("sendFriendMessage", target=12345678, messageChain=[
         {"type": "Plain", "text": "Hello World!"}
     ], method="POST")
-    ```
 
-    也可以使用 `call_api` 方法。
-
-    对于名称的路由含有二级目录的 API，由于名称中含有斜杠，必须使用 `call_api` 调用，例如：
-    ```py
     file_list = await bot.call_api(
         "file/list", id="", target=12345678, method="GET"
     )
@@ -63,13 +66,12 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
             adapter: 适配器，负责与 mirai-api-http 沟通，详见模块`mirai.adapters。
         """
         self.qq = qq
-
         self._adapter = adapter
-        self._bus = EventBus()
-        self._adapter.register_event_bus(self._bus)
+        self._bus = ModelEventBus()
+        adapter.register_event_bus(self._bus.base_bus)
 
     @property
-    def bus(self) -> EventBus:
+    def bus(self) -> ModelEventBus:
         return self._bus
 
     def subscribe(self, event, func: Callable, priority: int = 0) -> None:
@@ -90,22 +92,6 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
             **kwargs: 参数。
         """
         return await self._adapter.call_api(api, *args, **kwargs)
-
-    def on(self, event: str, priority: int = 0) -> Callable:
-        """注册事件处理器。
-
-        用法举例：
-        ```py
-        @bot.on('FriendMessage')
-        async def on_friend_message(event: dict):
-            print(f"收到来自{event['sender']['nickname']}的消息。")
-        ```
-
-        Args:
-            event: 事件名。
-            priority: 优先级，小者优先。
-        """
-        return self._bus.on(event, priority=priority)
 
     @property
     def adapter_info(self) -> Dict[str, Any]:
@@ -137,9 +123,9 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
 
         if self._adapter.single_mode:
             # Single Mode 下，QQ 号可以随便传入。这里从 session info 中获取正确的 QQ 号。
-            session_info = await self.call_api('sessionInfo')
+            session_info = await self.session_info.get()
             if session_info:
-                self.qq = session_info['data']['qq']['id']
+                self.qq = session_info.qq.id
 
         asyncio.create_task(self._adapter.emit("Startup", {'type': 'Startup'}))
         await self._adapter.start()
@@ -200,120 +186,9 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
         """
         MiraiRunner(self).run(host, port, asgi_server, **kwargs)
 
-
-class MiraiRunner(Singleton):
-    """运行 SimpleMirai 对象的托管类。
-
-    使用此类以实现机器人的多例运行。
-
-    例如:
-    ```py
-    runner = MiraiRunner(mirai)
-    runner.run(host='127.0.0.1', port=8000)
-    ```
-    """
-    bots: Iterable[SimpleMirai]
-    """运行的 SimpleMirai 对象。"""
-    def __init__(self, *bots: SimpleMirai):
-        """
-        Args:
-            *bots: 要运行的机器人。
-        """
-        self.bots = bots
-        self._asgi = ASGI()
-        self._asgi.add_event_handler('startup', self.startup)
-        self._asgi.add_event_handler('shutdown', self.shutdown)
-
-    async def startup(self):
-        """开始运行。"""
-        coros = [bot.startup() for bot in self.bots]
-        await asyncio.gather(*coros)
-
-    async def shutdown(self):
-        """结束运行。"""
-        coros = [bot.shutdown() for bot in self.bots]
-        await asyncio.gather(*coros)
-
-    async def __call__(self, scope, recv, send):
-        await self._asgi(scope, recv, send)
-
-    async def _run(self):
-        try:
-            await self.startup()
-            backgrounds = [bot.background() for bot in self.bots]
-            await asyncio.gather(*backgrounds)
-        finally:
-            await self.shutdown()
-
-    def run(
-        self,
-        host: str = '127.0.0.1',
-        port: int = 8000,
-        asgi_server: str = 'auto',
-        **kwargs
-    ):
-        """开始运行机器人。
-
-        一般情况下，此函数会进入主循环，不再返回。
-        """
-        if not asgi_serve(
-            self, host=host, port=port, asgi_server=asgi_server, **kwargs
-        ):
-            import textwrap
-            logger = logging.getLogger(__name__)
-            logger.warning(
-                textwrap.dedent(
-                    """
-                    未找到可用的 ASGI 服务，反向 WebSocket 和 WebHook 上报将不可用。
-                    仅 HTTP 轮询与正向 WebSocket 可用。
-                    建议安装 ASGI 服务器，如 `uvicorn` 或 `hypercorn`。
-                    在命令行键入：
-                        pip install uvicorn
-                    或者
-                        pip install hypercorn
-                    """
-                ).strip()
-            )
-            try:
-                asyncio.run(self._run())
-            except (KeyboardInterrupt, SystemExit):
-                exit()
-
-
-class Mirai(SimpleMirai):
-    """
-    机器人主类。
-
-    使用了 `__getattr__` 魔术方法，可以直接在对象上调用 API。
-
-        Mirai: 类包含 model 层封装，API 名称经过转写以符合命名规范，所有的 API 全部使用小写字母及下划线命名。
-    （API 名称也可使用原名。）
-    API 参数可以使用具名参数，也可以使用位置参数，关于 API 参数的更多信息请参见模块 `mirai.models.api`。
-
-    例如：
-    ```py
-    await bot.send_friend_message(12345678, [
-        Plain("Hello World!")
-    ])
-    ```
-
-    也可以使用 `call_api` 方法，须注意此方法直接继承自 `SimpleMirai`，因此未经 model 层封装，
-    需要遵循 `SimpleMirai` 的规定。
-    """
-    def __init__(self, qq: int, adapter: Adapter):
-        super().__init__(qq=qq, adapter=adapter)
-        # 将 bus 更换为 ModelEventBus
-        adapter.unregister_event_bus(self._bus)
-        self._bus: ModelEventBus = ModelEventBus()
-        adapter.register_event_bus(self._bus.base_bus)
-
-    @property
-    def bus(self) -> ModelEventBus:
-        return self._bus
-
     def on(
         self,
-        event_type: Union[Type[Event], str],
+        event: Union[Type[Event], str],
         priority: int = 0,
     ) -> Callable:
         """注册事件处理器。
@@ -326,10 +201,10 @@ class Mirai(SimpleMirai):
         ```
 
         Args:
-            event_type: 事件类或事件名。
+            event: 事件类或事件名。
             priority: 优先级，较小者优先。
         """
-        return self._bus.on(event_type, priority)
+        return self._bus.on(event, priority)
 
     def api(self, api: str) -> ApiModel.Proxy:
         """获取 API Proxy 对象。
@@ -354,21 +229,23 @@ class Mirai(SimpleMirai):
         self,
         target: Union[Entity, MessageEvent],
         message: TMessage,
-        quote: bool = False
+        quote: Union[bool, int] = False
     ) -> int:
         """发送消息。可以从 `Friend` `Group` 等对象，或者从 `MessageEvent` 中自动识别消息发送对象。
 
         Args:
-            target: 目标对象。
-            message: 发送的消息。
-            quote: 是否以回复消息的形式发送，默认为 False。
+            target(`Union[Entity, MessageEvent]`): 目标对象。
+            message(`TMessage`): 发送的消息。
+            quote(`Union[bool, int]`): 需要回复的消息的 message_id，或者传入 True 以自动回复 target 对应的消息。
 
         Returns:
             int: 发送的消息的 message_id。
         """
+        quoting = quote if quote is not True and quote is not False else None
         # 识别消息发送对象
         if isinstance(target, TempMessage):
-            quoting = target.message_chain.message_id if quote else None
+            if quote is True and quoting is None:
+                quoting = target.message_chain.message_id
             return (
                 await self.send_temp_message(
                     qq=target.sender.id,
@@ -379,10 +256,9 @@ class Mirai(SimpleMirai):
             )
 
         if isinstance(target, MessageEvent):
-            quoting = target.message_chain.message_id if quote else None
+            if quote is True and quoting is None:
+                quoting = target.message_chain.message_id
             target = target.sender
-        else:
-            quoting = None
 
         if isinstance(target, Friend):
             send_message = self.send_friend_message
@@ -543,6 +419,85 @@ class Mirai(SimpleMirai):
             event, RespOperate.IGNORE
             & RespOperate.BAN if ban else RespOperate.DECLINE, message
         )
+
+
+class MiraiRunner(Singleton):
+    """运行 SimpleMirai 对象的托管类。
+
+    使用此类以实现机器人的多例运行。
+
+    例如:
+    ```py
+    runner = MiraiRunner(mirai)
+    runner.run(host='127.0.0.1', port=8000)
+    ```
+    """
+    bots: Iterable[Mirai]
+    """运行的 SimpleMirai 对象。"""
+    def __init__(self, *bots: Mirai):
+        """
+        Args:
+            *bots: 要运行的机器人。
+        """
+        self.bots = bots
+        self._asgi = ASGI()
+        self._asgi.add_event_handler('startup', self.startup)
+        self._asgi.add_event_handler('shutdown', self.shutdown)
+
+    async def startup(self):
+        """开始运行。"""
+        coros = [bot.startup() for bot in self.bots]
+        await asyncio.gather(*coros)
+
+    async def shutdown(self):
+        """结束运行。"""
+        coros = [bot.shutdown() for bot in self.bots]
+        await asyncio.gather(*coros)
+
+    async def __call__(self, scope, recv, send):
+        await self._asgi(scope, recv, send)
+
+    async def _run(self):
+        try:
+            await self.startup()
+            backgrounds = [bot.background() for bot in self.bots]
+            await asyncio.gather(*backgrounds)
+        finally:
+            await self.shutdown()
+
+    def run(
+        self,
+        host: str = '127.0.0.1',
+        port: int = 8000,
+        asgi_server: str = 'auto',
+        **kwargs
+    ):
+        """开始运行机器人。
+
+        一般情况下，此函数会进入主循环，不再返回。
+        """
+        if not asgi_serve(
+            self, host=host, port=port, asgi_server=asgi_server, **kwargs
+        ):
+            import textwrap
+            logger = logging.getLogger(__name__)
+            logger.warning(
+                textwrap.dedent(
+                    """
+                    未找到可用的 ASGI 服务，反向 WebSocket 和 WebHook 上报将不可用。
+                    仅 HTTP 轮询与正向 WebSocket 可用。
+                    建议安装 ASGI 服务器，如 `uvicorn` 或 `hypercorn`。
+                    在命令行键入：
+                        pip install uvicorn
+                    或者
+                        pip install hypercorn
+                    """
+                ).strip()
+            )
+            try:
+                asyncio.run(self._run())
+            except (KeyboardInterrupt, SystemExit):
+                pass
 
 
 class LifeSpan(Event):

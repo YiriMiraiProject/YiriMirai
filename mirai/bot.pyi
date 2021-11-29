@@ -41,7 +41,36 @@ def __getattr__(name) -> Any:
     ...
 
 
-class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
+class MiraiRunner(Singleton):
+    _asgi: ASGI
+    bots: Iterable['Mirai']
+
+    def __init__(self, *bots: 'Mirai') -> None:
+        ...
+
+    async def startup(self) -> None:
+        ...
+
+    async def shutdown(self) -> None:
+        ...
+
+    async def __call__(self, scope, recv, send) -> None:
+        ...
+
+    def run(
+        self,
+        host: str = ...,
+        port: int = ...,
+        asgi_server: str = ...,
+        **kwargs
+    ) -> None:
+        ...
+
+    async def _run(self):
+        ...
+
+
+class Mirai(ApiProvider, AdapterInterface, AbstractEventBus):
     qq: int
 
     def __init__(self, qq: int, adapter: Adapter) -> None:
@@ -57,9 +86,6 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
         ...
 
     async def call_api(self, api: str, *args, **kwargs):
-        ...
-
-    def on(self, event: str, priority: int = 0) -> Callable:
         ...
 
     @property
@@ -107,40 +133,6 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
     ) -> None:
         ...
 
-
-class MiraiRunner(Singleton):
-    _asgi: ASGI
-    bots: Iterable[SimpleMirai]
-
-    def __init__(self, *bots: SimpleMirai) -> None:
-        ...
-
-    async def startup(self) -> None:
-        ...
-
-    async def shutdown(self) -> None:
-        ...
-
-    async def __call__(self, scope, recv, send) -> None:
-        ...
-
-    def run(
-        self,
-        host: str = ...,
-        port: int = ...,
-        asgi_server: str = ...,
-        **kwargs
-    ) -> None:
-        ...
-
-    async def _run(self):
-        ...
-
-
-class Mirai(SimpleMirai):
-    def __init__(self, qq: int, adapter: Adapter) -> None:
-        ...
-
     def on(
         self,
         event_type: Union[Type[Event], str],
@@ -159,7 +151,7 @@ class Mirai(SimpleMirai):
         target: Union[Entity, MessageEvent],
         message: Union[MessageChain, Iterable[Union[MessageComponent, str]],
                        MessageComponent, str],
-        quote: bool = ...
+        quote: Union[bool, int] = False
     ) -> int:
         ...
 
@@ -1448,7 +1440,3 @@ class Mirai(SimpleMirai):
             type (`Literal['group','friend','temp']`): 上传的语音类型。
             voice (`Union[str,Path]`): 上传的语音的本地路径。
         """
-
-
-def __getattr__(name) -> Any:
-    ...
