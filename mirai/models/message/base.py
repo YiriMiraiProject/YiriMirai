@@ -1,5 +1,5 @@
 import re
-from typing import List, Union, cast
+from typing import List,  cast
 
 from mirai.models.base import MiraiIndexedMetaclass, MiraiIndexedModel
 
@@ -37,7 +37,7 @@ class MessageComponent(MiraiIndexedModel, metaclass=MessageComponentMetaclass):
     """消息组件。"""
     type: str
     """消息组件类型。"""
-    def __str__(self):
+    def __str__(self) -> str:
         return ''
 
     def as_mirai_code(self) -> str:
@@ -74,10 +74,12 @@ class Plain(MessageComponent):
     def as_mirai_code(self) -> str:
         return serialize(self.text)
 
-    def __eq__(self, other: Union['Plain', str]):
+    def __eq__(self, other: object):
         if isinstance(other, Plain):
             return self.text == other.text
-        return self.text == other
+        if isinstance(other, str):
+            return self.text == other
+        return NotImplemented
 
     def __repr_str__(self, _):
         return repr(self.text)

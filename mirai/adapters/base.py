@@ -7,9 +7,9 @@ import asyncio
 import logging
 from datetime import datetime
 from json import dumps
-from typing import Any, Dict, Optional, Set, cast
+from typing import Any, Dict, NoReturn, Optional, Set, Tuple, Type, Union, cast
 
-from mirai import exceptions
+from mirai.exceptions import NetworkError
 from mirai.api_provider import ApiProvider, Method
 from mirai.bus import AbstractEventBus
 from mirai.tasks import Tasks
@@ -17,24 +17,28 @@ from mirai.tasks import Tasks
 logger = logging.getLogger(__name__)
 
 
-def _json_default(obj):  # 支持 datetime
+def _json_default(obj: Any):  # 支持 datetime
     if isinstance(obj, datetime):
         return int(obj.timestamp())
 
 
-def json_dumps(obj) -> str:
+def json_dumps(obj: Any) -> str:
     """保存为 json。"""
     return dumps(obj, default=_json_default)
 
 
-def error_handler_async(errors):
+def error_handler_async(errors: Tuple[Type[BaseException], ...]):
     """错误处理装饰器。"""
     def wrapper(func):
         async def wrapped(self, *args, **kwargs):
             try:
                 return await func(self, *args, **kwargs)
+            except KeyError:
+                raise NetworkError(
+                    '从 mirai-api-http 返回的数据格式错误。请检查版本是否正确。'
+                )
             except errors as e:
-                err = exceptions.NetworkError(
+                err = NetworkError(
                     '无法连接到 mirai。请检查 mirai-api-http 是否启动，地址与端口是否正确。'
                 )
                 logger.error(err)
@@ -56,7 +60,7 @@ class AdapterInterface(abc.ABC):
         "适配器信息。"
 
     @classmethod
-    def __subclasshook__(cls, C):
+    def __subclasshook__(cls, C: type):
         if cls is AdapterInterface:
             if any("adapter_info" in B.__dict__ for B in C.__mro__):
                 return True
@@ -91,7 +95,7 @@ class Adapter(ApiProvider, AdapterInterface):
         self.background = None
 
     @property
-    def adapter_info(self):
+    def adapter_info(self) -> Dict[str, Any]:
         return {
             'verify_key': self.verify_key,
             'session': self.session,
@@ -144,7 +148,7 @@ class Adapter(ApiProvider, AdapterInterface):
         """登出。"""
 
     @abc.abstractmethod
-    async def call_api(self, api: str, method: Method = Method.GET, **params):
+    async def call_api(self, api: str, method: Method = Method.GET, **params) -> Any:
         """调用 API。
 
         Args:
@@ -154,7 +158,7 @@ class Adapter(ApiProvider, AdapterInterface):
         """
 
     @abc.abstractmethod
-    async def _background(self):
+    async def _background(self) -> Union[NoReturn, None]:
         """背景事件循环，用于接收事件。"""
 
     async def start(self):
@@ -181,3 +185,6 @@ class Adapter(ApiProvider, AdapterInterface):
         """
         coros = [bus.emit(event, *args, **kwargs) for bus in self.buses]
         return sum(await asyncio.gather(*coros), [])
+
+
+__all__ = ['Adapter', 'AdapterInterface', 'error_handler_async']

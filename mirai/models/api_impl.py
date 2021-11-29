@@ -22,7 +22,7 @@ from mirai.models.api import (
 from mirai.models.base import MiraiBaseModel
 from mirai.models.entities import (
     FileProperties, Friend, Group, GroupConfigModel, GroupMember,
-    MemberInfoModel, Profile, RespOperate, Sex
+    MemberInfoModel, Profile, RespOperate
 )
 from mirai.models.events import (
     FriendMessage, GroupMessage, OtherClientMessage, RequestEvent,

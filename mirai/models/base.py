@@ -2,7 +2,7 @@
 """
 此模块提供 YiriMirai 中使用的 pydantic 模型的基类。
 """
-from typing import Dict, List, Type, cast, TypeVar
+from typing import Dict, List, Type, TypeVar, cast
 
 import pydantic.main as pdm
 from pydantic import BaseModel
@@ -85,8 +85,8 @@ class MiraiIndexedMetaclass(MiraiMetaclass):
             type_ = cls.__indexes__.get(name)
             if not (type_ and issubclass(type_, cls)):
                 raise ValueError(f'`{name}` 不是 `{cls.__name__}` 的子类！')
-            return type_
-        except AttributeError as e:
+            return cast(TMIMClass, type_)
+        except AttributeError:
             raise ValueError(f'`{name}` 不是 `{cls.__name__}` 的子类！') from None
 
 

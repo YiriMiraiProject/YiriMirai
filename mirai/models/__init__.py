@@ -32,8 +32,8 @@ from mirai.models.events import (
 from mirai.models.message import (
     App, At, AtAll, Dice, Face, File, FlashImage, Forward, ForwardMessageNode,
     Image, Json, MessageChain, MessageComponent, MiraiCode, MusicShare,
-    MusicShareKind, Plain, Poke, PokeNames,  Unknown, Voice, Xml,
-    deserialize, serialize
+    MusicShareKind, Plain, Poke, PokeNames, Unknown, Voice, Xml, deserialize,
+    serialize
 )
 
 __all__ = [
@@ -59,6 +59,8 @@ __all__ = [
     'At', 'AtAll', 'Dice', 'Face', 'File', 'FlashImage', 'Forward',
     'ForwardMessageNode', 'Image', 'Json', 'MessageChain', 'MessageComponent',
     'MiraiCode', 'MusicShareKind', 'MusicShare', 'Plain', 'PokeNames', 'Poke',
-     'Unknown', 'Voice', 'Xml', 'serialize', 'deserialize',
-    'ModelEventBus'
+    'Unknown', 'Voice', 'Xml', 'serialize', 'deserialize', 'ModelEventBus'
 ]
+
+# 导入所有的 API 实现，以自动注册 API 定义
+from mirai.models.api_impl import *

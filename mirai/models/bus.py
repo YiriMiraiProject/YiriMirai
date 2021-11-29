@@ -20,7 +20,7 @@ def event_chain_parents(event: str):
 
     例如：`FriendMessage` 的事件链为 `['FriendMessage', 'MessageEvent', 'Event']`。
     """
-    event_type = Event.get_subtype(event)
+    event_type: type = Event.get_subtype(event)
     while issubclass(event_type, Event):
         yield event_type.__name__
         event_type = event_type.__base__
@@ -42,7 +42,7 @@ class ModelEventBus(EventBus):
 
     def subscribe(
         self,
-        event_type: Union[Type[Event], str],
+        event: Union[Type[Event], str],
         func: Callable,
         priority: int = 0
     ) -> None:
@@ -53,38 +53,38 @@ class ModelEventBus(EventBus):
             func: 事件处理器。
             priority: 优先级，小者优先。
         """
-        if isinstance(event_type, str):
-            event_type = cast(Type[Event], Event.get_subtype(event_type))
+        if isinstance(event, str):
+            event = cast(Type[Event], Event.get_subtype(event))
 
         async def middleware(event: dict):
             """中间件。负责与底层 bus 沟通，将 event dict 解析为 Event 对象。"""
-            event_model = cast(Event, Event.parse_obj(event))
+            event_model = Event.parse_obj(event)
             logger.debug(f'收到事件 {event_model.type}。')
             return await async_with_exception(func(event_model))
 
         self._middlewares[func] = middleware
-        self.base_bus.subscribe(event_type.__name__, middleware, priority)
-        logger.debug(f'注册事件 {event_type.__name__} at {func}。')
+        self.base_bus.subscribe(event.__name__, middleware, priority)
+        logger.debug(f'注册事件 {event.__name__} at {func}。')
 
     def unsubscribe(
-        self, event_type: Union[Type[Event], str], func: Callable
+        self, event: Union[Type[Event], str], func: Callable
     ) -> None:
         """移除事件处理器。
 
         Args:
-            event_type: 事件类型。
+            event: 事件类型。
             func: 事件处理器。
         """
-        if isinstance(event_type, str):
-            event_type = cast(Type[Event], Event.get_subtype(event_type))
+        if isinstance(event, str):
+            event = cast(Type[Event], Event.get_subtype(event))
 
-        self.base_bus.unsubscribe(event_type.__name__, self._middlewares[func])
+        self.base_bus.unsubscribe(event.__name__, self._middlewares[func])
         del self._middlewares[func]
-        logger.debug(f'解除事件注册 {event_type.__name__} at {func}。')
+        logger.debug(f'解除事件注册 {event.__name__} at {func}。')
 
     def on(
         self,
-        event_type: Union[Type[Event], str],
+        event: Union[Type[Event], str],
         priority: int = 0,
     ) -> Callable:
         """以装饰器的方式注册事件处理器。
@@ -97,11 +97,11 @@ class ModelEventBus(EventBus):
         ```
 
         Args:
-            event_type: 事件类型或事件名。
+            event: 事件类型或事件名。
             priority: 优先级，小者优先。
         """
         def decorator(func: Callable) -> Callable:
-            self.subscribe(event_type, func, priority)
+            self.subscribe(event, func, priority)
             return func
 
         return decorator

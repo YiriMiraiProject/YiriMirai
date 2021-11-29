@@ -233,13 +233,13 @@ class ApiModel(ApiBaseModel):
             except ValidationError as e:
                 raise ApiParametersError(e) from None
 
-        async def get(self, *args, **kwargs) -> Optional[TModel]:
+        async def get(self, *args, **kwargs) -> Any:
             """获取。对于 GET 方法的 API，调用此方法。"""
             return await self._call_api(
                 method=Method.GET, args=args, kwargs=kwargs
             )
 
-        async def set(self, *args, **kwargs) -> Optional[TModel]:
+        async def set(self, *args, **kwargs) -> Any:
             """设置。对于 POST 方法的 API，可调用此方法。"""
             return await self._call_api(
                 method=Method.POST, args=args, kwargs=kwargs
@@ -258,7 +258,7 @@ class ApiGet(ApiModel):
             """
             raise TypeError(f'`{self.api_type.Info.alias}` 不支持 `set` 方法。')
 
-        async def __call__(self, *args, **kwargs) -> Optional[TModel]:
+        async def __call__(self, *args, **kwargs):
             return await self.get(*args, **kwargs)
 
 
@@ -272,7 +272,7 @@ class ApiPost(ApiModel):
             """
             raise TypeError(f'`{self.api_type.Info.alias}` 不支持 `get` 方法。')
 
-        async def __call__(self, *args, **kwargs) -> Optional[TModel]:
+        async def __call__(self, *args, **kwargs):
             return await self.set(*args, **kwargs)
 
 
@@ -346,5 +346,3 @@ __all__ = [
     'ApiRest',
     'ApiResponse',
 ]
-
-from mirai.models.api_impl import *

@@ -73,7 +73,7 @@ class ApiParametersError(TypeError):
                 )
                 message = error['msg']
                 errors.append(f'参数 `{parameter_name}` 类型错误，原因：{message}')
-            self.args = errors
+            self.args = tuple(errors)
         except TypeError:
             self.args = (err.json(), )
 

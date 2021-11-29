@@ -9,7 +9,7 @@ from typing import Optional, cast
 
 import httpx
 
-from mirai import exceptions
+from mirai.exceptions import ApiError, NetworkError
 from mirai.adapters.base import (
     Adapter, AdapterInterface, error_handler_async, json_dumps
 )
@@ -24,7 +24,7 @@ def _parse_response(response: httpx.Response) -> dict:
     response.raise_for_status()
     result = response.json()
     if result.get('code', 0) != 0:
-        raise exceptions.ApiError(result)
+        raise ApiError(result)
     return result
 
 
@@ -67,7 +67,7 @@ class HTTPAdapter(Adapter):
         if host[:2] == '//':
             host = 'http:' + host
         elif host[:8] == 'https://':
-            raise exceptions.NetworkError('不支持 HTTPS！')
+            raise NetworkError('不支持 HTTPS！')
         elif host[:7] != 'http://':
             host = 'http://' + host
 
@@ -171,7 +171,7 @@ class HTTPAdapter(Adapter):
                             client, '/verify', {
                                 "verifyKey": self.verify_key,
                             }
-                        )
+                        ) or {}
                     )['session']
                 else:
                     self.session = str(random.randint(1, 2**20))
@@ -203,16 +203,19 @@ class HTTPAdapter(Adapter):
                     )
         logger.info(f"[HTTP] 从账号{self.qq}退出。")
 
+    @_error_handler_async_local
     async def poll_event(self):
         """进行一次轮询，获取并处理事件。"""
         async with httpx.AsyncClient(
             base_url=self.host_name, headers=self.headers
         ) as client:
-            msg_count = (await self._get(client, '/countMessage', {}))['data']
+            msg_count = (await self._get(client, '/countMessage', {})
+                         or {})['data']
             if msg_count > 0:
                 msg_list = (
                     await
                     self._get(client, '/fetchMessage', {'count': msg_count})
+                    or {}
                 )['data']
 
                 coros = [self.emit(msg['type'], msg) for msg in msg_list]

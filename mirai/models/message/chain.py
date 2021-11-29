@@ -1,14 +1,14 @@
 import itertools
 import logging
+from datetime import datetime
 from typing import (
     Iterable, List, Optional, Tuple, Type, TypeVar, Union, cast, overload
 )
-from datetime import datetime
 
 from pydantic import validator
 
 from mirai.models.base import MiraiBaseModel
-from mirai.models.message.base import (MessageComponent, Plain, deserialize)
+from mirai.models.message.base import MessageComponent, Plain, deserialize
 
 logger = logging.getLogger(__name__)
 
@@ -187,13 +187,13 @@ class MessageChain(MiraiBaseModel):
         return MessageChain._parse_message_chain(msg_chain)
 
     @classmethod
-    def parse_obj(cls, msg_chain: Iterable):
+    def parse_obj(cls, obj: Iterable):
         """通过列表形式的消息链，构造对应的 `MessageChain` 对象。
 
         Args:
             msg_chain: 列表形式的消息链。
         """
-        result = MessageChain._parse_message_chain(msg_chain)
+        result = MessageChain._parse_message_chain(obj)
         return cls(__root__=result)
 
     def __init__(
@@ -424,9 +424,7 @@ class MessageChain(MiraiBaseModel):
             return MessageChain(other) + self
         return NotImplemented
 
-    def __eq__(
-        self, other: Union['MessageChain', List[Union[MessageComponent, str]]]
-    ) -> bool:
+    def __eq__(self, other: object) -> bool:
         if isinstance(other, (MessageChain, list)):
             return all(a == b for a, b in zip(self, other))
         return NotImplemented

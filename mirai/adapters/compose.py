@@ -45,7 +45,7 @@ class ComposeAdapter(Adapter):
         self.session = self.api_channel.session
         await self.event_channel.login(qq)
 
-    async def logout(self):
+    async def logout(self, terminate: bool = True):
         await self.event_channel.logout()
         await self.api_channel.logout()
 

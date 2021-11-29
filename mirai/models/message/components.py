@@ -1,5 +1,4 @@
 import logging
-import re
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
@@ -91,7 +90,7 @@ class Image(MessageComponent):
             other, Image
         ) and self.type == other.type and self.uuid == other.uuid
 
-    def __str__(self):
+    def __str__(self) -> str:
         return '[图片]'
 
     def as_mirai_code(self) -> str:

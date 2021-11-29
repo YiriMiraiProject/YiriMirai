@@ -197,7 +197,7 @@ def asgi_serve(
         return True
     if asgi == 'hypercorn':
         import asyncio
-        config = config.Config().from_mapping(bind=f'{host}:{port}', **kwargs)
-        asyncio.run(serve(app, config), debug=True)
+        m_config = config.Config().from_mapping(bind=f'{host}:{port}', **kwargs)
+        asyncio.run(serve(app, m_config), debug=True)
         return True
     return False

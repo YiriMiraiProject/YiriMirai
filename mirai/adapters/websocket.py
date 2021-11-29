@@ -17,7 +17,7 @@ from websockets.exceptions import (
     ConnectionClosed, ConnectionClosedOK, InvalidURI
 )
 
-from mirai import exceptions
+from mirai.exceptions import NetworkError, ApiError
 from mirai.adapters.base import (
     Adapter, AdapterInterface, error_handler_async, json_dumps
 )
@@ -69,7 +69,7 @@ class WebSocketAdapter(Adapter):
         if host[:2] == '//':
             host = 'ws:' + host
         elif host[:7] == 'http://' or host[:8] == 'https://':
-            raise exceptions.NetworkError(f'{host} 不是一个可用的 WebSocket 地址！')
+            raise NetworkError(f'{host} 不是一个可用的 WebSocket 地址！')
         elif host[:5] != 'ws://':
             host = 'ws://' + host
 
@@ -126,7 +126,7 @@ class WebSocketAdapter(Adapter):
     async def _receiver(self):
         """开始接收 websocket 数据。"""
         if not self.connection:
-            raise exceptions.NetworkError(
+            raise NetworkError(
                 f'WebSocket 通道 {self.host_name} 未连接！'
             )
         while True:
@@ -162,7 +162,7 @@ class WebSocketAdapter(Adapter):
                 data = self._recv_dict[sync_id].popleft()
 
                 if data.get('code', 0) != 0:
-                    raise exceptions.ApiError(data)
+                    raise ApiError(data)
 
                 return data
                 # 如果没有对应同步 ID 的数据，则等待 websocket 数据
@@ -198,7 +198,8 @@ class WebSocketAdapter(Adapter):
         if self.connection:
             await self.connection.close()
 
-            await self._receiver_task
+            if self._receiver_task:
+                await self._receiver_task
 
             logger.info(f"[WebSocket] 从账号{self.qq}退出。")
 
@@ -210,7 +211,7 @@ class WebSocketAdapter(Adapter):
 
     async def call_api(self, api: str, method: Method = Method.GET, **params):
         if not self.connection:
-            raise exceptions.NetworkError(
+            raise NetworkError(
                 f'WebSocket 通道 {self.host_name} 未连接！'
             )
         self._local_sync_id += 1  # 使用不同的 sync_id
@@ -248,11 +249,13 @@ class WebSocketAdapter(Adapter):
     async def _background(self):
         """开始接收事件。"""
         logger.info('[WebSocket] 机器人开始运行。按 Ctrl + C 停止。')
+        heartbeat = None
 
         try:
             heartbeat = asyncio.create_task(self._heartbeat())
             while True:
                 await self.poll_event()
         finally:
-            await Tasks.cancel(heartbeat)
+            if heartbeat:
+                await Tasks.cancel(heartbeat)
             await self._tasks.cancel_all()

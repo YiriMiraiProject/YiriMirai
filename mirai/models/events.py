@@ -4,7 +4,7 @@
 """
 from datetime import datetime
 from enum import Enum
-from typing import TYPE_CHECKING, Any, Optional, Type, Union, cast
+from typing import TYPE_CHECKING, Any, Optional, TypeVar, Union, cast
 
 if TYPE_CHECKING:
     from typing_extensions import Literal
@@ -20,13 +20,14 @@ from mirai.models.entities import (
 )
 from mirai.models.message import MessageChain
 
+TEventClass = TypeVar("TEventClass", bound='EventMetaclass')
 
 class EventMetaclass(MiraiIndexedMetaclass):
-    def get_subtype(cls, name: str) -> 'EventMetaclass':
+    def get_subtype(cls: TEventClass, name: str) -> TEventClass:
         try:
-            return cast(EventMetaclass, super().get_subtype(name))
+            return super().get_subtype(name)
         except ValueError:
-            return Event
+            return cast(TEventClass, Event)
 
 
 class Event(MiraiIndexedModel, metaclass=EventMetaclass):

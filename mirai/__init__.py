@@ -19,9 +19,7 @@ else:
     from mirai.adapters import Adapter
 
 from mirai.api_provider import Method
-from mirai.bot import (
-    LifeSpan, Mirai, MiraiRunner, Shutdown, SimpleMirai, Startup
-)
+from mirai.bot import LifeSpan, Mirai, MiraiRunner, Shutdown, Startup
 from mirai.bus import EventBus
 from mirai.colorlog import ColoredFormatter
 from mirai.exceptions import (
@@ -34,8 +32,8 @@ from mirai.models import (
 )
 
 __all__ = [
-    'Mirai', 'SimpleMirai', 'MiraiRunner', 'LifeSpan', 'Startup', 'Shutdown',
-    'Adapter', 'Method', 'HTTPAdapter', 'WebSocketAdapter', 'WebHookAdapter',
+    'Mirai', 'MiraiRunner', 'LifeSpan', 'Startup', 'Shutdown', 'Adapter',
+    'Method', 'HTTPAdapter', 'WebSocketAdapter', 'WebHookAdapter',
     'ComposeAdapter', 'EventBus', 'get_logger', 'Event', 'MessageEvent',
     'FriendMessage', 'GroupMessage', 'TempMessage', 'StrangerMessage',
     'MessageChain', 'Plain', 'At', 'AtAll', 'Dice', 'Face', 'Poke',
@@ -68,7 +66,7 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def __getattr__(name):
+def __getattr__(name: str):
     if name in (
         'HTTPAdapter', 'WebSocketAdapter', 'WebHookAdapter', 'ComposeAdapter'
     ):

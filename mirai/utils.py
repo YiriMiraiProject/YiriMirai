@@ -6,7 +6,7 @@ import inspect
 from collections import defaultdict
 from typing import Dict, Generic, List, Set, TypeVar, cast
 
-from mirai import exceptions
+from mirai.exceptions import print_exception
 
 
 async def async_(obj):
@@ -19,7 +19,7 @@ async def async_with_exception(obj):
     try:
         return await async_(obj)
     except Exception as e:
-        exceptions.print_exception(e)  # 打印异常信息，但不打断执行流程
+        print_exception(e)  # 打印异常信息，但不打断执行流程
 
 
 T = TypeVar('T')
