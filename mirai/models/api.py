@@ -346,3 +346,12 @@ __all__ = [
     'ApiRest',
     'ApiResponse',
 ]
+
+
+def __getattr__(name: str) -> Type[ApiModel]:
+    """获取指定名称的 API。"""
+    import mirai.models.api_impl as api
+    result = getattr(api, name, None)
+    if result is None:
+        result = ApiModel.get_subtype(name)
+    return result
