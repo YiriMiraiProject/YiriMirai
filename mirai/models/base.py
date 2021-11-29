@@ -2,7 +2,7 @@
 """
 此模块提供 YiriMirai 中使用的 pydantic 模型的基类。
 """
-from typing import Dict, List, Type, cast
+from typing import Dict, List, Type, cast, TypeVar
 
 import pydantic.main as pdm
 from pydantic import BaseModel
@@ -40,6 +40,9 @@ class MiraiBaseModel(BaseModel, metaclass=MiraiMetaclass):
         alias_generator = to_camel
 
 
+TMIMClass = TypeVar('TMIMClass', bound='MiraiIndexedMetaclass')
+
+
 class MiraiIndexedMetaclass(MiraiMetaclass):
     """可以通过子类名获取子类的类的元类。"""
     __indexes__: Dict[str, 'MiraiIndexedMetaclass']
@@ -66,10 +69,10 @@ class MiraiIndexedMetaclass(MiraiMetaclass):
                 base.__indexes__[name] = new_cls
         return new_cls
 
-    def __getitem__(cls, name):
+    def __getitem__(cls: TMIMClass, name) -> TMIMClass:
         return cls.get_subtype(name)
 
-    def get_subtype(cls, name: str) -> 'MiraiIndexedMetaclass':
+    def get_subtype(cls: TMIMClass, name: str) -> TMIMClass:
         """根据类名称，获取相应的子类类型。
 
         Args:

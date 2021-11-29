@@ -25,6 +25,7 @@ yapf = "^0.31.0"
 toml = "^0.10.2"
 pdoc3 = "^0.9.2"
 mypy = "^0.910"
+pytest = "^6.2.5"
 
 [tool.poetry.extras]
 uvicorn = ["uvicorn"]
@@ -34,7 +35,6 @@ hypercorn = ["hypercorn"]
 name = "tuna"
 url = "https://pypi.tuna.tsinghua.edu.cn/simple"
 default = true
-
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

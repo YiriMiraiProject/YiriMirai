@@ -397,7 +397,8 @@ class MessageChain(MiraiBaseModel):
         return len(self.__root__)
 
     def __add__(
-        self, other: Union['MessageChain', MessageComponent, str]
+        self, other: Union['MessageChain', MessageComponent, str,
+                           Iterable[Union[MessageComponent, str]]]
     ) -> 'MessageChain':
         if isinstance(other, MessageChain):
             return self.__class__(self.__root__ + other.__root__)
@@ -405,15 +406,22 @@ class MessageChain(MiraiBaseModel):
             return self.__class__(self.__root__ + [Plain(other)])
         if isinstance(other, MessageComponent):
             return self.__class__(self.__root__ + [other])
+        if isinstance(other, list):
+            return self + MessageChain(other)
         return NotImplemented
 
-    def __radd__(self, other: Union[MessageComponent, str]) -> 'MessageChain':
+    def __radd__(
+        self, other: Union[MessageComponent, str,
+                           Iterable[Union[MessageComponent, str]]]
+    ) -> 'MessageChain':
         if isinstance(other, MessageComponent):
             return self.__class__([other] + self.__root__)
         if isinstance(other, str):
             return self.__class__(
                 [cast(MessageComponent, Plain(other))] + self.__root__
             )
+        if isinstance(other, list):
+            return MessageChain(other) + self
         return NotImplemented
 
     def __eq__(

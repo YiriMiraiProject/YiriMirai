@@ -9,11 +9,12 @@ from typing import (
     Any, Awaitable, Callable, Dict, Iterable, List, Optional, Type, Union, cast
 )
 
-import mirai.models.api
-from mirai.adapters.base import Adapter, AdapterInterface, ApiProvider
+from mirai.adapters.base import Adapter, AdapterInterface
+from mirai.api_provider import ApiProvider, Method
 from mirai.asgi import ASGI, asgi_serve
 from mirai.bus import AbstractEventBus, EventBus
 from mirai.models.api import ApiModel
+from mirai.models.api_impl import RespEvent
 from mirai.models.bus import ModelEventBus
 from mirai.models.entities import (
     Entity, Friend, Group, GroupMember, Permission, RespOperate, Subject
@@ -136,14 +137,17 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
 
         if self._adapter.single_mode:
             # Single Mode 下，QQ 号可以随便传入。这里从 session info 中获取正确的 QQ 号。
-            self.qq = (await self.call_api('sessionInfo'))['data']['qq']['id']
+            session_info = await self.call_api('sessionInfo')
+            if session_info:
+                self.qq = session_info['data']['qq']['id']
 
         asyncio.create_task(self._adapter.emit("Startup", {'type': 'Startup'}))
         await self._adapter.start()
 
     async def background(self):
         """等待背景任务完成。"""
-        await self._adapter.background
+        if self._adapter.background:
+            await self._adapter.background
 
     async def shutdown(self):
         """结束运行机器人。"""
@@ -371,8 +375,8 @@ class Mirai(SimpleMirai):
                     group=target.group.id,
                     message_chain=message,
                     quote=quoting
-                )
-            ).message_id
+                ) or -1
+            )
 
         if isinstance(target, MessageEvent):
             quoting = target.message_chain.message_id if quote else None
@@ -396,7 +400,7 @@ class Mirai(SimpleMirai):
             target=id_, message_chain=message, quote=quoting
         )
 
-        return response
+        return response or -1
 
     async def get_friend(self, id_: int) -> Optional[Friend]:
         """获取好友对象。
@@ -497,9 +501,9 @@ class Mirai(SimpleMirai):
             operate: 处理操作。
             message: 回复的信息。
         """
-        api_type = ApiModel.get_subtype('Resp' + event.type)
+        api_type = cast(RespEvent, ApiModel.get_subtype('Resp' + event.type))
         api = api_type.from_event(event, operate, message)
-        await api.call(self, 'POST')
+        await api.call(self, Method.POST)
 
     async def allow(self, event: RequestEvent, message: str = ''):
         """允许申请。

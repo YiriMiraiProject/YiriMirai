@@ -2,6 +2,7 @@
 """
 此模块提供 API 调用与返回数据解析相关。
 """
+import abc
 import logging
 from typing import Any, Generic, List, Optional, Type, TypeVar, Union, cast
 
@@ -43,6 +44,9 @@ class ApiResponse(MiraiBaseModel):
 
     def __getitem__(self, item):
         return self.data and self.data[item]
+
+
+TAMClass = TypeVar('TAMClass', bound='ApiMetaclass')
 
 
 class ApiMetaclass(MiraiIndexedMetaclass):
@@ -88,9 +92,9 @@ class ApiMetaclass(MiraiIndexedMetaclass):
 
         return new_cls
 
-    def get_subtype(cls, name: str) -> 'ApiMetaclass':
+    def get_subtype(cls: TAMClass, name: str) -> TAMClass:
         try:
-            return cast(ApiMetaclass, super().get_subtype(name))
+            return super().get_subtype(name)
         except ValueError as e:
             raise ValueError(f'`{name}` 不是可用的 API！') from e
 
@@ -101,6 +105,14 @@ class ApiBaseModel(MiraiIndexedModel, metaclass=ApiMetaclass):
     直接继承此类，不会被 ApiMetaclass 索引，也不会引起 metaclass 冲突。
     用于实现 API 类型之间的方法复用。
     """
+    @abc.abstractmethod
+    async def call(
+        self,
+        api_provider: ApiProvider,
+        method: Method = Method.GET,
+        response_type: Optional[Type[ApiResponse]] = None,
+    ):
+        pass
 
 
 TModel = TypeVar('TModel', bound=MiraiBaseModel)
