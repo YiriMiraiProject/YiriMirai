@@ -22,6 +22,7 @@ from mirai.models.message import MessageChain
 
 TEventClass = TypeVar("TEventClass", bound='EventMetaclass')
 
+
 class EventMetaclass(MiraiIndexedMetaclass):
     def get_subtype(cls: TEventClass, name: str) -> TEventClass:
         try:

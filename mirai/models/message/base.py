@@ -1,5 +1,5 @@
 import re
-from typing import List,  cast
+from typing import List, cast
 
 from mirai.models.base import MiraiIndexedMetaclass, MiraiIndexedModel
 

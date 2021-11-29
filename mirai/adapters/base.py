@@ -9,9 +9,9 @@ from datetime import datetime
 from json import dumps
 from typing import Any, Dict, NoReturn, Optional, Set, Tuple, Type, Union, cast
 
-from mirai.exceptions import NetworkError
 from mirai.api_provider import ApiProvider, Method
 from mirai.bus import AbstractEventBus
+from mirai.exceptions import NetworkError
 from mirai.tasks import Tasks
 
 logger = logging.getLogger(__name__)
@@ -34,9 +34,7 @@ def error_handler_async(errors: Tuple[Type[BaseException], ...]):
             try:
                 return await func(self, *args, **kwargs)
             except KeyError:
-                raise NetworkError(
-                    '从 mirai-api-http 返回的数据格式错误。请检查版本是否正确。'
-                )
+                raise NetworkError('从 mirai-api-http 返回的数据格式错误。请检查版本是否正确。')
             except errors as e:
                 err = NetworkError(
                     '无法连接到 mirai。请检查 mirai-api-http 是否启动，地址与端口是否正确。'
@@ -148,7 +146,9 @@ class Adapter(ApiProvider, AdapterInterface):
         """登出。"""
 
     @abc.abstractmethod
-    async def call_api(self, api: str, method: Method = Method.GET, **params) -> Any:
+    async def call_api(
+        self, api: str, method: Method = Method.GET, **params
+    ) -> Any:
         """调用 API。
 
         Args:

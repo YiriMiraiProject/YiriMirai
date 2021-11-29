@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from mirai.adapters.websocket import WebSocketAdapter
 
 
-def __getattr__(name:str):
+def __getattr__(name: str):
     import importlib
     MODULES = {
         'ComposeAdapter': '.compose',

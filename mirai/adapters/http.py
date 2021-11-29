@@ -9,11 +9,11 @@ from typing import Optional, cast
 
 import httpx
 
-from mirai.exceptions import ApiError, NetworkError
 from mirai.adapters.base import (
     Adapter, AdapterInterface, error_handler_async, json_dumps
 )
 from mirai.api_provider import Method
+from mirai.exceptions import ApiError, NetworkError
 from mirai.tasks import Tasks
 
 logger = logging.getLogger(__name__)

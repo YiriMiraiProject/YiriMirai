@@ -17,11 +17,11 @@ from websockets.exceptions import (
     ConnectionClosed, ConnectionClosedOK, InvalidURI
 )
 
-from mirai.exceptions import NetworkError, ApiError
 from mirai.adapters.base import (
     Adapter, AdapterInterface, error_handler_async, json_dumps
 )
 from mirai.api_provider import Method
+from mirai.exceptions import ApiError, NetworkError
 from mirai.tasks import Tasks
 
 logger = logging.getLogger(__name__)
@@ -126,9 +126,7 @@ class WebSocketAdapter(Adapter):
     async def _receiver(self):
         """开始接收 websocket 数据。"""
         if not self.connection:
-            raise NetworkError(
-                f'WebSocket 通道 {self.host_name} 未连接！'
-            )
+            raise NetworkError(f'WebSocket 通道 {self.host_name} 未连接！')
         while True:
             try:
                 # 数据格式：
@@ -211,9 +209,7 @@ class WebSocketAdapter(Adapter):
 
     async def call_api(self, api: str, method: Method = Method.GET, **params):
         if not self.connection:
-            raise NetworkError(
-                f'WebSocket 通道 {self.host_name} 未连接！'
-            )
+            raise NetworkError(f'WebSocket 通道 {self.host_name} 未连接！')
         self._local_sync_id += 1  # 使用不同的 sync_id
         sync_id = str(self._local_sync_id)
         content = {

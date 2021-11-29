@@ -14,7 +14,7 @@ from typing_extensions import Literal
 from mirai.adapters.base import Adapter, AdapterInterface, ApiProvider
 from mirai.asgi import ASGI
 from mirai.bus import AbstractEventBus
-from mirai.models.api import ApiModel, FileProperties, RespOperate
+from mirai.models.api import ApiModel
 from mirai.models.api_impl import *
 from mirai.models.entities import (
     Entity, Friend, Group, GroupConfigModel, GroupMember, MemberInfoModel,
