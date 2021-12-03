@@ -314,6 +314,12 @@ class MessageChain(MiraiBaseModel):
 
         # 索引对象为 MessageComponent 类，返回所有对应 component
         if isinstance(index, type):
+            # 特殊处理 Source 和 Quote
+            if index is MessageChain.Source:
+                return cast(index, [self.source] if self.source else [])
+            elif index is MessageChain.Quote:
+                return cast(index, [self.quote] if self.quote else [])
+
             components = (
                 component for component in self if type(component) is index
             )
@@ -357,8 +363,15 @@ class MessageChain(MiraiBaseModel):
                List[TMessageComponent]]:
         return self.get(index)
 
-    def __reversed__(self) -> Iterable[MessageComponent]:
-        return reversed(self.__root__)
+    def __reversed__(self) -> "MessageChain":
+        return self.__class__(
+            reversed(
+                [
+                    Plain(''.join(reversed(c.text)))
+                    if isinstance(c, Plain) else c for c in self.__root__
+                ]
+            )
+        )
 
     def has(
         self, sub: Union[MessageComponent, Type[MessageComponent],
@@ -381,6 +394,11 @@ class MessageChain(MiraiBaseModel):
             bool: 是否找到。
         """
         if isinstance(sub, type):  # 检测消息链中是否有某种类型的对象
+            # 特殊处理 Source 和 Quote
+            if sub is MessageChain.Source:
+                return bool(self.source)
+            elif sub is MessageChain.Quote:
+                return bool(self.quote)
             return any(type(c) is sub for c in self)
         if isinstance(sub, MessageComponent):  # 检查消息链中是否有某个组件
             return sub in self.__root__
