@@ -143,7 +143,7 @@ class Adapter(AdapterInterface):
     """mirai-api-http 配置的认证 key，关闭认证时为 None。"""
     single_mode: bool
     """是否开启 single_mode，开启后与 session 将无效。"""
-    sessions: Set[Session]
+    sessions: Dict[int, Session]
     """已登录的会话。"""
     def __init__(self, verify_key: Optional[str], single_mode: bool = False):
         """
@@ -153,7 +153,7 @@ class Adapter(AdapterInterface):
         """
         self.verify_key = verify_key
         self.single_mode = single_mode
-        self.sessions = set()
+        self.sessions = {}
 
     @property
     def adapter_info(self) -> Dict[str, Any]:
@@ -188,14 +188,15 @@ class Adapter(AdapterInterface):
 
     async def login(self, qq: int) -> Session:
         """登录到 mirai-api-http。"""
-        result = await self._login(qq)
-        self.sessions.add(result)
-        return result
+        session = await self._login(qq)
+        self.sessions[qq] = session
+        return session
 
-    async def logout(self, session: Session):
+    async def logout(self, qq: int):
         """登出。"""
+        session = self.sessions[qq]
         await session.shutdown()
-        self.sessions.remove(session)
+        self.sessions.pop(qq)
 
 
 __all__ = ['Adapter', 'AdapterInterface', 'Session', 'error_handler_async']

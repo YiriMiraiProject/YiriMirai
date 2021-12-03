@@ -115,7 +115,7 @@ class Mirai(ApiProvider, AdapterInterface, AbstractEventBus):
         origin_session = self._session
         self._session = await adapter.login(self.qq)
         yield
-        await adapter.logout(self._session)
+        await adapter.logout(self.qq)
         self._session = origin_session
 
     async def startup(self):
@@ -143,7 +143,7 @@ class Mirai(ApiProvider, AdapterInterface, AbstractEventBus):
             self.bus.emit("Shutdown", {'type': 'Shutdown'})
         )
         if self._session:
-            await self._adapter.logout(self._session)
+            await self._adapter.logout(self.qq)
 
     @property
     def asgi(self) -> 'MiraiRunner':
