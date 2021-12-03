@@ -9,7 +9,7 @@ from typing import Mapping, Optional, cast
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
-from mirai.adapters.base import Adapter, AdapterInterface, json_dumps
+from mirai.adapters.base import Adapter, AdapterInterface, Session, json_dumps
 from mirai.api_provider import Method
 from mirai.asgi import ASGI
 
@@ -22,7 +22,7 @@ class YiriMiraiJSONResponse(JSONResponse):
         return json_dumps(content).encode('utf-8')
 
 
-class WebHookAdapter(Adapter):
+class WebHookAdapter(Adapter, Session):
     """WebHook 适配器。作为 HTTP 服务器与 mirai-api-http 沟通。"""
     session: str
     """WebHook 不需要 session，此处为机器人的 QQ 号。"""
@@ -48,7 +48,8 @@ class WebHookAdapter(Adapter):
             enable_quick_response: 是否启用快速响应，当与其他适配器混合使用时，禁用可以提高响应速度。
             single_mode: 是否启用单例模式。
         """
-        super().__init__(verify_key=verify_key, single_mode=single_mode)
+        Adapter.__init__(self, verify_key=verify_key, single_mode=single_mode)
+        Session.__init__(self, 0)
         self.route = route
         self.extra_headers = extra_headers or {}
         self.enable_quick_response = enable_quick_response
@@ -110,14 +111,17 @@ class WebHookAdapter(Adapter):
         adapter.session = cast(str, info.get('session'))
         return adapter
 
-    async def login(self, qq: int):
+    async def _login(self, qq: int) -> 'WebHookAdapter':
         """WebHook 不需要登录。直接返回。"""
+        self.qq = qq
         self.session = str(qq)
         logger.info(f'[WebHook] 成功登录到账号{qq}。')
+        return self
 
-    async def logout(self, terminate: bool = True):
+    async def shutdown(self):
         """WebHook 不需要登出。直接返回。"""
         logger.info(f"[WebHook] 从账号{self.session}退出。")
+        await super().shutdown()
 
     async def call_api(self, api: str, method: Method = Method.GET, **params):
         """调用 API。WebHook 的 API 调用只能在快速响应中发生。"""

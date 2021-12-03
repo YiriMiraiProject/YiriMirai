@@ -18,7 +18,7 @@ from websockets.exceptions import (
 )
 
 from mirai.adapters.base import (
-    Adapter, AdapterInterface, error_handler_async, json_dumps
+    Adapter, AdapterInterface, Session, error_handler_async, json_dumps
 )
 from mirai.api_provider import Method
 from mirai.exceptions import ApiError, NetworkError
@@ -31,59 +31,19 @@ _error_handler_async_local = error_handler_async(
 )
 
 
-class WebSocketAdapter(Adapter):
-    """WebSocket 适配器。作为 WebSocket 客户端与 mirai-api-http 沟通。"""
-    host_name: str
-    """WebSocket Server 的地址。"""
+class WebSocketSession(Session):
+    """WebSocket 适配器的会话。"""
+    session: str
+
     sync_id: str
     """mirai-api-http 配置的同步 ID。"""
-    qq: int
-    """机器人的 QQ 号。"""
     connection: Optional[WebSocketClientProtocol]
     """WebSocket 客户端连接。"""
     heartbeat_interval: float
     """每隔多久发送心跳包，单位：秒。"""
-    def __init__(
-        self,
-        verify_key: Optional[str],
-        host: str,
-        port: int,
-        sync_id: str = '-1',
-        single_mode: bool = False,
-        heartbeat_interval: float = 60.,
-    ):
-        """
-        Args:
-            verify_key: mirai-api-http 配置的认证 key，关闭认证时为 None。
-            host: WebSocket Server 的地址。
-            port: WebSocket Server 的端口。
-            sync_id: mirai-api-http 配置的同步 ID。
-            single_mode: 是否启用单例模式。
-            heartbeat_interval: 每隔多久发送心跳包，单位秒。
-        """
-        super().__init__(verify_key=verify_key, single_mode=single_mode)
-
-        self._host = host
-        self._port = port
-
-        if host[:2] == '//':
-            host = 'ws:' + host
-        elif host[:7] == 'http://' or host[:8] == 'https://':
-            raise NetworkError(f'{host} 不是一个可用的 WebSocket 地址！')
-        elif host[:5] != 'ws://':
-            host = 'ws://' + host
-
-        if host[-1:] == '/':
-            host = host[:-1]
-
-        self.host_name = f'{host}:{port}/all'
-
-        self.sync_id = sync_id  # 这个神奇的 sync_id，默认值 -1，居然是个字符串
-        # 既然这样不如把 sync_id 全改成字符串好了
-
-        self.qq = 0
-        self.connection = None
-
+    def __init__(self, qq: int, sync_id: str, heartbeat_interval: float):
+        super().__init__(qq)
+        self.sync_id = sync_id
         self.heartbeat_interval = heartbeat_interval
 
         # 接收 WebSocket 数据的 Task
@@ -97,36 +57,34 @@ class WebSocketAdapter(Adapter):
         # 心跳机制（Keep-Alive）：上次发送数据包的时间
         self._last_send_time: float = 0.
 
-    @property
-    def adapter_info(self):
-        return {
-            'verify_key': self.verify_key,
-            'session': self.session,
-            'single_mode': self.single_mode,
-            'host': self._host,
-            'port': self._port,
-            'sync_id': self.sync_id,
+    async def login(self, verify_key: str, host_name: str):
+        headers = {
+            'verifyKey': verify_key,  # 关闭认证时，WebSocket 可传入任意 verify_key
+            'qq': str(self.qq),
         }
 
-    @classmethod
-    def via(cls, adapter_interface: AdapterInterface) -> "WebSocketAdapter":
-        info = adapter_interface.adapter_info
-        adapter = cls(
-            verify_key=info['verify_key'],
-            **{
-                key: info[key]
-                for key in ['host', 'port', 'sync_id', 'single_mode']
-                if key in info
-            }
-        )
-        adapter.session = cast(str, info.get('session'))
-        return adapter
+        self.connection = await connect(host_name, extra_headers=headers)
+        self._receiver_task = asyncio.create_task(self._receiver())
+
+        verify_response = await self._recv('')  # 神奇现象：这里的 syncId 是个空字符串
+        self.session = verify_response['session']
+
+    async def shutdown(self):
+        if self.connection:
+            await self.connection.close()
+
+            if self._receiver_task:
+                await self._receiver_task
+
+            logger.info(f"[WebSocket] 从账号{self.qq}退出。")
+        await super().shutdown()
 
     @_error_handler_async_local
     async def _receiver(self):
         """开始接收 websocket 数据。"""
         if not self.connection:
-            raise NetworkError(f'WebSocket 通道 {self.host_name} 未连接！')
+            raise NetworkError(f'WebSocket 通道未连接！')
+
         while True:
             try:
                 # 数据格式：
@@ -172,35 +130,6 @@ class WebSocketAdapter(Adapter):
             f'[WebSocket] mirai-api-http 响应超时，可能是由于调用出错。同步 ID：{sync_id}。'
         )
 
-    @_error_handler_async_local
-    async def login(self, qq: int):
-        headers = {
-            'verifyKey': self.verify_key or
-                         '',  # 关闭认证时，WebSocket 可传入任意 verify_key
-            'qq': str(qq),
-        }
-        if self.session:
-            headers['sessionKey'] = self.session
-
-        self.connection = await connect(self.host_name, extra_headers=headers)
-        self._receiver_task = asyncio.create_task(self._receiver())
-
-        verify_response = await self._recv('')  # 神奇现象：这里的 syncId 是个空字符串
-        self.session = verify_response['session']
-
-        self.qq = qq
-        logger.info(f'[WebSocket] 成功登录到账号{qq}。')
-
-    @_error_handler_async_local
-    async def logout(self, terminate: bool = True):
-        if self.connection:
-            await self.connection.close()
-
-            if self._receiver_task:
-                await self._receiver_task
-
-            logger.info(f"[WebSocket] 从账号{self.qq}退出。")
-
     async def poll_event(self):
         """获取并处理事件。"""
         event = await self._recv(self.sync_id, -1)
@@ -235,10 +164,10 @@ class WebSocketAdapter(Adapter):
             logger.debug(e)
 
     async def _heartbeat(self):
-        while True:
+        while self.connection:
             await asyncio.sleep(self.heartbeat_interval)
             if time.time() - self._last_send_time > self.heartbeat_interval:
-                await self.call_api('about')
+                await self.connection.send('')
                 self._last_send_time = time.time()
                 logger.debug("[WebSocket] 发送心跳包。")
 
@@ -255,3 +184,78 @@ class WebSocketAdapter(Adapter):
             if heartbeat:
                 await Tasks.cancel(heartbeat)
             await self._tasks.cancel_all()
+
+
+class WebSocketAdapter(Adapter):
+    """WebSocket 适配器。作为 WebSocket 客户端与 mirai-api-http 沟通。"""
+    host_name: str
+    """WebSocket Server 的地址。"""
+    def __init__(
+        self,
+        verify_key: Optional[str],
+        host: str,
+        port: int,
+        sync_id: str = '-1',
+        single_mode: bool = False,
+        heartbeat_interval: float = 60.,
+    ):
+        """
+        Args:
+            verify_key: mirai-api-http 配置的认证 key，关闭认证时为 None。
+            host: WebSocket Server 的地址。
+            port: WebSocket Server 的端口。
+            sync_id: mirai-api-http 配置的同步 ID。
+            single_mode: 是否启用单例模式。
+            heartbeat_interval: 每隔多久发送心跳包，单位秒。
+        """
+        super().__init__(verify_key=verify_key, single_mode=single_mode)
+
+        self._host = host
+        self._port = port
+
+        if host[:2] == '//':
+            host = 'ws:' + host
+        elif host[:7] == 'http://' or host[:8] == 'https://':
+            raise NetworkError(f'{host} 不是一个可用的 WebSocket 地址！')
+        elif host[:5] != 'ws://':
+            host = 'ws://' + host
+
+        if host[-1:] == '/':
+            host = host[:-1]
+
+        self.host_name = f'{host}:{port}/all'
+
+        self.sync_id = sync_id  # 这个神奇的 sync_id，默认值 -1，居然是个字符串
+        # 既然这样不如把 sync_id 全改成字符串好了
+
+        self.heartbeat_interval = heartbeat_interval
+
+    @property
+    def adapter_info(self):
+        return {
+            'verify_key': self.verify_key,
+            'single_mode': self.single_mode,
+            'host': self._host,
+            'port': self._port,
+            'sync_id': self.sync_id,
+        }
+
+    @classmethod
+    def via(cls, adapter_interface: AdapterInterface) -> "WebSocketAdapter":
+        info = adapter_interface.adapter_info
+        adapter = cls(
+            verify_key=info['verify_key'],
+            **{
+                key: info[key]
+                for key in ['host', 'port', 'sync_id', 'single_mode']
+                if key in info
+            }
+        )
+        return adapter
+
+    @_error_handler_async_local
+    async def _login(self, qq: int) -> WebSocketSession:
+        session = WebSocketSession(qq, self.sync_id, self.heartbeat_interval)
+        await session.login(self.verify_key or '', self.host_name)
+        logger.info(f'[WebSocket] 成功登录到账号{qq}。')
+        return session

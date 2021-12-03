@@ -116,7 +116,7 @@ class ModelEventBus(EventBus):
             **kwargs: 参数。
         """
         if isinstance(event, str):
-            return await super().emit(event, *args, **kwargs)
+            return await self.base_bus.emit(event, *args, **kwargs)
 
         return await self.base_bus.emit(
             event.type, event.dict(by_alias=True, exclude_none=True)

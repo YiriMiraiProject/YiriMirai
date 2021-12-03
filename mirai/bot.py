@@ -9,7 +9,7 @@ from typing import (
     Any, Awaitable, Callable, Dict, Iterable, List, Optional, Type, Union, cast
 )
 
-from mirai.adapters.base import Adapter, AdapterInterface
+from mirai.adapters.base import Adapter, AdapterInterface, Session
 from mirai.api_provider import ApiProvider, Method
 from mirai.asgi import ASGI, asgi_serve
 from mirai.bus import AbstractEventBus
@@ -67,8 +67,8 @@ class Mirai(ApiProvider, AdapterInterface, AbstractEventBus):
         """
         self.qq = qq
         self._adapter = adapter
+        self._session: Optional[Session] = None
         self._bus = ModelEventBus()
-        adapter.register_event_bus(self._bus.base_bus)
 
     @property
     def bus(self) -> ModelEventBus:
@@ -91,7 +91,9 @@ class Mirai(ApiProvider, AdapterInterface, AbstractEventBus):
             *args: 参数。
             **kwargs: 参数。
         """
-        return await self._adapter.call_api(api, *args, **kwargs)
+        if self._session is None:
+            raise RuntimeError("账号未登录。")
+        return await self._session.call_api(api, *args, **kwargs)
 
     @property
     def adapter_info(self) -> Dict[str, Any]:
@@ -110,16 +112,16 @@ class Mirai(ApiProvider, AdapterInterface, AbstractEventBus):
         Args:
             adapter: 使用的适配器。
         """
-        origin_adapter = self._adapter
-        await adapter.login(self.qq)
-        self._adapter = adapter
+        origin_session = self._session
+        self._session = await adapter.login(self.qq)
         yield
-        self._adapter = origin_adapter
-        await adapter.logout(False)
+        await adapter.logout(self._session)
+        self._session = origin_session
 
     async def startup(self):
         """开始运行机器人（立即返回）。"""
-        await self._adapter.login(self.qq)
+        self._session = await self._adapter.login(self.qq)
+        self._session.register_event_bus(self._bus.base_bus)
 
         if self._adapter.single_mode:
             # Single Mode 下，QQ 号可以随便传入。这里从 session info 中获取正确的 QQ 号。
@@ -127,30 +129,21 @@ class Mirai(ApiProvider, AdapterInterface, AbstractEventBus):
             if session_info:
                 self.qq = session_info.qq.id
 
-        asyncio.create_task(self._adapter.emit("Startup", {'type': 'Startup'}))
-        await self._adapter.start()
+        asyncio.create_task(self.bus.emit("Startup", {'type': 'Startup'}))
+        await self._session.start()
 
     async def background(self):
         """等待背景任务完成。"""
-        if self._adapter.background:
-            await self._adapter.background
+        if self._session and self._session.background:
+            await self._session.background
 
     async def shutdown(self):
         """结束运行机器人。"""
         await asyncio.create_task(
-            self._adapter.emit("Shutdown", {'type': 'Shutdown'})
+            self.bus.emit("Shutdown", {'type': 'Shutdown'})
         )
-        await self._adapter.logout()
-        await self._adapter.shutdown()
-
-    @property
-    def session(self) -> str:
-        """获取 session key，可用于调试。
-
-        Returns:
-            str: session key。
-        """
-        return self._adapter.session
+        if self._session:
+            await self._adapter.logout(self._session)
 
     @property
     def asgi(self) -> 'MiraiRunner':
