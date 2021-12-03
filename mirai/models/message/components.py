@@ -527,7 +527,26 @@ class ForwardMessageNode(MiraiBaseModel):
     """消息的 message_id，可以只使用此属性，从缓存中读取消息内容。"""
     time: Optional[datetime] = None
     """发送时间。"""
-    @validator('message_chain', check_fields=False)
+    def __init__(
+        self,
+        sender_id: int,
+        time: datetime,
+        message: Union[int, MessageChain],
+        sender_name: Optional[str] = None
+    ):
+        if isinstance(message, int):
+            message_chain, message_id = None, message
+        else:
+            message_chain, message_id = message, None
+        super().__init__(
+            sender_id=sender_id,
+            sender_name=sender_name,
+            message_chain=message_chain,
+            message_id=message_id,
+            time=time
+        )
+
+    @validator('message_chain')
     def _validate_message_chain(cls, value: Union[MessageChain, list]):
         if isinstance(value, list):
             return MessageChain.parse_obj(value)
@@ -546,11 +565,8 @@ class ForwardMessageNode(MiraiBaseModel):
         Returns:
             ForwardMessageNode: 生成的一条消息。
         """
-        return ForwardMessageNode(
-            sender_id=sender.id,
-            sender_name=sender.get_name(),
-            message_chain=message
-        )
+        time = message.source.time if message.source else datetime.now()
+        return ForwardMessageNode(sender.id, time, message, sender.get_name())
 
 
 class Forward(MessageComponent):
@@ -560,10 +576,11 @@ class Forward(MessageComponent):
     node_list: List[ForwardMessageNode]
     """转发消息节点列表。"""
     def __init__(self, *args, **kwargs):
-        if len(args) == 1:
-            self.node_list = args[0]
-            super().__init__(**kwargs)
-        super().__init__(*args, **kwargs)
+        if len(args) == 1 and isinstance(args[0], list):
+            node_list = args[0]
+        else:
+            node_list = [*args]
+        super().__init__(node_list=node_list, **kwargs)
 
     def __str__(self):
         return '[聊天记录]'
