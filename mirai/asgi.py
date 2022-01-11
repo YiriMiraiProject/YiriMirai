@@ -124,7 +124,7 @@ class ASGI(Singleton):
 
             async def _startup():
                 nonlocal _task
-                _task = asyncio.create_task(func)
+                _task = asyncio.create_task(cast(Awaitable, func))
                 # 不阻塞
 
             async def _shutdown():

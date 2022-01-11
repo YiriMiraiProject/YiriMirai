@@ -353,7 +353,8 @@ def __getattr__(name: str) -> Type[ApiModel]:
     result = globals().get(name, None)
     import mirai.models.api_impl as api
     try:
-        result = result or getattr(api, name, None) or ApiModel.get_subtype(name)
+        result = result or getattr(api, name,
+                                   None) or ApiModel.get_subtype(name)
     except Exception as e:
         raise AttributeError(f'{name} 不是一个 API。') from e
     return result

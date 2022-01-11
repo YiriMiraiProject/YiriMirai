@@ -47,7 +47,7 @@ class Event(MiraiIndexedModel, metaclass=EventMetaclass):
         try:
             return cast(Event, super().parse_obj(obj))
         except ValueError:
-            return Event(type=obj['type'])
+            return Event(**obj)
 
 
 ###############################

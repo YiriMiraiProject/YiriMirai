@@ -7,7 +7,7 @@ import asyncio
 import logging
 from datetime import datetime
 from json import dumps
-from typing import Any, Dict, List, NoReturn, Optional, Set, Tuple, Type, Union, cast
+from typing import Any, Dict, NoReturn, Optional, Set, Tuple, Type, Union
 
 from mirai.api_provider import ApiProvider, Method
 from mirai.bus import AbstractEventBus

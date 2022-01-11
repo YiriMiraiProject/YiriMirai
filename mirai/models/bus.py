@@ -6,7 +6,7 @@
 """
 import logging
 from collections import defaultdict
-from typing import Any, Awaitable, Callable, List, Type, Union, cast
+from typing import Any, Awaitable, Callable, Dict, List, Type, Union, cast
 
 from mirai.bus import EventBus
 from mirai.models.events import Event
@@ -38,7 +38,9 @@ class ModelEventBus(EventBus):
     """
     def __init__(self):
         self.base_bus = EventBus(event_chain_generator=event_chain_parents)
-        self._middlewares = defaultdict(type(None))
+        self._middlewares: Dict[Callable, Any] = defaultdict(
+            cast(Callable[..., None], type(None))
+        )
 
     def subscribe(
         self,
