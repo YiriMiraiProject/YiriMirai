@@ -4,14 +4,14 @@
 """
 import asyncio
 import logging
-from typing import Dict, Mapping, Optional, cast
+from typing import Dict, Mapping, Optional
 
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
 
 from mirai.adapters.base import Adapter, AdapterInterface, Session, json_dumps
-from mirai.api_provider import Method
 from mirai.asgi import ASGI
+from mirai.interface import ApiMethod
 
 logger = logging.getLogger(__name__)
 
@@ -37,15 +37,17 @@ class WebHookSession(Session):
         logger.info(f"[WebHook] 从账号{qq}退出。")
         await super().shutdown()
 
-    async def call_api(self, api: str, method: Method = Method.GET, **params):
+    async def call_api(
+        self, api: str, method: ApiMethod = ApiMethod.GET, **params
+    ):
         """调用 API。WebHook 的 API 调用只能在快速响应中发生。"""
         if self.enable_quick_response:
             content = {'command': api.replace('/', '_'), 'content': params}
-            if method == Method.RESTGET:
+            if method == ApiMethod.RESTGET:
                 content['subCommand'] = 'get'
-            elif method == Method.RESTPOST:
+            elif method == ApiMethod.RESTPOST:
                 content['subCommand'] = 'update'
-            elif method == Method.MULTIPART:
+            elif method == ApiMethod.MULTIPART:
                 raise NotImplementedError(
                     "WebHook 适配器不支持上传操作。请使用 bot.use_adapter 临时调用 HTTP 适配器。"
                 )
@@ -59,7 +61,7 @@ class WebHookSession(Session):
 
     async def handle_event(self, event):
         try:
-            tasks = await self.emit(event['type'], event)
+            tasks = await self.emit(event)
             await asyncio.gather(*tasks)
         except WebHookSession.QuickResponse as response:
             # 快速响应，直接返回。

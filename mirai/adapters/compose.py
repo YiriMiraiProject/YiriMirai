@@ -4,7 +4,7 @@
 """
 
 from mirai.adapters.base import Adapter, Session
-from mirai.api_provider import Method
+from mirai.interface import ApiMethod
 
 
 class ComposeSession(Session):
@@ -21,7 +21,9 @@ class ComposeSession(Session):
     async def _background(self):
         await self.event_channel._background()
 
-    async def call_api(self, api: str, method: Method = Method.GET, **params):
+    async def call_api(
+        self, api: str, method: ApiMethod = ApiMethod.GET, **params
+    ):
         return await self.api_channel.call_api(api, method, **params)
 
 

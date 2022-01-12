@@ -4,7 +4,7 @@
 """
 import inspect
 from collections import defaultdict
-from typing import Dict, Generic, List, Set, TypeVar, cast
+from typing import Any, Callable, Dict, Generic, List, Set, TypeVar, cast
 
 from mirai.exceptions import print_exception
 
@@ -14,12 +14,14 @@ async def async_(obj):
     return (await obj) if inspect.isawaitable(obj) else obj
 
 
-async def async_with_exception(obj):
+async def async_with_exception(
+    obj, error_handler: Callable[[BaseException], Any] = print_exception
+):
     """异步包装一个对象，同时处理调用中发生的异常。"""
     try:
         return await async_(obj)
     except Exception as e:
-        print_exception(e)  # 打印异常信息，但不打断执行流程
+        await async_(error_handler(e))
 
 
 T = TypeVar('T')

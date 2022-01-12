@@ -10,9 +10,9 @@ from typing import (
 )
 
 from mirai.adapters.base import Adapter, AdapterInterface, Session
-from mirai.api_provider import ApiProvider, Method
 from mirai.asgi import ASGI, asgi_serve
-from mirai.bus import AbstractEventBus
+from mirai.bus import EventBus, TEventHandler
+from mirai.interface import ApiInterface, ApiMethod, EventInterface
 from mirai.models.api import ApiModel
 from mirai.models.api_impl import RespEvent
 from mirai.models.bus import ModelEventBus
@@ -26,7 +26,7 @@ from mirai.utils import Singleton
 __all__ = ['Mirai', 'MiraiRunner', 'LifeSpan', 'Startup', 'Shutdown']
 
 
-class Mirai(ApiProvider, AdapterInterface, AbstractEventBus):
+class Mirai(AdapterInterface):
     """
     机器人主类。
 
@@ -58,7 +58,7 @@ class Mirai(ApiProvider, AdapterInterface, AbstractEventBus):
     ```
     """
     qq: int
-
+    """QQ 号。"""
     def __init__(self, qq: int, adapter: Adapter):
         """
         Args:
@@ -68,32 +68,65 @@ class Mirai(ApiProvider, AdapterInterface, AbstractEventBus):
         self.qq = qq
         self._adapter = adapter
         self._session: Optional[Session] = None
-        self._bus = ModelEventBus()
+        self._bus = EventBus()
+        self._model_bus = ModelEventBus(self._bus)
 
     @property
-    def bus(self) -> ModelEventBus:
+    def bus(self) -> EventBus:
         return self._bus
 
-    def subscribe(self, event, func: Callable, priority: int = 0) -> None:
-        self._bus.subscribe(event, func, priority)
-
-    def unsubscribe(self, event, func: Callable) -> None:
-        self._bus.unsubscribe(event, func)
-
-    async def emit(self, event, *args, **kwargs) -> List[Awaitable[Any]]:
-        return await self._bus.emit(event, *args, **kwargs)
-
-    async def call_api(self, api: str, *args, **kwargs):
-        """调用 API。
+    def subscribe(
+        self,
+        event_type: Union[type, str],
+        func: TEventHandler,
+        priority: int = 0
+    ) -> None:
+        """注册事件处理器。
 
         Args:
-            api: API 名称。
-            *args: 参数。
-            **kwargs: 参数。
+            event_type: 事件类或事件名。
+            func: 事件处理器。
+            priority: 优先级，小者优先。
         """
-        if self._session is None:
-            raise RuntimeError("账号未登录。")
-        return await self._session.call_api(api, *args, **kwargs)
+        if isinstance(event_type, str):
+            event_type = Event.get_subtype(event_type)
+        self._bus.subscribe(event_type, func, priority)
+
+    def unsubscribe(
+        self, event_type: Union[type, str], func: Callable
+    ) -> None:
+        """移除事件处理器。
+
+        Args:
+            event_type: 事件类或事件名。
+            func: 事件处理器。
+        """
+        if isinstance(event_type, str):
+            event_type = Event.get_subtype(event_type)
+        self._bus.unsubscribe(event_type, func)
+
+    def on(
+        self, *event_types: Union[type, str], priority: int = 0
+    ) -> Callable:
+        """注册事件处理器。
+
+        用法举例：
+        ```python
+        @bot.on(FriendMessage)
+        async def on_friend_message(event: FriendMessage):
+            print(f"收到来自{event.sender.nickname}的消息。")
+        ```
+
+        Args:
+            *event_types: 事件类或事件名。
+            priority: 优先级，较小者优先。
+        """
+        def decorator(func: TEventHandler) -> Callable:
+            for event in event_types:
+                self.subscribe(event, func, priority)
+            return func
+
+        return decorator
 
     @property
     def adapter_info(self) -> Dict[str, Any]:
@@ -118,10 +151,17 @@ class Mirai(ApiProvider, AdapterInterface, AbstractEventBus):
         await adapter.logout(self.qq)
         self._session = origin_session
 
+    @property
+    def session(self) -> Session:
+        """当前登录的 Session。"""
+        if self._session is None:
+            raise RuntimeError("账号未登录。")
+        return self._session
+
     async def startup(self):
         """开始运行机器人（立即返回）。"""
         self._session = await self._adapter.login(self.qq)
-        self._session.register_event_bus(self._bus.base_bus)
+        self._session.register_event_bus(self._model_bus)
 
         if self._adapter.single_mode:
             # Single Mode 下，QQ 号可以随便传入。这里从 session info 中获取正确的 QQ 号。
@@ -129,7 +169,7 @@ class Mirai(ApiProvider, AdapterInterface, AbstractEventBus):
             if session_info:
                 self.qq = session_info.qq.id
 
-        asyncio.create_task(self.bus.emit("Startup", {'type': 'Startup'}))
+        asyncio.create_task(self._bus.emit(Startup()))
         await self._session.start()
 
     async def background(self):
@@ -139,9 +179,7 @@ class Mirai(ApiProvider, AdapterInterface, AbstractEventBus):
 
     async def shutdown(self):
         """结束运行机器人。"""
-        await asyncio.create_task(
-            self.bus.emit("Shutdown", {'type': 'Shutdown'})
-        )
+        await asyncio.create_task(self._bus.emit(Shutdown()))
         if self._session:
             await self._adapter.logout(self.qq)
 
@@ -179,26 +217,6 @@ class Mirai(ApiProvider, AdapterInterface, AbstractEventBus):
         """
         MiraiRunner(self).run(host, port, asgi_server, **kwargs)
 
-    def on(
-        self,
-        event: Union[Type[Event], str],
-        priority: int = 0,
-    ) -> Callable:
-        """注册事件处理器。
-
-        用法举例：
-        ```python
-        @bot.on(FriendMessage)
-        async def on_friend_message(event: FriendMessage):
-            print(f"收到来自{event.sender.nickname}的消息。")
-        ```
-
-        Args:
-            event: 事件类或事件名。
-            priority: 优先级，较小者优先。
-        """
-        return self._bus.on(event, priority)
-
     def api(self, api: str) -> ApiModel.Proxy:
         """获取 API Proxy 对象。
 
@@ -213,7 +231,7 @@ class Mirai(ApiProvider, AdapterInterface, AbstractEventBus):
             ApiModel.Proxy: API Proxy 对象。
         """
         api_type = ApiModel.get_subtype(api)
-        return api_type.Proxy(self, api_type)
+        return api_type.Proxy(self.session, api_type)
 
     def __getattr__(self, api: str) -> ApiModel.Proxy:
         return self.api(api)
@@ -372,7 +390,7 @@ class Mirai(ApiProvider, AdapterInterface, AbstractEventBus):
         """
         api_type = cast(RespEvent, ApiModel.get_subtype('Resp' + event.type))
         api = api_type.from_event(event, operate, message)
-        await api.call(self, Method.POST)
+        await api.call(self.session, ApiMethod.POST)
 
     async def allow(self, event: RequestEvent, message: str = ''):
         """允许申请。
@@ -493,19 +511,13 @@ class MiraiRunner(Singleton):
                 pass
 
 
-class LifeSpan(Event):
+class LifeSpan():
     """生命周期事件。"""
-    type: str = 'LifeSpan'
-    """事件名。"""
 
 
 class Startup(LifeSpan):
     """启动事件。"""
-    type: str = 'Startup'
-    """事件名。"""
 
 
 class Shutdown(LifeSpan):
     """关闭事件。"""
-    type: str = 'Shutdown'
-    """事件名。"""

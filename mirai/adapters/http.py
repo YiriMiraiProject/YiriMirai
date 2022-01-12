@@ -12,8 +12,8 @@ import httpx
 from mirai.adapters.base import (
     Adapter, AdapterInterface, Session, error_handler_async, json_dumps
 )
-from mirai.api_provider import Method
 from mirai.exceptions import ApiError, NetworkError
+from mirai.interface import ApiMethod
 from mirai.tasks import Tasks
 
 logger = logging.getLogger(__name__)
@@ -112,26 +112,27 @@ class HTTPSession(Session):
             msg_count = (await _get(client, '/countMessage', {}) or {})['data']
             if msg_count > 0:
                 msg_list = (
-                    await
-                    self._get(client, '/fetchMessage', {'count': msg_count})
+                    await _get(client, '/fetchMessage', {'count': msg_count})
                     or {}
                 )['data']
 
-                coros = [self.emit(msg['type'], msg) for msg in msg_list]
+                coros = [self.emit(msg) for msg in msg_list]
                 await asyncio.gather(*coros)
 
-    async def call_api(self,
-                       api: str,
-                       method: Method = Method.GET,
-                       **params) -> Optional[dict]:
+    async def call_api(
+        self,
+        api: str,
+        method: ApiMethod = ApiMethod.GET,
+        **params
+    ) -> Optional[dict]:
         async with httpx.AsyncClient(
             base_url=self.host_name, headers=self.headers
         ) as client:
-            if method == Method.GET or method == Method.RESTGET:
+            if method == ApiMethod.GET or method == ApiMethod.RESTGET:
                 return await _get(client, f'/{api}', params)
-            if method == Method.POST or method == Method.RESTPOST:
+            if method == ApiMethod.POST or method == ApiMethod.RESTPOST:
                 return await _post(client, f'/{api}', params)
-            if method == Method.MULTIPART:
+            if method == ApiMethod.MULTIPART:
                 return await _post_multipart(
                     client, f'/{api}', params['data'], params['files']
                 )
@@ -143,7 +144,7 @@ class HTTPSession(Session):
             async with httpx.AsyncClient(
                 base_url=self.host_name, headers=self.headers
             ) as client:
-                await self._post(
+                await _post(
                     client, '/release', {
                         "sessionKey": self.headers['session'],
                         "qq": self.qq,

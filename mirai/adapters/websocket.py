@@ -10,7 +10,7 @@ import random
 import time
 from collections import defaultdict, deque
 from itertools import repeat
-from typing import Dict, Optional, cast
+from typing import Dict, Optional
 
 from websockets.client import WebSocketClientProtocol, connect
 from websockets.exceptions import (
@@ -20,8 +20,8 @@ from websockets.exceptions import (
 from mirai.adapters.base import (
     Adapter, AdapterInterface, Session, error_handler_async, json_dumps
 )
-from mirai.api_provider import Method
 from mirai.exceptions import ApiError, NetworkError
+from mirai.interface import ApiMethod
 from mirai.tasks import Tasks
 
 logger = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ _error_handler_async_local = error_handler_async(
 class WebSocketSession(Session):
     """WebSocket 适配器的会话。"""
     session: str
-
+    """mirai-api-http 的 session。"""
     sync_id: str
     """mirai-api-http 配置的同步 ID。"""
     connection: Optional[WebSocketClientProtocol]
@@ -134,11 +134,13 @@ class WebSocketSession(Session):
         """获取并处理事件。"""
         event = await self._recv(self.sync_id, -1)
 
-        self._tasks.create_task(self.emit(event['type'], event))
+        self._tasks.create_task(self.emit(event))
 
-    async def call_api(self, api: str, method: Method = Method.GET, **params):
+    async def call_api(
+        self, api: str, method: ApiMethod = ApiMethod.GET, **params
+    ):
         if not self.connection:
-            raise NetworkError(f'WebSocket 通道 {self.host_name} 未连接！')
+            raise NetworkError(f'WebSocket 通道未连接！')
         self._local_sync_id += 1  # 使用不同的 sync_id
         sync_id = str(self._local_sync_id)
         content = {
@@ -146,11 +148,11 @@ class WebSocketSession(Session):
             'command': api.replace('/', '_'),
             'content': params
         }
-        if method == Method.RESTGET:
+        if method == ApiMethod.RESTGET:
             content['subCommand'] = 'get'
-        elif method == Method.RESTPOST:
+        elif method == ApiMethod.RESTPOST:
             content['subCommand'] = 'update'
-        elif method == Method.MULTIPART:
+        elif method == ApiMethod.MULTIPART:
             raise NotImplementedError(
                 "WebSocket 适配器不支持上传操作。请使用 bot.use_adapter 临时调用 HTTP 适配器。"
             )

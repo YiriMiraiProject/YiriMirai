@@ -9,9 +9,8 @@ from datetime import datetime
 from json import dumps
 from typing import Any, Dict, NoReturn, Optional, Set, Tuple, Type, Union
 
-from mirai.api_provider import ApiProvider, Method
-from mirai.bus import AbstractEventBus
 from mirai.exceptions import NetworkError
+from mirai.interface import ApiInterface, ApiMethod, EventInterface
 from mirai.tasks import Tasks
 
 logger = logging.getLogger(__name__)
@@ -65,11 +64,14 @@ class AdapterInterface(abc.ABC):
         return NotImplemented
 
 
-class Session(ApiProvider):
+TEventDict = Dict[str, Any]
+
+
+class Session(ApiInterface, EventInterface[TEventDict]):
     """会话。表示适配器到 mirai-api-http 的一个连接。"""
     qq: int
     """机器人的 QQ 号。"""
-    buses: Set[AbstractEventBus]
+    buses: Set[EventInterface[TEventDict]]
     """注册的事件总线集合。"""
     background: Optional[asyncio.Task]
     """背景事件循环任务。"""
@@ -78,7 +80,7 @@ class Session(ApiProvider):
         self.buses = set()
         self.background = None
 
-    def register_event_bus(self, *buses: AbstractEventBus):
+    def register_event_bus(self, *buses: EventInterface[TEventDict]):
         """注册事件总线。
 
         Args:
@@ -86,7 +88,7 @@ class Session(ApiProvider):
         """
         self.buses |= set(buses)
 
-    def unregister_event_bus(self, *buses: AbstractEventBus):
+    def unregister_event_bus(self, *buses: EventInterface[TEventDict]):
         """解除注册事件总线。
 
         Args:
@@ -107,7 +109,7 @@ class Session(ApiProvider):
 
     @abc.abstractmethod
     async def call_api(
-        self, api: str, method: Method = Method.GET, **params
+        self, api: str, method: ApiMethod = ApiMethod.GET, **params
     ) -> Any:
         """调用 API。
 
@@ -122,15 +124,13 @@ class Session(ApiProvider):
         if self.background:
             await Tasks.cancel(self.background)
 
-    async def emit(self, event: str, *args, **kwargs):
+    async def emit(self, event: TEventDict):
         """向事件总线发送一个事件。
 
         Args:
-            event: 事件名称。
-            *args: 事件参数。
-            **kwargs: 事件参数。
+            event: 事件。
         """
-        coros = [bus.emit(event, *args, **kwargs) for bus in self.buses]
+        coros = [bus.emit(event) for bus in self.buses]
         return sum(await asyncio.gather(*coros), [])
 
 

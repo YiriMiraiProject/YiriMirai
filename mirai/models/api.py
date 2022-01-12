@@ -8,8 +8,8 @@ from typing import Any, Generic, List, Optional, Type, TypeVar, Union, cast
 
 from pydantic import ValidationError
 
-from mirai.api_provider import ApiProvider, Method
 from mirai.exceptions import ApiParametersError
+from mirai.interface import ApiInterface, ApiMethod
 from mirai.models.base import (
     MiraiBaseModel, MiraiIndexedMetaclass, MiraiIndexedModel
 )
@@ -108,8 +108,8 @@ class ApiBaseModel(MiraiIndexedModel, metaclass=ApiMetaclass):
     @abc.abstractmethod
     async def call(
         self,
-        api_provider: ApiProvider,
-        method: Method = Method.GET,
+        api_provider: ApiInterface,
+        method: ApiMethod = ApiMethod.GET,
         response_type: Optional[Type[ApiResponse]] = None,
     ):
         pass
@@ -147,8 +147,8 @@ class ApiModel(ApiBaseModel):
 
     async def _call(
         self,
-        api_provider: ApiProvider,
-        method: Method = Method.GET,
+        api_provider: ApiInterface,
+        method: ApiMethod = ApiMethod.GET,
     ):
         return await api_provider.call_api(
             api=self.Info.name,
@@ -158,8 +158,8 @@ class ApiModel(ApiBaseModel):
 
     async def call(
         self,
-        api_provider: ApiProvider,
-        method: Method = Method.GET,
+        api_provider: ApiInterface,
+        method: ApiMethod = ApiMethod.GET,
         response_type: Optional[Type[ApiResponse]] = None,
     ):
         """调用 API。"""
@@ -209,14 +209,14 @@ class ApiModel(ApiBaseModel):
         除去`sessionKey`由适配器自动指定外，其余参数可按顺序传入。具名参数仍然可用，适当地使用具名参数可增强代码的可读性。
         """
         def __init__(
-            self, api_provider: ApiProvider, api_type: Type['ApiModel']
+            self, api_provider: ApiInterface, api_type: Type['ApiModel']
         ):
             self.api_provider = api_provider
             self.api_type = api_type
 
         async def _call_api(
             self,
-            method: Method = Method.GET,
+            method: ApiMethod = ApiMethod.GET,
             response_type: Optional[Type[ApiResponse]] = None,
             args: Union[list, tuple, None] = None,
             kwargs: Optional[dict] = None
@@ -236,13 +236,13 @@ class ApiModel(ApiBaseModel):
         async def get(self, *args, **kwargs) -> Any:
             """获取。对于 GET 方法的 API，调用此方法。"""
             return await self._call_api(
-                method=Method.GET, args=args, kwargs=kwargs
+                method=ApiMethod.GET, args=args, kwargs=kwargs
             )
 
         async def set(self, *args, **kwargs) -> Any:
             """设置。对于 POST 方法的 API，可调用此方法。"""
             return await self._call_api(
-                method=Method.POST, args=args, kwargs=kwargs
+                method=ApiMethod.POST, args=args, kwargs=kwargs
             )
 
         async def __call__(self, *args, **kwargs):
@@ -284,7 +284,7 @@ class ApiRest(ApiModel):
         """API 的信息。"""
         name = ""
         alias = ""
-        method = Method.GET
+        method = ApiMethod.GET
 
     PostResponse = ApiResponse
 
@@ -305,7 +305,7 @@ class ApiRest(ApiModel):
             api_type: Type['ApiRest']
 
             def __init__(
-                self, api_provider: ApiProvider, api_type: Type['ApiRest'],
+                self, api_provider: ApiInterface, api_type: Type['ApiRest'],
                 partial_args: Union[list, tuple], partial_kwargs: dict
             ):
                 super().__init__(api_provider=api_provider, api_type=api_type)
@@ -315,7 +315,7 @@ class ApiRest(ApiModel):
             async def get(self, *args, **kwargs) -> Optional[TModel_]:
                 """获取。"""
                 return await self._call_api(
-                    method=Method.RESTGET,
+                    method=ApiMethod.RESTGET,
                     args=[*self.partial_args, *args],
                     kwargs={
                         **self.partial_kwargs,
@@ -326,7 +326,7 @@ class ApiRest(ApiModel):
             async def set(self, *args, **kwargs) -> Optional[TModel_]:
                 """设置。"""
                 return await self._call_api(
-                    method=Method.RESTPOST,
+                    method=ApiMethod.RESTPOST,
                     response_type=self.api_type.PostResponse,
                     args=[*self.partial_args, *args],
                     kwargs={
@@ -342,7 +342,6 @@ __all__ = [
     'ApiMetaclass',
     'ApiModel',
     'ApiPost',
-    'ApiProvider',
     'ApiRest',
     'ApiResponse',
 ]

@@ -11,9 +11,9 @@ from typing import (
 
 from typing_extensions import Literal
 
-from mirai.adapters.base import Adapter, AdapterInterface, ApiProvider
+from mirai.adapters.base import Adapter, AdapterInterface, Session
 from mirai.asgi import ASGI
-from mirai.bus import AbstractEventBus
+from mirai.bus import EventBus, TEventHandler
 from mirai.models.api import ApiModel
 from mirai.models.api_impl import *
 from mirai.models.entities import (
@@ -70,19 +70,28 @@ class MiraiRunner(Singleton):
         ...
 
 
-class Mirai(ApiProvider, AdapterInterface, AbstractEventBus):
+class Mirai(AdapterInterface):
     qq: int
 
     def __init__(self, qq: int, adapter: Adapter) -> None:
         ...
 
-    def subscribe(self, event, func: Callable, priority: int = 0) -> None:
+    @property
+    def bus(self) -> EventBus:
         ...
 
-    def unsubscribe(self, event, func: Callable) -> None:
+    def subscribe(
+        self,
+        event_type: Union[type, str],
+        func: TEventHandler,
+        priority: int = ...
+    ) -> None:
         ...
 
-    async def emit(self, event, *args, **kwargs) -> List[Awaitable[Any]]:
+    def unsubscribe(self, event_type: Union[type, str], func: Callable) -> None:
+        ...
+
+    def on(self, *event_types: Union[type, str], priority: int = ...) -> Callable:
         ...
 
     async def call_api(self, api: str, *args, **kwargs):
@@ -95,6 +104,10 @@ class Mirai(ApiProvider, AdapterInterface, AbstractEventBus):
     async def use_adapter(self, adapter: Adapter):
         ...
 
+    @property
+    def session(self) -> Session:
+        ...
+
     async def startup(self) -> None:
         ...
 
@@ -102,10 +115,6 @@ class Mirai(ApiProvider, AdapterInterface, AbstractEventBus):
         ...
 
     async def shutdown(self) -> None:
-        ...
-
-    @property
-    def session(self) -> str:
         ...
 
     @property
@@ -131,13 +140,6 @@ class Mirai(ApiProvider, AdapterInterface, AbstractEventBus):
         asgi_server: str = ...,
         **kwargs
     ) -> None:
-        ...
-
-    def on(
-        self,
-        event_type: Union[Type[Event], str],
-        priority: int = 0
-    ) -> Callable:
         ...
 
     def api(self, api: str) -> ApiModel.Proxy:

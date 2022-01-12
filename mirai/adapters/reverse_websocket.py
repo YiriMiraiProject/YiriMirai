@@ -3,7 +3,7 @@
 此模块提供反向 WebSocket 适配器，适用于 mirai-api-http 的 reverse websocket adapter。
 """
 from mirai.adapters.base import Adapter
-from mirai.api_provider import Method
+from mirai.interface import ApiMethod
 
 
 class ReverseWebSocketAdapter(Adapter):
@@ -17,7 +17,9 @@ class ReverseWebSocketAdapter(Adapter):
     async def logout(self, terminate: bool = True):
         pass
 
-    async def call_api(self, api: str, method: Method = Method.GET, **params):
+    async def call_api(
+        self, api: str, method: ApiMethod = ApiMethod.GET, **params
+    ):
         pass
 
     async def _background(self):

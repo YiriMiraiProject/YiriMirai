@@ -1,13 +1,13 @@
 import asyncio
-from mirai.api_provider import ApiProvider, Method
+from mirai.interface import ApiInterface, ApiMethod
 from mirai.models.api import ApiModel
 from mirai.models.message import MessageChain, Plain
 
 msg = ['Hello', Plain('World!')]
 
 
-class FakeAPI(ApiProvider):
-    async def call_api(self, api: str, method: Method = Method.GET, **params):
+class FakeAPI(ApiInterface):
+    async def call_api(self, api: str, method: ApiMethod = ApiMethod.GET, **params):
         if api == 'sendFriendMessage':
             chain = params.get('messageChain')
             assert isinstance(chain, list)

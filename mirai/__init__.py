@@ -18,13 +18,13 @@ if TYPE_CHECKING:
 else:
     from mirai.adapters import Adapter
 
-from mirai.api_provider import Method
 from mirai.bot import LifeSpan, Mirai, MiraiRunner, Shutdown, Startup
 from mirai.bus import EventBus
 from mirai.colorlog import ColoredFormatter
 from mirai.exceptions import (
     ApiError, NetworkError, SkipExecution, StopExecution, StopPropagation
 )
+from mirai.interface import ApiMethod
 from mirai.models import (
     At, AtAll, Dice, Event, Face, FriendMessage, GroupMessage, Image,
     MessageChain, MessageEvent, Plain, Poke, PokeNames, StrangerMessage,
@@ -33,7 +33,7 @@ from mirai.models import (
 
 __all__ = [
     'Mirai', 'MiraiRunner', 'LifeSpan', 'Startup', 'Shutdown', 'Adapter',
-    'Method', 'HTTPAdapter', 'WebSocketAdapter', 'WebHookAdapter',
+    'ApiMethod', 'HTTPAdapter', 'WebSocketAdapter', 'WebHookAdapter',
     'ComposeAdapter', 'EventBus', 'get_logger', 'Event', 'MessageEvent',
     'FriendMessage', 'GroupMessage', 'TempMessage', 'StrangerMessage',
     'MessageChain', 'Plain', 'At', 'AtAll', 'Dice', 'Face', 'Poke',

@@ -4,7 +4,7 @@
 from pathlib import Path
 from typing import TYPE_CHECKING, Iterable, List, Optional, Union
 
-from mirai.api_provider import ApiProvider, Method
+from mirai.interface import ApiInterface, ApiMethod
 
 if TYPE_CHECKING:
     from typing_extensions import Literal
@@ -382,15 +382,15 @@ class FileUpload(ApiPost):
     """上传目录的 id，空串为上传到根目录。"""
     async def _call(
         self,
-        api_provider: ApiProvider,
-        method: Method = Method.GET,
+        api_provider: ApiInterface,
+        method: ApiMethod = ApiMethod.GET,
     ):
         import aiofiles
         async with aiofiles.open(self.file, 'rb') as f:
             file = await f.read()
         return await api_provider.call_api(
             'file/upload',
-            method=Method.MULTIPART,
+            method=ApiMethod.MULTIPART,
             data={
                 'type': self.type,
                 'target': self.target,
@@ -415,15 +415,15 @@ class UploadImage(ApiPost):
     """上传的图片的本地路径。"""
     async def _call(
         self,
-        api_provider: ApiProvider,
-        method: Method = Method.GET,
+        api_provider: ApiInterface,
+        method: ApiMethod = ApiMethod.GET,
     ):
         import aiofiles
         async with aiofiles.open(self.img, 'rb') as f:
             img = await f.read()
         return await api_provider.call_api(
             'uploadImage',
-            method=Method.MULTIPART,
+            method=ApiMethod.MULTIPART,
             data={'type': self.type},
             files={'img': img}
         )
@@ -444,15 +444,15 @@ class UploadVoice(ApiPost):
     """上传的语音的本地路径。"""
     async def _call(
         self,
-        api_provider: ApiProvider,
-        method: Method = Method.GET,
+        api_provider: ApiInterface,
+        method: ApiMethod = ApiMethod.GET,
     ):
         import aiofiles
         async with aiofiles.open(self.voice, 'rb') as f:
             voice = await f.read()
         return await api_provider.call_api(
             'uploadVoice',
-            method=Method.MULTIPART,
+            method=ApiMethod.MULTIPART,
             data={'type': self.type},
             files={'voice': voice}
         )
