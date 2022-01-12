@@ -6,13 +6,13 @@ import asyncio
 import contextlib
 import logging
 from typing import (
-    Any, Awaitable, Callable, Dict, Iterable, List, Optional, Type, Union, cast
+    Any, Awaitable, Callable, Dict, Iterable, List, Optional, Union, cast
 )
 
 from mirai.adapters.base import Adapter, AdapterInterface, Session
 from mirai.asgi import ASGI, asgi_serve
 from mirai.bus import EventBus, TEventHandler
-from mirai.interface import ApiInterface, ApiMethod, EventInterface
+from mirai.interface import ApiMethod, EventInterface
 from mirai.models.api import ApiModel
 from mirai.models.api_impl import RespEvent
 from mirai.models.bus import ModelEventBus
@@ -26,7 +26,7 @@ from mirai.utils import Singleton
 __all__ = ['Mirai', 'MiraiRunner', 'LifeSpan', 'Startup', 'Shutdown']
 
 
-class Mirai(AdapterInterface):
+class Mirai(AdapterInterface, EventInterface[object]):
     """
     机器人主类。
 
@@ -59,21 +59,22 @@ class Mirai(AdapterInterface):
     """
     qq: int
     """QQ 号。"""
-    def __init__(self, qq: int, adapter: Adapter):
+    bus: EventBus
+    """事件总线。"""
+    def __init__(
+        self, qq: int, adapter: Adapter, bus: Optional[EventBus] = None
+    ):
         """
         Args:
             qq: QQ 号。启用 Single Mode 时，可以随便传入，登陆后会自动获取正确的 QQ 号。
             adapter: 适配器，负责与 mirai-api-http 沟通，详见模块`mirai.adapters。
+            bus: 事件总线，留空使用默认实现。默认为 None。
         """
         self.qq = qq
         self._adapter = adapter
         self._session: Optional[Session] = None
-        self._bus = EventBus()
-        self._model_bus = ModelEventBus(self._bus)
-
-    @property
-    def bus(self) -> EventBus:
-        return self._bus
+        self.bus = bus or EventBus()
+        self._model_bus = ModelEventBus(self.bus)
 
     def subscribe(
         self,
@@ -90,7 +91,7 @@ class Mirai(AdapterInterface):
         """
         if isinstance(event_type, str):
             event_type = Event.get_subtype(event_type)
-        self._bus.subscribe(event_type, func, priority)
+        self.bus.subscribe(event_type, func, priority)
 
     def unsubscribe(
         self, event_type: Union[type, str], func: Callable
@@ -103,7 +104,7 @@ class Mirai(AdapterInterface):
         """
         if isinstance(event_type, str):
             event_type = Event.get_subtype(event_type)
-        self._bus.unsubscribe(event_type, func)
+        self.bus.unsubscribe(event_type, func)
 
     def on(
         self, *event_types: Union[type, str], priority: int = 0
@@ -127,6 +128,11 @@ class Mirai(AdapterInterface):
             return func
 
         return decorator
+
+    async def emit(self, event: object):
+        """触发一个事件。
+        """
+        return await self.bus.emit(event)
 
     @property
     def adapter_info(self) -> Dict[str, Any]:
@@ -169,7 +175,7 @@ class Mirai(AdapterInterface):
             if session_info:
                 self.qq = session_info.qq.id
 
-        asyncio.create_task(self._bus.emit(Startup()))
+        asyncio.create_task(self.bus.emit(Startup()))
         await self._session.start()
 
     async def background(self):
@@ -179,7 +185,7 @@ class Mirai(AdapterInterface):
 
     async def shutdown(self):
         """结束运行机器人。"""
-        await asyncio.create_task(self._bus.emit(Shutdown()))
+        await asyncio.create_task(self.bus.emit(Shutdown()))
         if self._session:
             await self._adapter.logout(self.qq)
 

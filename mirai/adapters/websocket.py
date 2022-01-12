@@ -85,6 +85,7 @@ class WebSocketSession(Session):
         if not self.connection:
             raise NetworkError(f'WebSocket 通道未连接！')
 
+        response = None
         while True:
             try:
                 # 数据格式：
