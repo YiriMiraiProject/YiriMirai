@@ -30,6 +30,9 @@ class Entity(MiraiBaseModel):
     def get_name(self) -> str:
         """名称。"""
 
+    def __int__(self) -> int:
+        return self.id
+
 
 class Friend(Entity):
     """好友。"""
