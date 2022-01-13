@@ -82,32 +82,24 @@ async def _post_multipart(
 
 class HTTPSession(Session):
     """HTTP 轮询适配器的会话。"""
-    host_name: str
-    """mirai-api-http 的 HTTPAdapter Server 主机名。"""
-    poll_interval: float
-    """轮询时间间隔，单位秒。"""
+    adapter: 'HTTPAdapter'
+    """创建 Session 的适配器。"""
+    session: str
+    """mirai-api-http 的 session。"""
     headers: httpx.Headers
     """HTTP 请求头。"""
-    single_mode: bool
-    """是否开启 single_mode，开启后与 session 将无效。"""
-    def __init__(
-        self,
-        qq: int,
-        host_name: str,
-        headers: httpx.Headers,
-        single_mode: bool = False
-    ):
+    def __init__(self, qq: int, adapter: 'HTTPAdapter', session: str):
         super().__init__(qq)
-        self.host_name = host_name
-        self.headers = headers
-        self.single_mode = single_mode
+        self.adapter = adapter
+        self.session = session
+        self.headers = httpx.Headers({'sessionKey': session})
         self._tasks = Tasks()
 
     @_error_handler_async_local
     async def poll_event(self):
         """进行一次轮询，获取并处理事件。"""
         async with httpx.AsyncClient(
-            base_url=self.host_name, headers=self.headers
+            base_url=self.adapter.host_name, headers=self.headers
         ) as client:
             msg_count = (await _get(client, '/countMessage', {}) or {})['data']
             if msg_count > 0:
@@ -126,7 +118,7 @@ class HTTPSession(Session):
         **params
     ) -> Optional[dict]:
         async with httpx.AsyncClient(
-            base_url=self.host_name, headers=self.headers
+            base_url=self.adapter.host_name, headers=self.headers
         ) as client:
             if method == ApiMethod.GET or method == ApiMethod.RESTGET:
                 return await _get(client, f'/{api}', params)
@@ -140,13 +132,13 @@ class HTTPSession(Session):
 
     @_error_handler_async_local
     async def shutdown(self):
-        if not self.single_mode:
+        if not self.adapter.single_mode:
             async with httpx.AsyncClient(
-                base_url=self.host_name, headers=self.headers
+                base_url=self.adapter.host_name, headers=self.headers
             ) as client:
                 await _post(
                     client, '/release', {
-                        "sessionKey": self.headers['session'],
+                        "sessionKey": self.session,
                         "qq": self.qq,
                     }
                 )
@@ -160,7 +152,7 @@ class HTTPSession(Session):
         try:
             while True:
                 self._tasks.create_task(self.poll_event())
-                await asyncio.sleep(self.poll_interval)
+                await asyncio.sleep(self.adapter.poll_interval)
         finally:
             await self._tasks.cancel_all()
 
@@ -254,6 +246,4 @@ class HTTPAdapter(Adapter):
                 )
 
             logger.info(f'[HTTP] 成功登录到账号{qq}。')
-            return HTTPSession(
-                qq, self.host_name, httpx.Headers({'sessionKey': session})
-            )
+            return HTTPSession(qq, self, session)

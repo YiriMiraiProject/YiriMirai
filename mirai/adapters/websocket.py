@@ -33,18 +33,15 @@ _error_handler_async_local = error_handler_async(
 
 class WebSocketSession(Session):
     """WebSocket 适配器的会话。"""
+    adapter: 'WebSocketAdapter'
+    """创建 Session 的适配器。"""
     session: str
     """mirai-api-http 的 session。"""
-    sync_id: str
-    """mirai-api-http 配置的同步 ID。"""
     connection: Optional[WebSocketClientProtocol]
     """WebSocket 客户端连接。"""
-    heartbeat_interval: float
-    """每隔多久发送心跳包，单位：秒。"""
-    def __init__(self, qq: int, sync_id: str, heartbeat_interval: float):
+    def __init__(self, qq: int, adapter: 'WebSocketAdapter'):
         super().__init__(qq)
-        self.sync_id = sync_id
-        self.heartbeat_interval = heartbeat_interval
+        self.adapter = adapter
 
         # 接收 WebSocket 数据的 Task
         self._receiver_task: Optional[asyncio.Task] = None
@@ -133,7 +130,7 @@ class WebSocketSession(Session):
 
     async def poll_event(self):
         """获取并处理事件。"""
-        event = await self._recv(self.sync_id, -1)
+        event = await self._recv(self.adapter.sync_id, -1)
 
         self._tasks.create_task(self.emit(event))
 
@@ -168,8 +165,9 @@ class WebSocketSession(Session):
 
     async def _heartbeat(self):
         while self.connection:
-            await asyncio.sleep(self.heartbeat_interval)
-            if time.time() - self._last_send_time > self.heartbeat_interval:
+            await asyncio.sleep(self.adapter.heartbeat_interval)
+            if time.time(
+            ) - self._last_send_time > self.adapter.heartbeat_interval:
                 await self.connection.send('')
                 self._last_send_time = time.time()
                 logger.debug("[WebSocket] 发送心跳包。")
@@ -193,6 +191,10 @@ class WebSocketAdapter(Adapter):
     """WebSocket 适配器。作为 WebSocket 客户端与 mirai-api-http 沟通。"""
     host_name: str
     """WebSocket Server 的地址。"""
+    sync_id: str
+    """mirai-api-http 配置的同步 ID。"""
+    heartbeat_interval: float
+    """每隔多久发送心跳包，单位：秒。"""
     def __init__(
         self,
         verify_key: Optional[str],
@@ -258,7 +260,7 @@ class WebSocketAdapter(Adapter):
 
     @_error_handler_async_local
     async def _login(self, qq: int) -> WebSocketSession:
-        session = WebSocketSession(qq, self.sync_id, self.heartbeat_interval)
+        session = WebSocketSession(qq, self)
         await session.login(self.verify_key or '', self.host_name)
         logger.info(f'[WebSocket] 成功登录到账号{qq}。')
         return session

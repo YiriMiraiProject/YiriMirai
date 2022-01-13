@@ -3,7 +3,7 @@
 # YiriMirai
 一个轻量级、低耦合的基于 mirai-api-http 的 Python SDK。
 
-更多信息请看[文档](https://yiri-mirai.vercel.app/)。
+更多信息请看[文档](https://yiri-mirai.wybxc.cc/)。
 """
 __version__ = '0.3.0'
 __author__ = '忘忧北萱草'
@@ -25,20 +25,27 @@ from mirai.exceptions import (
     ApiError, NetworkError, SkipExecution, StopExecution, StopPropagation
 )
 from mirai.interface import ApiMethod
-from mirai.models import (
-    At, AtAll, Dice, Event, Face, FriendMessage, GroupMessage, Image,
-    MessageChain, MessageEvent, Plain, Poke, PokeNames, StrangerMessage,
-    TempMessage, Voice, deserialize, serialize
+from mirai.models.message import (
+    App, At, AtAll, Dice, Face, File, FlashImage, Forward, ForwardMessageNode,
+    Image, Json, MessageChain, MiraiCode, MusicShare, MusicShareKind, Plain,
+    Poke, PokeNames, Unknown, Voice, Xml, deserialize, serialize
+)
+
+from mirai.models.events import (
+    Event, FriendMessage, GroupMessage, MessageEvent, StrangerMessage,
+    TempMessage
 )
 
 __all__ = [
-    'Mirai', 'MiraiRunner', 'LifeSpan', 'Startup', 'Shutdown', 'Adapter',
-    'ApiMethod', 'HTTPAdapter', 'WebSocketAdapter', 'WebHookAdapter',
-    'ComposeAdapter', 'EventBus', 'get_logger', 'Event', 'MessageEvent',
-    'FriendMessage', 'GroupMessage', 'TempMessage', 'StrangerMessage',
-    'MessageChain', 'Plain', 'At', 'AtAll', 'Dice', 'Face', 'Poke',
-    'PokeNames', 'Image', 'Voice', 'serialize', 'deserialize', 'ApiError',
-    'NetworkError', 'SkipExecution', 'StopExecution', 'StopPropagation'
+    'Adapter', 'ApiError', 'ApiMethod', 'App', 'At', 'AtAll', 'ComposeAdapter',
+    'Dice', 'Event', 'EventBus', 'Face', 'File', 'FlashImage', 'Forward',
+    'ForwardMessageNode', 'FriendMessage', 'GroupMessage', 'HTTPAdapter',
+    'Image', 'Json', 'LifeSpan', 'MessageChain', 'MessageEvent', 'Mirai',
+    'MiraiCode', 'MiraiRunner', 'MusicShare', 'MusicShareKind', 'NetworkError',
+    'Plain', 'Poke', 'PokeNames', 'Shutdown', 'SkipExecution', 'Startup',
+    'StopExecution', 'StopPropagation', 'StrangerMessage', 'TempMessage',
+    'Unknown', 'Voice', 'WebHookAdapter', 'WebSocketAdapter', 'Xml',
+    'deserialize', 'get_logger', 'serialize'
 ]
 
 logger = logging.getLogger(__name__)

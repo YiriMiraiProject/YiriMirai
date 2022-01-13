@@ -4,9 +4,10 @@
 """
 import asyncio
 import contextlib
+import inspect
 import logging
 from typing import (
-    Any, Awaitable, Callable, Dict, Iterable, List, Optional, Union, cast
+    Any, Awaitable, Callable, Dict, Iterable, List, Optional, Set, Union, cast
 )
 
 from mirai.adapters.base import Adapter, AdapterInterface, Session
@@ -22,7 +23,8 @@ from mirai.models.entities import (
 )
 from mirai.models.events import Event, MessageEvent, RequestEvent, TempMessage
 from mirai.models.message import TMessage
-from mirai.utils import Singleton
+from mirai.tasks import Tasks
+from mirai.utils import Singleton, async_
 
 __all__ = ['Mirai', 'MiraiRunner', 'LifeSpan', 'Startup', 'Shutdown']
 
@@ -86,6 +88,8 @@ class Mirai(AdapterInterface, EventInterface[object]):
         self.event_interface_bypass = set(event_interface_bypass)
         if error_log:
             self.bus.subscribe(Exception, print_exception)
+        self._background_task_set: Set[Callable[[], Awaitable]] = set()
+        self._background_tasks = Tasks()
 
     def subscribe(
         self,
@@ -183,12 +187,13 @@ class Mirai(AdapterInterface, EventInterface[object]):
 
         if self._adapter.single_mode:
             # Single Mode 下，QQ 号可以随便传入。这里从 session info 中获取正确的 QQ 号。
-            # session_info = await self.session_info.get()
-            # if session_info:
-            #     self.qq = session_info.qq.id
-            pass
+            session_info = await self.session_info.get()
+            if session_info:
+                self.qq = session_info.qq.id
 
         asyncio.create_task(self.bus.emit(Startup()))
+        for task in self._background_task_set:
+            self._background_tasks.create_task(task())
         await self._session.start()
 
     async def background(self):
@@ -199,6 +204,7 @@ class Mirai(AdapterInterface, EventInterface[object]):
     async def shutdown(self):
         """结束运行机器人。"""
         await asyncio.create_task(self.bus.emit(Shutdown()))
+        await self._background_tasks.cancel_all()
         if self._session:
             await self._adapter.logout(self.qq)
 
@@ -207,15 +213,29 @@ class Mirai(AdapterInterface, EventInterface[object]):
         """ASGI 对象，用于使用 uvicorn 等启动。"""
         return MiraiRunner(self)
 
-    @staticmethod
-    def add_background_task(func: Union[Callable, Awaitable, None] = None):
+    def add_background_task(
+        self, func: Union[Callable, Awaitable, None] = None
+    ):
         """注册背景任务，将在 bot 启动后自动运行。
 
         Args:
             func(`Union[Callable, Awaitable, None]`): 背景任务，可以是函数或者协程，省略参数以作为装饰器调用。
         """
-        asgi = ASGI()
-        return asgi.add_background_task(func)
+        if func is None:
+
+            def wrapper(func: Union[Callable, Awaitable]):
+                self.add_background_task(func)
+                return func
+
+            return wrapper
+
+        async def wrapper_task():
+            if inspect.isawaitable(func):
+                return await func
+            else:
+                return await async_(cast(Callable, func)())
+
+        self._background_task_set.add(wrapper_task)
 
     def run(
         self,
