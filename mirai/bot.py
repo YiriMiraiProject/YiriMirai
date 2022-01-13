@@ -12,6 +12,7 @@ from typing import (
 from mirai.adapters.base import Adapter, AdapterInterface, Session
 from mirai.asgi import ASGI, asgi_serve
 from mirai.bus import EventBus, TEventHandler
+from mirai.exceptions import print_exception
 from mirai.interface import ApiMethod, EventInterface
 from mirai.models.api import ApiModel
 from mirai.models.api_impl import RespEvent
@@ -61,20 +62,30 @@ class Mirai(AdapterInterface, EventInterface[object]):
     """QQ 号。"""
     bus: EventBus
     """事件总线。"""
+    event_interface_bypass: Iterable[EventInterface[object]]
+    """旁路事件接口。"""
     def __init__(
-        self, qq: int, adapter: Adapter, bus: Optional[EventBus] = None
+        self,
+        qq: int,
+        adapter: Adapter,
+        event_interface_bypass: Iterable[EventInterface[object]] = (),
+        error_log: bool = True
     ):
         """
         Args:
             qq: QQ 号。启用 Single Mode 时，可以随便传入，登陆后会自动获取正确的 QQ 号。
             adapter: 适配器，负责与 mirai-api-http 沟通，详见模块`mirai.adapters。
-            bus: 事件总线，留空使用默认实现。默认为 None。
+            event_interface_bypass: 旁路事件接口。
+            error_log: 在错误发生时，是否在控制台打印。
         """
         self.qq = qq
         self._adapter = adapter
         self._session: Optional[Session] = None
-        self.bus = bus or EventBus()
+        self.bus = EventBus()
         self._model_bus = ModelEventBus(self.bus)
+        self.event_interface_bypass = set(event_interface_bypass)
+        if error_log:
+            self.bus.subscribe(Exception, print_exception)
 
     def subscribe(
         self,
@@ -130,8 +141,9 @@ class Mirai(AdapterInterface, EventInterface[object]):
         return decorator
 
     async def emit(self, event: object):
-        """触发一个事件。
-        """
+        """触发一个事件。"""
+        for interface in self.event_interface_bypass:
+            await interface.emit(event)
         return await self.bus.emit(event)
 
     @property
@@ -171,9 +183,10 @@ class Mirai(AdapterInterface, EventInterface[object]):
 
         if self._adapter.single_mode:
             # Single Mode 下，QQ 号可以随便传入。这里从 session info 中获取正确的 QQ 号。
-            session_info = await self.session_info.get()
-            if session_info:
-                self.qq = session_info.qq.id
+            # session_info = await self.session_info.get()
+            # if session_info:
+            #     self.qq = session_info.qq.id
+            pass
 
         asyncio.create_task(self.bus.emit(Startup()))
         await self._session.start()

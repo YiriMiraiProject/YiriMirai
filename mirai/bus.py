@@ -6,7 +6,7 @@ import asyncio
 import functools
 import inspect
 import logging
-from typing import Awaitable, Callable, Dict, List, Optional
+from typing import Any, Awaitable, Callable, Dict, List, Optional
 
 from mirai.exceptions import (
     SkipExecution, StopExecution, StopPropagation, print_exception
@@ -16,7 +16,7 @@ from mirai.utils import PriorityDict, async_with_exception
 
 logger = logging.getLogger(__name__)
 
-TEventHandler = Callable[[object], Optional[Awaitable]]
+TEventHandler = Callable[[Any], Optional[Awaitable]]
 
 
 class EventBus(EventInterface[object]):
