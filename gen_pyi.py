@@ -66,12 +66,26 @@ for api in sorted(
 {indent(params_doc, 4)}
             """
 
+        async def __call__(self, {params}) -> {response_type_name}:
+            """{c.docstring}
+
+            Args:
+{indent(params_doc, 4)}
+            """
+
 '''
     elif issubclass(api, mirai.models.api.ApiPost):
         s += f'''
     @type_check_only
     class __{api.__name__}Proxy():
         async def set(self, {params}) -> {response_type_name}:
+            """{c.docstring}
+
+            Args:
+{indent(params_doc, 4)}
+            """
+
+        async def __call__(self, {params}) -> {response_type_name}:
             """{c.docstring}
 
             Args:
@@ -95,23 +109,22 @@ for api in sorted(
             Args:
 {indent(params_doc, 4)}
             """
+        async def __call__(self, {params}) -> {response_type_name}:
+            """{c.docstring}
 
+            Args:
+{indent(params_doc, 4)}
+            """
 '''
 
     s += f'''
-    @overload
     @property
     def {api.Info.alias}(self) -> __{api.__name__}Proxy:
-       """{c.docstring}"""
+       """{c.docstring}
 
-    @overload
-    async def {api.Info.alias}(self, {params}) -> {response_type_name}:
-        """{c.docstring}
-
-        Args:
+            Args:
 {indent(params_doc, 3)}
-        """
-
+            """
 '''
 
 s = re.sub(r'Args:(\n\s*)*\s*"""', '"""', s)
