@@ -135,7 +135,7 @@ class WebSocketSession(Session):
         self._tasks.create_task(self.emit(event))
 
     async def call_api(
-        self, api: str, method: ApiMethod = ApiMethod.GET, **params
+        self, api: str, method: ApiMethod = ApiMethod.GET, *_, **params
     ):
         if not self.connection:
             raise NetworkError(f'WebSocket 通道未连接！')

@@ -49,9 +49,9 @@ class MiraiIndexedMetaclass(MiraiMetaclass):
     __indexedbases__: List['MiraiIndexedMetaclass'] = []
     __indexedmodel__ = None
 
-    def __new__(cls, name, bases, attrs, **kwargs):
+    def __new__(cls, name, bases, *args, **kwargs):
         new_cls: MiraiIndexedMetaclass = super().__new__(
-            cls, name, bases, attrs, **kwargs
+            cls, name, bases, *args, **kwargs
         )
         # 第一类：MiraiIndexedModel
         if name == 'MiraiIndexedModel':

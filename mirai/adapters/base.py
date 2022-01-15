@@ -109,7 +109,11 @@ class Session(ApiInterface, EventInterface[TEventDict]):
 
     @abc.abstractmethod
     async def call_api(
-        self, api: str, method: ApiMethod = ApiMethod.GET, **params
+        self,
+        api: str,
+        method: ApiMethod = ApiMethod.GET,
+        *args,
+        **params
     ) -> Any:
         """调用 API。
 

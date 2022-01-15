@@ -115,6 +115,7 @@ class HTTPSession(Session):
         self,
         api: str,
         method: ApiMethod = ApiMethod.GET,
+        *_,
         **params
     ) -> Optional[dict]:
         async with httpx.AsyncClient(

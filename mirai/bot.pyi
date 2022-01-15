@@ -19,12 +19,12 @@ from mirai.models.entities import (
     Entity, Friend, Group, GroupConfigModel, GroupMember, MemberInfoModel,
     Profile, Subject
 )
-from mirai.models.events import Event, MessageEvent, RequestEvent
+from mirai.models.events import MessageEvent, RequestEvent
 from mirai.models.message import Image, MessageChain, MessageComponent, Voice
 from mirai.utils import Singleton
 
 
-class LifeSpan(Event):
+class LifeSpan():
     type: str
 
 
@@ -36,7 +36,7 @@ class Shutdown(LifeSpan):
     type: str
 
 
-def __getattr__(name) -> Any:
+def __getattr__(name) -> Any:  # type: ignore
     ...
 
 
@@ -93,8 +93,10 @@ class Mirai(AdapterInterface):
         ...
 
     def on(
-        self, *event_types: Union[type, str], priority: int = ...
-    ) -> Callable:
+        self,
+        *event_types: Union[type, str],
+        priority: int = ...
+    ) -> TEventHandler:
         ...
 
     async def call_api(self, api: str, *args, **kwargs):
@@ -156,7 +158,7 @@ class Mirai(AdapterInterface):
         target: Union[Entity, MessageEvent],
         message: Union[MessageChain, Iterable[Union[MessageComponent, str]],
                        MessageComponent, str],
-        quote: Union[bool, int] = False
+        quote: Union[bool, int] = ...
     ) -> int:
         ...
 
@@ -180,21 +182,27 @@ class Mirai(AdapterInterface):
         self,
         event: RequestEvent,
         operate: Union[int, RespOperate],
-        message: str = ''
-    ):
+        message: str = ...
+    ) -> None:
         ...
 
-    async def allow(self, event: RequestEvent, message: str = ''):
+    async def allow(self, event: RequestEvent, message: str = ...) -> None:
         ...
 
     async def decline(
-        self, event: RequestEvent, message: str = '', ban: bool = False
-    ):
+        self,
+        event: RequestEvent,
+        message: str = ...,
+        ban: bool = ...
+    ) -> None:
         ...
 
     async def ignore(
-        self, event: RequestEvent, message: str = '', ban: bool = False
-    ):
+        self,
+        event: RequestEvent,
+        message: str = ...,
+        ban: bool = ...
+    ) -> None:
         ...
 
     ### 以下为自动生成 ###

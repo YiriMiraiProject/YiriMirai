@@ -16,7 +16,7 @@ from mirai.utils import PriorityDict, async_with_exception
 
 logger = logging.getLogger(__name__)
 
-TEventHandler = Callable[[Any], Optional[Awaitable]]
+TEventHandler = Callable[[Any], Optional[Awaitable[Any]]]
 
 
 class EventBus(EventInterface[object]):

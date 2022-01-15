@@ -107,9 +107,9 @@ class Mirai(AdapterInterface, EventInterface[object]):
             event_type = Event.get_subtype(event_type)
         self.bus.unsubscribe(event_type, func)
 
-    def on(
-        self, *event_types: Union[type, str], priority: int = 0
-    ) -> Callable:
+    def on(self,
+           *event_types: Union[type, str],
+           priority: int = 0) -> Callable[[TEventHandler], TEventHandler]:
         """注册事件处理器。
 
         用法举例：
@@ -123,7 +123,7 @@ class Mirai(AdapterInterface, EventInterface[object]):
             *event_types: 事件类或事件名。
             priority: 优先级，较小者优先。
         """
-        def decorator(func: TEventHandler) -> Callable:
+        def decorator(func: TEventHandler) -> TEventHandler:
             for event in event_types:
                 self.subscribe(event, func, priority)
             return func

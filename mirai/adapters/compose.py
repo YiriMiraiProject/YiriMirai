@@ -22,7 +22,7 @@ class ComposeSession(Session):
         await self.event_channel._background()
 
     async def call_api(
-        self, api: str, method: ApiMethod = ApiMethod.GET, **params
+        self, api: str, method: ApiMethod = ApiMethod.GET, *_, **params
     ):
         return await self.api_channel.call_api(api, method, **params)
 

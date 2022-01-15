@@ -14,7 +14,7 @@ class ReverseWebSocketAdapter(Adapter):
             "由于 mirai-api-http 的反向 WebSocket 尚不完善，该适配器尚未实现。"
         )
 
-    async def logout(self, terminate: bool = True):
+    async def logout(self, qq: int):
         pass
 
     async def call_api(

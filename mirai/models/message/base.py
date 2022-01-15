@@ -9,10 +9,10 @@ class MessageComponentMetaclass(MiraiIndexedMetaclass):
     __parameter_names__: List[str]
     __message_component__ = None
 
-    def __new__(cls, name, bases, attrs, **kwargs):
+    def __new__(cls, name, bases, *args, **kwargs):
         new_cls = cast(
             MessageComponentMetaclass,
-            super().__new__(cls, name, bases, attrs, **kwargs)
+            super().__new__(cls, name, bases, *args, **kwargs)
         )
         if name == 'MessageComponent':
             cls.__message_component__ = new_cls

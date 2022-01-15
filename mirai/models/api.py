@@ -61,10 +61,10 @@ class ApiMetaclass(MiraiIndexedMetaclass):
 
     Info: Type[ApiInfo]
 
-    def __new__(cls, name, bases, attrs, **kwargs):
+    def __new__(cls, name, bases, *args, **kwargs):
         new_cls: ApiMetaclass = cast(
             ApiMetaclass,
-            super().__new__(cls, name, bases, attrs, **kwargs)
+            super().__new__(cls, name, bases, *args, **kwargs)
         )
 
         if name == 'ApiModel':
@@ -294,7 +294,9 @@ class ApiRest(ApiModel):
         直接调用时，传入 GET 和 POST 的公共参数，返回一个 `ApiRest.Proxy.Partial` 对象，
         由此对象提供实际调用支持。
         """
-        def __call__(self, *args, **kwargs) -> 'ApiRest.Proxy.Partial':
+        def __call__( # type: ignore
+            self, *args, **kwargs
+        ) -> 'ApiRest.Proxy.Partial[TModel]':
             return ApiRest.Proxy.Partial(
                 self.api_provider, cast(Type['ApiRest'], self.api_type), args,
                 kwargs
@@ -335,6 +337,9 @@ class ApiRest(ApiModel):
                     }
                 )
 
+            def __await__(self):
+                return self.get().__await__()
+
 
 __all__ = [
     'ApiBaseModel',
@@ -346,14 +351,19 @@ __all__ = [
     'ApiResponse',
 ]
 
+_impl = None
+
 
 def __getattr__(name: str) -> Type[ApiModel]:
     """获取指定名称的 API。"""
     result = globals().get(name, None)
-    import mirai.models.api_impl as api
-    try:
-        result = result or getattr(api, name,
-                                   None) or ApiModel.get_subtype(name)
-    except Exception as e:
-        raise AttributeError(f'{name} 不是一个 API。') from e
+    if result is None:
+        global _impl
+        if _impl is None:
+            import importlib
+            _impl = importlib.import_module('mirai.models.api_impl')
+        try:
+            result = getattr(_impl, name, None) or ApiModel.get_subtype(name)
+        except Exception as e:
+            raise AttributeError(f'{name} 不是一个 API。') from e
     return result

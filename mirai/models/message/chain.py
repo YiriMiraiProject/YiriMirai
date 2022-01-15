@@ -225,7 +225,7 @@ class MessageChain(MiraiBaseModel):
     def quote(self):
         return self._quote
 
-    def dict(self, **kwargs):
+    def dict(self, **kwargs):  # type: ignore
         """转为字典。"""
         result = [component.dict(**kwargs) for component in self.__root__]
         if self.source:
@@ -253,7 +253,7 @@ class MessageChain(MiraiBaseModel):
             s += f', quote={self.quote!r}'
         return s
 
-    def __iter__(self):
+    def __iter__(self):  # type: ignore
         yield from self.__root__
 
     @overload

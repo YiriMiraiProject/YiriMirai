@@ -32,13 +32,13 @@ class WebHookSession(Session):
         def __init__(self, data: dict):
             self.data = data
 
-    async def shutdown(self, qq: int):
+    async def shutdown(self):
         """WebHook 不需要登出。直接返回。"""
-        logger.info(f"[WebHook] 从账号{qq}退出。")
+        logger.info(f"[WebHook] 从账号{self.qq}退出。")
         await super().shutdown()
 
     async def call_api(
-        self, api: str, method: ApiMethod = ApiMethod.GET, **params
+        self, api: str, method: ApiMethod = ApiMethod.GET, *_, **params
     ):
         """调用 API。WebHook 的 API 调用只能在快速响应中发生。"""
         if self.enable_quick_response:
@@ -72,7 +72,7 @@ class WebHookSession(Session):
 
 class WebHookAdapter(Adapter):
     """WebHook 适配器。作为 HTTP 服务器与 mirai-api-http 沟通。"""
-    sessions: Dict[int, WebHookSession]
+    sessions: Dict[int, WebHookSession]  # type: ignore
     """已登录的会话。"""
     route: str
     """适配器的路由。"""

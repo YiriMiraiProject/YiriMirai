@@ -25,15 +25,14 @@ from mirai.exceptions import (
     ApiError, NetworkError, SkipExecution, StopExecution, StopPropagation
 )
 from mirai.interface import ApiMethod
+from mirai.models.events import (
+    Event, FriendMessage, GroupMessage, MessageEvent, StrangerMessage,
+    TempMessage
+)
 from mirai.models.message import (
     App, At, AtAll, Dice, Face, File, FlashImage, Forward, ForwardMessageNode,
     Image, Json, MessageChain, MiraiCode, MusicShare, MusicShareKind, Plain,
     Poke, PokeNames, Unknown, Voice, Xml, deserialize, serialize
-)
-
-from mirai.models.events import (
-    Event, FriendMessage, GroupMessage, MessageEvent, StrangerMessage,
-    TempMessage
 )
 
 __all__ = [

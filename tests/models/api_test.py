@@ -7,7 +7,7 @@ msg = ['Hello', Plain('World!')]
 
 
 class FakeAPI(ApiInterface):
-    async def call_api(self, api: str, method: ApiMethod = ApiMethod.GET, **params):
+    async def call_api(self, api: str, method: ApiMethod = ApiMethod.GET, *_, **params):
         if api == 'sendFriendMessage':
             chain = params.get('messageChain')
             assert isinstance(chain, list)
