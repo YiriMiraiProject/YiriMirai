@@ -639,7 +639,7 @@ class RespNewFriendRequestEvent(ApiPost, RespEvent):
                 return 0
             if v == RespOperate.DECLINE:
                 return 1
-            if v == RespOperate.DECLINE & RespOperate.BAN:
+            if v == RespOperate.DECLINE | RespOperate.BAN:
                 return 2
             raise ValueError(f'无效操作{v}。')
         return v

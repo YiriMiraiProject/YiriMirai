@@ -198,15 +198,15 @@ class RespOperate(Flag):
 
     `RespOperate.ALLOW` 允许请求
 
-    `RespOperate.DECLINE & RespOpearte.BAN` 拒绝并拉黑
+    `RespOperate.DECLINE | RespOpearte.BAN` 拒绝并拉黑
     """
-    ALLOW = 1
+    ALLOW = 0b1000
     """允许请求。"""
-    DECLINE = 2
+    DECLINE = 0b1001
     """拒绝请求。"""
-    IGNORE = 3
+    IGNORE = 0b1010
     """忽略请求。"""
-    BAN = 4
+    BAN = 0b1000
     """拉黑。与前三个选项组合。"""
 
 

@@ -45,20 +45,6 @@ class Mirai(AdapterInterface, EventInterface[object]):
         Plain("Hello World!")
     ])
     ```
-
-    也可以使用 `call_api` 方法，此时 API 名称与参数名称需与 mirai-api-http 中的定义相同，
-    参数需要全部以具名参数的形式给出，并且需要指明使用的方法（GET/POST）。
-
-    例如：
-    ```py
-    await bot.call_api("sendFriendMessage", target=12345678, messageChain=[
-        {"type": "Plain", "text": "Hello World!"}
-    ], method="POST")
-
-    file_list = await bot.call_api(
-        "file/list", id="", target=12345678, method="GET"
-    )
-    ```
     """
     qq: int
     """QQ 号。"""
@@ -452,7 +438,7 @@ class Mirai(AdapterInterface, EventInterface[object]):
         """
         await self.process_request(
             event, RespOperate.DECLINE
-            & RespOperate.BAN if ban else RespOperate.DECLINE, message
+            | RespOperate.BAN if ban else RespOperate.DECLINE, message
         )
 
     async def ignore(
@@ -467,7 +453,7 @@ class Mirai(AdapterInterface, EventInterface[object]):
         """
         await self.process_request(
             event, RespOperate.IGNORE
-            & RespOperate.BAN if ban else RespOperate.DECLINE, message
+            | RespOperate.BAN if ban else RespOperate.DECLINE, message
         )
 
 
