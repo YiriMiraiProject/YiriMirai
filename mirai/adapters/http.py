@@ -44,7 +44,7 @@ async def _post(client: httpx.AsyncClient, url: str,
             url,
             content=content,
             headers={'Content-Type': 'application/json'},
-            timeout=10.
+            timeout=60.
         )
         logger.debug(f'[HTTP] 发送 POST 请求，地址{url}，状态 {response.status_code}。')
     except httpx.TimeoutException:
@@ -58,7 +58,7 @@ async def _get(client: httpx.AsyncClient, url: str,
                params: dict) -> Optional[dict]:
     """调用 GET 方法。"""
     try:
-        response = await client.get(url, params=params, timeout=10.)
+        response = await client.get(url, params=params, timeout=60.)
         logger.debug(f'[HTTP] 发送 GET 请求，地址{url}，状态 {response.status_code}。')
     except httpx.TimeoutException:
         logger.error(f'[HTTP] GET 请求超时，地址{url}。')
