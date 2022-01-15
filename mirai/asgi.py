@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 """此模块提供公共 ASGI 前端。"""
-import asyncio
 import functools
 import logging
-from inspect import iscoroutinefunction
-from typing import (
-    Awaitable, Callable, Dict, List, Literal, Optional, Tuple, Union, cast
-)
+from typing import Callable, Dict, List, Literal, Optional, Tuple
 
 from starlette.applications import Starlette
 from starlette.requests import Request
@@ -152,8 +148,9 @@ def asgi_serve(
         return True
     if asgi_server == 'hypercorn':
         import asyncio
-        from hypercorn.config import Config
+
         from hypercorn.asyncio import serve
+        from hypercorn.config import Config
         config = Config.from_mapping(bind=f'{host}:{port}', **kwargs)
         asyncio.run(serve(app, config), debug=True)
         return True

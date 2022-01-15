@@ -122,9 +122,9 @@ for api in sorted(
     def {api.Info.alias}(self) -> __{api.__name__}Proxy:
        """{c.docstring}
 
-            Args:
+        Args:
 {indent(params_doc, 3)}
-            """
+        """
 '''
 
 s = re.sub(r'Args:(\n\s*)*\s*"""', '"""', s)
