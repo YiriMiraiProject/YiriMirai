@@ -194,7 +194,7 @@ class GroupEvent(Event):
         group: 事件对应的群。
     """
     # group: Group
-    # 一个奇怪的现象：群事件不一定有 group，它可能藏在 opeartor.group 里
+    # 一个奇怪的现象：群事件不一定有 group，它可能藏在 operator.group 里
 
     type: str
     """事件名。"""

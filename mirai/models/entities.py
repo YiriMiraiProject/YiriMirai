@@ -198,7 +198,7 @@ class RespOperate(Flag):
 
     `RespOperate.ALLOW` 允许请求
 
-    `RespOperate.DECLINE | RespOpearte.BAN` 拒绝并拉黑
+    `RespOperate.DECLINE | RespOperate.BAN` 拒绝并拉黑
     """
     ALLOW = 0b1000
     """允许请求。"""
