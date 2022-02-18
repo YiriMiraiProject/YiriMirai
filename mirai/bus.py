@@ -6,7 +6,7 @@ import asyncio
 import functools
 import inspect
 import logging
-from typing import Any, Awaitable, Callable, Dict, List, Optional
+from typing import Any, Awaitable, Callable, Coroutine, Dict, List, Optional, cast
 
 from mirai.exceptions import (
     SkipExecution, StopExecution, StopPropagation, print_exception
@@ -139,7 +139,10 @@ class EventBus(EventInterface[object]):
             pass
 
         # 只保留快速响应的返回值。
-        return [asyncio.create_task(coro) for coro in filter(None, coros)]
+        return [
+            asyncio.create_task(cast(Coroutine, coro))
+            for coro in filter(None, coros)
+        ]
 
     async def emit(self, event: object) -> List[Awaitable]:
         """触发一个事件。
