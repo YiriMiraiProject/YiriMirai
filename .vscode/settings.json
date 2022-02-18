@@ -7,7 +7,7 @@
     ],
     "css.lint.unknownAtRules": "ignore",
     "python.formatting.provider": "yapf",
-    "python.analysis.typeCheckingMode": "strict",
+    "python.analysis.typeCheckingMode": "basic",
     "python.analysis.diagnosticSeverityOverrides": {
         "reportUnboundVariable": "information",
         "reportUnusedImport": "information",
