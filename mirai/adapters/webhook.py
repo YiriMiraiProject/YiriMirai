@@ -67,7 +67,7 @@ class WebHookSession(Session):
             # 快速响应，直接返回。
             return response.data
 
-        return {}
+        return {"command": "", "content": {}}
 
 
 class WebHookAdapter(Adapter):
