@@ -1,3 +1,4 @@
+"""此模块提供消息相关的基础定义。"""
 import re
 from typing import List, cast
 

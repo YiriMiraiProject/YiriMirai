@@ -1,3 +1,5 @@
+"""此模块提供消息链与消息元素相关。
+"""
 from typing import Iterable, Union
 
 from mirai.models.message.base import (

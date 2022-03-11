@@ -11,7 +11,7 @@ from typing import Any, Dict, NoReturn, Optional, Set, Tuple, Type, Union
 
 from mirai.exceptions import NetworkError
 from mirai.interface import ApiInterface, ApiMethod, EventInterface
-from mirai.tasks import Tasks
+from mirai.utils import Tasks
 
 logger = logging.getLogger(__name__)
 

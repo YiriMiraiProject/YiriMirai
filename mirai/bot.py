@@ -23,8 +23,7 @@ from mirai.models.entities import (
 )
 from mirai.models.events import Event, MessageEvent, RequestEvent, TempMessage
 from mirai.models.message import TMessage
-from mirai.tasks import Tasks
-from mirai.utils import Singleton, async_
+from mirai.utils import Singleton, Tasks, async_
 
 __all__ = ['Mirai', 'MiraiRunner', 'LifeSpan', 'Startup', 'Shutdown']
 

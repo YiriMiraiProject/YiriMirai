@@ -6,7 +6,9 @@ import asyncio
 import functools
 import inspect
 import logging
-from typing import Any, Awaitable, Callable, Coroutine, Dict, List, Optional, cast
+from typing import (
+    Any, Awaitable, Callable, Coroutine, Dict, List, Optional, cast
+)
 
 from mirai.exceptions import (
     SkipExecution, StopExecution, StopPropagation, print_exception

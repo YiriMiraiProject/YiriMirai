@@ -1,3 +1,4 @@
+"""此模块提供消息链相关。"""
 import itertools
 import logging
 from datetime import datetime

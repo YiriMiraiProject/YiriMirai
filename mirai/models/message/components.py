@@ -1,3 +1,4 @@
+"""此模块提供消息元素相关。"""
 import logging
 from datetime import datetime
 from enum import Enum

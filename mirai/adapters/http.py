@@ -14,7 +14,7 @@ from mirai.adapters.base import (
 )
 from mirai.exceptions import ApiError, NetworkError
 from mirai.interface import ApiMethod
-from mirai.tasks import Tasks
+from mirai.utils import Tasks
 
 logger = logging.getLogger(__name__)
 

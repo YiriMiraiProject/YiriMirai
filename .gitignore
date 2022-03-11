@@ -133,7 +133,7 @@ dmypy.json
 /test*.py
 
 # pdoc documents
-/docs
+/docs/mirai
 
 # doc branch
 /node_modules
@@ -158,6 +158,7 @@ yarn-error.log*
 
 # PyCharm
 .idea/
+.vscode/
 
 # TabNine
 .tabnine.model
