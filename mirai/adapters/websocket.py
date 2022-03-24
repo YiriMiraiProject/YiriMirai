@@ -8,14 +8,7 @@ import json
 import logging
 import random
 import time
-from collections import defaultdict, deque
-from itertools import repeat
 from typing import Dict, Optional
-
-from websockets.client import WebSocketClientProtocol, connect
-from websockets.exceptions import (
-    ConnectionClosed, ConnectionClosedOK, InvalidURI
-)
 
 from mirai.adapters.base import (
     Adapter, AdapterInterface, Session, error_handler_async, json_dumps
@@ -23,6 +16,10 @@ from mirai.adapters.base import (
 from mirai.exceptions import ApiError, NetworkError
 from mirai.interface import ApiMethod
 from mirai.utils import Tasks
+from websockets.client import WebSocketClientProtocol, connect
+from websockets.exceptions import (
+    ConnectionClosed, ConnectionClosedOK, InvalidURI
+)
 
 logger = logging.getLogger(__name__)
 
@@ -45,8 +42,9 @@ class WebSocketSession(Session):
 
         # 接收 WebSocket 数据的 Task
         self._receiver_task: Optional[asyncio.Task] = None
-        # 用于临时保存接收到的数据，以便根据 sync_id 进行同步识别
-        self._recv_dict: Dict[str, deque] = defaultdict(deque)
+        # # 用于临时保存接收到的数据，以便根据 sync_id 进行同步识别
+        # self._recv_dict: Dict[str, deque] = defaultdict(deque)
+        self._recv_futures: Dict[str, asyncio.Future[dict]] = {}
         # 本地同步 ID，每次调用 API 递增。
         self._local_sync_id = random.randint(1, 1024) * 1024
         # 事件处理任务管理器
@@ -94,11 +92,16 @@ class WebSocketSession(Session):
                 # }
                 response = json.loads(await self.connection.recv())
                 data = response['data']
+                sync_id = response['syncId']
 
-                logger.debug(
-                    f"[WebSocket] 收到 WebSocket 数据，同步 ID：{response['syncId']}。"
-                )
-                self._recv_dict[response['syncId']].append(data)
+                logger.debug(f"[WebSocket] 收到 WebSocket 数据，同步 ID：{sync_id}。")
+
+                if sync_id == self.adapter.sync_id:
+                    self._tasks.create_task(self.emit(data))
+                else:
+                    self._recv_futures[sync_id].set_result(data)
+                    del self._recv_futures[sync_id]
+
             except KeyError:
                 logger.error(f'[WebSocket] 不正确的数据：{response}')
             except ConnectionClosedOK:
@@ -110,29 +113,13 @@ class WebSocketSession(Session):
 
     async def _recv(self, sync_id: str = '-1', timeout: int = 600) -> dict:
         """接收并解析 websocket 数据。"""
-        timer = range(timeout) if timeout > 0 else repeat(0)
-        for _ in timer:
-            if self._recv_dict[sync_id]:
-                data = self._recv_dict[sync_id].popleft()
-
-                if data.get('code', 0) != 0:
-                    raise ApiError(data)
-
-                return data
-                # 如果没有对应同步 ID 的数据，则等待 websocket 数据
-                # 目前存在问题：如果 mah 发回的数据不含 sync_id，
-                # 这里就会无限循环……
-                # 所以还是限制次数好了。
-            await asyncio.sleep(0.1)
-        raise TimeoutError(
-            f'[WebSocket] mirai-api-http 响应超时，可能是由于调用出错。同步 ID：{sync_id}。'
-        )
-
-    async def poll_event(self):
-        """获取并处理事件。"""
-        event = await self._recv(self.adapter.sync_id, -1)
-
-        self._tasks.create_task(self.emit(event))
+        loop = asyncio.get_running_loop()
+        future = loop.create_future()
+        self._recv_futures[sync_id] = future  # future 在 _receiver 中被从 dict 删除。
+        data = await future
+        if data.get('code', 0) != 0:
+            raise ApiError(data)
+        return data
 
     async def call_api(
         self, api: str, method: ApiMethod = ApiMethod.GET, *_, **params
@@ -168,22 +155,17 @@ class WebSocketSession(Session):
             await asyncio.sleep(self.adapter.heartbeat_interval)
             if time.time(
             ) - self._last_send_time > self.adapter.heartbeat_interval:
-                await self.connection.send('')
+                await self.connection.send('{}')
                 self._last_send_time = time.time()
                 logger.debug("[WebSocket] 发送心跳包。")
 
     async def _background(self):
         """开始接收事件。"""
         logger.info('[WebSocket] 机器人开始运行。按 Ctrl + C 停止。')
-        heartbeat = None
 
         try:
-            heartbeat = asyncio.create_task(self._heartbeat())
-            while True:
-                await self.poll_event()
+            await self._heartbeat()
         finally:
-            if heartbeat:
-                await Tasks.cancel(heartbeat)
             await self._tasks.cancel_all()
 
 
