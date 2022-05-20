@@ -4,8 +4,11 @@
 """
 import re
 import traceback
+from typing import Type, cast
 
 from pydantic import ValidationError
+
+from mirai.models.api import ApiModel
 
 
 class NetworkError(RuntimeError):
@@ -63,14 +66,13 @@ class ApiParametersError(TypeError):
             err(`str`): pydantic 的解析错误。
         """
         self._err = err
+        model = cast(Type[ApiModel], err.model)
         try:
-            errors = [f'在调用 `{err.model.Info.alias}` 时出错。']
+            errors = [f'在调用 `{model.Info.alias}` 时出错。']
             for error in self._err.errors():
                 parameter_name = error['loc'][0]
-                parameter_name = re.sub(
-                    r'[A-Z]', lambda m: '_' + m.group(0).lower(),
-                    parameter_name
-                )
+                parameter_name = re.sub(r'[A-Z]', lambda m: f'_{m.group(0).lower()}', parameter_name)
+
                 message = error['msg']
                 errors.append(f'参数 `{parameter_name}` 类型错误，原因：{message}')
             self.args = tuple(errors)

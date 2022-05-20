@@ -113,8 +113,7 @@ class WebHookAdapter(Adapter):
                 key = key.lower()  # HTTP headers 不区分大小写
                 request_value = request.headers.get(key, '').lower()
                 expect_value = self.extra_headers[key].lower()
-                if (request_value != expect_value
-                    ) and (request_value != '[' + expect_value + ']'):
+                if request_value not in [expect_value, f'[{expect_value}]']:
                     logger.info(
                         f"请求头验证失败：expect [{expect_value}], " +
                         f"got {request_value}。"

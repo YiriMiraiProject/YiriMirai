@@ -2,7 +2,9 @@
 """
 此模块提供一些实用的辅助方法。
 """
+
 import asyncio
+import contextlib
 import inspect
 from collections import defaultdict
 from typing import Any, Callable, Dict, Generic, List, Set, TypeVar, cast
@@ -139,10 +141,8 @@ class Tasks:
             task: 任务。
         """
         task.cancel()
-        try:
+        with contextlib.suppress(asyncio.CancelledError):
             await task
-        except asyncio.CancelledError:
-            pass
 
     async def cancel_all(self):
         """取消所有任务。此方法会等待到所有任务取消成功。"""

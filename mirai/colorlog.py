@@ -47,10 +47,7 @@ class ColoredFormatter(logging.Formatter):
             colors: 一个字典，键是日志级别名称，值是颜色。
         """
         super().__init__(*args, **kwargs)
-        if colors is None:
-            self.colors = COLORS
-        else:
-            self.colors = {**colors}
+        self.colors = COLORS if colors is None else {**colors}
 
     def format(self, record):
         formatted = super().format(record)

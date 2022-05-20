@@ -356,7 +356,7 @@ _impl = None
 
 def __getattr__(name: str) -> Type[ApiModel]:
     """获取指定名称的 API。"""
-    result = globals().get(name, None)
+    result = globals().get(name)
     if result is None:
         global _impl
         if _impl is None:

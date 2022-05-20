@@ -32,12 +32,10 @@ def error_handler_async(errors: Tuple[Type[BaseException], ...]):
         async def wrapped(self, *args, **kwargs):
             try:
                 return await func(self, *args, **kwargs)
-            except KeyError:
-                raise NetworkError('从 mirai-api-http 返回的数据格式错误。请检查版本是否正确。')
+            except KeyError as e:
+                raise NetworkError('从 mirai-api-http 返回的数据格式错误。请检查版本是否正确。') from e
             except errors as e:
-                err = NetworkError(
-                    '无法连接到 mirai。请检查 mirai-api-http 是否启动，地址与端口是否正确。'
-                )
+                err = NetworkError('无法连接到 mirai。请检查 mirai-api-http 是否启动，地址与端口是否正确。')
                 logger.error(err)
                 raise err from e
             except Exception as e:
@@ -58,9 +56,8 @@ class AdapterInterface(abc.ABC):
 
     @classmethod
     def __subclasshook__(cls, C: type):
-        if cls is AdapterInterface:
-            if any("adapter_info" in B.__dict__ for B in C.__mro__):
-                return True
+        if cls is AdapterInterface and any("adapter_info" in B.__dict__ for B in C.__mro__):
+            return True
         return NotImplemented
 
 

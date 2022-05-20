@@ -167,9 +167,7 @@ class _SendMessage(ApiBaseModel):
 
     @validator('message_chain', check_fields=False)
     def _validate_message_chain(cls, value: Union[MessageChain, list]):
-        if isinstance(value, list):
-            return MessageChain.parse_obj(value)
-        return value
+        return MessageChain.parse_obj(value) if isinstance(value, list) else value
 
 
 class SendFriendMessage(ApiPost, _SendMessage):
@@ -715,9 +713,7 @@ class CmdExecute(ApiPost):
     """命令。"""
     @validator('command')
     def _validate_command(cls, value):
-        if isinstance(value, list):
-            return MessageChain.parse_obj(value)
-        return value
+        return MessageChain.parse_obj(value) if isinstance(value, list) else value
 
     class Info(ApiPost.Info):
         name = "cmd/execute"

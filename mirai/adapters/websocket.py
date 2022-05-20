@@ -78,7 +78,7 @@ class WebSocketSession(Session):
     async def _receiver(self):
         """开始接收 websocket 数据。"""
         if not self.connection:
-            raise NetworkError(f'WebSocket 通道未连接！')
+            raise NetworkError('WebSocket 通道未连接！')
 
         response = None
         while True:
@@ -104,12 +104,13 @@ class WebSocketSession(Session):
 
             except KeyError:
                 logger.error(f'[WebSocket] 不正确的数据：{response}')
-            except ConnectionClosedOK:
-                raise SystemExit()
+            except ConnectionClosedOK as e:
+                raise SystemExit() from e
             except ConnectionClosed as e:
                 exit_message = f'[WebSocket] WebSocket 通道意外关闭。code: {e.code}, reason: {e.reason}'
+
                 logger.error(exit_message)
-                raise SystemExit(exit_message)
+                raise SystemExit(exit_message) from e
 
     async def _recv(self, sync_id: str = '-1', timeout: int = 600) -> dict:
         """接收并解析 websocket 数据。"""
@@ -125,7 +126,7 @@ class WebSocketSession(Session):
         self, api: str, method: ApiMethod = ApiMethod.GET, *_, **params
     ):
         if not self.connection:
-            raise NetworkError(f'WebSocket 通道未连接！')
+            raise NetworkError('WebSocket 通道未连接！')
         self._local_sync_id += 1  # 使用不同的 sync_id
         sync_id = str(self._local_sync_id)
         content = {
@@ -200,16 +201,14 @@ class WebSocketAdapter(Adapter):
         self._host = host
         self._port = port
 
-        if host[:2] == '//':
-            host = 'ws:' + host
-        elif host[:7] == 'http://' or host[:8] == 'https://':
+        if host.startswith('//'):
+            host = f'ws:{host}'
+        elif host.startswith('http://') or host.startswith('https://'):
             raise NetworkError(f'{host} 不是一个可用的 WebSocket 地址！')
         elif host[:5] != 'ws://':
-            host = 'ws://' + host
+            host = f'ws://{host}'
 
-        if host[-1:] == '/':
-            host = host[:-1]
-
+        host = host.removesuffix('/')
         self.host_name = f'{host}:{port}/all'
 
         self.sync_id = sync_id  # 这个神奇的 sync_id，默认值 -1，居然是个字符串

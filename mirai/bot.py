@@ -326,10 +326,7 @@ class Mirai(AdapterInterface, EventInterface[object]):
         friend_list = await self.friend_list.get()
         if not friend_list:
             return None
-        for friend in cast(List[Friend], friend_list):
-            if friend.id == id_:
-                return friend
-        return None
+        return next((friend for friend in cast(List[Friend], friend_list) if friend.id == id_), None)
 
     async def get_group(self, id_: int) -> Optional[Group]:
         """获取群组对象。
@@ -344,10 +341,7 @@ class Mirai(AdapterInterface, EventInterface[object]):
         group_list = await self.group_list.get()
         if not group_list:
             return None
-        for group in cast(List[Group], group_list):
-            if group.id == id_:
-                return group
-        return None
+        return next((group for group in cast(List[Group], group_list) if group.id == id_), None)
 
     async def get_group_member(self, group: Union[Group, int],
                                id_: int) -> Optional[GroupMember]:
@@ -366,10 +360,7 @@ class Mirai(AdapterInterface, EventInterface[object]):
         member_list = await self.member_list.get(group)
         if not member_list:
             return None
-        for member in cast(List[GroupMember], member_list):
-            if member.id == id_:
-                return member
-        return None
+        return next((member for member in cast(List[GroupMember], member_list) if member.id == id_), None)
 
     async def get_entity(self, subject: Subject) -> Optional[Entity]:
         """获取实体对象。
@@ -412,7 +403,7 @@ class Mirai(AdapterInterface, EventInterface[object]):
             operate: 处理操作。
             message: 回复的信息。
         """
-        api_type = cast(RespEvent, ApiModel.get_subtype('Resp' + event.type))
+        api_type = cast(RespEvent, ApiModel.get_subtype(f'Resp{event.type}'))
         api = api_type.from_event(event, operate, message)
         await api.call(self.session, ApiMethod.POST)
 
@@ -529,10 +520,8 @@ class MiraiRunner(Singleton):
                     """
                 ).strip()
             )
-            try:
+            with contextlib.suppress(KeyboardInterrupt, SystemExit):
                 asyncio.run(self._run())
-            except (KeyboardInterrupt, SystemExit):
-                pass
 
 
 class LifeSpan():

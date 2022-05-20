@@ -95,11 +95,7 @@ class EventBus(EventInterface[object]):
     @functools.lru_cache()
     def _topological_sort(self, event_type: type) -> List[type]:
         """拓扑排序。"""
-        result: List[type] = []
-        for base_event in self._topological_order:
-            if issubclass(event_type, base_event):
-                result.append(base_event)
-        return result
+        return [base_event for base_event in self._topological_order if issubclass(event_type, base_event)]
 
     async def _emit(self, event: object, safe: bool) -> List[Awaitable]:
         """触发一个事件。
