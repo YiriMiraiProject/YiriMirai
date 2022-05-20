@@ -8,15 +8,13 @@ import re
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import (
-    Iterable, List, Optional, Tuple, Type, TypeVar, Union, cast, overload
-)
+from typing import (Iterable, List, Optional, Tuple, Type, TypeVar, Union,
+                    cast, overload)
 
 from pydantic import HttpUrl, validator
 
-from mirai.models.base import (
-    MiraiBaseModel, MiraiIndexedMetaclass, MiraiIndexedModel
-)
+from mirai.models.base import (MiraiBaseModel, MiraiIndexedMetaclass,
+                               MiraiIndexedModel)
 from mirai.models.entities import Friend, GroupMember
 from mirai.utils import kmp
 

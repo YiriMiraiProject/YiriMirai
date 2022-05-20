@@ -6,10 +6,10 @@ import logging
 from datetime import datetime
 from enum import Enum, Flag
 from pathlib import Path
-from typing import (
-    TYPE_CHECKING, Any, Generic, Iterable, List, Optional, Type, TypeVar,
-    Union, cast
-)
+from typing import (TYPE_CHECKING, Any, Generic, Iterable, List, Optional,
+                    Type, TypeVar, Union, cast)
+
+from mirai.exceptions import ApiParametersError
 
 if TYPE_CHECKING:
     from typing_extensions import Literal
@@ -19,22 +19,18 @@ else:
     except ImportError:
         from typing_extensions import Literal
 
-from pydantic import validator
+from pydantic import ValidationError, validator
 
 from mirai.api_provider import ApiProvider, Method
-from mirai.models.base import (
-    MiraiBaseModel, MiraiIndexedMetaclass, MiraiIndexedModel
-)
-from mirai.models.entities import (
-    Friend, Group, GroupConfigModel, GroupMember, MemberInfoModel
-)
-from mirai.models.events import (
-    FriendMessage, GroupMessage, OtherClientMessage, RequestEvent,
-    StrangerMessage, TempMessage
-)
-from mirai.models.message import (
-    Image, MessageChain, MessageComponent, TMessage, Voice
-)
+from mirai.models.base import (MiraiBaseModel, MiraiIndexedMetaclass,
+                               MiraiIndexedModel)
+from mirai.models.entities import (Friend, Group, GroupConfigModel,
+                                   GroupMember, MemberInfoModel)
+from mirai.models.events import (FriendMessage, GroupMessage,
+                                 OtherClientMessage, RequestEvent,
+                                 StrangerMessage, TempMessage)
+from mirai.models.message import (Image, MessageChain, MessageComponent,
+                                  TMessage, Voice)
 from mirai.utils import async_
 
 logger = logging.getLogger(__name__)
@@ -299,7 +295,7 @@ class ApiModel(ApiBaseModel):
         api_provider: ApiProvider,
         method: Method = Method.GET,
     ):
-        return await api_provider.call_api(
+        return await api_provider._call_api(
             api=self.Info.name,
             method=method,
             **self.dict(by_alias=True, exclude_none=True)
@@ -379,8 +375,11 @@ class ApiModel(ApiBaseModel):
             args = args or []
             kwargs = kwargs or {}
 
-            api = self.api_type(*args, **kwargs)
-            return await api.call(self.api_provider, method, response_type)
+            try:
+                api = self.api_type(*args, **kwargs)
+                return await api.call(self.api_provider, method, response_type)
+            except ValidationError as e:
+                raise ApiParametersError(e) from None
 
         async def get(self, *args, **kwargs) -> Optional[TModel]:
             """获取。对于 GET 方法的 API，调用此方法。"""
@@ -763,7 +762,7 @@ class FileUpload(ApiPost):
         import aiofiles
         async with aiofiles.open(self.file, 'rb') as f:
             file = await f.read()
-        return await api_provider.call_api(
+        return await api_provider._call_api(
             'file/upload',
             method=Method.MULTIPART,
             data={
@@ -777,7 +776,7 @@ class FileUpload(ApiPost):
     class Info(ApiPost.Info):
         name = "file/upload"
         alias = "file_upload"
-        response_type = MiraiBaseModel # TODO
+        response_type = MiraiBaseModel  # TODO
 
 
 class UploadImage(ApiPost):
@@ -794,7 +793,7 @@ class UploadImage(ApiPost):
         import aiofiles
         async with aiofiles.open(self.img, 'rb') as f:
             img = await f.read()
-        return await api_provider.call_api(
+        return await api_provider._call_api(
             'uploadImage',
             method=Method.MULTIPART,
             data={'type': self.type},
@@ -821,7 +820,7 @@ class UploadVoice(ApiPost):
         import aiofiles
         async with aiofiles.open(self.voice, 'rb') as f:
             voice = await f.read()
-        return await api_provider.call_api(
+        return await api_provider._call_api(
             'uploadVoice',
             method=Method.MULTIPART,
             data={'type': self.type},

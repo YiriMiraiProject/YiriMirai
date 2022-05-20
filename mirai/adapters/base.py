@@ -144,7 +144,7 @@ class Adapter(ApiProvider, AdapterInterface):
         """登出。"""
 
     @abc.abstractmethod
-    async def call_api(self, api: str, method: Method = Method.GET, **params):
+    async def _call_api(self, api: str, method: Method = Method.GET, **params):
         """调用 API。
 
         Args:

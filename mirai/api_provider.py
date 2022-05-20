@@ -29,7 +29,7 @@ class ApiProvider(abc.ABC):
     使用了 `__getattr__`，可以直接通过属性调用 API。
     """
     @abc.abstractmethod
-    async def call_api(self, api: str, method: Method = Method.GET, **params):
+    async def _call_api(self, api: str, method: Method = Method.GET, **params):
         """调用 API。此处为抽象方法，具体实现由子类决定。
 
         Args:
@@ -40,4 +40,4 @@ class ApiProvider(abc.ABC):
 
     def __getattr__(self,
                     api: str) -> Callable[..., Union[Awaitable[Any], Any]]:
-        return functools.partial(self.call_api, api)
+        return functools.partial(self._call_api, api)

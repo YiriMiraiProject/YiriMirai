@@ -49,8 +49,8 @@ class ComposeAdapter(Adapter):
         await self.event_channel.logout()
         await self.api_channel.logout()
 
-    async def call_api(self, api: str, method: Method = Method.GET, **params):
-        return await self.api_channel.call_api(api, method, **params)
+    async def _call_api(self, api: str, method: Method = Method.GET, **params):
+        return await self.api_channel._call_api(api, method, **params)
 
     async def _background(self):
         await self.event_channel._background()

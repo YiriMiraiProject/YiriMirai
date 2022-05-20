@@ -13,14 +13,12 @@ from itertools import repeat
 from typing import Dict, Optional, cast
 
 from websockets.client import WebSocketClientProtocol, connect
-from websockets.exceptions import (
-    ConnectionClosed, ConnectionClosedOK, InvalidURI
-)
+from websockets.exceptions import (ConnectionClosed, ConnectionClosedOK,
+                                   InvalidURI)
 
 from mirai import exceptions
-from mirai.adapters.base import (
-    Adapter, AdapterInterface, error_handler_async, json_dumps
-)
+from mirai.adapters.base import (Adapter, AdapterInterface,
+                                 error_handler_async, json_dumps)
 from mirai.api_provider import Method
 from mirai.tasks import Tasks
 
@@ -208,7 +206,7 @@ class WebSocketAdapter(Adapter):
 
         self._tasks.create_task(self.emit(event['type'], event))
 
-    async def call_api(self, api: str, method: Method = Method.GET, **params):
+    async def _call_api(self, api: str, method: Method = Method.GET, **params):
         if not self.connection:
             raise exceptions.NetworkError(
                 f'WebSocket 通道 {self.host_name} 未连接！'
@@ -241,7 +239,7 @@ class WebSocketAdapter(Adapter):
         while True:
             await asyncio.sleep(self.heartbeat_interval)
             if time.time() - self._last_send_time > self.heartbeat_interval:
-                await self.call_api('about')
+                await self._call_api('about')
                 self._last_send_time = time.time()
                 logger.debug("[WebSocket] 发送心跳包。")
 

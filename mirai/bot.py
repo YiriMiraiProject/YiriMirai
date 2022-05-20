@@ -5,9 +5,9 @@
 import asyncio
 import contextlib
 import logging
-from typing import (
-    Any, Awaitable, Callable, Dict, Iterable, List, Optional, Type, Union, cast
-)
+import warnings
+from typing import (Any, Awaitable, Callable, Dict, Iterable, List, Optional,
+                    Type, Union, cast)
 
 import mirai.models.api
 from mirai.adapters.base import Adapter, AdapterInterface, ApiProvider
@@ -15,9 +15,8 @@ from mirai.asgi import ASGI, asgi_serve
 from mirai.bus import AbstractEventBus, EventBus
 from mirai.models.api import ApiModel, RespEvent, RespOperate
 from mirai.models.bus import ModelEventBus
-from mirai.models.entities import (
-    Entity, Friend, Group, GroupMember, Permission, Subject
-)
+from mirai.models.entities import (Entity, Friend, Group, GroupMember,
+                                   Permission, Subject)
 from mirai.models.events import Event, MessageEvent, RequestEvent, TempMessage
 from mirai.models.message import TMessage
 from mirai.utils import Singleton
@@ -88,7 +87,11 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
             *args: 参数。
             **kwargs: 参数。
         """
-        return await self._adapter.call_api(api, *args, **kwargs)
+        warnings.warn("SimpleMirai 已弃用，将在 0.3 后移除。", DeprecationWarning)
+        return await self._call_api(api, *args, **kwargs)
+
+    async def _call_api(self, api: str, *args, **kwargs):
+        return await self._adapter._call_api(api, *args, **kwargs)
 
     def on(self, event: str, priority: int = 0) -> Callable:
         """注册事件处理器。
@@ -136,7 +139,7 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
 
         if self._adapter.single_mode:
             # Single Mode 下，QQ 号可以随便传入。这里从 session info 中获取正确的 QQ 号。
-            self.qq = (await self.call_api('sessionInfo'))['data']['qq']['id']
+            self.qq = (await self._call_api('sessionInfo'))['data']['qq']['id']
 
         asyncio.create_task(self._adapter.emit("Startup", {'type': 'Startup'}))
         await self._adapter.start()
