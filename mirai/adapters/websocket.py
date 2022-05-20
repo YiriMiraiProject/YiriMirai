@@ -206,7 +206,7 @@ class WebSocketAdapter(Adapter):
 
         self._tasks.create_task(self.emit(event['type'], event))
 
-    async def _call_api(self, api: str, method: Method = Method.GET, **params):
+    async def call_api(self, api: str, method: Method = Method.GET, **params):
         if not self.connection:
             raise exceptions.NetworkError(
                 f'WebSocket 通道 {self.host_name} 未连接！'
@@ -239,7 +239,7 @@ class WebSocketAdapter(Adapter):
         while True:
             await asyncio.sleep(self.heartbeat_interval)
             if time.time() - self._last_send_time > self.heartbeat_interval:
-                await self._call_api('about')
+                await self.call_api('about')
                 self._last_send_time = time.time()
                 logger.debug("[WebSocket] 发送心跳包。")
 

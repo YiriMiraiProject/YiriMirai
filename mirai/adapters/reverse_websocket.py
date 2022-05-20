@@ -17,7 +17,7 @@ class ReverseWebSocketAdapter(Adapter):
     async def logout(self):
         pass
 
-    async def _call_api(self, api: str, method: Method = Method.GET, **params):
+    async def call_api(self, api: str, method: Method = Method.GET, **params):
         pass
 
     async def _background(self):

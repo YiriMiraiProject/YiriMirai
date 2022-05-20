@@ -217,7 +217,7 @@ class HTTPAdapter(Adapter):
                 coros = [self.emit(msg['type'], msg) for msg in msg_list]
                 await asyncio.gather(*coros)
 
-    async def _call_api(self,
+    async def call_api(self,
                        api: str,
                        method: Method = Method.GET,
                        **params) -> Optional[dict]:

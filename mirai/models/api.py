@@ -295,7 +295,7 @@ class ApiModel(ApiBaseModel):
         api_provider: ApiProvider,
         method: Method = Method.GET,
     ):
-        return await api_provider._call_api(
+        return await api_provider.call_api(
             api=self.Info.name,
             method=method,
             **self.dict(by_alias=True, exclude_none=True)
@@ -762,7 +762,7 @@ class FileUpload(ApiPost):
         import aiofiles
         async with aiofiles.open(self.file, 'rb') as f:
             file = await f.read()
-        return await api_provider._call_api(
+        return await api_provider.call_api(
             'file/upload',
             method=Method.MULTIPART,
             data={
@@ -793,7 +793,7 @@ class UploadImage(ApiPost):
         import aiofiles
         async with aiofiles.open(self.img, 'rb') as f:
             img = await f.read()
-        return await api_provider._call_api(
+        return await api_provider.call_api(
             'uploadImage',
             method=Method.MULTIPART,
             data={'type': self.type},
@@ -820,7 +820,7 @@ class UploadVoice(ApiPost):
         import aiofiles
         async with aiofiles.open(self.voice, 'rb') as f:
             voice = await f.read()
-        return await api_provider._call_api(
+        return await api_provider.call_api(
             'uploadVoice',
             method=Method.MULTIPART,
             data={'type': self.type},

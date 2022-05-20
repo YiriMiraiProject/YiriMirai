@@ -205,9 +205,9 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __AboutProxy():
-        async def get(self) -> None:
+        async def get(self) -> AboutResponse:
             """获取插件信息。"""
-        async def __call__(self) -> None:
+        async def __call__(self) -> AboutResponse:
             """获取插件信息。"""
 
     @property
@@ -218,9 +218,9 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __BotProfileProxy():
-        async def get(self) -> None:
+        async def get(self) -> ProfileResponse:
             """获取 Bot 资料。"""
-        async def __call__(self) -> None:
+        async def __call__(self) -> ProfileResponse:
             """获取 Bot 资料。"""
 
     @property
@@ -231,12 +231,12 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __CmdExecuteProxy():
-        async def set(self, command: Union[MessageChain,Iterable[Union[MessageComponent,str]],str]) -> None:
+        async def set(self, command: Union[MessageChain,Iterable[Union[MessageComponent,str]],str]) -> Response:
             """执行命令。
             Args:
                 command (`Union[MessageChain,Iterable[Union[MessageComponent,str]],str]`): 命令。
             """
-        async def __call__(self, command: Union[MessageChain,Iterable[Union[MessageComponent,str]],str]) -> None:
+        async def __call__(self, command: Union[MessageChain,Iterable[Union[MessageComponent,str]],str]) -> Response:
             """执行命令。
             Args:
                 command (`Union[MessageChain,Iterable[Union[MessageComponent,str]],str]`): 命令。
@@ -253,7 +253,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __CmdRegisterProxy():
-        async def set(self, name: str, usage: str, description: str, alias: Optional[List[str]] = None) -> None:
+        async def set(self, name: str, usage: str, description: str, alias: Optional[List[str]] = None) -> Response:
             """注册命令。
             Args:
                 name (`str`): 命令名称。
@@ -261,7 +261,7 @@ class Mirai(SimpleMirai):
                 description (`str`): 命令描述。
                 alias (`Optional[List[str]]`): 可选。命令别名，默认值 None。
             """
-        async def __call__(self, name: str, usage: str, description: str, alias: Optional[List[str]] = None) -> None:
+        async def __call__(self, name: str, usage: str, description: str, alias: Optional[List[str]] = None) -> Response:
             """注册命令。
             Args:
                 name (`str`): 命令名称。
@@ -284,12 +284,12 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __DeleteFriendProxy():
-        async def set(self, target: int) -> None:
+        async def set(self, target: int) -> Response:
             """删除好友。
             Args:
                 target (`int`): 需要删除的好友 QQ 号。
             """
-        async def __call__(self, target: int) -> None:
+        async def __call__(self, target: int) -> Response:
             """删除好友。
             Args:
                 target (`int`): 需要删除的好友 QQ 号。
@@ -306,14 +306,14 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __FileDeleteProxy():
-        async def set(self, id: str, target: int, path: Optional[str] = None) -> None:
+        async def set(self, id: str, target: int, path: Optional[str] = None) -> Response:
             """删除文件。
             Args:
                 id (`str`): 欲删除的文件 id。
                 target (`int`): 群号或好友 QQ 号。
                 path (`Optional[str]`): 可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id，默认值 None。
             """
-        async def __call__(self, id: str, target: int, path: Optional[str] = None) -> None:
+        async def __call__(self, id: str, target: int, path: Optional[str] = None) -> Response:
             """删除文件。
             Args:
                 id (`str`): 欲删除的文件 id。
@@ -334,7 +334,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __FileInfoProxy():
-        async def get(self, id: str, target: int, with_download_info: Optional[bool] = None, path: Optional[str] = None) -> None:
+        async def get(self, id: str, target: int, with_download_info: Optional[bool] = None, path: Optional[str] = None) -> FileInfoResponse:
             """查看文件信息。
             Args:
                 id (`str`): 文件 id。
@@ -342,7 +342,7 @@ class Mirai(SimpleMirai):
                 with_download_info (`Optional[bool]`): 是否携带下载信息，默认值 None。
                 path (`Optional[str]`): 可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id，默认值 None。
             """
-        async def __call__(self, id: str, target: int, with_download_info: Optional[bool] = None, path: Optional[str] = None) -> None:
+        async def __call__(self, id: str, target: int, with_download_info: Optional[bool] = None, path: Optional[str] = None) -> FileInfoResponse:
             """查看文件信息。
             Args:
                 id (`str`): 文件 id。
@@ -365,7 +365,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __FileListProxy():
-        async def get(self, id: str, target: int, with_download_info: Optional[bool] = None, path: Optional[str] = None, offset: Optional[int] = None, size: Optional[int] = None) -> None:
+        async def get(self, id: str, target: int, with_download_info: Optional[bool] = None, path: Optional[str] = None, offset: Optional[int] = None, size: Optional[int] = None) -> FileListResponse:
             """查看文件列表。
             Args:
                 id (`str`): 文件夹 id，空串为根目录。
@@ -375,7 +375,7 @@ class Mirai(SimpleMirai):
                 offset (`Optional[int]`): 可选。分页偏移，默认值 None。
                 size (`Optional[int]`): 可选。分页大小，默认值 None。
             """
-        async def __call__(self, id: str, target: int, with_download_info: Optional[bool] = None, path: Optional[str] = None, offset: Optional[int] = None, size: Optional[int] = None) -> None:
+        async def __call__(self, id: str, target: int, with_download_info: Optional[bool] = None, path: Optional[str] = None, offset: Optional[int] = None, size: Optional[int] = None) -> FileListResponse:
             """查看文件列表。
             Args:
                 id (`str`): 文件夹 id，空串为根目录。
@@ -402,7 +402,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __FileMkdirProxy():
-        async def set(self, id: str, target: int, directory_name: str, path: Optional[str] = None) -> None:
+        async def set(self, id: str, target: int, directory_name: str, path: Optional[str] = None) -> FileMkdirResponse:
             """创建文件夹。
             Args:
                 id (`str`): 父目录 id。
@@ -410,7 +410,7 @@ class Mirai(SimpleMirai):
                 directory_name (`str`): 新建文件夹名。
                 path (`Optional[str]`): 可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id，默认值 None。
             """
-        async def __call__(self, id: str, target: int, directory_name: str, path: Optional[str] = None) -> None:
+        async def __call__(self, id: str, target: int, directory_name: str, path: Optional[str] = None) -> FileMkdirResponse:
             """创建文件夹。
             Args:
                 id (`str`): 父目录 id。
@@ -433,7 +433,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __FileMoveProxy():
-        async def set(self, id: str, target: int, move_to: str, path: Optional[str] = None, move_to_path: Optional[str] = None) -> None:
+        async def set(self, id: str, target: int, move_to: str, path: Optional[str] = None, move_to_path: Optional[str] = None) -> Response:
             """移动文件。
             Args:
                 id (`str`): 欲移动的文件 id。
@@ -442,7 +442,7 @@ class Mirai(SimpleMirai):
                 path (`Optional[str]`): 可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id，默认值 None。
                 move_to_path (`Optional[str]`): 可选。移动目标文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id，默认值 None。
             """
-        async def __call__(self, id: str, target: int, move_to: str, path: Optional[str] = None, move_to_path: Optional[str] = None) -> None:
+        async def __call__(self, id: str, target: int, move_to: str, path: Optional[str] = None, move_to_path: Optional[str] = None) -> Response:
             """移动文件。
             Args:
                 id (`str`): 欲移动的文件 id。
@@ -467,7 +467,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __FileRenameProxy():
-        async def set(self, id: str, target: int, rename_to: str, path: Optional[str] = None) -> None:
+        async def set(self, id: str, target: int, rename_to: str, path: Optional[str] = None) -> Response:
             """重命名文件。
             Args:
                 id (`str`): 欲重命名的文件 id。
@@ -475,7 +475,7 @@ class Mirai(SimpleMirai):
                 rename_to (`str`): 新文件名。
                 path (`Optional[str]`): 可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id，默认值 None。
             """
-        async def __call__(self, id: str, target: int, rename_to: str, path: Optional[str] = None) -> None:
+        async def __call__(self, id: str, target: int, rename_to: str, path: Optional[str] = None) -> Response:
             """重命名文件。
             Args:
                 id (`str`): 欲重命名的文件 id。
@@ -498,7 +498,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __FileUploadProxy():
-        async def set(self, type: Literal['group'], target: int, file: Union[str,Path], path: str = '') -> None:
+        async def set(self, type: Literal['group'], target: int, file: Union[str,Path], path: str = '') -> MiraiBaseModel:
             """文件上传。（暂时不可用）
             Args:
                 type (`Literal['group']`): 上传的文件类型。
@@ -506,7 +506,7 @@ class Mirai(SimpleMirai):
                 file (`Union[str,Path]`): 上传的文件的本地路径。
                 path (`str`): 上传目录的 id，空串为上传到根目录，默认值 ''。
             """
-        async def __call__(self, type: Literal['group'], target: int, file: Union[str,Path], path: str = '') -> None:
+        async def __call__(self, type: Literal['group'], target: int, file: Union[str,Path], path: str = '') -> MiraiBaseModel:
             """文件上传。（暂时不可用）
             Args:
                 type (`Literal['group']`): 上传的文件类型。
@@ -529,9 +529,9 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __FriendListProxy():
-        async def get(self) -> None:
+        async def get(self) -> FriendListResponse:
             """获取好友列表。"""
-        async def __call__(self) -> None:
+        async def __call__(self) -> FriendListResponse:
             """获取好友列表。"""
 
     @property
@@ -542,12 +542,12 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __FriendProfileProxy():
-        async def get(self, target: int) -> None:
+        async def get(self, target: int) -> ProfileResponse:
             """获取好友资料。
             Args:
                 target (`int`): 好友 QQ 号。
             """
-        async def __call__(self, target: int) -> None:
+        async def __call__(self, target: int) -> ProfileResponse:
             """获取好友资料。
             Args:
                 target (`int`): 好友 QQ 号。
@@ -564,19 +564,19 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __GroupConfigProxy():
-        async def get(self, target: int, config: Optional[GroupConfigModel] = None) -> None:
+        async def get(self, target: int, config: Optional[GroupConfigModel] = None) -> GroupConfigModel:
             """获取或修改群设置。
             Args:
                 target (`int`): 群号。
                 config (`Optional[GroupConfigModel]`): 仅修改时可用。群设置，默认值 None。
             """
-        async def set(self, target: int, config: Optional[GroupConfigModel] = None) -> None:
+        async def set(self, target: int, config: Optional[GroupConfigModel] = None) -> Response:
             """获取或修改群设置。
             Args:
                 target (`int`): 群号。
                 config (`Optional[GroupConfigModel]`): 仅修改时可用。群设置，默认值 None。
             """
-        async def __call__(self, target: int, config: Optional[GroupConfigModel] = None) -> None:
+        async def __call__(self, target: int, config: Optional[GroupConfigModel] = None) -> GroupConfigModel:
             """获取或修改群设置。
             Args:
                 target (`int`): 群号。
@@ -595,9 +595,9 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __GroupListProxy():
-        async def get(self) -> None:
+        async def get(self) -> GroupListResponse:
             """获取群列表。"""
-        async def __call__(self) -> None:
+        async def __call__(self) -> GroupListResponse:
             """获取群列表。"""
 
     @property
@@ -608,14 +608,14 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __KickProxy():
-        async def set(self, target: int, member_id: int, msg: str = '') -> None:
+        async def set(self, target: int, member_id: int, msg: str = '') -> Response:
             """移出群成员。
             Args:
                 target (`int`): 指定群的群号。
                 member_id (`int`): 指定群成员的 QQ 号。
                 msg (`str`): 可选。信息，默认值 ''。
             """
-        async def __call__(self, target: int, member_id: int, msg: str = '') -> None:
+        async def __call__(self, target: int, member_id: int, msg: str = '') -> Response:
             """移出群成员。
             Args:
                 target (`int`): 指定群的群号。
@@ -636,14 +636,14 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __MemberAdminProxy():
-        async def set(self, target: int, member_id: int, assign: bool) -> None:
+        async def set(self, target: int, member_id: int, assign: bool) -> Response:
             """设置或取消群成员管理员。
             Args:
                 target (`int`): 群号。
                 member_id (`int`): 指定群成员的 QQ 号。
                 assign (`bool`): 是否设置管理员。
             """
-        async def __call__(self, target: int, member_id: int, assign: bool) -> None:
+        async def __call__(self, target: int, member_id: int, assign: bool) -> Response:
             """设置或取消群成员管理员。
             Args:
                 target (`int`): 群号。
@@ -664,21 +664,21 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __MemberInfoProxy():
-        async def get(self, target: int, member_id: int, info: Optional[MemberInfoModel] = None) -> None:
+        async def get(self, target: int, member_id: int, info: Optional[MemberInfoModel] = None) -> MemberInfoModel:
             """获取或修改群成员资料。
             Args:
                 target (`int`): 群号。
                 member_id (`int`): 指定群成员的 QQ 号。
                 info (`Optional[MemberInfoModel]`): 仅修改时可用。群成员资料，默认值 None。
             """
-        async def set(self, target: int, member_id: int, info: Optional[MemberInfoModel] = None) -> None:
+        async def set(self, target: int, member_id: int, info: Optional[MemberInfoModel] = None) -> Response:
             """获取或修改群成员资料。
             Args:
                 target (`int`): 群号。
                 member_id (`int`): 指定群成员的 QQ 号。
                 info (`Optional[MemberInfoModel]`): 仅修改时可用。群成员资料，默认值 None。
             """
-        async def __call__(self, target: int, member_id: int, info: Optional[MemberInfoModel] = None) -> None:
+        async def __call__(self, target: int, member_id: int, info: Optional[MemberInfoModel] = None) -> MemberInfoModel:
             """获取或修改群成员资料。
             Args:
                 target (`int`): 群号。
@@ -699,12 +699,12 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __MemberListProxy():
-        async def get(self, target: int) -> None:
+        async def get(self, target: int) -> MemberListResponse:
             """获取群成员列表。
             Args:
                 target (`int`): 指定群的群号。
             """
-        async def __call__(self, target: int) -> None:
+        async def __call__(self, target: int) -> MemberListResponse:
             """获取群成员列表。
             Args:
                 target (`int`): 指定群的群号。
@@ -721,13 +721,13 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __MemberProfileProxy():
-        async def get(self, target: int, member_id: int) -> None:
+        async def get(self, target: int, member_id: int) -> ProfileResponse:
             """获取群成员资料。
             Args:
                 target (`int`): 指定群的群号。
                 member_id (`int`): 指定群成员的 QQ 号。
             """
-        async def __call__(self, target: int, member_id: int) -> None:
+        async def __call__(self, target: int, member_id: int) -> ProfileResponse:
             """获取群成员资料。
             Args:
                 target (`int`): 指定群的群号。
@@ -746,12 +746,12 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __MessageFromIdProxy():
-        async def get(self, id: int) -> None:
+        async def get(self, id: int) -> MessageFromIdResponse:
             """通过 message_id 获取消息。
             Args:
                 id (`int`): 获取消息的 message_id。
             """
-        async def __call__(self, id: int) -> None:
+        async def __call__(self, id: int) -> MessageFromIdResponse:
             """通过 message_id 获取消息。
             Args:
                 id (`int`): 获取消息的 message_id。
@@ -768,14 +768,14 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __MuteProxy():
-        async def set(self, target: int, member_id: int, time: int) -> None:
+        async def set(self, target: int, member_id: int, time: int) -> Response:
             """禁言群成员。
             Args:
                 target (`int`): 指定群的群号。
                 member_id (`int`): 指定群成员的 QQ 号。
                 time (`int`): 禁言时间，单位为秒，最多30天，默认为0。
             """
-        async def __call__(self, target: int, member_id: int, time: int) -> None:
+        async def __call__(self, target: int, member_id: int, time: int) -> Response:
             """禁言群成员。
             Args:
                 target (`int`): 指定群的群号。
@@ -796,12 +796,12 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __MuteAllProxy():
-        async def set(self, target: int) -> None:
+        async def set(self, target: int) -> Response:
             """全体禁言。
             Args:
                 target (`int`): 指定群的群号。
             """
-        async def __call__(self, target: int) -> None:
+        async def __call__(self, target: int) -> Response:
             """全体禁言。
             Args:
                 target (`int`): 指定群的群号。
@@ -818,12 +818,12 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __QuitProxy():
-        async def set(self, target: int) -> None:
+        async def set(self, target: int) -> Response:
             """退出群聊。
             Args:
                 target (`int`): 指定群的群号。
             """
-        async def __call__(self, target: int) -> None:
+        async def __call__(self, target: int) -> Response:
             """退出群聊。
             Args:
                 target (`int`): 指定群的群号。
@@ -840,12 +840,12 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __RecallProxy():
-        async def set(self, target: int) -> None:
+        async def set(self, target: int) -> Response:
             """撤回消息。
             Args:
                 target (`int`): 需要撤回的消息的 message_id。
             """
-        async def __call__(self, target: int) -> None:
+        async def __call__(self, target: int) -> Response:
             """撤回消息。
             Args:
                 target (`int`): 需要撤回的消息的 message_id。
@@ -862,7 +862,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __RespBotInvitedJoinGroupRequestEventProxy():
-        async def set(self, event_id: int, from_id: int, group_id: int, operate: Union[int,RespOperate], message: str) -> None:
+        async def set(self, event_id: int, from_id: int, group_id: int, operate: Union[int,RespOperate], message: str) -> MiraiBaseModel:
             """响应被邀请入群申请。
             Args:
                 event_id (`int`): 响应申请事件的标识。
@@ -871,7 +871,7 @@ class Mirai(SimpleMirai):
                 operate (`Union[int,RespOperate]`): 响应的操作类型。
                 message (`str`): 回复的信息。
             """
-        async def __call__(self, event_id: int, from_id: int, group_id: int, operate: Union[int,RespOperate], message: str) -> None:
+        async def __call__(self, event_id: int, from_id: int, group_id: int, operate: Union[int,RespOperate], message: str) -> MiraiBaseModel:
             """响应被邀请入群申请。
             Args:
                 event_id (`int`): 响应申请事件的标识。
@@ -896,7 +896,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __RespMemberJoinRequestEventProxy():
-        async def set(self, event_id: int, from_id: int, group_id: int, operate: Union[int,RespOperate], message: str) -> None:
+        async def set(self, event_id: int, from_id: int, group_id: int, operate: Union[int,RespOperate], message: str) -> MiraiBaseModel:
             """响应用户入群申请。
             Args:
                 event_id (`int`): 响应申请事件的标识。
@@ -905,7 +905,7 @@ class Mirai(SimpleMirai):
                 operate (`Union[int,RespOperate]`): 响应的操作类型。
                 message (`str`): 回复的信息。
             """
-        async def __call__(self, event_id: int, from_id: int, group_id: int, operate: Union[int,RespOperate], message: str) -> None:
+        async def __call__(self, event_id: int, from_id: int, group_id: int, operate: Union[int,RespOperate], message: str) -> MiraiBaseModel:
             """响应用户入群申请。
             Args:
                 event_id (`int`): 响应申请事件的标识。
@@ -930,7 +930,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __RespNewFriendRequestEventProxy():
-        async def set(self, event_id: int, from_id: int, group_id: int, operate: Union[int,RespOperate], message: str) -> None:
+        async def set(self, event_id: int, from_id: int, group_id: int, operate: Union[int,RespOperate], message: str) -> MiraiBaseModel:
             """响应添加好友申请。
             Args:
                 event_id (`int`): 响应申请事件的标识。
@@ -939,7 +939,7 @@ class Mirai(SimpleMirai):
                 operate (`Union[int,RespOperate]`): 响应的操作类型。
                 message (`str`): 回复的信息。
             """
-        async def __call__(self, event_id: int, from_id: int, group_id: int, operate: Union[int,RespOperate], message: str) -> None:
+        async def __call__(self, event_id: int, from_id: int, group_id: int, operate: Union[int,RespOperate], message: str) -> MiraiBaseModel:
             """响应添加好友申请。
             Args:
                 event_id (`int`): 响应申请事件的标识。
@@ -964,14 +964,14 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __SendFriendMessageProxy():
-        async def set(self, target: int, message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str], quote: Optional[int] = None) -> None:
+        async def set(self, target: int, message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str], quote: Optional[int] = None) -> MessageResponse:
             """发送好友消息。
             Args:
                 target (`int`): 发送消息目标好友的 QQ 号。
                 message_chain (`Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str]`): 消息链。
                 quote (`Optional[int]`): 可选。引用一条消息的 message_id 进行回复，默认值 None。
             """
-        async def __call__(self, target: int, message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str], quote: Optional[int] = None) -> None:
+        async def __call__(self, target: int, message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str], quote: Optional[int] = None) -> MessageResponse:
             """发送好友消息。
             Args:
                 target (`int`): 发送消息目标好友的 QQ 号。
@@ -992,14 +992,14 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __SendGroupMessageProxy():
-        async def set(self, target: int, message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str], quote: Optional[int] = None) -> None:
+        async def set(self, target: int, message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str], quote: Optional[int] = None) -> MessageResponse:
             """发送群消息。
             Args:
                 target (`int`): 发送消息目标群的群号。
                 message_chain (`Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str]`): 消息链。
                 quote (`Optional[int]`): 可选。引用一条消息的 message_id 进行回复，默认值 None。
             """
-        async def __call__(self, target: int, message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str], quote: Optional[int] = None) -> None:
+        async def __call__(self, target: int, message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str], quote: Optional[int] = None) -> MessageResponse:
             """发送群消息。
             Args:
                 target (`int`): 发送消息目标群的群号。
@@ -1020,14 +1020,14 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __SendNudgeProxy():
-        async def set(self, target: int, subject: int, kind: Literal['Friend','Group','Stranger']) -> None:
+        async def set(self, target: int, subject: int, kind: Literal['Friend','Group','Stranger']) -> Response:
             """发送头像戳一戳消息。
             Args:
                 target (`int`): 戳一戳的目标 QQ 号，可以为 bot QQ 号。
                 subject (`int`): 戳一戳接受主体（上下文），戳一戳信息会发送至该主体，为群号或好友 QQ 号。
                 kind (`Literal['Friend','Group','Stranger']`): 上下文类型，可选值 `Friend`, `Group`, `Stranger`。
             """
-        async def __call__(self, target: int, subject: int, kind: Literal['Friend','Group','Stranger']) -> None:
+        async def __call__(self, target: int, subject: int, kind: Literal['Friend','Group','Stranger']) -> Response:
             """发送头像戳一戳消息。
             Args:
                 target (`int`): 戳一戳的目标 QQ 号，可以为 bot QQ 号。
@@ -1048,7 +1048,7 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __SendTempMessageProxy():
-        async def set(self, qq: int, group: int, message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str], quote: Optional[int] = None) -> None:
+        async def set(self, qq: int, group: int, message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str], quote: Optional[int] = None) -> MessageResponse:
             """发送临时消息。
             Args:
                 qq (`int`): 临时会话对象 QQ 号。
@@ -1056,7 +1056,7 @@ class Mirai(SimpleMirai):
                 message_chain (`Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str]`): 消息链。
                 quote (`Optional[int]`): 可选。引用一条消息的 message_id 进行回复，默认值 None。
             """
-        async def __call__(self, qq: int, group: int, message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str], quote: Optional[int] = None) -> None:
+        async def __call__(self, qq: int, group: int, message_chain: Union[MessageChain,Iterable[Union[MessageComponent,str]],MessageComponent,str], quote: Optional[int] = None) -> MessageResponse:
             """发送临时消息。
             Args:
                 qq (`int`): 临时会话对象 QQ 号。
@@ -1079,9 +1079,9 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __SessionInfoProxy():
-        async def get(self) -> None:
+        async def get(self) -> SessionInfoResponse:
             """获取机器人信息。"""
-        async def __call__(self) -> None:
+        async def __call__(self) -> SessionInfoResponse:
             """获取机器人信息。"""
 
     @property
@@ -1092,12 +1092,12 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __SetEssenceProxy():
-        async def set(self, target: int) -> None:
+        async def set(self, target: int) -> Response:
             """设置群精华消息。
             Args:
                 target (`int`): 精华消息的 message_id。
             """
-        async def __call__(self, target: int) -> None:
+        async def __call__(self, target: int) -> Response:
             """设置群精华消息。
             Args:
                 target (`int`): 精华消息的 message_id。
@@ -1114,13 +1114,13 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __UnmuteProxy():
-        async def set(self, target: int, member_id: int) -> None:
+        async def set(self, target: int, member_id: int) -> Response:
             """解除群成员禁言。
             Args:
                 target (`int`): 指定群的群号。
                 member_id (`int`): 指定群成员的 QQ 号。
             """
-        async def __call__(self, target: int, member_id: int) -> None:
+        async def __call__(self, target: int, member_id: int) -> Response:
             """解除群成员禁言。
             Args:
                 target (`int`): 指定群的群号。
@@ -1139,12 +1139,12 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __UnmuteAllProxy():
-        async def set(self, target: int) -> None:
+        async def set(self, target: int) -> Response:
             """解除全体禁言。
             Args:
                 target (`int`): 指定群的群号。
             """
-        async def __call__(self, target: int) -> None:
+        async def __call__(self, target: int) -> Response:
             """解除全体禁言。
             Args:
                 target (`int`): 指定群的群号。
@@ -1161,13 +1161,13 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __UploadImageProxy():
-        async def set(self, type: Literal['friend','group','temp'], img: Union[str,Path]) -> None:
+        async def set(self, type: Literal['friend','group','temp'], img: Union[str,Path]) -> Image:
             """图片文件上传。
             Args:
                 type (`Literal['friend','group','temp']`): 上传的图片类型。
                 img (`Union[str,Path]`): 上传的图片的本地路径。
             """
-        async def __call__(self, type: Literal['friend','group','temp'], img: Union[str,Path]) -> None:
+        async def __call__(self, type: Literal['friend','group','temp'], img: Union[str,Path]) -> Image:
             """图片文件上传。
             Args:
                 type (`Literal['friend','group','temp']`): 上传的图片类型。
@@ -1186,13 +1186,13 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __UploadVoiceProxy():
-        async def set(self, type: Literal['group','friend','temp'], voice: Union[str,Path]) -> None:
+        async def set(self, type: Literal['group','friend','temp'], voice: Union[str,Path]) -> Voice:
             """语音文件上传。
             Args:
                 type (`Literal['group','friend','temp']`): 上传的语音类型。
                 voice (`Union[str,Path]`): 上传的语音的本地路径。
             """
-        async def __call__(self, type: Literal['group','friend','temp'], voice: Union[str,Path]) -> None:
+        async def __call__(self, type: Literal['group','friend','temp'], voice: Union[str,Path]) -> Voice:
             """语音文件上传。
             Args:
                 type (`Literal['group','friend','temp']`): 上传的语音类型。

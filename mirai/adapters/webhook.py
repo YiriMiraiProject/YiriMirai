@@ -119,7 +119,7 @@ class WebHookAdapter(Adapter):
         """WebHook 不需要登出。直接返回。"""
         logger.info(f"[WebHook] 从账号{self.session}退出。")
 
-    async def _call_api(self, api: str, method: Method = Method.GET, **params):
+    async def call_api(self, api: str, method: Method = Method.GET, **params):
         """调用 API。WebHook 的 API 调用只能在快速响应中发生。"""
         if self.enable_quick_response:
             content = {'command': api.replace('/', '_'), 'content': params}

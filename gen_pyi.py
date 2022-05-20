@@ -44,13 +44,13 @@ for api in sorted(
 '''
 
     try:
-        response_type = api.Response.__fields__['data'].type_
+        response_type = api.Info.response_type
         response_type_name = response_type.__qualname__
     except AttributeError:
         response_type_name = 'None'
 
     try:
-        response_post_type = api.PostResponse.__fields__['data'].type_
+        response_post_type = api.Info.response_type_post
         response_post_type_name = response_post_type.__name__
     except AttributeError:
         response_post_type_name = 'None'
