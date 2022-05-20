@@ -121,9 +121,9 @@ class HTTPSession(Session):
         async with httpx.AsyncClient(
             base_url=self.adapter.host_name, headers=self.headers
         ) as client:
-            if method == ApiMethod.GET or method == ApiMethod.RESTGET:
+            if method in [ApiMethod.GET, ApiMethod.RESTGET]:
                 return await _get(client, f'/{api}', params)
-            if method == ApiMethod.POST or method == ApiMethod.RESTPOST:
+            if method in [ApiMethod.POST, ApiMethod.RESTPOST]:
                 return await _post(client, f'/{api}', params)
             if method == ApiMethod.MULTIPART:
                 return await _post_multipart(
@@ -185,16 +185,14 @@ class HTTPAdapter(Adapter):
         self._host = host
         self._port = port
 
-        if host[:2] == '//':
-            host = 'http:' + host
-        elif host[:8] == 'https://':
+        if host.startswith('//'):
+            host = f'http:{host}'
+        elif host.startswith('https://'):
             raise NetworkError('不支持 HTTPS！')
         elif host[:7] != 'http://':
-            host = 'http://' + host
+            host = f'http://{host}'
 
-        if host[-1:] == '/':
-            host = host[:-1]
-
+        host = host.removesuffix('/')
         self.host_name = f'{host}:{port}'
 
         self.poll_interval = poll_interval

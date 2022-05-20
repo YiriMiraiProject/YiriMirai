@@ -15,9 +15,8 @@ else:
         from typing_extensions import Literal
 
 from mirai.models.base import MiraiIndexedMetaclass, MiraiIndexedModel
-from mirai.models.entities import (
-    Client, Entity, Friend, Group, GroupMember, Permission, Subject
-)
+from mirai.models.entities import (Client, Entity, Friend, Group, GroupMember,
+                                   Permission, Subject)
 from mirai.models.message import MessageChain
 
 TEventClass = TypeVar("TEventClass", bound='EventMetaclass')

@@ -333,10 +333,9 @@ class MessageChain(MiraiBaseModel):
     def get_first(self,
                   t: Type[TMessageComponent]) -> Optional[TMessageComponent]:
         """获取消息链中第一个符合类型的消息组件。"""
-        for component in self:
-            if isinstance(component, t):
-                return component
-        return None
+        return next(
+            (component for component in self if isinstance(component, t)), None
+        )
 
     @overload
     def __getitem__(self, index: int) -> MessageComponent:

@@ -10,9 +10,8 @@ from pydantic import ValidationError
 
 from mirai.exceptions import ApiParametersError
 from mirai.interface import ApiInterface, ApiMethod
-from mirai.models.base import (
-    MiraiBaseModel, MiraiIndexedMetaclass, MiraiIndexedModel
-)
+from mirai.models.base import (MiraiBaseModel, MiraiIndexedMetaclass,
+                               MiraiIndexedModel)
 
 logger = logging.getLogger(__name__)
 

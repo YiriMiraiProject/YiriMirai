@@ -6,9 +6,8 @@ import asyncio
 import contextlib
 import inspect
 import logging
-from typing import (
-    Any, Awaitable, Callable, Dict, Iterable, List, Optional, Set, Union, cast
-)
+from typing import (Any, Awaitable, Callable, Dict, Iterable, List, Optional,
+                    Set, Union, cast)
 
 from mirai.adapters.base import Adapter, AdapterInterface, Session
 from mirai.asgi import ASGI, asgi_serve
@@ -18,9 +17,8 @@ from mirai.interface import ApiMethod, EventInterface
 from mirai.models.api import ApiModel
 from mirai.models.api_impl import RespEvent
 from mirai.models.bus import ModelEventBus
-from mirai.models.entities import (
-    Entity, Friend, Group, GroupMember, Permission, RespOperate, Subject
-)
+from mirai.models.entities import (Entity, Friend, Group, GroupMember,
+                                   Permission, RespOperate, Subject)
 from mirai.models.events import Event, MessageEvent, RequestEvent, TempMessage
 from mirai.models.message import TMessage
 from mirai.utils import Singleton, Tasks, async_

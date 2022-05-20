@@ -70,8 +70,11 @@ class ApiParametersError(TypeError):
         try:
             errors = [f'在调用 `{model.Info.alias}` 时出错。']
             for error in self._err.errors():
-                parameter_name = error['loc'][0]
-                parameter_name = re.sub(r'[A-Z]', lambda m: f'_{m.group(0).lower()}', parameter_name)
+                parameter_name = str(error['loc'][0])
+                parameter_name = re.sub(
+                    r'[A-Z]', lambda m: f'_{m.group(0).lower()}',
+                    parameter_name
+                )
 
                 message = error['msg']
                 errors.append(f'参数 `{parameter_name}` 类型错误，原因：{message}')

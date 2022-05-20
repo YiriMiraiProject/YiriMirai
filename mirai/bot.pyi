@@ -3,10 +3,8 @@
 `mirai.bot` 模块的存根文件，用于补全代码提示。
 """
 from pathlib import Path
-from typing import (
-    Any, Awaitable, Callable, Dict, Iterable, List, Optional, Union, overload,
-    type_check_only
-)
+from typing import (Any, Awaitable, Callable, Dict, Iterable, List, Optional,
+                    Union, overload, type_check_only)
 
 from typing_extensions import Literal
 
@@ -15,14 +13,12 @@ from mirai.asgi import ASGI
 from mirai.bus import EventBus, TEventHandler
 from mirai.models.api import ApiModel
 from mirai.models.api_impl import *
-from mirai.models.entities import (
-    Entity, Friend, Group, GroupConfigModel, GroupMember, MemberInfoModel,
-    Profile, Subject
-)
+from mirai.models.entities import (Entity, Friend, Group, GroupConfigModel,
+                                   GroupMember, MemberInfoModel, Profile,
+                                   Subject)
 from mirai.models.events import MessageEvent, RequestEvent
 from mirai.models.message import Image, MessageChain, MessageComponent, Voice
 from mirai.utils import Singleton
-
 
 class LifeSpan():
     type: str

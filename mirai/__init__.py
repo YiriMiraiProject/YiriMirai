@@ -12,28 +12,24 @@ import logging
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mirai.adapters import (
-        Adapter, ComposeAdapter, HTTPAdapter, WebHookAdapter, WebSocketAdapter
-    )
+    from mirai.adapters import (Adapter, ComposeAdapter, HTTPAdapter,
+                                WebHookAdapter, WebSocketAdapter)
 else:
     from mirai.adapters import Adapter
 
 from mirai.bot import LifeSpan, Mirai, MiraiRunner, Shutdown, Startup
 from mirai.bus import EventBus
 from mirai.colorlog import ColoredFormatter
-from mirai.exceptions import (
-    ApiError, NetworkError, SkipExecution, StopExecution, StopPropagation
-)
+from mirai.exceptions import (ApiError, NetworkError, SkipExecution,
+                              StopExecution, StopPropagation)
 from mirai.interface import ApiMethod
-from mirai.models.events import (
-    Event, FriendMessage, GroupMessage, MessageEvent, StrangerMessage,
-    TempMessage
-)
-from mirai.models.message import (
-    App, At, AtAll, Dice, Face, File, FlashImage, Forward, ForwardMessageNode,
-    Image, Json, MessageChain, MiraiCode, MusicShare, MusicShareKind, Plain,
-    Poke, PokeNames, Unknown, Voice, Xml, deserialize, serialize
-)
+from mirai.models.events import (Event, FriendMessage, GroupMessage,
+                                 MessageEvent, StrangerMessage, TempMessage)
+from mirai.models.message import (App, At, AtAll, Dice, Face, File, FlashImage,
+                                  Forward, ForwardMessageNode, Image, Json,
+                                  MessageChain, MiraiCode, MusicShare,
+                                  MusicShareKind, Plain, Poke, PokeNames,
+                                  Unknown, Voice, Xml, deserialize, serialize)
 
 __all__ = [
     'Adapter', 'ApiError', 'ApiMethod', 'App', 'At', 'AtAll', 'ComposeAdapter',

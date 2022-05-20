@@ -10,16 +10,15 @@ import random
 import time
 from typing import Dict, Optional
 
-from mirai.adapters.base import (
-    Adapter, AdapterInterface, Session, error_handler_async, json_dumps
-)
+from websockets.client import WebSocketClientProtocol, connect
+from websockets.exceptions import (ConnectionClosed, ConnectionClosedOK,
+                                   InvalidURI)
+
+from mirai.adapters.base import (Adapter, AdapterInterface, Session,
+                                 error_handler_async, json_dumps)
 from mirai.exceptions import ApiError, NetworkError
 from mirai.interface import ApiMethod
 from mirai.utils import Tasks
-from websockets.client import WebSocketClientProtocol, connect
-from websockets.exceptions import (
-    ConnectionClosed, ConnectionClosedOK, InvalidURI
-)
 
 logger = logging.getLogger(__name__)
 

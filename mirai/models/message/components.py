@@ -41,7 +41,7 @@ class AtAll(MessageComponent):
         return "@全体成员"
 
     def as_mirai_code(self) -> str:
-        return f"[mirai:atall]"
+        return "[mirai:atall]"
 
 
 class Face(MessageComponent):
@@ -66,9 +66,7 @@ class Face(MessageComponent):
             (self.face_id == other.face_id or self.name == other.name)
 
     def __str__(self):
-        if self.name:
-            return f'[{self.name}]'
-        return '[表情]'
+        return f'[{self.name}]' if self.name else '[表情]'
 
     def as_mirai_code(self):
         return f"[mirai:face:{self.face_id}]"
@@ -100,13 +98,12 @@ class Image(MessageComponent):
     @validator('path')
     def validate_path(cls, path: Union[str, Path, None]):
         """修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。"""
-        if path:
-            try:
-                return str(Path(path).resolve(strict=True))
-            except FileNotFoundError:
-                raise ValueError(f"无效路径：{path}")
-        else:
+        if not path:
             return path
+        try:
+            return str(Path(path).resolve(strict=True))
+        except FileNotFoundError as e:
+            raise ValueError(f"无效路径：{path}") from e
 
     @property
     def uuid(self):
@@ -155,7 +152,7 @@ class Image(MessageComponent):
                 if determine_type:
                     import imghdr
                     path = path.with_suffix(
-                        '.' + str(imghdr.what(None, content))
+                        f'.{str(imghdr.what(None, content))}'
                     )
                 path.parent.mkdir(parents=True, exist_ok=True)
             elif directory:
@@ -398,13 +395,12 @@ class Voice(MessageComponent):
     @validator('path')
     def validate_path(cls, path: Optional[str]):
         """修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。"""
-        if path:
-            try:
-                return str(Path(path).resolve(strict=True))
-            except FileNotFoundError:
-                raise ValueError(f"无效路径：{path}")
-        else:
+        if not path:
             return path
+        try:
+            return str(Path(path).resolve(strict=True))
+        except FileNotFoundError as e:
+            raise ValueError(f"无效路径：{path}") from e
 
     def __str__(self):
         return '[语音]'
@@ -458,8 +454,6 @@ class Voice(MessageComponent):
             filename: 从本地文件路径加载语音，与 `content` 二选一。
             content: 从本地文件内容加载语音，与 `filename` 二选一。
         """
-        if content:
-            pass
         if filename:
             path = Path(filename)
             import aiofiles
@@ -549,9 +543,8 @@ class ForwardMessageNode(MiraiBaseModel):
 
     @validator('message_chain')
     def _validate_message_chain(cls, value: Union[MessageChain, list]):
-        if isinstance(value, list):
-            return MessageChain.parse_obj(value)
-        return value
+        return MessageChain.parse_obj(value
+                                      ) if isinstance(value, list) else value
 
     @classmethod
     def create(

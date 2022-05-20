@@ -22,24 +22,5 @@
         "reportMissingTypeStubs": "none",
         "reportUnnecessaryIsInstance": "none"
     },
-    "cSpell.words": [
-        "aiofiles",
-        "ASGI",
-        "CHAOJIHUIYUAN",
-        "coro",
-        "coros",
-        "HRTX",
-        "invitor",
-        "isawaitable",
-        "mirai",
-        "Mirai",
-        "MISRO",
-        "pydantic",
-        "Relogin",
-        "Starlette",
-        "TMIM",
-        "Unmute",
-        "uvicorn",
-        "Yiri"
-    ]
+    "python.linting.mypyEnabled": false
 }

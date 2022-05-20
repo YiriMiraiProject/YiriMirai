@@ -64,7 +64,7 @@ def test_meta():
             'time': time.time(),
         }]
     ).source
-    assert bool(source) is True
+    assert bool(source)
     quote = MessageChain.parse_obj(
         [
             {
@@ -80,7 +80,7 @@ def test_meta():
             }
         ]
     ).quote
-    assert bool(quote) is True
+    assert bool(quote)
     if source and quote:
         chain = MessageChain(
             [source, quote, 'str1',
