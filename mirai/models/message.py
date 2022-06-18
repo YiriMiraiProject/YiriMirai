@@ -772,6 +772,14 @@ class Face(MessageComponent):
     def as_mirai_code(self):
         return f"[mirai:face:{self.face_id}]"
 
+class MarketFace(MessageComponent):
+    """商店表情（目前只支持接收）。"""
+    type: str = "MarketFace"
+    """消息组件类型。"""
+    id: int
+    """商店表情编号。"""
+    name: str
+    """商店表情名称。"""
 
 class Image(MessageComponent):
     """图片。"""
@@ -1311,6 +1319,7 @@ __all__ = [
     'ForwardMessageNode',
     'Image',
     'Json',
+    'MarketFace',
     'MessageChain',
     'MessageComponent',
     'MusicShareKind',

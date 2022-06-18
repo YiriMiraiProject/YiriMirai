@@ -8,42 +8,34 @@ model 层架构在 bus 和 adapters 之上，将 mirai-api-http 传回的原始�
 model 层使用 pydantic 进行数据解析。
 """
 from mirai.models.bus import ModelEventBus
-from mirai.models.entities import (Client, Entity, Friend, Group, GroupMember,
-                                   Permission)
-from mirai.models.events import (BotEvent, BotGroupPermissionChangeEvent,
-                                 BotInvitedJoinGroupRequestEvent,
-                                 BotJoinGroupEvent, BotLeaveEventActive,
-                                 BotLeaveEventKick, BotMuteEvent,
-                                 BotOfflineEventActive, BotOfflineEventDropped,
-                                 BotOfflineEventForce, BotOnlineEvent,
-                                 BotReloginEvent, BotUnmuteEvent, ClientKind,
-                                 CommandEvent, CommandExecutedEvent, Event,
-                                 FriendEvent, FriendInputStatusChangedEvent,
-                                 FriendMessage, FriendNickChangedEvent,
-                                 FriendRecallEvent,
-                                 GroupAllowAnonymousChatEvent,
-                                 GroupAllowConfessTalkEvent,
-                                 GroupAllowMemberInviteEvent,
-                                 GroupEntranceAnnouncementChangeEvent,
-                                 GroupEvent, GroupMessage, GroupMuteAllEvent,
-                                 GroupNameChangeEvent, GroupRecallEvent,
-                                 MemberCardChangeEvent, MemberHonorChangeEvent,
-                                 MemberJoinEvent, MemberJoinRequestEvent,
-                                 MemberLeaveEventKick, MemberLeaveEventQuit,
-                                 MemberMuteEvent, MemberPermissionChangeEvent,
-                                 MemberSpecialTitleChangeEvent,
-                                 MemberUnmuteEvent, MessageEvent,
-                                 NewFriendRequestEvent, NudgeEvent,
-                                 OtherClientEvent, OtherClientMessage,
-                                 OtherClientOfflineEvent,
-                                 OtherClientOnlineEvent, RequestEvent,
-                                 StrangerMessage, TempMessage)
-from mirai.models.message import (App, At, AtAll, Dice, Face, File, FlashImage,
-                                  Forward, ForwardMessageNode, Image, Json,
-                                  MessageChain, MessageComponent, MiraiCode,
-                                  MusicShare, MusicShareKind, Plain, Poke,
-                                  PokeNames, Quote, Source, Unknown, Voice,
-                                  Xml, deserialize, serialize)
+from mirai.models.entities import (
+    Client, Entity, Friend, Group, GroupMember, Permission
+)
+from mirai.models.events import (
+    BotEvent, BotGroupPermissionChangeEvent, BotInvitedJoinGroupRequestEvent,
+    BotJoinGroupEvent, BotLeaveEventActive, BotLeaveEventKick, BotMuteEvent,
+    BotOfflineEventActive, BotOfflineEventDropped, BotOfflineEventForce,
+    BotOnlineEvent, BotReloginEvent, BotUnmuteEvent, ClientKind, CommandEvent,
+    CommandExecutedEvent, Event, FriendEvent, FriendInputStatusChangedEvent,
+    FriendMessage, FriendNickChangedEvent, FriendRecallEvent,
+    GroupAllowAnonymousChatEvent, GroupAllowConfessTalkEvent,
+    GroupAllowMemberInviteEvent, GroupEntranceAnnouncementChangeEvent,
+    GroupEvent, GroupMessage, GroupMuteAllEvent, GroupNameChangeEvent,
+    GroupRecallEvent, MemberCardChangeEvent, MemberHonorChangeEvent,
+    MemberJoinEvent, MemberJoinRequestEvent, MemberLeaveEventKick,
+    MemberLeaveEventQuit, MemberMuteEvent, MemberPermissionChangeEvent,
+    MemberSpecialTitleChangeEvent, MemberUnmuteEvent, MessageEvent,
+    NewFriendRequestEvent, NudgeEvent, OtherClientEvent, OtherClientMessage,
+    OtherClientOfflineEvent, OtherClientOnlineEvent, RequestEvent,
+    FriendSyncMessage, GroupSyncMessage, StrangerSyncMessage, TempSyncMessage,
+    StrangerMessage, TempMessage
+)
+from mirai.models.message import (
+    App, At, AtAll, Dice, Face, File, FlashImage, Forward, ForwardMessageNode,
+    Image, Json, MessageChain, MessageComponent, MiraiCode, MusicShare,
+    MarketFace, MusicShareKind, Plain, Poke, PokeNames, Quote, Source, Unknown,
+    Voice, Xml, deserialize, serialize
+)
 
 __all__ = [
     'Entity',
@@ -69,6 +61,10 @@ __all__ = [
     'CommandExecutedEvent',
     'Event',
     'FriendEvent',
+    'FriendSyncMessage',
+    'GroupSyncMessage',
+    'StrangerSyncMessage',
+    'TempSyncMessage',
     'FriendInputStatusChangedEvent',
     'FriendMessage',
     'FriendNickChangedEvent',
@@ -119,6 +115,7 @@ __all__ = [
     'MiraiCode',
     'MusicShareKind',
     'MusicShare',
+    'MarketFace',
     'Plain',
     'PokeNames',
     'Poke',
