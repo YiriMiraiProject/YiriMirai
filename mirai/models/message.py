@@ -261,7 +261,7 @@ class MessageChain(MiraiBaseModel):
         result = []
         for msg in msg_chain:
             if isinstance(msg, dict):
-                result.append(MessageComponent.parse_obj(msg))
+                result.append(MessageComponent.parse_subtype(msg))
             elif isinstance(msg, MessageComponent):
                 result.append(msg)
             elif isinstance(msg, str):
