@@ -38,9 +38,9 @@ class Event(MiraiIndexedModel):
         ) + ')'
 
     @classmethod
-    def parse_obj(cls, obj: dict) -> 'Event':
+    def parse_subtype(cls, obj: dict) -> 'Event':
         try:
-            return cast(Event, super().parse_obj(obj))
+            return cast(Event, super().parse_subtype(obj))
         except ValueError:
             return Event(type=obj['type'])
 
@@ -886,8 +886,6 @@ class MessageEvent(Event):
     """
     type: str
     """事件名。"""
-    sender: Entity
-    """发送消息的来源。"""
     message_chain: MessageChain
     """消息内容。"""
 
@@ -962,6 +960,76 @@ class StrangerMessage(MessageEvent):
     """消息内容。"""
 
 
+class FriendSyncMessage(MessageEvent):
+    """其他客户端发送的好友消息。
+
+    Args:
+        type: 事件名。
+        subject: 发送消息的目标好友。
+        message_chain: 消息内容。
+    """
+    type: str = 'FriendSyncMessage'
+    """事件名。"""
+    subject: Friend
+    """发送消息的目标好友。"""
+    message_chain: MessageChain
+    """消息内容。"""
+
+
+class GroupSyncMessage(MessageEvent):
+    """其他客户端发送的群消息。
+
+    Args:
+        type: 事件名。
+        subject: 发送消息的目标群组。
+        message_chain: 消息内容。
+    """
+    type: str = 'GroupSyncMessage'
+    """事件名。"""
+    subject: Group
+    """发送消息的目标群组。"""
+    message_chain: MessageChain
+    """消息内容。"""
+    @property
+    def group(self) -> Group:
+        return self.subject
+
+
+class TempSyncMessage(MessageEvent):
+    """其他客户端发送的群临时消息。
+
+    Args:
+        type: 事件名。
+        subject: 发送消息的目标群成员。
+        message_chain: 消息内容。
+    """
+    type: str = 'TempSyncMessage'
+    """事件名。"""
+    subject: GroupMember
+    """发送消息的目标群成员。"""
+    message_chain: MessageChain
+    """消息内容。"""
+    @property
+    def group(self) -> Group:
+        return self.subject.group
+
+
+class StrangerSyncMessage(MessageEvent):
+    """其他客户端发送的陌生人消息。
+
+    Args:
+        type: 事件名。
+        subject: 发送消息的目标。
+        message_chain: 消息内容。
+    """
+    type: str = 'StrangerSyncMessage'
+    """事件名。"""
+    subject: Friend
+    """发送消息的目标。"""
+    message_chain: MessageChain
+    """消息内容。"""
+
+
 class OtherClientMessage(MessageEvent):
     """其他客户端消息。
 
@@ -998,6 +1066,7 @@ __all__ = [
     'FriendEvent',
     'FriendInputStatusChangedEvent',
     'FriendMessage',
+    'FriendSyncMessage',
     'FriendNickChangedEvent',
     'FriendRecallEvent',
     'GroupAllowAnonymousChatEvent',
@@ -1006,6 +1075,7 @@ __all__ = [
     'GroupEntranceAnnouncementChangeEvent',
     'GroupEvent',
     'GroupMessage',
+    'GroupSyncMessage',
     'GroupMuteAllEvent',
     'GroupNameChangeEvent',
     'GroupRecallEvent',
@@ -1025,5 +1095,7 @@ __all__ = [
     'OtherClientMessage',
     'RequestEvent',
     'StrangerMessage',
+    'StrangerSyncMessage',
     'TempMessage',
+    'TempSyncMessage',
 ]

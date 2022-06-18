@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "yiri-mirai"
-version = "0.2.6.2"
+version = "0.2.7"
 description = "一个轻量级、低耦合的基于 mirai-api-http 的 Python SDK。"
 authors = ["忘忧北萱草 <wybxc@qq.com>"]
 packages = [{ include = "mirai" }]

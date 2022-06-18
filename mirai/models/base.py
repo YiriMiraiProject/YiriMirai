@@ -93,7 +93,7 @@ class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):
             raise ValueError(f'`{name}` 不是 `{cls.__name__}` 的子类！') from None
 
     @classmethod
-    def parse_obj(cls, obj: dict) -> 'MiraiIndexedModel':
+    def parse_subtype(cls, obj: dict) -> 'MiraiIndexedModel':
         """通过字典，构造对应的模型对象。
 
         Args:

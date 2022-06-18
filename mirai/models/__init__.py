@@ -18,22 +18,23 @@ from mirai.models.events import (
     BotOnlineEvent, BotReloginEvent, BotUnmuteEvent, ClientKind, CommandEvent,
     CommandExecutedEvent, Event, FriendEvent, FriendInputStatusChangedEvent,
     FriendMessage, FriendNickChangedEvent, FriendRecallEvent,
-    GroupAllowAnonymousChatEvent, GroupAllowConfessTalkEvent,
-    GroupAllowMemberInviteEvent, GroupEntranceAnnouncementChangeEvent,
-    GroupEvent, GroupMessage, GroupMuteAllEvent, GroupNameChangeEvent,
-    GroupRecallEvent, MemberCardChangeEvent, MemberHonorChangeEvent,
+    FriendSyncMessage, GroupAllowAnonymousChatEvent,
+    GroupAllowConfessTalkEvent, GroupAllowMemberInviteEvent,
+    GroupEntranceAnnouncementChangeEvent, GroupEvent, GroupMessage,
+    GroupMuteAllEvent, GroupNameChangeEvent, GroupRecallEvent,
+    GroupSyncMessage, MemberCardChangeEvent, MemberHonorChangeEvent,
     MemberJoinEvent, MemberJoinRequestEvent, MemberLeaveEventKick,
     MemberLeaveEventQuit, MemberMuteEvent, MemberPermissionChangeEvent,
     MemberSpecialTitleChangeEvent, MemberUnmuteEvent, MessageEvent,
     NewFriendRequestEvent, NudgeEvent, OtherClientEvent, OtherClientMessage,
     OtherClientOfflineEvent, OtherClientOnlineEvent, RequestEvent,
-    StrangerMessage, TempMessage
+    StrangerMessage, StrangerSyncMessage, TempMessage, TempSyncMessage
 )
 from mirai.models.message import (
     App, At, AtAll, Dice, Face, File, FlashImage, Forward, ForwardMessageNode,
-    Image, Json, MessageChain, MessageComponent, MiraiCode, MusicShare,
-    MusicShareKind, Plain, Poke, PokeNames, Quote, Source, Unknown, Voice, Xml,
-    deserialize, serialize
+    Image, Json, MarketFace, MessageChain, MessageComponent, MiraiCode,
+    MusicShare, MusicShareKind, Plain, Poke, PokeNames, Quote, Source, Unknown,
+    Voice, Xml, deserialize, serialize
 )
 
 __all__ = [
@@ -60,6 +61,10 @@ __all__ = [
     'CommandExecutedEvent',
     'Event',
     'FriendEvent',
+    'FriendSyncMessage',
+    'GroupSyncMessage',
+    'StrangerSyncMessage',
+    'TempSyncMessage',
     'FriendInputStatusChangedEvent',
     'FriendMessage',
     'FriendNickChangedEvent',
@@ -110,6 +115,7 @@ __all__ = [
     'MiraiCode',
     'MusicShareKind',
     'MusicShare',
+    'MarketFace',
     'Plain',
     'PokeNames',
     'Poke',

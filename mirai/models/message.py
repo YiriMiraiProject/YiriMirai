@@ -263,7 +263,7 @@ class MessageChain(MiraiBaseModel):
         result = []
         for msg in msg_chain:
             if isinstance(msg, dict):
-                result.append(MessageComponent.parse_obj(msg))
+                result.append(MessageComponent.parse_subtype(msg))
             elif isinstance(msg, MessageComponent):
                 result.append(msg)
             elif isinstance(msg, str):
@@ -773,6 +773,16 @@ class Face(MessageComponent):
 
     def as_mirai_code(self):
         return f"[mirai:face:{self.face_id}]"
+
+
+class MarketFace(MessageComponent):
+    """商店表情（目前只支持接收）。"""
+    type: str = "MarketFace"
+    """消息组件类型。"""
+    id: int
+    """商店表情编号。"""
+    name: str
+    """商店表情名称。"""
 
 
 class Image(MessageComponent):
@@ -1313,6 +1323,7 @@ __all__ = [
     'ForwardMessageNode',
     'Image',
     'Json',
+    'MarketFace',
     'MessageChain',
     'MessageComponent',
     'MusicShareKind',

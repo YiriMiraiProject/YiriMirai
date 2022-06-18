@@ -5,6 +5,7 @@
 import asyncio
 import contextlib
 import logging
+import warnings
 from typing import (
     Any, Awaitable, Callable, Dict, Iterable, List, Optional, Type, Union, cast
 )
@@ -88,6 +89,7 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
             *args: 参数。
             **kwargs: 参数。
         """
+        warnings.warn("SimpleMirai 已弃用，将在 0.3 后移除。", DeprecationWarning)
         return await self._adapter.call_api(api, *args, **kwargs)
 
     def on(self, event: str, priority: int = 0) -> Callable:
@@ -306,6 +308,16 @@ class Mirai(SimpleMirai):
     @property
     def bus(self) -> ModelEventBus:
         return self._bus
+
+    async def call_api(self, api: str, *args, **kwargs):
+        """调用 API。
+
+        Args:
+            api: API 名称。
+            *args: 参数。
+            **kwargs: 参数。
+        """
+        return await self._adapter.call_api(api, *args, **kwargs)
 
     def on(
         self,

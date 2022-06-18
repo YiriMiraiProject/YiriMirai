@@ -58,7 +58,7 @@ class ModelEventBus(EventBus):
 
         async def middleware(event: dict):
             """中间件。负责与底层 bus 沟通，将 event dict 解析为 Event 对象。"""
-            event_model = cast(Event, Event.parse_obj(event))
+            event_model = cast(Event, Event.parse_subtype(event))
             logger.debug(f'收到事件 {event_model.type}。')
             return await async_with_exception(func(event_model))
 
