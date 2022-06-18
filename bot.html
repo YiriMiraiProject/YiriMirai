@@ -34,6 +34,7 @@
 import asyncio
 import contextlib
 import logging
+import warnings
 from typing import (
     Any, Awaitable, Callable, Dict, Iterable, List, Optional, Type, Union, cast
 )
@@ -117,6 +118,7 @@ class SimpleMirai(ApiProvider, AdapterInterface, AbstractEventBus):
             *args: 参数。
             **kwargs: 参数。
         &#34;&#34;&#34;
+        warnings.warn(&#34;SimpleMirai 已弃用，将在 0.3 后移除。&#34;, DeprecationWarning)
         return await self._adapter.call_api(api, *args, **kwargs)
 
     def on(self, event: str, priority: int = 0) -&gt; Callable:
@@ -335,6 +337,16 @@ class Mirai(SimpleMirai):
     @property
     def bus(self) -&gt; ModelEventBus:
         return self._bus
+
+    async def call_api(self, api: str, *args, **kwargs):
+        &#34;&#34;&#34;调用 API。
+
+        Args:
+            api: API 名称。
+            *args: 参数。
+            **kwargs: 参数。
+        &#34;&#34;&#34;
+        return await self._adapter.call_api(api, *args, **kwargs)
 
     def on(
         self,
@@ -632,7 +644,7 @@ class Shutdown(LifeSpan):
 <li><code><b><a title="mirai.models.events.Event" href="models/events.html#mirai.models.events.Event">Event</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.Event.get_subtype" href="models/base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.Event.parse_obj" href="models/base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_subtype" href="models/base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.Event.type" href="models/events.html#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -697,6 +709,16 @@ API 参数可以使用具名参数，也可以使用位置参数，关于 API �
     @property
     def bus(self) -&gt; ModelEventBus:
         return self._bus
+
+    async def call_api(self, api: str, *args, **kwargs):
+        &#34;&#34;&#34;调用 API。
+
+        Args:
+            api: API 名称。
+            *args: 参数。
+            **kwargs: 参数。
+        &#34;&#34;&#34;
+        return await self._adapter.call_api(api, *args, **kwargs)
 
     def on(
         self,
@@ -1686,7 +1708,7 @@ runner.run(host='127.0.0.1', port=8000)
 <li><code><b><a title="mirai.bot.LifeSpan" href="#mirai.bot.LifeSpan">LifeSpan</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.bot.LifeSpan.get_subtype" href="models/base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.bot.LifeSpan.parse_obj" href="models/base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.bot.LifeSpan.parse_subtype" href="models/base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.bot.LifeSpan.type" href="models/events.html#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -1785,6 +1807,7 @@ runner.run(host='127.0.0.1', port=8000)
             *args: 参数。
             **kwargs: 参数。
         &#34;&#34;&#34;
+        warnings.warn(&#34;SimpleMirai 已弃用，将在 0.3 后移除。&#34;, DeprecationWarning)
         return await self._adapter.call_api(api, *args, **kwargs)
 
     def on(self, event: str, priority: int = 0) -&gt; Callable:
@@ -2028,6 +2051,7 @@ def session(self) -&gt; str:
         *args: 参数。
         **kwargs: 参数。
     &#34;&#34;&#34;
+    warnings.warn(&#34;SimpleMirai 已弃用，将在 0.3 后移除。&#34;, DeprecationWarning)
     return await self._adapter.call_api(api, *args, **kwargs)</code></pre>
 </details>
 </dd>
@@ -2234,7 +2258,7 @@ async def use_adapter(self, adapter: Adapter):
 <li><code><b><a title="mirai.bot.LifeSpan" href="#mirai.bot.LifeSpan">LifeSpan</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.bot.LifeSpan.get_subtype" href="models/base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.bot.LifeSpan.parse_obj" href="models/base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.bot.LifeSpan.parse_subtype" href="models/base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.bot.LifeSpan.type" href="models/events.html#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>

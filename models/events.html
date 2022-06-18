@@ -67,9 +67,9 @@ class Event(MiraiIndexedModel):
         ) + &#39;)&#39;
 
     @classmethod
-    def parse_obj(cls, obj: dict) -&gt; &#39;Event&#39;:
+    def parse_subtype(cls, obj: dict) -&gt; &#39;Event&#39;:
         try:
-            return cast(Event, super().parse_obj(obj))
+            return cast(Event, super().parse_subtype(obj))
         except ValueError:
             return Event(type=obj[&#39;type&#39;])
 
@@ -915,8 +915,6 @@ class MessageEvent(Event):
     &#34;&#34;&#34;
     type: str
     &#34;&#34;&#34;事件名。&#34;&#34;&#34;
-    sender: Entity
-    &#34;&#34;&#34;发送消息的来源。&#34;&#34;&#34;
     message_chain: MessageChain
     &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
 
@@ -991,6 +989,76 @@ class StrangerMessage(MessageEvent):
     &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
 
 
+class FriendSyncMessage(MessageEvent):
+    &#34;&#34;&#34;其他客户端发送的好友消息。
+
+    Args:
+        type: 事件名。
+        subject: 发送消息的目标好友。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;FriendSyncMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    subject: Friend
+    &#34;&#34;&#34;发送消息的目标好友。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
+
+
+class GroupSyncMessage(MessageEvent):
+    &#34;&#34;&#34;其他客户端发送的群消息。
+
+    Args:
+        type: 事件名。
+        subject: 发送消息的目标群组。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;GroupSyncMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    subject: Group
+    &#34;&#34;&#34;发送消息的目标群组。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
+    @property
+    def group(self) -&gt; Group:
+        return self.subject
+
+
+class TempSyncMessage(MessageEvent):
+    &#34;&#34;&#34;其他客户端发送的群临时消息。
+
+    Args:
+        type: 事件名。
+        subject: 发送消息的目标群成员。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;TempSyncMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    subject: GroupMember
+    &#34;&#34;&#34;发送消息的目标群成员。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
+    @property
+    def group(self) -&gt; Group:
+        return self.subject.group
+
+
+class StrangerSyncMessage(MessageEvent):
+    &#34;&#34;&#34;其他客户端发送的陌生人消息。
+
+    Args:
+        type: 事件名。
+        subject: 发送消息的目标。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;StrangerSyncMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    subject: Friend
+    &#34;&#34;&#34;发送消息的目标。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
+
+
 class OtherClientMessage(MessageEvent):
     &#34;&#34;&#34;其他客户端消息。
 
@@ -1027,6 +1095,7 @@ __all__ = [
     &#39;FriendEvent&#39;,
     &#39;FriendInputStatusChangedEvent&#39;,
     &#39;FriendMessage&#39;,
+    &#39;FriendSyncMessage&#39;,
     &#39;FriendNickChangedEvent&#39;,
     &#39;FriendRecallEvent&#39;,
     &#39;GroupAllowAnonymousChatEvent&#39;,
@@ -1035,6 +1104,7 @@ __all__ = [
     &#39;GroupEntranceAnnouncementChangeEvent&#39;,
     &#39;GroupEvent&#39;,
     &#39;GroupMessage&#39;,
+    &#39;GroupSyncMessage&#39;,
     &#39;GroupMuteAllEvent&#39;,
     &#39;GroupNameChangeEvent&#39;,
     &#39;GroupRecallEvent&#39;,
@@ -1054,7 +1124,9 @@ __all__ = [
     &#39;OtherClientMessage&#39;,
     &#39;RequestEvent&#39;,
     &#39;StrangerMessage&#39;,
+    &#39;StrangerSyncMessage&#39;,
     &#39;TempMessage&#39;,
+    &#39;TempSyncMessage&#39;,
 ]</code></pre>
 </details>
 </section>
@@ -1124,7 +1196,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.Event.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.Event.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.Event.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -1198,7 +1270,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -1290,7 +1362,7 @@ __all__ = [
 <li><code><a title="mirai.models.events.RequestEvent.from_id" href="#mirai.models.events.RequestEvent.from_id">from_id</a></code></li>
 <li><code><a title="mirai.models.events.RequestEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.events.RequestEvent.group_id" href="#mirai.models.events.RequestEvent.group_id">group_id</a></code></li>
-<li><code><a title="mirai.models.events.RequestEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.RequestEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.RequestEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -1352,7 +1424,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -1408,7 +1480,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -1470,7 +1542,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -1535,7 +1607,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -1584,7 +1656,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.events.BotEvent" href="#mirai.models.events.BotEvent">BotEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.BotEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.BotEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.BotEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.BotEvent.qq" href="#mirai.models.events.BotEvent.qq">qq</a></code></li>
 <li><code><a title="mirai.models.events.BotEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
@@ -1634,7 +1706,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.events.BotEvent" href="#mirai.models.events.BotEvent">BotEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.BotEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.BotEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.BotEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.BotEvent.qq" href="#mirai.models.events.BotEvent.qq">qq</a></code></li>
 <li><code><a title="mirai.models.events.BotEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
@@ -1684,7 +1756,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.events.BotEvent" href="#mirai.models.events.BotEvent">BotEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.BotEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.BotEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.BotEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.BotEvent.qq" href="#mirai.models.events.BotEvent.qq">qq</a></code></li>
 <li><code><a title="mirai.models.events.BotEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
@@ -1734,7 +1806,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.events.BotEvent" href="#mirai.models.events.BotEvent">BotEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.BotEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.BotEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.BotEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.BotEvent.qq" href="#mirai.models.events.BotEvent.qq">qq</a></code></li>
 <li><code><a title="mirai.models.events.BotEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
@@ -1784,7 +1856,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.events.BotEvent" href="#mirai.models.events.BotEvent">BotEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.BotEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.BotEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.BotEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.BotEvent.qq" href="#mirai.models.events.BotEvent.qq">qq</a></code></li>
 <li><code><a title="mirai.models.events.BotEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
@@ -1841,7 +1913,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -1888,7 +1960,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.Event.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.Event.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.Event.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -1971,7 +2043,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.events.CommandEvent" href="#mirai.models.events.CommandEvent">CommandEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.CommandEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.CommandEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.CommandEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.CommandEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -2009,9 +2081,9 @@ __all__ = [
         ) + &#39;)&#39;
 
     @classmethod
-    def parse_obj(cls, obj: dict) -&gt; &#39;Event&#39;:
+    def parse_subtype(cls, obj: dict) -&gt; &#39;Event&#39;:
         try:
-            return cast(Event, super().parse_obj(obj))
+            return cast(Event, super().parse_subtype(obj))
         except ValueError:
             return Event(type=obj[&#39;type&#39;])
 
@@ -2054,7 +2126,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.base.MiraiIndexedModel.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.base.MiraiIndexedModel.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.base.MiraiIndexedModel.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2113,7 +2185,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.Event.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.Event.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.Event.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -2175,7 +2247,7 @@ __all__ = [
 <ul class="hlist">
 <li><code><a title="mirai.models.events.FriendEvent.friend" href="#mirai.models.events.FriendEvent.friend">friend</a></code></li>
 <li><code><a title="mirai.models.events.FriendEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.FriendEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.FriendEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.FriendEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -2224,14 +2296,20 @@ __all__ = [
 <li>pydantic.main.BaseModel</li>
 <li>pydantic.utils.Representation</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.FriendMessage.sender"><code class="name">var <span class="ident">sender</span> : <a title="mirai.models.entities.Friend" href="entities.html#mirai.models.entities.Friend">Friend</a></code></dt>
+<dd>
+<div class="desc"><p>发送消息的好友。</p></div>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.message_chain" href="#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
-<li><code><a title="mirai.models.events.MessageEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
-<li><code><a title="mirai.models.events.MessageEvent.sender" href="#mirai.models.events.MessageEvent.sender">sender</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -2302,7 +2380,7 @@ __all__ = [
 <ul class="hlist">
 <li><code><a title="mirai.models.events.FriendEvent.friend" href="#mirai.models.events.FriendEvent.friend">friend</a></code></li>
 <li><code><a title="mirai.models.events.FriendEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.FriendEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.FriendEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.FriendEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -2386,8 +2464,70 @@ __all__ = [
 <li><code><b><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.Event.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.Event.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.Event.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.FriendSyncMessage"><code class="flex name class">
+<span>class <span class="ident">FriendSyncMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>其他客户端发送的好友消息。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>subject</code></strong></dt>
+<dd>发送消息的目标好友。</dd>
+<dt><strong><code>message_chain</code></strong></dt>
+<dd>消息内容。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FriendSyncMessage(MessageEvent):
+    &#34;&#34;&#34;其他客户端发送的好友消息。
+
+    Args:
+        type: 事件名。
+        subject: 发送消息的目标好友。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;FriendSyncMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    subject: Friend
+    &#34;&#34;&#34;发送消息的目标好友。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.FriendSyncMessage.subject"><code class="name">var <span class="ident">subject</span> : <a title="mirai.models.entities.Friend" href="entities.html#mirai.models.entities.Friend">Friend</a></code></dt>
+<dd>
+<div class="desc"><p>发送消息的目标好友。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.message_chain" href="#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2469,7 +2609,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -2552,7 +2692,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -2635,7 +2775,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -2718,7 +2858,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -2799,7 +2939,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.Event.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.Event.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.Event.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -2851,6 +2991,13 @@ __all__ = [
 <li>pydantic.main.BaseModel</li>
 <li>pydantic.utils.Representation</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.GroupMessage.sender"><code class="name">var <span class="ident">sender</span> : <a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"><p>发送消息的群成员。</p></div>
+</dd>
+</dl>
 <h3>Instance variables</h3>
 <dl>
 <dt id="mirai.models.events.GroupMessage.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
@@ -2872,8 +3019,7 @@ def group(self) -&gt; Group:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.message_chain" href="#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
-<li><code><a title="mirai.models.events.MessageEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
-<li><code><a title="mirai.models.events.MessageEvent.sender" href="#mirai.models.events.MessageEvent.sender">sender</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -2956,7 +3102,7 @@ def group(self) -&gt; Group:
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -3039,7 +3185,7 @@ def group(self) -&gt; Group:
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -3131,8 +3277,88 @@ def group(self) -&gt; Group:
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.GroupSyncMessage"><code class="flex name class">
+<span>class <span class="ident">GroupSyncMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>其他客户端发送的群消息。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>subject</code></strong></dt>
+<dd>发送消息的目标群组。</dd>
+<dt><strong><code>message_chain</code></strong></dt>
+<dd>消息内容。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroupSyncMessage(MessageEvent):
+    &#34;&#34;&#34;其他客户端发送的群消息。
+
+    Args:
+        type: 事件名。
+        subject: 发送消息的目标群组。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;GroupSyncMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    subject: Group
+    &#34;&#34;&#34;发送消息的目标群组。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
+    @property
+    def group(self) -&gt; Group:
+        return self.subject</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.GroupSyncMessage.subject"><code class="name">var <span class="ident">subject</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"><p>发送消息的目标群组。</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="mirai.models.events.GroupSyncMessage.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def group(self) -&gt; Group:
+    return self.subject</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.message_chain" href="#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
 </ul>
@@ -3208,7 +3434,7 @@ def group(self) -&gt; Group:
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -3285,7 +3511,7 @@ def group(self) -&gt; Group:
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -3350,7 +3576,7 @@ def group(self) -&gt; Group:
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -3442,7 +3668,7 @@ def group(self) -&gt; Group:
 <li><code><a title="mirai.models.events.RequestEvent.from_id" href="#mirai.models.events.RequestEvent.from_id">from_id</a></code></li>
 <li><code><a title="mirai.models.events.RequestEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.events.RequestEvent.group_id" href="#mirai.models.events.RequestEvent.group_id">group_id</a></code></li>
-<li><code><a title="mirai.models.events.RequestEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.RequestEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.RequestEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -3510,7 +3736,7 @@ def group(self) -&gt; Group:
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -3569,7 +3795,7 @@ def group(self) -&gt; Group:
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -3625,7 +3851,7 @@ def group(self) -&gt; Group:
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -3702,7 +3928,7 @@ def group(self) -&gt; Group:
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -3779,7 +4005,7 @@ def group(self) -&gt; Group:
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -3844,7 +4070,7 @@ def group(self) -&gt; Group:
 <li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.GroupEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -3876,8 +4102,6 @@ def group(self) -&gt; Group:
     &#34;&#34;&#34;
     type: str
     &#34;&#34;&#34;事件名。&#34;&#34;&#34;
-    sender: Entity
-    &#34;&#34;&#34;发送消息的来源。&#34;&#34;&#34;
     message_chain: MessageChain
     &#34;&#34;&#34;消息内容。&#34;&#34;&#34;</code></pre>
 </details>
@@ -3892,10 +4116,14 @@ def group(self) -&gt; Group:
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="mirai.models.events.FriendMessage" href="#mirai.models.events.FriendMessage">FriendMessage</a></li>
+<li><a title="mirai.models.events.FriendSyncMessage" href="#mirai.models.events.FriendSyncMessage">FriendSyncMessage</a></li>
 <li><a title="mirai.models.events.GroupMessage" href="#mirai.models.events.GroupMessage">GroupMessage</a></li>
+<li><a title="mirai.models.events.GroupSyncMessage" href="#mirai.models.events.GroupSyncMessage">GroupSyncMessage</a></li>
 <li><a title="mirai.models.events.OtherClientMessage" href="#mirai.models.events.OtherClientMessage">OtherClientMessage</a></li>
 <li><a title="mirai.models.events.StrangerMessage" href="#mirai.models.events.StrangerMessage">StrangerMessage</a></li>
+<li><a title="mirai.models.events.StrangerSyncMessage" href="#mirai.models.events.StrangerSyncMessage">StrangerSyncMessage</a></li>
 <li><a title="mirai.models.events.TempMessage" href="#mirai.models.events.TempMessage">TempMessage</a></li>
+<li><a title="mirai.models.events.TempSyncMessage" href="#mirai.models.events.TempSyncMessage">TempSyncMessage</a></li>
 </ul>
 <h3>Class variables</h3>
 <dl>
@@ -3903,17 +4131,13 @@ def group(self) -&gt; Group:
 <dd>
 <div class="desc"><p>消息内容。</p></div>
 </dd>
-<dt id="mirai.models.events.MessageEvent.sender"><code class="name">var <span class="ident">sender</span> : <a title="mirai.models.entities.Entity" href="entities.html#mirai.models.entities.Entity">Entity</a></code></dt>
-<dd>
-<div class="desc"><p>发送消息的来源。</p></div>
-</dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.Event.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.Event.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.Event.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -3996,7 +4220,7 @@ def group(self) -&gt; Group:
 <li><code><a title="mirai.models.events.RequestEvent.from_id" href="#mirai.models.events.RequestEvent.from_id">from_id</a></code></li>
 <li><code><a title="mirai.models.events.RequestEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.events.RequestEvent.group_id" href="#mirai.models.events.RequestEvent.group_id">group_id</a></code></li>
-<li><code><a title="mirai.models.events.RequestEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.RequestEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.RequestEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -4087,7 +4311,7 @@ def group(self) -&gt; Group:
 <li><code><b><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.Event.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.Event.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.Event.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -4136,14 +4360,20 @@ def group(self) -&gt; Group:
 <li>pydantic.main.BaseModel</li>
 <li>pydantic.utils.Representation</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.OtherClientMessage.sender"><code class="name">var <span class="ident">sender</span> : mirai.models.entities.Client</code></dt>
+<dd>
+<div class="desc"><p>发送消息的人。</p></div>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.message_chain" href="#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
-<li><code><a title="mirai.models.events.MessageEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
-<li><code><a title="mirai.models.events.MessageEvent.sender" href="#mirai.models.events.MessageEvent.sender">sender</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -4216,7 +4446,7 @@ def group(self) -&gt; Group:
 <li><code><b><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.Event.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.Event.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.Event.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -4265,14 +4495,82 @@ def group(self) -&gt; Group:
 <li>pydantic.main.BaseModel</li>
 <li>pydantic.utils.Representation</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.StrangerMessage.sender"><code class="name">var <span class="ident">sender</span> : <a title="mirai.models.entities.Friend" href="entities.html#mirai.models.entities.Friend">Friend</a></code></dt>
+<dd>
+<div class="desc"><p>发送消息的人。</p></div>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.message_chain" href="#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
-<li><code><a title="mirai.models.events.MessageEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
-<li><code><a title="mirai.models.events.MessageEvent.sender" href="#mirai.models.events.MessageEvent.sender">sender</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.StrangerSyncMessage"><code class="flex name class">
+<span>class <span class="ident">StrangerSyncMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>其他客户端发送的陌生人消息。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>subject</code></strong></dt>
+<dd>发送消息的目标。</dd>
+<dt><strong><code>message_chain</code></strong></dt>
+<dd>消息内容。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class StrangerSyncMessage(MessageEvent):
+    &#34;&#34;&#34;其他客户端发送的陌生人消息。
+
+    Args:
+        type: 事件名。
+        subject: 发送消息的目标。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;StrangerSyncMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    subject: Friend
+    &#34;&#34;&#34;发送消息的目标。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.StrangerSyncMessage.subject"><code class="name">var <span class="ident">subject</span> : <a title="mirai.models.entities.Friend" href="entities.html#mirai.models.entities.Friend">Friend</a></code></dt>
+<dd>
+<div class="desc"><p>发送消息的目标。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.message_chain" href="#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -4324,6 +4622,13 @@ def group(self) -&gt; Group:
 <li>pydantic.main.BaseModel</li>
 <li>pydantic.utils.Representation</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.TempMessage.sender"><code class="name">var <span class="ident">sender</span> : <a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"><p>发送消息的群成员。</p></div>
+</dd>
+</dl>
 <h3>Instance variables</h3>
 <dl>
 <dt id="mirai.models.events.TempMessage.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
@@ -4345,8 +4650,87 @@ def group(self) -&gt; Group:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.message_chain" href="#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
-<li><code><a title="mirai.models.events.MessageEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
-<li><code><a title="mirai.models.events.MessageEvent.sender" href="#mirai.models.events.MessageEvent.sender">sender</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.events.TempSyncMessage"><code class="flex name class">
+<span>class <span class="ident">TempSyncMessage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>其他客户端发送的群临时消息。</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong></dt>
+<dd>事件名。</dd>
+<dt><strong><code>subject</code></strong></dt>
+<dd>发送消息的目标群成员。</dd>
+<dt><strong><code>message_chain</code></strong></dt>
+<dd>消息内容。</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TempSyncMessage(MessageEvent):
+    &#34;&#34;&#34;其他客户端发送的群临时消息。
+
+    Args:
+        type: 事件名。
+        subject: 发送消息的目标群成员。
+        message_chain: 消息内容。
+    &#34;&#34;&#34;
+    type: str = &#39;TempSyncMessage&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    subject: GroupMember
+    &#34;&#34;&#34;发送消息的目标群成员。&#34;&#34;&#34;
+    message_chain: MessageChain
+    &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
+    @property
+    def group(self) -&gt; Group:
+        return self.subject.group</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.TempSyncMessage.subject"><code class="name">var <span class="ident">subject</span> : <a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"><p>发送消息的目标群成员。</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="mirai.models.events.TempSyncMessage.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def group(self) -&gt; Group:
+    return self.subject.group</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.message_chain" href="#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -4470,6 +4854,9 @@ def group(self) -&gt; Group:
 </li>
 <li>
 <h4><code><a title="mirai.models.events.FriendMessage" href="#mirai.models.events.FriendMessage">FriendMessage</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.FriendMessage.sender" href="#mirai.models.events.FriendMessage.sender">sender</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="mirai.models.events.FriendNickChangedEvent" href="#mirai.models.events.FriendNickChangedEvent">FriendNickChangedEvent</a></code></h4>
@@ -4485,6 +4872,12 @@ def group(self) -&gt; Group:
 <li><code><a title="mirai.models.events.FriendRecallEvent.message_id" href="#mirai.models.events.FriendRecallEvent.message_id">message_id</a></code></li>
 <li><code><a title="mirai.models.events.FriendRecallEvent.operator" href="#mirai.models.events.FriendRecallEvent.operator">operator</a></code></li>
 <li><code><a title="mirai.models.events.FriendRecallEvent.time" href="#mirai.models.events.FriendRecallEvent.time">time</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.FriendSyncMessage" href="#mirai.models.events.FriendSyncMessage">FriendSyncMessage</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.FriendSyncMessage.subject" href="#mirai.models.events.FriendSyncMessage.subject">subject</a></code></li>
 </ul>
 </li>
 <li>
@@ -4530,6 +4923,7 @@ def group(self) -&gt; Group:
 <h4><code><a title="mirai.models.events.GroupMessage" href="#mirai.models.events.GroupMessage">GroupMessage</a></code></h4>
 <ul class="">
 <li><code><a title="mirai.models.events.GroupMessage.group" href="#mirai.models.events.GroupMessage.group">group</a></code></li>
+<li><code><a title="mirai.models.events.GroupMessage.sender" href="#mirai.models.events.GroupMessage.sender">sender</a></code></li>
 </ul>
 </li>
 <li>
@@ -4558,6 +4952,13 @@ def group(self) -&gt; Group:
 <li><code><a title="mirai.models.events.GroupRecallEvent.message_id" href="#mirai.models.events.GroupRecallEvent.message_id">message_id</a></code></li>
 <li><code><a title="mirai.models.events.GroupRecallEvent.operator" href="#mirai.models.events.GroupRecallEvent.operator">operator</a></code></li>
 <li><code><a title="mirai.models.events.GroupRecallEvent.time" href="#mirai.models.events.GroupRecallEvent.time">time</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.GroupSyncMessage" href="#mirai.models.events.GroupSyncMessage">GroupSyncMessage</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.GroupSyncMessage.group" href="#mirai.models.events.GroupSyncMessage.group">group</a></code></li>
+<li><code><a title="mirai.models.events.GroupSyncMessage.subject" href="#mirai.models.events.GroupSyncMessage.subject">subject</a></code></li>
 </ul>
 </li>
 <li>
@@ -4637,7 +5038,6 @@ def group(self) -&gt; Group:
 <h4><code><a title="mirai.models.events.MessageEvent" href="#mirai.models.events.MessageEvent">MessageEvent</a></code></h4>
 <ul class="">
 <li><code><a title="mirai.models.events.MessageEvent.message_chain" href="#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
-<li><code><a title="mirai.models.events.MessageEvent.sender" href="#mirai.models.events.MessageEvent.sender">sender</a></code></li>
 </ul>
 </li>
 <li>
@@ -4659,6 +5059,9 @@ def group(self) -&gt; Group:
 </li>
 <li>
 <h4><code><a title="mirai.models.events.OtherClientMessage" href="#mirai.models.events.OtherClientMessage">OtherClientMessage</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.OtherClientMessage.sender" href="#mirai.models.events.OtherClientMessage.sender">sender</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="mirai.models.events.RequestEvent" href="#mirai.models.events.RequestEvent">RequestEvent</a></code></h4>
@@ -4670,11 +5073,28 @@ def group(self) -&gt; Group:
 </li>
 <li>
 <h4><code><a title="mirai.models.events.StrangerMessage" href="#mirai.models.events.StrangerMessage">StrangerMessage</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.StrangerMessage.sender" href="#mirai.models.events.StrangerMessage.sender">sender</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.StrangerSyncMessage" href="#mirai.models.events.StrangerSyncMessage">StrangerSyncMessage</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.StrangerSyncMessage.subject" href="#mirai.models.events.StrangerSyncMessage.subject">subject</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="mirai.models.events.TempMessage" href="#mirai.models.events.TempMessage">TempMessage</a></code></h4>
 <ul class="">
 <li><code><a title="mirai.models.events.TempMessage.group" href="#mirai.models.events.TempMessage.group">group</a></code></li>
+<li><code><a title="mirai.models.events.TempMessage.sender" href="#mirai.models.events.TempMessage.sender">sender</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.TempSyncMessage" href="#mirai.models.events.TempSyncMessage">TempSyncMessage</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.TempSyncMessage.group" href="#mirai.models.events.TempSyncMessage.group">group</a></code></li>
+<li><code><a title="mirai.models.events.TempSyncMessage.subject" href="#mirai.models.events.TempSyncMessage.subject">subject</a></code></li>
 </ul>
 </li>
 </ul>

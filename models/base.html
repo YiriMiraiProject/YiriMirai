@@ -122,7 +122,7 @@ class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):
             raise ValueError(f&#39;`{name}` 不是 `{cls.__name__}` 的子类！&#39;) from None
 
     @classmethod
-    def parse_obj(cls, obj: dict) -&gt; &#39;MiraiIndexedModel&#39;:
+    def parse_subtype(cls, obj: dict) -&gt; &#39;MiraiIndexedModel&#39;:
         &#34;&#34;&#34;通过字典，构造对应的模型对象。
 
         Args:
@@ -311,7 +311,7 @@ class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):
             raise ValueError(f&#39;`{name}` 不是 `{cls.__name__}` 的子类！&#39;) from None
 
     @classmethod
-    def parse_obj(cls, obj: dict) -&gt; &#39;MiraiIndexedModel&#39;:
+    def parse_subtype(cls, obj: dict) -&gt; &#39;MiraiIndexedModel&#39;:
         &#34;&#34;&#34;通过字典，构造对应的模型对象。
 
         Args:
@@ -374,8 +374,8 @@ def get_subtype(cls, name: str) -&gt; Type[&#39;MiraiIndexedModel&#39;]:
         raise ValueError(f&#39;`{name}` 不是 `{cls.__name__}` 的子类！&#39;) from None</code></pre>
 </details>
 </dd>
-<dt id="mirai.models.base.MiraiIndexedModel.parse_obj"><code class="name flex">
-<span>def <span class="ident">parse_obj</span></span>(<span>obj: dict) ‑> <a title="mirai.models.base.MiraiIndexedModel" href="#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></span>
+<dt id="mirai.models.base.MiraiIndexedModel.parse_subtype"><code class="name flex">
+<span>def <span class="ident">parse_subtype</span></span>(<span>obj: dict) ‑> <a title="mirai.models.base.MiraiIndexedModel" href="#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>通过字典，构造对应的模型对象。</p>
@@ -394,7 +394,7 @@ def get_subtype(cls, name: str) -&gt; Type[&#39;MiraiIndexedModel&#39;]:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@classmethod
-def parse_obj(cls, obj: dict) -&gt; &#39;MiraiIndexedModel&#39;:
+def parse_subtype(cls, obj: dict) -&gt; &#39;MiraiIndexedModel&#39;:
     &#34;&#34;&#34;通过字典，构造对应的模型对象。
 
     Args:
@@ -469,7 +469,7 @@ def parse_obj(cls, obj: dict) -&gt; &#39;MiraiIndexedModel&#39;:
 <h4><code><a title="mirai.models.base.MiraiIndexedModel" href="#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></code></h4>
 <ul class="">
 <li><code><a title="mirai.models.base.MiraiIndexedModel.get_subtype" href="#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.base.MiraiIndexedModel.parse_obj" href="#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.base.MiraiIndexedModel.parse_subtype" href="#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 <li>

@@ -31,7 +31,11 @@
 &#34;&#34;&#34;
 此模块提供异常相关。
 &#34;&#34;&#34;
+import re
 import traceback
+from typing import Type, cast
+
+from pydantic import ValidationError
 
 
 class NetworkError(RuntimeError):
@@ -79,6 +83,32 @@ class StopExecution(Exception):
 
 class SkipExecution(Exception):
     &#34;&#34;&#34;跳过同优先度的事件处理器，进入下一优先度。&#34;&#34;&#34;
+
+
+class ApiParametersError(TypeError):
+    &#34;&#34;&#34;API 参数错误。&#34;&#34;&#34;
+    def __init__(self, err: ValidationError):
+        &#34;&#34;&#34;
+        Args:
+            err(`str`): pydantic 的解析错误。
+        &#34;&#34;&#34;
+        from mirai.models.api import ApiModel
+        self._err = err
+        model = cast(Type[&#39;ApiModel&#39;], err.model)
+        try:
+            errors = [f&#39;在调用 `{model.Info.alias}` 时出错。&#39;]
+            for error in self._err.errors():
+                parameter_name = str(error[&#39;loc&#39;][0])
+                parameter_name = re.sub(
+                    r&#39;[A-Z]&#39;, lambda m: f&#39;_{m.group(0).lower()}&#39;,
+                    parameter_name
+                )
+
+                message = error[&#39;msg&#39;]
+                errors.append(f&#39;参数 `{parameter_name}` 类型错误，原因：{message}&#39;)
+            self.args = tuple(errors)
+        except TypeError:
+            self.args = (err.json(), )
 
 
 def print_exception(e: Exception):

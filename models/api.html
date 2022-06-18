@@ -40,6 +40,8 @@ from typing import (
     Union, cast
 )
 
+from mirai.exceptions import ApiParametersError
+
 if TYPE_CHECKING:
     from typing_extensions import Literal
 else:
@@ -48,7 +50,7 @@ else:
     except ImportError:
         from typing_extensions import Literal
 
-from pydantic import validator
+from pydantic import ValidationError, validator
 
 from mirai.api_provider import ApiProvider, Method
 from mirai.models.base import (
@@ -211,6 +213,8 @@ class FileProperties(MiraiBaseModel):
     &#34;&#34;&#34;是否是文件。&#34;&#34;&#34;
     is_directory: bool
     &#34;&#34;&#34;是否是文件夹。&#34;&#34;&#34;
+    size: Optional[int] = None
+    &#34;&#34;&#34;文件大小。&#34;&#34;&#34;
     download_info: Optional[DownloadInfo] = None
     &#34;&#34;&#34;文件的下载信息。&#34;&#34;&#34;
 
@@ -321,6 +325,17 @@ class ApiModel(ApiBaseModel):
         except ValueError as e:
             raise ValueError(f&#39;`{name}` 不是可用的 API！&#39;) from e
 
+    async def _call(
+        self,
+        api_provider: ApiProvider,
+        method: Method = Method.GET,
+    ):
+        return await api_provider.call_api(
+            api=self.Info.name,
+            method=method,
+            **self.dict(by_alias=True, exclude_none=True)
+        )
+
     async def call(
         self,
         api_provider: ApiProvider,
@@ -328,19 +343,16 @@ class ApiModel(ApiBaseModel):
         response_type: Optional[Type[TModel]] = None,
     ) -&gt; Optional[TModel]:
         &#34;&#34;&#34;调用 API。&#34;&#34;&#34;
-        info = self.Info
         logger.debug(f&#39;调用 API：{repr(self)}&#39;)
-        raw_response = await api_provider.call_api(
-            api=info.name,
-            method=method,
-            **self.dict(by_alias=True, exclude_none=True)
-        )
+        raw_response = await self._call(api_provider, method)
 
         # 如果 API 无法调用，raw_response 为空
         if not raw_response:
             return None
         # 解析 API 返回数据
-        response_type = cast(Type[TModel], response_type or info.response_type)
+        response_type = cast(
+            Type[TModel], response_type or self.Info.response_type
+        )
         return response_type.parse_obj(raw_response)
 
     class Proxy(Generic[TModel]):
@@ -398,8 +410,11 @@ class ApiModel(ApiBaseModel):
             args = args or []
             kwargs = kwargs or {}
 
-            api = self.api_type(*args, **kwargs)
-            return await api.call(self.api_provider, method, response_type)
+            try:
+                api = self.api_type(*args, **kwargs)
+                return await api.call(self.api_provider, method, response_type)
+            except ValidationError as e:
+                raise ApiParametersError(e) from None
 
         async def get(self, *args, **kwargs) -&gt; Optional[TModel]:
             &#34;&#34;&#34;获取。对于 GET 方法的 API，调用此方法。&#34;&#34;&#34;
@@ -582,6 +597,16 @@ class MemberProfile(ApiGet):
     class Info(ApiGet.Info):
         name = &#34;memberProfile&#34;
         alias = &#34;member_profile&#34;
+        response_type = ProfileResponse
+
+
+class UserProfile(ApiGet):
+    &#34;&#34;&#34;获取用户资料。&#34;&#34;&#34;
+    target: int
+    &#34;&#34;&#34;指定用户的 QQ 号。&#34;&#34;&#34;
+    class Info(ApiGet.Info):
+        name = &#34;userProfile&#34;
+        alias = &#34;user_profile&#34;
         response_type = ProfileResponse
 
 
@@ -774,11 +799,10 @@ class FileUpload(ApiPost):
     &#34;&#34;&#34;上传的文件的本地路径。&#34;&#34;&#34;
     path: str = &#39;&#39;
     &#34;&#34;&#34;上传目录的 id，空串为上传到根目录。&#34;&#34;&#34;
-    async def call(
+    async def _call(
         self,
         api_provider: ApiProvider,
         method: Method = Method.GET,
-        response_type: Optional[Type[TModel]] = None,
     ):
         import aiofiles
         async with aiofiles.open(self.file, &#39;rb&#39;) as f:
@@ -797,7 +821,7 @@ class FileUpload(ApiPost):
     class Info(ApiPost.Info):
         name = &#34;file/upload&#34;
         alias = &#34;file_upload&#34;
-        response_type = FileProperties
+        response_type = MiraiBaseModel  # TODO
 
 
 class UploadImage(ApiPost):
@@ -806,11 +830,10 @@ class UploadImage(ApiPost):
     &#34;&#34;&#34;上传的图片类型。&#34;&#34;&#34;
     img: Union[str, Path]
     &#34;&#34;&#34;上传的图片的本地路径。&#34;&#34;&#34;
-    async def call(
+    async def _call(
         self,
         api_provider: ApiProvider,
         method: Method = Method.GET,
-        response_type: Optional[Type[TModel]] = None,
     ):
         import aiofiles
         async with aiofiles.open(self.img, &#39;rb&#39;) as f:
@@ -834,11 +857,10 @@ class UploadVoice(ApiPost):
     &#34;&#34;&#34;上传的语音类型。&#34;&#34;&#34;
     voice: Union[str, Path]
     &#34;&#34;&#34;上传的语音的本地路径。&#34;&#34;&#34;
-    async def call(
+    async def _call(
         self,
         api_provider: ApiProvider,
         method: Method = Method.GET,
-        response_type: Optional[Type[TModel]] = None,
     ):
         import aiofiles
         async with aiofiles.open(self.voice, &#39;rb&#39;) as f:
@@ -1232,6 +1254,7 @@ __all__ = [
     &#39;UnmuteAll&#39;,
     &#39;UploadImage&#39;,
     &#39;UploadVoice&#39;,
+    &#39;UserProfile&#39;,
 ]</code></pre>
 </details>
 </section>
@@ -1279,7 +1302,7 @@ __all__ = [
 <li><code><a title="mirai.models.api.ApiGet.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiGet.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiGet.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1353,7 +1376,7 @@ __all__ = [
 <li><code><b><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.base.MiraiIndexedModel.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.base.MiraiIndexedModel.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.base.MiraiIndexedModel.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1402,6 +1425,7 @@ __all__ = [
 <li><a title="mirai.models.api.MemberProfile" href="#mirai.models.api.MemberProfile">MemberProfile</a></li>
 <li><a title="mirai.models.api.MessageFromId" href="#mirai.models.api.MessageFromId">MessageFromId</a></li>
 <li><a title="mirai.models.api.SessionInfo" href="#mirai.models.api.SessionInfo">SessionInfo</a></li>
+<li><a title="mirai.models.api.UserProfile" href="#mirai.models.api.UserProfile">UserProfile</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
@@ -1411,7 +1435,7 @@ __all__ = [
 <li><code><a title="mirai.models.api.ApiModel.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiModel.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiModel.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiModel.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiModel.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1510,6 +1534,17 @@ __all__ = [
         except ValueError as e:
             raise ValueError(f&#39;`{name}` 不是可用的 API！&#39;) from e
 
+    async def _call(
+        self,
+        api_provider: ApiProvider,
+        method: Method = Method.GET,
+    ):
+        return await api_provider.call_api(
+            api=self.Info.name,
+            method=method,
+            **self.dict(by_alias=True, exclude_none=True)
+        )
+
     async def call(
         self,
         api_provider: ApiProvider,
@@ -1517,19 +1552,16 @@ __all__ = [
         response_type: Optional[Type[TModel]] = None,
     ) -&gt; Optional[TModel]:
         &#34;&#34;&#34;调用 API。&#34;&#34;&#34;
-        info = self.Info
         logger.debug(f&#39;调用 API：{repr(self)}&#39;)
-        raw_response = await api_provider.call_api(
-            api=info.name,
-            method=method,
-            **self.dict(by_alias=True, exclude_none=True)
-        )
+        raw_response = await self._call(api_provider, method)
 
         # 如果 API 无法调用，raw_response 为空
         if not raw_response:
             return None
         # 解析 API 返回数据
-        response_type = cast(Type[TModel], response_type or info.response_type)
+        response_type = cast(
+            Type[TModel], response_type or self.Info.response_type
+        )
         return response_type.parse_obj(raw_response)
 
     class Proxy(Generic[TModel]):
@@ -1587,8 +1619,11 @@ __all__ = [
             args = args or []
             kwargs = kwargs or {}
 
-            api = self.api_type(*args, **kwargs)
-            return await api.call(self.api_provider, method, response_type)
+            try:
+                api = self.api_type(*args, **kwargs)
+                return await api.call(self.api_provider, method, response_type)
+            except ValidationError as e:
+                raise ApiParametersError(e) from None
 
         async def get(self, *args, **kwargs) -&gt; Optional[TModel]:
             &#34;&#34;&#34;获取。对于 GET 方法的 API，调用此方法。&#34;&#34;&#34;
@@ -1670,19 +1705,16 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
     response_type: Optional[Type[TModel]] = None,
 ) -&gt; Optional[TModel]:
     &#34;&#34;&#34;调用 API。&#34;&#34;&#34;
-    info = self.Info
     logger.debug(f&#39;调用 API：{repr(self)}&#39;)
-    raw_response = await api_provider.call_api(
-        api=info.name,
-        method=method,
-        **self.dict(by_alias=True, exclude_none=True)
-    )
+    raw_response = await self._call(api_provider, method)
 
     # 如果 API 无法调用，raw_response 为空
     if not raw_response:
         return None
     # 解析 API 返回数据
-    response_type = cast(Type[TModel], response_type or info.response_type)
+    response_type = cast(
+        Type[TModel], response_type or self.Info.response_type
+    )
     return response_type.parse_obj(raw_response)</code></pre>
 </details>
 </dd>
@@ -1692,7 +1724,7 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
 <li><code><b><a title="mirai.models.api.ApiBaseModel" href="#mirai.models.api.ApiBaseModel">ApiBaseModel</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.api.ApiBaseModel.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiBaseModel.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiBaseModel.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1766,7 +1798,7 @@ await bot.group_config(12345678).set(config.modify(announcement='测试'))
 <li><code><a title="mirai.models.api.ApiModel.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiModel.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiModel.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiModel.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiModel.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1932,7 +1964,7 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
 <li><code><a title="mirai.models.api.ApiModel.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiModel.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiModel.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiModel.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiModel.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1972,7 +2004,7 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
 <li><code><a title="mirai.models.api.ApiGet.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiGet.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiGet.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2027,7 +2059,7 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2094,7 +2126,7 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2143,7 +2175,7 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2269,7 +2301,7 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2336,7 +2368,7 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
 <li><code><a title="mirai.models.api.ApiGet.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiGet.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiGet.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2447,7 +2479,7 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
 <li><code><a title="mirai.models.api.ApiGet.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiGet.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiGet.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2588,7 +2620,7 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2693,7 +2725,7 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2724,6 +2756,8 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
     &#34;&#34;&#34;是否是文件。&#34;&#34;&#34;
     is_directory: bool
     &#34;&#34;&#34;是否是文件夹。&#34;&#34;&#34;
+    size: Optional[int] = None
+    &#34;&#34;&#34;文件大小。&#34;&#34;&#34;
     download_info: Optional[DownloadInfo] = None
     &#34;&#34;&#34;文件的下载信息。&#34;&#34;&#34;</code></pre>
 </details>
@@ -2766,6 +2800,10 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
 <dt id="mirai.models.api.FileProperties.path"><code class="name">var <span class="ident">path</span> : str</code></dt>
 <dd>
 <div class="desc"><p>所在目录路径。</p></div>
+</dd>
+<dt id="mirai.models.api.FileProperties.size"><code class="name">var <span class="ident">size</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"><p>文件大小。</p></div>
 </dd>
 </dl>
 </dd>
@@ -2831,7 +2869,7 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2856,11 +2894,10 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
     &#34;&#34;&#34;上传的文件的本地路径。&#34;&#34;&#34;
     path: str = &#39;&#39;
     &#34;&#34;&#34;上传目录的 id，空串为上传到根目录。&#34;&#34;&#34;
-    async def call(
+    async def _call(
         self,
         api_provider: ApiProvider,
         method: Method = Method.GET,
-        response_type: Optional[Type[TModel]] = None,
     ):
         import aiofiles
         async with aiofiles.open(self.file, &#39;rb&#39;) as f:
@@ -2879,7 +2916,7 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
     class Info(ApiPost.Info):
         name = &#34;file/upload&#34;
         alias = &#34;file_upload&#34;
-        response_type = FileProperties</code></pre>
+        response_type = MiraiBaseModel  # TODO</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -2918,7 +2955,7 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2958,7 +2995,7 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
 <li><code><a title="mirai.models.api.ApiGet.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiGet.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiGet.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -3041,14 +3078,20 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
 <li>pydantic.main.BaseModel</li>
 <li>pydantic.utils.Representation</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.api.FriendMessage.sender"><code class="name">var <span class="ident">sender</span> : <a title="mirai.models.entities.Friend" href="entities.html#mirai.models.entities.Friend">Friend</a></code></dt>
+<dd>
+<div class="desc"><p>发送消息的好友。</p></div>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="mirai.models.events.MessageEvent" href="events.html#mirai.models.events.MessageEvent">MessageEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.message_chain" href="events.html#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
-<li><code><a title="mirai.models.events.MessageEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
-<li><code><a title="mirai.models.events.MessageEvent.sender" href="events.html#mirai.models.events.MessageEvent.sender">sender</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.type" href="events.html#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -3098,7 +3141,7 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
 <li><code><a title="mirai.models.api.ApiGet.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiGet.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiGet.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -3154,7 +3197,7 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
 <li><code><a title="mirai.models.api.ApiRest.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiRest.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiRest.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiRest.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiRest.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -3262,7 +3305,7 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
 <li><code><a title="mirai.models.api.ApiGet.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiGet.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiGet.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -3435,6 +3478,13 @@ async def call_api(self, api: str, method: Method = Method.GET, **params):
 <li>pydantic.main.BaseModel</li>
 <li>pydantic.utils.Representation</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.api.GroupMessage.sender"><code class="name">var <span class="ident">sender</span> : <a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"><p>发送消息的群成员。</p></div>
+</dd>
+</dl>
 <h3>Instance variables</h3>
 <dl>
 <dt id="mirai.models.api.GroupMessage.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
@@ -3456,8 +3506,7 @@ def group(self) -&gt; Group:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.message_chain" href="events.html#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
-<li><code><a title="mirai.models.events.MessageEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
-<li><code><a title="mirai.models.events.MessageEvent.sender" href="events.html#mirai.models.events.MessageEvent.sender">sender</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.type" href="events.html#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -3519,7 +3568,7 @@ def group(self) -&gt; Group:
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -3580,7 +3629,7 @@ def group(self) -&gt; Group:
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -3642,7 +3691,7 @@ def group(self) -&gt; Group:
 <li><code><a title="mirai.models.api.ApiRest.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiRest.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiRest.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiRest.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiRest.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -3740,7 +3789,7 @@ def group(self) -&gt; Group:
 <li><code><a title="mirai.models.api.ApiGet.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiGet.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiGet.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -3830,7 +3879,7 @@ def group(self) -&gt; Group:
 <li><code><a title="mirai.models.api.ApiGet.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiGet.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiGet.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -3879,7 +3928,7 @@ def group(self) -&gt; Group:
 <li><code><a title="mirai.models.api.ApiGet.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiGet.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiGet.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -4014,7 +4063,7 @@ def group(self) -&gt; Group:
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -4063,7 +4112,7 @@ def group(self) -&gt; Group:
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -4111,14 +4160,20 @@ def group(self) -&gt; Group:
 <li>pydantic.main.BaseModel</li>
 <li>pydantic.utils.Representation</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.api.OtherClientMessage.sender"><code class="name">var <span class="ident">sender</span> : mirai.models.entities.Client</code></dt>
+<dd>
+<div class="desc"><p>发送消息的人。</p></div>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="mirai.models.events.MessageEvent" href="events.html#mirai.models.events.MessageEvent">MessageEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.message_chain" href="events.html#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
-<li><code><a title="mirai.models.events.MessageEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
-<li><code><a title="mirai.models.events.MessageEvent.sender" href="events.html#mirai.models.events.MessageEvent.sender">sender</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.type" href="events.html#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -4227,7 +4282,7 @@ def group(self) -&gt; Group:
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -4276,7 +4331,7 @@ def group(self) -&gt; Group:
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -4348,7 +4403,7 @@ def group(self) -&gt; Group:
 <li><code><b><a title="mirai.models.events.Event" href="events.html#mirai.models.events.Event">Event</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.Event.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.events.Event.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.events.Event.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.Event.type" href="events.html#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -4410,7 +4465,7 @@ def group(self) -&gt; Group:
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 <li><code><b><a title="mirai.models.api.RespEvent" href="#mirai.models.api.RespEvent">RespEvent</a></b></code>:
@@ -4534,7 +4589,7 @@ def from_event(
 <li><code><b><a title="mirai.models.api.ApiBaseModel" href="#mirai.models.api.ApiBaseModel">ApiBaseModel</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.api.ApiBaseModel.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiBaseModel.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiBaseModel.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -4601,7 +4656,7 @@ def from_event(
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 <li><code><b><a title="mirai.models.api.RespEvent" href="#mirai.models.api.RespEvent">RespEvent</a></b></code>:
@@ -4678,7 +4733,7 @@ def from_event(
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 <li><code><b><a title="mirai.models.api.RespEvent" href="#mirai.models.api.RespEvent">RespEvent</a></b></code>:
@@ -4872,7 +4927,7 @@ def from_event(
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -4934,7 +4989,7 @@ def from_event(
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -4978,7 +5033,7 @@ def from_event(
 <li><code><b><a title="mirai.models.api.ApiBaseModel" href="#mirai.models.api.ApiBaseModel">ApiBaseModel</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.api.ApiBaseModel.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiBaseModel.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiBaseModel.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -5039,7 +5094,7 @@ def from_event(
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -5107,7 +5162,7 @@ def from_event(
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -5147,7 +5202,7 @@ def from_event(
 <li><code><a title="mirai.models.api.ApiGet.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiGet.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiGet.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiGet.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -5280,7 +5335,7 @@ def qq(self):
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -5368,14 +5423,20 @@ def qq(self):
 <li>pydantic.main.BaseModel</li>
 <li>pydantic.utils.Representation</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.api.StrangerMessage.sender"><code class="name">var <span class="ident">sender</span> : <a title="mirai.models.entities.Friend" href="entities.html#mirai.models.entities.Friend">Friend</a></code></dt>
+<dd>
+<div class="desc"><p>发送消息的人。</p></div>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="mirai.models.events.MessageEvent" href="events.html#mirai.models.events.MessageEvent">MessageEvent</a></b></code>:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.message_chain" href="events.html#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
-<li><code><a title="mirai.models.events.MessageEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
-<li><code><a title="mirai.models.events.MessageEvent.sender" href="events.html#mirai.models.events.MessageEvent.sender">sender</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.type" href="events.html#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -5427,6 +5488,13 @@ def qq(self):
 <li>pydantic.main.BaseModel</li>
 <li>pydantic.utils.Representation</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.api.TempMessage.sender"><code class="name">var <span class="ident">sender</span> : <a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a></code></dt>
+<dd>
+<div class="desc"><p>发送消息的群成员。</p></div>
+</dd>
+</dl>
 <h3>Instance variables</h3>
 <dl>
 <dt id="mirai.models.api.TempMessage.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
@@ -5448,8 +5516,7 @@ def group(self) -&gt; Group:
 <ul class="hlist">
 <li><code><a title="mirai.models.events.MessageEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.message_chain" href="events.html#mirai.models.events.MessageEvent.message_chain">message_chain</a></code></li>
-<li><code><a title="mirai.models.events.MessageEvent.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
-<li><code><a title="mirai.models.events.MessageEvent.sender" href="events.html#mirai.models.events.MessageEvent.sender">sender</a></code></li>
+<li><code><a title="mirai.models.events.MessageEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.events.MessageEvent.type" href="events.html#mirai.models.events.Event.type">type</a></code></li>
 </ul>
 </li>
@@ -5505,7 +5572,7 @@ def group(self) -&gt; Group:
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -5554,7 +5621,7 @@ def group(self) -&gt; Group:
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -5575,11 +5642,10 @@ def group(self) -&gt; Group:
     &#34;&#34;&#34;上传的图片类型。&#34;&#34;&#34;
     img: Union[str, Path]
     &#34;&#34;&#34;上传的图片的本地路径。&#34;&#34;&#34;
-    async def call(
+    async def _call(
         self,
         api_provider: ApiProvider,
         method: Method = Method.GET,
-        response_type: Optional[Type[TModel]] = None,
     ):
         import aiofiles
         async with aiofiles.open(self.img, &#39;rb&#39;) as f:
@@ -5625,7 +5691,7 @@ def group(self) -&gt; Group:
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -5646,11 +5712,10 @@ def group(self) -&gt; Group:
     &#34;&#34;&#34;上传的语音类型。&#34;&#34;&#34;
     voice: Union[str, Path]
     &#34;&#34;&#34;上传的语音的本地路径。&#34;&#34;&#34;
-    async def call(
+    async def _call(
         self,
         api_provider: ApiProvider,
         method: Method = Method.GET,
-        response_type: Optional[Type[TModel]] = None,
     ):
         import aiofiles
         async with aiofiles.open(self.voice, &#39;rb&#39;) as f:
@@ -5696,7 +5761,56 @@ def group(self) -&gt; Group:
 <li><code><a title="mirai.models.api.ApiPost.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
 <li><code><a title="mirai.models.api.ApiPost.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
-<li><code><a title="mirai.models.api.ApiPost.parse_obj" href="base.html#mirai.models.base.MiraiIndexedModel.parse_obj">parse_obj</a></code></li>
+<li><code><a title="mirai.models.api.ApiPost.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="mirai.models.api.UserProfile"><code class="flex name class">
+<span>class <span class="ident">UserProfile</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>获取用户资料。</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class UserProfile(ApiGet):
+    &#34;&#34;&#34;获取用户资料。&#34;&#34;&#34;
+    target: int
+    &#34;&#34;&#34;指定用户的 QQ 号。&#34;&#34;&#34;
+    class Info(ApiGet.Info):
+        name = &#34;userProfile&#34;
+        alias = &#34;user_profile&#34;
+        response_type = ProfileResponse</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.api.ApiGet" href="#mirai.models.api.ApiGet">ApiGet</a></li>
+<li><a title="mirai.models.api.ApiModel" href="#mirai.models.api.ApiModel">ApiModel</a></li>
+<li><a title="mirai.models.api.ApiBaseModel" href="#mirai.models.api.ApiBaseModel">ApiBaseModel</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.api.UserProfile.target"><code class="name">var <span class="ident">target</span> : int</code></dt>
+<dd>
+<div class="desc"><p>指定用户的 QQ 号。</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.api.ApiGet" href="#mirai.models.api.ApiGet">ApiGet</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.api.ApiGet.Info" href="#mirai.models.api.ApiModel.Info">Info</a></code></li>
+<li><code><a title="mirai.models.api.ApiGet.Proxy" href="#mirai.models.api.ApiModel.Proxy">Proxy</a></code></li>
+<li><code><a title="mirai.models.api.ApiGet.call" href="#mirai.models.api.ApiModel.call">call</a></code></li>
+<li><code><a title="mirai.models.api.ApiGet.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.api.ApiGet.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 </ul>
 </li>
 </ul>
@@ -5859,6 +5973,7 @@ def group(self) -&gt; Group:
 <li><code><a title="mirai.models.api.FileProperties.name" href="#mirai.models.api.FileProperties.name">name</a></code></li>
 <li><code><a title="mirai.models.api.FileProperties.parent" href="#mirai.models.api.FileProperties.parent">parent</a></code></li>
 <li><code><a title="mirai.models.api.FileProperties.path" href="#mirai.models.api.FileProperties.path">path</a></code></li>
+<li><code><a title="mirai.models.api.FileProperties.size" href="#mirai.models.api.FileProperties.size">size</a></code></li>
 </ul>
 </li>
 <li>
@@ -5887,6 +6002,9 @@ def group(self) -&gt; Group:
 </li>
 <li>
 <h4><code><a title="mirai.models.api.FriendMessage" href="#mirai.models.api.FriendMessage">FriendMessage</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.api.FriendMessage.sender" href="#mirai.models.api.FriendMessage.sender">sender</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="mirai.models.api.FriendProfile" href="#mirai.models.api.FriendProfile">FriendProfile</a></code></h4>
@@ -5934,6 +6052,7 @@ def group(self) -&gt; Group:
 <h4><code><a title="mirai.models.api.GroupMessage" href="#mirai.models.api.GroupMessage">GroupMessage</a></code></h4>
 <ul class="">
 <li><code><a title="mirai.models.api.GroupMessage.group" href="#mirai.models.api.GroupMessage.group">group</a></code></li>
+<li><code><a title="mirai.models.api.GroupMessage.sender" href="#mirai.models.api.GroupMessage.sender">sender</a></code></li>
 </ul>
 </li>
 <li>
@@ -6010,6 +6129,9 @@ def group(self) -&gt; Group:
 </li>
 <li>
 <h4><code><a title="mirai.models.api.OtherClientMessage" href="#mirai.models.api.OtherClientMessage">OtherClientMessage</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.api.OtherClientMessage.sender" href="#mirai.models.api.OtherClientMessage.sender">sender</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="mirai.models.api.ProfileResponse" href="#mirai.models.api.ProfileResponse">ProfileResponse</a></code></h4>
@@ -6142,11 +6264,15 @@ def group(self) -&gt; Group:
 </li>
 <li>
 <h4><code><a title="mirai.models.api.StrangerMessage" href="#mirai.models.api.StrangerMessage">StrangerMessage</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.api.StrangerMessage.sender" href="#mirai.models.api.StrangerMessage.sender">sender</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="mirai.models.api.TempMessage" href="#mirai.models.api.TempMessage">TempMessage</a></code></h4>
 <ul class="">
 <li><code><a title="mirai.models.api.TempMessage.group" href="#mirai.models.api.TempMessage.group">group</a></code></li>
+<li><code><a title="mirai.models.api.TempMessage.sender" href="#mirai.models.api.TempMessage.sender">sender</a></code></li>
 </ul>
 </li>
 <li>
@@ -6174,6 +6300,12 @@ def group(self) -&gt; Group:
 <ul class="">
 <li><code><a title="mirai.models.api.UploadVoice.type" href="#mirai.models.api.UploadVoice.type">type</a></code></li>
 <li><code><a title="mirai.models.api.UploadVoice.voice" href="#mirai.models.api.UploadVoice.voice">voice</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.api.UserProfile" href="#mirai.models.api.UserProfile">UserProfile</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.api.UserProfile.target" href="#mirai.models.api.UserProfile.target">target</a></code></li>
 </ul>
 </li>
 </ul>
