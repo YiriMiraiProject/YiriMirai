@@ -8,13 +8,15 @@ import re
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import (Iterable, List, Optional, Tuple, Type, TypeVar, Union,
-                    cast, overload)
+from typing import (
+    Iterable, List, Optional, Tuple, Type, TypeVar, Union, cast, overload
+)
 
 from pydantic import HttpUrl, validator
 
-from mirai.models.base import (MiraiBaseModel, MiraiIndexedMetaclass,
-                               MiraiIndexedModel)
+from mirai.models.base import (
+    MiraiBaseModel, MiraiIndexedMetaclass, MiraiIndexedModel
+)
 from mirai.models.entities import Friend, GroupMember
 from mirai.utils import kmp
 
@@ -772,6 +774,7 @@ class Face(MessageComponent):
     def as_mirai_code(self):
         return f"[mirai:face:{self.face_id}]"
 
+
 class MarketFace(MessageComponent):
     """商店表情（目前只支持接收）。"""
     type: str = "MarketFace"
@@ -780,6 +783,7 @@ class MarketFace(MessageComponent):
     """商店表情编号。"""
     name: str
     """商店表情名称。"""
+
 
 class Image(MessageComponent):
     """图片。"""

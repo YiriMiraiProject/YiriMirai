@@ -10,8 +10,9 @@ from typing import Optional, cast
 import httpx
 
 from mirai import exceptions
-from mirai.adapters.base import (Adapter, AdapterInterface,
-                                 error_handler_async, json_dumps)
+from mirai.adapters.base import (
+    Adapter, AdapterInterface, error_handler_async, json_dumps
+)
 from mirai.api_provider import Method
 from mirai.tasks import Tasks
 

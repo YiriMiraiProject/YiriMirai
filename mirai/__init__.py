@@ -12,22 +12,26 @@ import logging
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mirai.adapters import (Adapter, ComposeAdapter, HTTPAdapter,
-                                WebHookAdapter, WebSocketAdapter)
+    from mirai.adapters import (
+        Adapter, ComposeAdapter, HTTPAdapter, WebHookAdapter, WebSocketAdapter
+    )
 else:
     from mirai.adapters import Adapter
 
 from mirai.api_provider import Method
-from mirai.bot import (LifeSpan, Mirai, MiraiRunner, Shutdown, SimpleMirai,
-                       Startup)
+from mirai.bot import (
+    LifeSpan, Mirai, MiraiRunner, Shutdown, SimpleMirai, Startup
+)
 from mirai.bus import EventBus
 from mirai.colorlog import ColoredFormatter
-from mirai.exceptions import (ApiError, NetworkError, SkipExecution,
-                              StopExecution, StopPropagation)
-from mirai.models import (At, AtAll, Dice, Event, Face, FriendMessage,
-                          GroupMessage, Image, MessageChain, MessageEvent,
-                          Plain, Poke, PokeNames, StrangerMessage, TempMessage,
-                          Voice, deserialize, serialize)
+from mirai.exceptions import (
+    ApiError, NetworkError, SkipExecution, StopExecution, StopPropagation
+)
+from mirai.models import (
+    At, AtAll, Dice, Event, Face, FriendMessage, GroupMessage, Image,
+    MessageChain, MessageEvent, Plain, Poke, PokeNames, StrangerMessage,
+    TempMessage, Voice, deserialize, serialize
+)
 
 __all__ = [
     'Mirai', 'SimpleMirai', 'MiraiRunner', 'LifeSpan', 'Startup', 'Shutdown',

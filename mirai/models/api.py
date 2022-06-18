@@ -6,8 +6,10 @@ import logging
 from datetime import datetime
 from enum import Enum, Flag
 from pathlib import Path
-from typing import (TYPE_CHECKING, Any, Generic, Iterable, List, Optional,
-                    Type, TypeVar, Union, cast)
+from typing import (
+    TYPE_CHECKING, Any, Generic, Iterable, List, Optional, Type, TypeVar,
+    Union, cast
+)
 
 from mirai.exceptions import ApiParametersError
 
@@ -22,15 +24,19 @@ else:
 from pydantic import ValidationError, validator
 
 from mirai.api_provider import ApiProvider, Method
-from mirai.models.base import (MiraiBaseModel, MiraiIndexedMetaclass,
-                               MiraiIndexedModel)
-from mirai.models.entities import (Friend, Group, GroupConfigModel,
-                                   GroupMember, MemberInfoModel)
-from mirai.models.events import (FriendMessage, GroupMessage,
-                                 OtherClientMessage, RequestEvent,
-                                 StrangerMessage, TempMessage)
-from mirai.models.message import (Image, MessageChain, MessageComponent,
-                                  TMessage, Voice)
+from mirai.models.base import (
+    MiraiBaseModel, MiraiIndexedMetaclass, MiraiIndexedModel
+)
+from mirai.models.entities import (
+    Friend, Group, GroupConfigModel, GroupMember, MemberInfoModel
+)
+from mirai.models.events import (
+    FriendMessage, GroupMessage, OtherClientMessage, RequestEvent,
+    StrangerMessage, TempMessage
+)
+from mirai.models.message import (
+    Image, MessageChain, MessageComponent, TMessage, Voice
+)
 from mirai.utils import async_
 
 logger = logging.getLogger(__name__)
@@ -563,6 +569,7 @@ class MemberProfile(ApiGet):
         name = "memberProfile"
         alias = "member_profile"
         response_type = ProfileResponse
+
 
 class UserProfile(ApiGet):
     """获取用户资料。"""

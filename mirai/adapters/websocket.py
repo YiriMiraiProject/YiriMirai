@@ -13,12 +13,14 @@ from itertools import repeat
 from typing import Dict, Optional, cast
 
 from websockets.client import WebSocketClientProtocol, connect
-from websockets.exceptions import (ConnectionClosed, ConnectionClosedOK,
-                                   InvalidURI)
+from websockets.exceptions import (
+    ConnectionClosed, ConnectionClosedOK, InvalidURI
+)
 
 from mirai import exceptions
-from mirai.adapters.base import (Adapter, AdapterInterface,
-                                 error_handler_async, json_dumps)
+from mirai.adapters.base import (
+    Adapter, AdapterInterface, error_handler_async, json_dumps
+)
 from mirai.api_provider import Method
 from mirai.tasks import Tasks
 

@@ -4,8 +4,9 @@ import asyncio
 import functools
 import logging
 from inspect import iscoroutinefunction
-from typing import (Awaitable, Callable, Dict, List, Literal, Optional, Tuple,
-                    Union, cast)
+from typing import (
+    Awaitable, Callable, Dict, List, Literal, Optional, Tuple, Union, cast
+)
 
 from starlette.applications import Starlette
 from starlette.requests import Request
