@@ -1206,3 +1206,25 @@ class Mirai(SimpleMirai):
             type (`Literal['group','friend','temp']`): 上传的语音类型。
             voice (`Union[str,Path]`): 上传的语音的本地路径。
         """
+
+    # UserProfile
+
+    @type_check_only
+    class __UserProfileProxy():
+        async def get(self, target: int) -> ProfileResponse:
+            """获取用户资料。
+            Args:
+                target (`int`): 指定用户的 QQ 号。
+            """
+        async def __call__(self, target: int) -> ProfileResponse:
+            """获取用户资料。
+            Args:
+                target (`int`): 指定用户的 QQ 号。
+            """
+
+    @property
+    def user_profile(self) -> __UserProfileProxy:
+       """获取用户资料。
+        Args:
+            target (`int`): 指定用户的 QQ 号。
+        """

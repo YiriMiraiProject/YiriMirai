@@ -564,6 +564,15 @@ class MemberProfile(ApiGet):
         alias = "member_profile"
         response_type = ProfileResponse
 
+class UserProfile(ApiGet):
+    """获取用户资料。"""
+    target: int
+    """指定用户的 QQ 号。"""
+    class Info(ApiGet.Info):
+        name = "userProfile"
+        alias = "user_profile"
+        response_type = ProfileResponse
+
 
 class SendMessage(ApiBaseModel):
     """发送消息的 API 的方法复用，不作为 API 使用。"""
@@ -1209,4 +1218,5 @@ __all__ = [
     'UnmuteAll',
     'UploadImage',
     'UploadVoice',
+    'UserProfile',
 ]
