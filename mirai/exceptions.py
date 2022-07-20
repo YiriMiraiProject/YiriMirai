@@ -8,8 +8,6 @@ from typing import Type, cast
 
 from pydantic import ValidationError
 
-from mirai.models.api import ApiModel
-
 
 class NetworkError(RuntimeError):
     """网络连接出错。"""
@@ -65,6 +63,7 @@ class ApiParametersError(TypeError):
         Args:
             err(`str`): pydantic 的解析错误。
         """
+        from mirai.models.api import ApiModel
         self._err = err
         model = cast(Type[ApiModel], err.model)
         try:
