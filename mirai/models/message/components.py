@@ -3,7 +3,7 @@ import logging
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import List, Optional, Union, cast
 
 from pydantic import HttpUrl, validator
 
@@ -55,11 +55,12 @@ class Face(MessageComponent):
     def __init__(self, *args, **kwargs):
         if len(args) == 1:
             if isinstance(args[0], str):
-                self.name = args[0]
+                kwargs['name'] = args[0]
             elif isinstance(args[0], int):
-                self.face_id = args[0]
+                kwargs['faceId'] = args[0]
             super().__init__(**kwargs)
-        super().__init__(*args, **kwargs)
+        else:
+            super().__init__(*args, **kwargs)
 
     def __eq__(self, other):
         return isinstance(other, Face) and \
@@ -194,7 +195,7 @@ class Image(MessageComponent):
         else:
             raise ValueError("请指定图片路径或图片内容！")
         import base64
-        img = cls(base64=base64.b64encode(content).decode())
+        img = cls(base64=base64.b64encode(cast(bytes, content)).decode())
         return img
 
     @classmethod
@@ -462,7 +463,7 @@ class Voice(MessageComponent):
         else:
             raise ValueError("请指定语音路径或语音内容！")
         import base64
-        img = cls(base64=base64.b64encode(content).decode())
+        img = cls(base64=base64.b64encode(cast(bytes, content)).decode())
         return img
 
 
