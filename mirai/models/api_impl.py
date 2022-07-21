@@ -16,17 +16,21 @@ else:
 
 from pydantic import Field, validator
 
-from mirai.models.api import (ApiBaseModel, ApiGet, ApiPost, ApiResponse,
-                              ApiRest)
+from mirai.models.api import (
+    ApiBaseModel, ApiGet, ApiPost, ApiResponse, ApiRest
+)
 from mirai.models.base import MiraiBaseModel
-from mirai.models.entities import (FileProperties, Friend, Group,
-                                   GroupConfigModel, GroupMember,
-                                   MemberInfoModel, Profile, RespOperate)
-from mirai.models.events import (FriendMessage, GroupMessage,
-                                 OtherClientMessage, RequestEvent,
-                                 StrangerMessage, TempMessage)
-from mirai.models.message import (Image, MessageChain, MessageComponent,
-                                  TMessage, Voice)
+from mirai.models.entities import (
+    FileProperties, Friend, Group, GroupConfigModel, GroupMember,
+    MemberInfoModel, Profile, RespOperate
+)
+from mirai.models.events import (
+    FriendMessage, GroupMessage, OtherClientMessage, RequestEvent,
+    StrangerMessage, TempMessage
+)
+from mirai.models.message import (
+    Image, MessageChain, MessageComponent, TMessage, Voice
+)
 
 
 class About(ApiGet):
@@ -46,7 +50,7 @@ class SessionInfo(ApiGet):
         alias = "session_info"
 
     class Response(ApiResponse):
-        data: 'SessionInfo.Response.Data'
+        data: 'SessionInfo.Response.Data'  # type: ignore
 
         class Data(MiraiBaseModel):
             session_key: str = 'SINGLE_SESSION'
@@ -163,7 +167,8 @@ class _SendMessage(ApiBaseModel):
 
     @validator('message_chain', check_fields=False)
     def _validate_message_chain(cls, value: Union[MessageChain, list]):
-        return MessageChain.parse_obj(value) if isinstance(value, list) else value
+        return MessageChain.parse_obj(value
+                                      ) if isinstance(value, list) else value
 
 
 class SendFriendMessage(ApiPost, _SendMessage):
@@ -709,7 +714,8 @@ class CmdExecute(ApiPost):
     """命令。"""
     @validator('command')
     def _validate_command(cls, value):
-        return MessageChain.parse_obj(value) if isinstance(value, list) else value
+        return MessageChain.parse_obj(value
+                                      ) if isinstance(value, list) else value
 
     class Info(ApiPost.Info):
         name = "cmd/execute"
