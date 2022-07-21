@@ -15,17 +15,19 @@ else:
         from typing_extensions import Literal
 
 from mirai.models.base import MiraiIndexedMetaclass, MiraiIndexedModel
-from mirai.models.entities import (Client, Entity, Friend, Group, GroupMember,
-                                   Permission, Subject)
+from mirai.models.entities import (
+    Client, Entity, Friend, Group, GroupMember, Permission, Subject
+)
 from mirai.models.message import MessageChain
 
 TEventClass = TypeVar("TEventClass", bound='EventMetaclass')
 
 
 class EventMetaclass(MiraiIndexedMetaclass):
+
     def get_subtype(cls: TEventClass, name: str) -> TEventClass:
         try:
-            return super().get_subtype(name)
+            return cast(TEventClass, super().get_subtype(name))
         except ValueError:
             return cast(TEventClass, Event)
 
@@ -38,6 +40,7 @@ class Event(MiraiIndexedModel, metaclass=EventMetaclass):
     """
     type: str
     """事件名。"""
+
     def __repr_args__(self):
         return [(k, v) for k, v in self.__dict__.items() if k != 'type' and v]
 
@@ -197,6 +200,7 @@ class GroupEvent(Event):
 
     type: str
     """事件名。"""
+
     def __getattr__(self, name) -> Union[Group, Any]:
         if name == 'group':
             member = getattr(self, 'operator',
@@ -879,10 +883,13 @@ class MessageEvent(Event):
 
     Args:
         type: 事件名。
+        sender: 发送者。
         message_chain: 消息内容。
     """
     type: str
     """事件名。"""
+    sender: Entity
+    """发送者。"""
     message_chain: MessageChain
     """消息内容。"""
 
@@ -917,6 +924,7 @@ class GroupMessage(MessageEvent):
     """发送消息的群成员。"""
     message_chain: MessageChain
     """消息内容。"""
+
     @property
     def group(self) -> Group:
         return self.sender.group
@@ -936,6 +944,7 @@ class TempMessage(MessageEvent):
     """发送消息的群成员。"""
     message_chain: MessageChain
     """消息内容。"""
+
     @property
     def group(self) -> Group:
         return self.sender.group
@@ -957,7 +966,23 @@ class StrangerMessage(MessageEvent):
     """消息内容。"""
 
 
-class FriendSyncMessage(MessageEvent):
+class SyncMessageEvent(Event):
+    """其他客户端发送的消息事件。
+
+    Args:
+        type: 事件名。
+        subject: 发送消息的目标。
+        message_chain: 消息内容。
+    """
+    type: str
+    """事件名。"""
+    subject: Entity
+    """发送消息的目标。"""
+    message_chain: MessageChain
+    """消息内容。"""
+
+
+class FriendSyncMessage(SyncMessageEvent):
     """其他客户端发送的好友消息。
 
     Args:
@@ -973,7 +998,7 @@ class FriendSyncMessage(MessageEvent):
     """消息内容。"""
 
 
-class GroupSyncMessage(MessageEvent):
+class GroupSyncMessage(SyncMessageEvent):
     """其他客户端发送的群消息。
 
     Args:
@@ -987,12 +1012,13 @@ class GroupSyncMessage(MessageEvent):
     """发送消息的目标群组。"""
     message_chain: MessageChain
     """消息内容。"""
+
     @property
     def group(self) -> Group:
         return self.subject
 
 
-class TempSyncMessage(MessageEvent):
+class TempSyncMessage(SyncMessageEvent):
     """其他客户端发送的群临时消息。
 
     Args:
@@ -1006,12 +1032,13 @@ class TempSyncMessage(MessageEvent):
     """发送消息的目标群成员。"""
     message_chain: MessageChain
     """消息内容。"""
+
     @property
     def group(self) -> Group:
         return self.subject.group
 
 
-class StrangerSyncMessage(MessageEvent):
+class StrangerSyncMessage(SyncMessageEvent):
     """其他客户端发送的陌生人消息。
 
     Args:
