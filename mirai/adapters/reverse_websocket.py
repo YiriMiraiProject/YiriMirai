@@ -9,6 +9,7 @@ from mirai.interface import ApiMethod
 class ReverseWebSocketAdapter(Adapter):
     """反向 WebSocket 适配器。作为 WebSocket 服务器与 mirai-api-http 沟通。
     """
+
     async def login(self, qq: int):
         raise NotImplementedError(
             "由于 mirai-api-http 的反向 WebSocket 尚不完善，该适配器尚未实现。"

@@ -6,8 +6,9 @@ import asyncio
 import contextlib
 import inspect
 import logging
-from typing import (Any, Awaitable, Callable, Dict, Iterable, List, Optional,
-                    Set, Union, cast)
+from typing import (
+    Any, Awaitable, Callable, Dict, Iterable, List, Optional, Set, Union, cast
+)
 
 from mirai.adapters.base import Adapter, AdapterInterface, Session
 from mirai.asgi import ASGI, asgi_serve
@@ -17,8 +18,9 @@ from mirai.interface import ApiMethod, EventInterface
 from mirai.models.api import ApiModel
 from mirai.models.api_impl import RespEvent
 from mirai.models.bus import ModelEventBus
-from mirai.models.entities import (Entity, Friend, Group, GroupMember,
-                                   Permission, RespOperate, Subject)
+from mirai.models.entities import (
+    Entity, Friend, Group, GroupMember, Permission, RespOperate, Subject
+)
 from mirai.models.events import Event, MessageEvent, RequestEvent, TempMessage
 from mirai.models.message import TMessage
 from mirai.utils import Singleton, Tasks, async_
@@ -49,6 +51,7 @@ class Mirai(AdapterInterface, EventInterface[object]):
     """事件总线。"""
     event_interface_bypass: Iterable[EventInterface[object]]
     """旁路事件接口。"""
+
     def __init__(
         self,
         qq: int,
@@ -120,6 +123,7 @@ class Mirai(AdapterInterface, EventInterface[object]):
             *event_types: 事件类或事件名。
             priority: 优先级，较小者优先。
         """
+
         def decorator(func: TEventHandler) -> TEventHandler:
             for event in event_types:
                 self.subscribe(event, func, priority)
@@ -324,7 +328,12 @@ class Mirai(AdapterInterface, EventInterface[object]):
         friend_list = await self.friend_list.get()
         if not friend_list:
             return None
-        return next((friend for friend in cast(List[Friend], friend_list) if friend.id == id_), None)
+        return next(
+            (
+                friend for friend in cast(List[Friend], friend_list)
+                if friend.id == id_
+            ), None
+        )
 
     async def get_group(self, id_: int) -> Optional[Group]:
         """获取群组对象。
@@ -339,7 +348,12 @@ class Mirai(AdapterInterface, EventInterface[object]):
         group_list = await self.group_list.get()
         if not group_list:
             return None
-        return next((group for group in cast(List[Group], group_list) if group.id == id_), None)
+        return next(
+            (
+                group
+                for group in cast(List[Group], group_list) if group.id == id_
+            ), None
+        )
 
     async def get_group_member(self, group: Union[Group, int],
                                id_: int) -> Optional[GroupMember]:
@@ -358,7 +372,12 @@ class Mirai(AdapterInterface, EventInterface[object]):
         member_list = await self.member_list.get(group)
         if not member_list:
             return None
-        return next((member for member in cast(List[GroupMember], member_list) if member.id == id_), None)
+        return next(
+            (
+                member for member in cast(List[GroupMember], member_list)
+                if member.id == id_
+            ), None
+        )
 
     async def get_entity(self, subject: Subject) -> Optional[Entity]:
         """获取实体对象。
@@ -458,6 +477,7 @@ class MiraiRunner(Singleton):
     """
     bots: Iterable[Mirai]
     """运行的 SimpleMirai 对象。"""
+
     def __init__(self, *bots: Mirai):
         """
         Args:

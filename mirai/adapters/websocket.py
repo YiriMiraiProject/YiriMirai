@@ -11,11 +11,13 @@ import time
 from typing import Dict, Optional
 
 from websockets.client import WebSocketClientProtocol, connect
-from websockets.exceptions import (ConnectionClosed, ConnectionClosedOK,
-                                   InvalidURI)
+from websockets.exceptions import (
+    ConnectionClosed, ConnectionClosedOK, InvalidURI
+)
 
-from mirai.adapters.base import (Adapter, AdapterInterface, Session,
-                                 error_handler_async, json_dumps)
+from mirai.adapters.base import (
+    Adapter, AdapterInterface, Session, error_handler_async, json_dumps
+)
 from mirai.exceptions import ApiError, NetworkError
 from mirai.interface import ApiMethod
 from mirai.utils import Tasks
@@ -35,6 +37,7 @@ class WebSocketSession(Session):
     """mirai-api-http 的 session。"""
     connection: Optional[WebSocketClientProtocol]
     """WebSocket 客户端连接。"""
+
     def __init__(self, qq: int, adapter: 'WebSocketAdapter'):
         super().__init__(qq)
         self.adapter = adapter
@@ -177,6 +180,7 @@ class WebSocketAdapter(Adapter):
     """mirai-api-http 配置的同步 ID。"""
     heartbeat_interval: float
     """每隔多久发送心跳包，单位：秒。"""
+
     def __init__(
         self,
         verify_key: Optional[str],

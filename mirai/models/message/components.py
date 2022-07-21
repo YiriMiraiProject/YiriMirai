@@ -23,6 +23,7 @@ class At(MessageComponent):
     """群员 QQ 号。"""
     display: Optional[str] = None
     """At时显示的文字，发送消息时无效，自动使用群名片。"""
+
     def __eq__(self, other):
         return isinstance(other, At) and self.target == other.target
 
@@ -37,6 +38,7 @@ class AtAll(MessageComponent):
     """At全体。"""
     type: str = "AtAll"
     """消息组件类型。"""
+
     def __str__(self):
         return "@全体成员"
 
@@ -52,6 +54,7 @@ class Face(MessageComponent):
     """QQ 表情编号，可选，优先度高于 name。"""
     name: Optional[str] = None
     """QQ表情名称，可选。"""
+
     def __init__(self, *args, **kwargs):
         if len(args) == 1:
             if isinstance(args[0], str):
@@ -85,6 +88,7 @@ class Image(MessageComponent):
     """图片的路径，发送本地图片。"""
     base64: Optional[str] = None
     """图片的 Base64 编码。"""
+
     def __eq__(self, other):
         return isinstance(
             other, Image
@@ -233,6 +237,7 @@ class App(MessageComponent):
     """消息组件类型。"""
     content: str
     """内容。"""
+
     def as_json(self):
         from json import loads as json_loads
         return json_loads(self.content)
@@ -334,6 +339,7 @@ class Poke(MessageComponent):
     """消息组件类型。"""
     name: PokeNames
     """名称。"""
+
     @property
     def poke_type(self):
         return POKE_TYPE[self.name]
@@ -369,6 +375,7 @@ class FlashImage(Image):
     """图片的路径，发送本地图片，路径相对于 `plugins/MiraiAPIHTTP/images`。"""
     base64: Optional[str] = None
     """图片的 Base64 编码。"""
+
     def __str__(self):
         return '[闪照]'
 
@@ -393,6 +400,7 @@ class Voice(MessageComponent):
     """语音的 Base64 编码。"""
     length: Optional[int] = None
     """语音的长度，单位为秒。"""
+
     @validator('path')
     def validate_path(cls, path: Optional[str]):
         """修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。"""
@@ -473,6 +481,7 @@ class Dice(MessageComponent):
     """消息组件类型。"""
     value: int
     """点数。"""
+
     def __str__(self):
         return f'[骰子{self.value}]'
 
@@ -507,6 +516,7 @@ class MusicShare(MessageComponent):
     """音源路径。"""
     brief: str = ""
     """在消息列表中显示的内容。"""
+
     def __str__(self):
         return self.brief
 
@@ -523,6 +533,7 @@ class ForwardMessageNode(MiraiBaseModel):
     """消息的 message_id，可以只使用此属性，从缓存中读取消息内容。"""
     time: Optional[datetime] = None
     """发送时间。"""
+
     def __init__(
         self,
         sender_id: int,
@@ -570,6 +581,7 @@ class Forward(MessageComponent):
     """消息组件类型。"""
     node_list: List[ForwardMessageNode]
     """转发消息节点列表。"""
+
     def __init__(self, *args, **kwargs):
         if len(args) == 1 and isinstance(args[0], list):
             node_list = args[0]
@@ -591,6 +603,7 @@ class File(MessageComponent):
     """文件名称。"""
     size: int
     """文件大小。"""
+
     def __str__(self):
         return f'[文件]{self.name}'
 
@@ -601,6 +614,7 @@ class MiraiCode(MessageComponent):
     """消息组件类型。"""
     code: str
     """Mirai 码。"""
+
     def __str__(self):
         return serialize(self.code)
 

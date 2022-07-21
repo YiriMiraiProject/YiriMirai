@@ -25,6 +25,7 @@ class ASGI(Singleton):
 
     app: Starlette
     """内部的 Starlette 实例。"""
+
     def __init__(self):
         self.app = Starlette()
         self._routes: Dict[Tuple[str, str], List[Callable]] = {}

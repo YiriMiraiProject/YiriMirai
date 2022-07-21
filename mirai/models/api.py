@@ -10,8 +10,9 @@ from pydantic import ValidationError
 
 from mirai.exceptions import ApiParametersError
 from mirai.interface import ApiInterface, ApiMethod
-from mirai.models.base import (MiraiBaseModel, MiraiIndexedMetaclass,
-                               MiraiIndexedModel)
+from mirai.models.base import (
+    MiraiBaseModel, MiraiIndexedMetaclass, MiraiIndexedModel
+)
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +25,7 @@ class ApiResponse(MiraiBaseModel):
     """消息。"""
     data: Optional[Any] = None
     """返回数据。"""
+
     @classmethod
     def parse_obj(cls, obj: dict) -> 'ApiResponse':
         """将字典解析为对应的响应对象，对于无 code 和 msg 的响应，自动处理为 data 部分。
@@ -104,6 +106,7 @@ class ApiBaseModel(MiraiIndexedModel, metaclass=ApiMetaclass):
     直接继承此类，不会被 ApiMetaclass 索引，也不会引起 metaclass 冲突。
     用于实现 API 类型之间的方法复用。
     """
+
     @abc.abstractmethod
     async def call(
         self,
@@ -119,6 +122,7 @@ TModel = TypeVar('TModel', bound=MiraiBaseModel)
 
 class ApiModel(ApiBaseModel):
     """API 模型。"""
+
     class Info(ApiMetaclass.ApiInfo):
         """API 的信息。"""
         name = ""
@@ -207,6 +211,7 @@ class ApiModel(ApiBaseModel):
         的[文档](https://project-mirai.github.io/mirai-api-http/api/API.html)。
         除去`sessionKey`由适配器自动指定外，其余参数可按顺序传入。具名参数仍然可用，适当地使用具名参数可增强代码的可读性。
         """
+
         def __init__(
             self, api_provider: ApiInterface, api_type: Type['ApiModel']
         ):
@@ -249,7 +254,9 @@ class ApiModel(ApiBaseModel):
 
 
 class ApiGet(ApiModel):
+
     class Proxy(ApiModel.Proxy[TModel]):
+
         async def set(self, *args, **kwargs):
             """GET 方法的 API 不具有 `set`。
 
@@ -262,8 +269,10 @@ class ApiGet(ApiModel):
 
 
 class ApiPost(ApiModel):
+
     class Proxy(ApiModel.Proxy[TModel]):
         """POST 方法的 API 代理对象。"""
+
         async def get(self, *args, **kwargs):
             """POST 方法的 API 不具有 `get`。
 
@@ -279,6 +288,7 @@ TModel_ = TypeVar('TModel_', bound=MiraiBaseModel)
 
 
 class ApiRest(ApiModel):
+
     class Info(ApiModel.Info):
         """API 的信息。"""
         name = ""

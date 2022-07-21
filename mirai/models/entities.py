@@ -22,6 +22,7 @@ class Entity(MiraiBaseModel):
     """实体，表示一个用户或群。"""
     id: int
     """QQ 号或群号。"""
+
     @abc.abstractmethod
     def get_avatar_url(self) -> str:
         """头像图片链接。"""
@@ -42,6 +43,7 @@ class Friend(Entity):
     """昵称。"""
     remark: Optional[str]
     """备注。"""
+
     def get_avatar_url(self) -> str:
         return f'http://q4.qlogo.cn/g?b=qq&nk={self.id}&s=140'
 
@@ -57,6 +59,7 @@ class Permission(str, Enum):
     """管理员。"""
     Owner = "OWNER"
     """群主。"""
+
     def __repr__(self) -> str:
         return repr(self.value)
 
@@ -69,6 +72,7 @@ class Group(Entity):
     """群名称。"""
     permission: Permission
     """Bot 在群中的权限。"""
+
     def get_avatar_url(self) -> str:
         return f'https://p.qlogo.cn/gh/{self.id}/{self.id}/'
 
@@ -94,6 +98,7 @@ class GroupMember(Entity):
     """最后一次发言的时间。"""
     mute_time_remaining: int = 0
     """禁言剩余时间。"""
+
     def get_avatar_url(self) -> str:
         return f'http://q4.qlogo.cn/g?b=qq&nk={self.id}&s=140'
 
@@ -107,6 +112,7 @@ class Client(Entity):
     """识别 id。"""
     platform: str
     """来源平台。"""
+
     def get_avatar_url(self) -> str:
         raise NotImplementedError
 
@@ -212,6 +218,7 @@ class RespOperate(Flag):
 
 class Config(MiraiBaseModel):
     """配置项类型。"""
+
     def modify(self, **kwargs) -> 'Config':
         """修改部分设置。"""
         for k, v in kwargs.items():

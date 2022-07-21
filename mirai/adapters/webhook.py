@@ -18,17 +18,20 @@ logger = logging.getLogger(__name__)
 
 class YiriMiraiJSONResponse(JSONResponse):
     """调用自定义的 json_dumps 的 JSONResponse。"""
+
     def render(self, content) -> bytes:
         return json_dumps(content).encode('utf-8')
 
 
 class WebHookSession(Session):
+
     def __init__(self, qq: int, enable_quick_response: bool):
         super().__init__(qq)
         self.enable_quick_response = enable_quick_response
 
     class QuickResponse(BaseException):
         """WebHook 快速响应，以异常的方式跳出。"""
+
         def __init__(self, data: dict):
             self.data = data
 
@@ -80,6 +83,7 @@ class WebHookAdapter(Adapter):
     """额外请求头。"""
     enable_quick_response: bool
     """是否启用快速响应。"""
+
     def __init__(
         self,
         verify_key: Optional[str],

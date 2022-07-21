@@ -28,14 +28,20 @@ def json_dumps(obj: Any) -> str:
 
 def error_handler_async(errors: Tuple[Type[BaseException], ...]):
     """错误处理装饰器。"""
+
     def wrapper(func):
+
         async def wrapped(self, *args, **kwargs):
             try:
                 return await func(self, *args, **kwargs)
             except KeyError as e:
-                raise NetworkError('从 mirai-api-http 返回的数据格式错误。请检查版本是否正确。') from e
+                raise NetworkError(
+                    '从 mirai-api-http 返回的数据格式错误。请检查版本是否正确。'
+                ) from e
             except errors as e:
-                err = NetworkError('无法连接到 mirai。请检查 mirai-api-http 是否启动，地址与端口是否正确。')
+                err = NetworkError(
+                    '无法连接到 mirai。请检查 mirai-api-http 是否启动，地址与端口是否正确。'
+                )
                 logger.error(err)
                 raise err from e
             except Exception as e:
@@ -49,6 +55,7 @@ def error_handler_async(errors: Tuple[Type[BaseException], ...]):
 
 class AdapterInterface(abc.ABC):
     """适配器接口，包含适配器信息。"""
+
     @property
     @abc.abstractmethod
     def adapter_info(self) -> Dict[str, Any]:
@@ -56,7 +63,9 @@ class AdapterInterface(abc.ABC):
 
     @classmethod
     def __subclasshook__(cls, C: type):
-        if cls is AdapterInterface and any("adapter_info" in B.__dict__ for B in C.__mro__):
+        if cls is AdapterInterface and any(
+            "adapter_info" in B.__dict__ for B in C.__mro__
+        ):
             return True
         return NotImplemented
 
@@ -72,6 +81,7 @@ class Session(ApiInterface, EventInterface[TEventDict]):
     """注册的事件总线集合。"""
     background: Optional[asyncio.Task]
     """背景事件循环任务。"""
+
     def __init__(self, qq: int):
         self.qq = qq
         self.buses = set()
@@ -146,6 +156,7 @@ class Adapter(AdapterInterface):
     """是否开启 single_mode，开启后与 session 将无效。"""
     sessions: Dict[int, Session]
     """已登录的会话。"""
+
     def __init__(self, verify_key: Optional[str], single_mode: bool = False):
         """
         Args:

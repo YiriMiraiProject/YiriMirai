@@ -32,6 +32,7 @@ T = TypeVar('T')
 
 class PriorityDict(Generic[T]):
     """以优先级为键的字典。"""
+
     def __init__(self):
         self._data: Dict[int, Set[T]] = defaultdict(set)
         self._priorities = {}
@@ -69,6 +70,7 @@ class PriorityDict(Generic[T]):
 
 class SingletonMetaclass(type):
     """单例类元类。修改了单例类的 `__init__` 方法，使之只会被调用一次。"""
+
     def __new__(cls, name, bases, attrs, **kwargs):
         new_cls = super().__new__(cls, name, bases, attrs, **kwargs)
 
@@ -107,6 +109,7 @@ class Singleton(metaclass=SingletonMetaclass):
 
 class Tasks:
     """管理多个异步任务的类。"""
+
     def __init__(self):
         self._tasks: Set[asyncio.Task] = set()
 

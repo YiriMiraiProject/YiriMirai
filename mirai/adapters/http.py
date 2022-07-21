@@ -88,6 +88,7 @@ class HTTPSession(Session):
     """mirai-api-http 的 session。"""
     headers: httpx.Headers
     """HTTP 请求头。"""
+
     def __init__(self, qq: int, adapter: 'HTTPAdapter', session: str):
         super().__init__(qq)
         self.adapter = adapter
@@ -164,6 +165,7 @@ class HTTPAdapter(Adapter):
     """mirai-api-http 的 HTTPAdapter Server 主机名。"""
     poll_interval: float
     """轮询时间间隔，单位秒。"""
+
     def __init__(
         self,
         verify_key: Optional[str],

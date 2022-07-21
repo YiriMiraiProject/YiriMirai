@@ -6,11 +6,13 @@ import asyncio
 import functools
 import inspect
 import logging
-from typing import (Any, Awaitable, Callable, Coroutine, Dict, List, Optional,
-                    cast)
+from typing import (
+    Any, Awaitable, Callable, Coroutine, Dict, List, Optional, cast
+)
 
-from mirai.exceptions import (SkipExecution, StopExecution, StopPropagation,
-                              print_exception)
+from mirai.exceptions import (
+    SkipExecution, StopExecution, StopPropagation, print_exception
+)
 from mirai.interface import EventInterface
 from mirai.utils import PriorityDict, async_with_exception
 
@@ -27,6 +29,7 @@ class EventBus(EventInterface[object]):
 
     默认的事件总线可以处理以类包装的事件，并按照类的继承传播事件。
     """
+
     def __init__(self):
         """"""
         self._subscribers: Dict[type, PriorityDict[TEventHandler]] = {}
@@ -83,6 +86,7 @@ class EventBus(EventInterface[object]):
             *event_types: 事件类型。
             priority: 优先级，小者优先。
         """
+
         def decorator(func: TEventHandler) -> Callable:
             for event in event_types:
                 self.subscribe(event, func, priority)
@@ -93,7 +97,10 @@ class EventBus(EventInterface[object]):
     @functools.lru_cache()
     def _topological_sort(self, event_type: type) -> List[type]:
         """拓扑排序。"""
-        return [base_event for base_event in self._topological_order if issubclass(event_type, base_event)]
+        return [
+            base_event for base_event in self._topological_order
+            if issubclass(event_type, base_event)
+        ]
 
     async def _emit(self, event: object, safe: bool) -> List[Awaitable]:
         """触发一个事件。

@@ -33,6 +33,7 @@ class ComposeAdapter(Adapter):
     """提供 API 调用的适配器。"""
     event_channel: Adapter
     """提供事件处理的适配器。"""
+
     def __init__(self, api_channel: Adapter, event_channel: Adapter):
         """
         Args:

@@ -135,6 +135,7 @@ class MessageChain(MiraiBaseModel):
 
     消息链对这些操作进行了拓展。在传入元素的地方，一般都可以传入元素的类型。
     """
+
     class Source(MessageComponent):
         """源。包含消息的基本信息。"""
         type: str = "Source"
@@ -461,6 +462,7 @@ class MessageChain(MiraiBaseModel):
         Returns:
             MessageChain: 剩余的消息链。
         """
+
         def _exclude():
             nonlocal count
             x_is_type = isinstance(x, type)

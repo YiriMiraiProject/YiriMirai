@@ -23,6 +23,7 @@ class ApiMethod(str, Enum):
 
 class ApiInterface():
     """API 接口。由适配器提供，模型层通过接口调用底层API。"""
+
     @abc.abstractmethod
     async def call_api(
         self,
@@ -46,6 +47,7 @@ TEvent = TypeVar('TEvent', contravariant=True)
 
 class EventInterface(Generic[TEvent]):
     """事件接口，由模型层提供，适配器通过接口向上发送事件通知。"""
+
     @abc.abstractmethod
     async def emit(self, event: TEvent) -> Any:
         """触发一个事件。"""

@@ -22,6 +22,7 @@ class ModelEventBus(EventInterface[dict]):
     """
     base_bus: EventInterface[object]
     """模型事件总线基于的事件总线实现。"""
+
     def __init__(self, base_bus: EventInterface[object]):
         self.base_bus = base_bus
 

@@ -30,6 +30,7 @@ class MiraiBaseModel(BaseModel, metaclass=MiraiMetaclass):
     2. 允许通过别名访问字段。
     3. 自动生成小驼峰风格的别名，以符合 mirai-api-http 的命名。
     """
+
     def __init__(self, *args, **kwargs):
         """"""
         super().__init__(*args, **kwargs)
@@ -92,6 +93,7 @@ class MiraiIndexedMetaclass(MiraiMetaclass):
 
 class MiraiIndexedModel(MiraiBaseModel, metaclass=MiraiIndexedMetaclass):
     """可以通过子类名获取子类的类。"""
+
     @classmethod
     def parse_subtype(cls, obj: dict) -> 'MiraiIndexedModel':
         """通过字典，构造对应的模型对象。

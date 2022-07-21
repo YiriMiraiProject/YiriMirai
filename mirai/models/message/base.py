@@ -38,6 +38,7 @@ class MessageComponent(MiraiIndexedModel, metaclass=MessageComponentMetaclass):
     """消息组件。"""
     type: str
     """消息组件类型。"""
+
     def __str__(self) -> str:
         return ''
 
@@ -69,6 +70,7 @@ class Plain(MessageComponent):
     """消息组件类型。"""
     text: str
     """文字消息。"""
+
     def __str__(self):
         return self.text
 

@@ -31,6 +31,7 @@ API_ERROR_FMT = {
 
 class ApiError(RuntimeError):
     """调用 API 出错。"""
+
     def __init__(self, response: dict):
         """
         Args:
@@ -58,6 +59,7 @@ class SkipExecution(BaseException):
 
 class ApiParametersError(TypeError):
     """API 参数错误。"""
+
     def __init__(self, err: ValidationError):
         """
         Args:

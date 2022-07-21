@@ -35,6 +35,7 @@ from mirai.models.message import (
 
 class About(ApiGet):
     """获取插件信息。"""
+
     class Info(ApiGet.Info):
         name = "about"
         alias = "about"
@@ -45,6 +46,7 @@ class About(ApiGet):
 
 class SessionInfo(ApiGet):
     """获取机器人信息。"""
+
     class Info(ApiGet.Info):
         name = "sessionInfo"
         alias = "session_info"
@@ -74,6 +76,7 @@ class MessageFromId(ApiGet):
     """通过 message_id 获取消息。"""
     id: int
     """获取消息的 message_id。"""
+
     class Info(ApiGet.Info):
         name = "messageFromId"
         alias = "message_from_id"
@@ -86,6 +89,7 @@ class MessageFromId(ApiGet):
 
 class FriendList(ApiGet):
     """获取好友列表。"""
+
     class Info(ApiGet.Info):
         name = "friendList"
         alias = "friend_list"
@@ -93,12 +97,14 @@ class FriendList(ApiGet):
     class Response(ApiResponse):
         data: List[Friend]
         """好友列表。"""
+
         def __iter__(self):
             yield from self.data
 
 
 class GroupList(ApiGet):
     """获取群列表。"""
+
     class Info(ApiGet.Info):
         name = "groupList"
         alias = "group_list"
@@ -106,6 +112,7 @@ class GroupList(ApiGet):
     class Response(ApiResponse):
         data: List[Group]
         """群组列表。"""
+
         def __iter__(self):
             yield from self.data
 
@@ -114,6 +121,7 @@ class MemberList(ApiGet):
     """获取群成员列表。"""
     target: int
     """指定群的群号。"""
+
     class Info(ApiGet.Info):
         name = "memberList"
         alias = "member_list"
@@ -121,12 +129,14 @@ class MemberList(ApiGet):
     class Response(ApiResponse):
         data: List[GroupMember]
         """群成员列表。"""
+
         def __iter__(self):
             yield from self.data
 
 
 class BotProfile(ApiGet):
     """获取 Bot 资料。"""
+
     class Info(ApiGet.Info):
         name = "botProfile"
         alias = "bot_profile"
@@ -139,6 +149,7 @@ class FriendProfile(ApiGet):
     """获取好友资料。"""
     target: int
     """好友 QQ 号。"""
+
     class Info(ApiGet.Info):
         name = "friendProfile"
         alias = "friend_profile"
@@ -153,6 +164,7 @@ class MemberProfile(ApiGet):
     """指定群的群号。"""
     member_id: int
     """指定群成员的 QQ 号。"""
+
     class Info(ApiGet.Info):
         name = "memberProfile"
         alias = "member_profile"
@@ -179,6 +191,7 @@ class SendFriendMessage(ApiPost, _SendMessage):
     """消息链。"""
     quote: Optional[int] = None
     """可选。引用一条消息的 message_id 进行回复。"""
+
     class Info(ApiPost.Info):
         name = "sendFriendMessage"
         alias = "send_friend_message"
@@ -196,6 +209,7 @@ class SendGroupMessage(ApiPost, _SendMessage):
     """消息链。"""
     quote: Optional[int] = None
     """可选。引用一条消息的 message_id 进行回复。"""
+
     class Info(ApiPost.Info):
         name = "sendGroupMessage"
         alias = "send_group_message"
@@ -215,6 +229,7 @@ class SendTempMessage(ApiPost, _SendMessage):
     """消息链。"""
     quote: Optional[int] = None
     """可选。引用一条消息的 message_id 进行回复。"""
+
     class Info(ApiPost.Info):
         name = "sendTempMessage"
         alias = "send_temp_message"
@@ -232,6 +247,7 @@ class SendNudge(ApiPost):
     """戳一戳接受主体（上下文），戳一戳信息会发送至该主体，为群号或好友 QQ 号。"""
     kind: Literal['Friend', 'Group', 'Stranger']
     """上下文类型，可选值 `Friend`, `Group`, `Stranger`。"""
+
     class Info(ApiPost.Info):
         name = "sendNudge"
         alias = "send_nudge"
@@ -241,6 +257,7 @@ class Recall(ApiPost):
     """撤回消息。"""
     target: int
     """需要撤回的消息的 message_id。"""
+
     class Info(ApiPost.Info):
         name = "recall"
         alias = "recall"
@@ -260,6 +277,7 @@ class FileList(ApiGet):
     """可选。分页偏移。"""
     size: Optional[int] = None
     """可选。分页大小。"""
+
     class Info(ApiGet.Info):
         name = "file/list"
         alias = "file_list"
@@ -289,6 +307,7 @@ class FileInfo(ApiGet):
     """是否携带下载信息。"""
     path: Optional[str] = None
     """可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。"""
+
     class Info(ApiGet.Info):
         name = "file/info"
         alias = "file_info"
@@ -307,6 +326,7 @@ class FileMkdir(ApiPost):
     """新建文件夹名。"""
     path: Optional[str] = None
     """可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。"""
+
     class Info(ApiPost.Info):
         name = "file/mkdir"
         alias = "file_mkdir"
@@ -323,6 +343,7 @@ class FileDelete(ApiPost):
     """群号或好友 QQ 号。"""
     path: Optional[str] = None
     """可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。"""
+
     class Info(ApiPost.Info):
         name = "file/delete"
         alias = "file_delete"
@@ -343,6 +364,7 @@ class FileMove(ApiPost):
     """可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。"""
     move_to_path: Optional[str] = None
     """可选。移动目标文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。"""
+
     class Info(ApiPost.Info):
         name = "file/move"
         alias = "file_move"
@@ -361,6 +383,7 @@ class FileRename(ApiPost):
     """新文件名。"""
     path: Optional[str] = None
     """可选。文件夹路径。文件夹允许重名，不保证准确，准确定位使用 id。"""
+
     class Info(ApiPost.Info):
         name = "file/rename"
         alias = "file_rename"
@@ -379,6 +402,7 @@ class FileUpload(ApiPost):
     """上传的文件的本地路径。"""
     path: str = ''
     """上传目录的 id，空串为上传到根目录。"""
+
     async def _call(
         self,
         api_provider: ApiInterface,
@@ -412,6 +436,7 @@ class UploadImage(ApiPost):
     """上传的图片类型。"""
     img: Union[str, Path]
     """上传的图片的本地路径。"""
+
     async def _call(
         self,
         api_provider: ApiInterface,
@@ -441,6 +466,7 @@ class UploadVoice(ApiPost):
     """上传的语音类型。"""
     voice: Union[str, Path]
     """上传的语音的本地路径。"""
+
     async def _call(
         self,
         api_provider: ApiInterface,
@@ -468,6 +494,7 @@ class DeleteFriend(ApiPost):
     """删除好友。"""
     target: int
     """需要删除的好友 QQ 号。"""
+
     class Info(ApiPost.Info):
         name = "deleteFriend"
         alias = "delete_friend"
@@ -481,6 +508,7 @@ class Mute(ApiPost):
     """指定群成员的 QQ 号。"""
     time: int
     """禁言时间，单位为秒，最多30天，默认为0。"""
+
     class Info(ApiPost.Info):
         name = "mute"
         alias = "mute"
@@ -492,6 +520,7 @@ class Unmute(ApiPost):
     """指定群的群号。"""
     member_id: int
     """指定群成员的 QQ 号。"""
+
     class Info(ApiPost.Info):
         name = "unmute"
         alias = "unmute"
@@ -505,6 +534,7 @@ class Kick(ApiPost):
     """指定群成员的 QQ 号。"""
     msg: str = ""
     """可选。信息。"""
+
     class Info(ApiPost.Info):
         name = "kick"
         alias = "kick"
@@ -514,6 +544,7 @@ class Quit(ApiPost):
     """退出群聊。"""
     target: int
     """指定群的群号。"""
+
     class Info(ApiPost.Info):
         name = "quit"
         alias = "quit"
@@ -523,6 +554,7 @@ class MuteAll(ApiPost):
     """全体禁言。"""
     target: int
     """指定群的群号。"""
+
     class Info(ApiPost.Info):
         name = "muteAll"
         alias = "mute_all"
@@ -535,6 +567,7 @@ class UnmuteAll(ApiPost):
     """解除全体禁言。"""
     target: int
     """指定群的群号。"""
+
     class Info(ApiPost.Info):
         name = "unmuteAll"
         alias = "unmute_all"
@@ -544,6 +577,7 @@ class SetEssence(ApiPost):
     """设置群精华消息。"""
     target: int
     """精华消息的 message_id。"""
+
     class Info(ApiPost.Info):
         name = "setEssence"
         alias = "set_essence"
@@ -555,6 +589,7 @@ class GroupConfig(ApiRest):
     """群号。"""
     config: Optional[GroupConfigModel] = None
     """仅修改时可用。群设置。"""
+
     class Info(ApiRest.Info):
         name = "groupConfig"
         alias = "group_config"
@@ -571,6 +606,7 @@ class MemberInfo(ApiRest):
     """指定群成员的 QQ 号。"""
     info: Optional[MemberInfoModel] = None
     """仅修改时可用。群成员资料。"""
+
     class Info(ApiRest.Info):
         name = "memberInfo"
         alias = "member_info"
@@ -587,6 +623,7 @@ class MemberAdmin(ApiPost):
     """指定群成员的 QQ 号。"""
     assign: bool
     """是否设置管理员。"""
+
     class Info(ApiPost.Info):
         name = "memberAdmin"
         alias = "member_admin"
@@ -604,6 +641,7 @@ class RespEvent(ApiBaseModel):
     """响应的操作类型。"""
     message: str
     """回复的信息。"""
+
     @classmethod
     def from_event(
         cls, event: RequestEvent, operate: Union[int, RespOperate],
@@ -631,6 +669,7 @@ class RespNewFriendRequestEvent(ApiPost, RespEvent):
     """响应的操作类型。"""
     message: str
     """回复的信息。"""
+
     @validator('operate')
     def _validate_operate(cls, v):
         if isinstance(v, RespOperate):
@@ -660,6 +699,7 @@ class RespMemberJoinRequestEvent(ApiPost, RespEvent):
     """响应的操作类型。"""
     message: str
     """回复的信息。"""
+
     @validator('operate')
     def _validate_operate(cls, v):
         if isinstance(v, RespOperate):
@@ -693,6 +733,7 @@ class RespBotInvitedJoinGroupRequestEvent(ApiPost, RespEvent):
     """响应的操作类型。"""
     message: str
     """回复的信息。"""
+
     @validator('operate')
     def _validate_operate(cls, v):
         if isinstance(v, RespOperate):
@@ -712,6 +753,7 @@ class CmdExecute(ApiPost):
     """执行命令。"""
     command: Union[MessageChain, Iterable[Union[MessageComponent, str]], str]
     """命令。"""
+
     @validator('command')
     def _validate_command(cls, value):
         return MessageChain.parse_obj(value
@@ -732,6 +774,7 @@ class CmdRegister(ApiPost):
     """命令描述。"""
     alias: Optional[List[str]] = None
     """可选。命令别名。"""
+
     class Info(ApiPost.Info):
         name = "cmd/register"
         alias = "cmd_register"
