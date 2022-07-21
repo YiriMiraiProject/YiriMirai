@@ -4,14 +4,14 @@
 """
 import asyncio
 import logging
-from typing import Mapping, Optional, cast
+from typing import Dict, Mapping, Optional
 
 from starlette.requests import Request
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, Response
 
-from mirai.adapters.base import Adapter, AdapterInterface, json_dumps
-from mirai.api_provider import Method
+from mirai.adapters.base import Adapter, AdapterInterface, Session, json_dumps
 from mirai.asgi import ASGI
+from mirai.interface import ApiMethod
 
 logger = logging.getLogger(__name__)
 
@@ -22,10 +22,58 @@ class YiriMiraiJSONResponse(JSONResponse):
         return json_dumps(content).encode('utf-8')
 
 
+class WebHookSession(Session):
+    def __init__(self, qq: int, enable_quick_response: bool):
+        super().__init__(qq)
+        self.enable_quick_response = enable_quick_response
+
+    class QuickResponse(BaseException):
+        """WebHook 快速响应，以异常的方式跳出。"""
+        def __init__(self, data: dict):
+            self.data = data
+
+    async def shutdown(self):
+        """WebHook 不需要登出。直接返回。"""
+        logger.info(f"[WebHook] 从账号{self.qq}退出。")
+        await super().shutdown()
+
+    async def call_api(
+        self, api: str, method: ApiMethod = ApiMethod.GET, *_, **params
+    ):
+        """调用 API。WebHook 的 API 调用只能在快速响应中发生。"""
+        if self.enable_quick_response:
+            content = {'command': api.replace('/', '_'), 'content': params}
+            if method == ApiMethod.RESTGET:
+                content['subCommand'] = 'get'
+            elif method == ApiMethod.RESTPOST:
+                content['subCommand'] = 'update'
+            elif method == ApiMethod.MULTIPART:
+                raise NotImplementedError(
+                    "WebHook 适配器不支持上传操作。请使用 bot.use_adapter 临时调用 HTTP 适配器。"
+                )
+
+            logger.debug(f'[WebHook] WebHook 快速响应 {api}。')
+            raise WebHookSession.QuickResponse(content)
+        return None
+
+    async def _background(self):
+        """WebHook 不需要事件循环。直接返回。"""
+
+    async def handle_event(self, event):
+        try:
+            tasks = await self.emit(event)
+            await asyncio.gather(*tasks)
+        except WebHookSession.QuickResponse as response:
+            # 快速响应，直接返回。
+            return response.data
+
+        return {"command": "", "content": {}}
+
+
 class WebHookAdapter(Adapter):
     """WebHook 适配器。作为 HTTP 服务器与 mirai-api-http 沟通。"""
-    session: str
-    """WebHook 不需要 session，此处为机器人的 QQ 号。"""
+    sessions: Dict[int, WebHookSession]  # type: ignore
+    """已登录的会话。"""
     route: str
     """适配器的路由。"""
     extra_headers: Mapping[str, str]
@@ -55,15 +103,17 @@ class WebHookAdapter(Adapter):
 
         async def endpoint(request: Request):
             # 鉴权（QQ 号和额外请求头）
-            if request.headers.get('bot') != self.session:  # 验证 QQ 号
-                logger.debug(f"收到来自其他账号（{request.headers.get('bot')}）的事件。")
-                return
+            qq = request.headers.get('bot', 'Unknown')
+            if qq and qq.isdecimal():
+                qq = int(qq)
+            if qq not in self.sessions:  # 验证 QQ 号
+                logger.debug(f"收到来自其他账号（{qq}）的事件。")
+                return Response(status_code=404)
             for key in self.extra_headers:  # 验证请求头
                 key = key.lower()  # HTTP headers 不区分大小写
                 request_value = request.headers.get(key, '').lower()
                 expect_value = self.extra_headers[key].lower()
-                if (request_value != expect_value
-                    ) and (request_value != '[' + expect_value + ']'):
+                if request_value not in [expect_value, f'[{expect_value}]']:
                     logger.info(
                         f"请求头验证失败：expect [{expect_value}], " +
                         f"got {request_value}。"
@@ -73,21 +123,15 @@ class WebHookAdapter(Adapter):
                     )
             # 处理事件
             event = await request.json()
-            result = await self.handle_event(event)
+            result = await self.sessions[qq].handle_event(event)
             return YiriMiraiJSONResponse(result)
 
         ASGI().add_route(self.route, endpoint, methods=['POST'])
-
-    class QuickResponse(BaseException):
-        """WebHook 快速响应，以异常的方式跳出。"""
-        def __init__(self, data: dict):
-            self.data = data
 
     @property
     def adapter_info(self):
         return {
             'verify_key': self.verify_key,
-            'session': self.session,
             'single_mode': self.single_mode,
             'route': self.route,
             'extra_headers': self.extra_headers,
@@ -107,44 +151,10 @@ class WebHookAdapter(Adapter):
                 ] if key in info
             }
         )
-        adapter.session = cast(str, info.get('session'))
         return adapter
 
-    async def login(self, qq: int):
+    async def _login(self, qq: int) -> WebHookSession:
         """WebHook 不需要登录。直接返回。"""
-        self.session = str(qq)
+        self.qq = qq
         logger.info(f'[WebHook] 成功登录到账号{qq}。')
-
-    async def logout(self, terminate: bool = True):
-        """WebHook 不需要登出。直接返回。"""
-        logger.info(f"[WebHook] 从账号{self.session}退出。")
-
-    async def call_api(self, api: str, method: Method = Method.GET, **params):
-        """调用 API。WebHook 的 API 调用只能在快速响应中发生。"""
-        if self.enable_quick_response:
-            content = {'command': api.replace('/', '_'), 'content': params}
-            if method == Method.RESTGET:
-                content['subCommand'] = 'get'
-            elif method == Method.RESTPOST:
-                content['subCommand'] = 'update'
-            elif method == Method.MULTIPART:
-                raise NotImplementedError(
-                    "WebHook 适配器不支持上传操作。请使用 bot.use_adapter 临时调用 HTTP 适配器。"
-                )
-
-            logger.debug(f'[WebHook] WebHook 快速响应 {api}。')
-            raise WebHookAdapter.QuickResponse(content)
-        return None
-
-    async def _background(self):
-        """WebHook 不需要事件循环。直接返回。"""
-
-    async def handle_event(self, event):
-        try:
-            tasks = await self.emit(event['type'], event)
-            await asyncio.gather(*tasks)
-        except WebHookAdapter.QuickResponse as response:
-            # 快速响应，直接返回。
-            return response.data
-
-        return {}
+        return WebHookSession(qq, self.enable_quick_response)

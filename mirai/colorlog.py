@@ -6,6 +6,7 @@
 """
 import logging
 from enum import IntEnum
+from typing import Dict, Iterable, Mapping, Optional, cast
 
 __all__ = ['ConsoleColor', 'ColoredFormatter']
 
@@ -14,7 +15,7 @@ class ConsoleColor(IntEnum):
     """各种颜色。"""
     BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, \
         BLACK_BOLD, RED_BOLD, GREEN_BOLD, YELLOW_BOLD, \
-        BLUE_BOLD, MAGENTA_BOLD, CYAN_BOLD, WHITE_BOLD = range(16)
+        BLUE_BOLD, MAGENTA_BOLD, CYAN_BOLD, WHITE_BOLD = cast(Iterable['ConsoleColor'], range(16))
 
     def seq(self):
         s = '\033[1;' if self.value >= 8 else '\033['
@@ -33,15 +34,20 @@ COLORS = {
 
 class ColoredFormatter(logging.Formatter):
     """带颜色的日志格式化器。"""
-    def __init__(self, *args, colors=None, **kwargs):
+    colors: Dict[str, ConsoleColor]
+
+    def __init__(
+        self,
+        *args,
+        colors: Optional[Mapping[str, ConsoleColor]] = None,
+        **kwargs
+    ):
         """
         Args:
             colors: 一个字典，键是日志级别名称，值是颜色。
         """
         super().__init__(*args, **kwargs)
-        if colors is None:
-            colors = COLORS
-        self.colors = colors
+        self.colors = COLORS if colors is None else {**colors}
 
     def format(self, record):
         formatted = super().format(record)

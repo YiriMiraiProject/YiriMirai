@@ -4,7 +4,7 @@
 """
 from datetime import datetime
 from enum import Enum
-from typing import TYPE_CHECKING, Any, Optional, Type, Union, cast
+from typing import TYPE_CHECKING, Any, Optional, TypeVar, Union, cast
 
 if TYPE_CHECKING:
     from typing_extensions import Literal
@@ -14,14 +14,23 @@ else:
     except ImportError:
         from typing_extensions import Literal
 
-from mirai.models.base import MiraiIndexedModel
-from mirai.models.entities import (
-    Client, Entity, Friend, Group, GroupMember, Permission, Subject
-)
+from mirai.models.base import MiraiIndexedMetaclass, MiraiIndexedModel
+from mirai.models.entities import (Client, Entity, Friend, Group, GroupMember,
+                                   Permission, Subject)
 from mirai.models.message import MessageChain
 
+TEventClass = TypeVar("TEventClass", bound='EventMetaclass')
 
-class Event(MiraiIndexedModel):
+
+class EventMetaclass(MiraiIndexedMetaclass):
+    def get_subtype(cls: TEventClass, name: str) -> TEventClass:
+        try:
+            return super().get_subtype(name)
+        except ValueError:
+            return cast(TEventClass, Event)
+
+
+class Event(MiraiIndexedModel, metaclass=EventMetaclass):
     """事件基类。
 
     Args:
@@ -29,27 +38,15 @@ class Event(MiraiIndexedModel):
     """
     type: str
     """事件名。"""
-    def __repr__(self):
-        return self.__class__.__name__ + '(' + ', '.join(
-            (
-                f'{k}={repr(v)}'
-                for k, v in self.__dict__.items() if k != 'type' and v
-            )
-        ) + ')'
+    def __repr_args__(self):
+        return [(k, v) for k, v in self.__dict__.items() if k != 'type' and v]
 
     @classmethod
     def parse_subtype(cls, obj: dict) -> 'Event':
         try:
             return cast(Event, super().parse_subtype(obj))
         except ValueError:
-            return Event(type=obj['type'])
-
-    @classmethod
-    def get_subtype(cls, name: str) -> Type['Event']:
-        try:
-            return cast(Type[Event], super().get_subtype(name))
-        except ValueError:
-            return Event
+            return Event(**obj)
 
 
 ###############################
@@ -196,7 +193,7 @@ class GroupEvent(Event):
         group: 事件对应的群。
     """
     # group: Group
-    # 一个奇怪的现象：群事件不一定有 group，它可能藏在 opeartor.group 里
+    # 一个奇怪的现象：群事件不一定有 group，它可能藏在 operator.group 里
 
     type: str
     """事件名。"""
@@ -1047,55 +1044,21 @@ class OtherClientMessage(MessageEvent):
 
 
 __all__ = [
-    'BotEvent',
-    'BotGroupPermissionChangeEvent',
-    'BotInvitedJoinGroupRequestEvent',
-    'BotJoinGroupEvent',
-    'BotLeaveEventActive',
-    'BotLeaveEventKick',
-    'BotMuteEvent',
-    'BotOfflineEventActive',
-    'BotOfflineEventDropped',
-    'BotOfflineEventForce',
-    'BotOnlineEvent',
-    'BotReloginEvent',
-    'BotUnmuteEvent',
-    'CommandEvent',
-    'CommandExecutedEvent',
-    'Event',
-    'FriendEvent',
-    'FriendInputStatusChangedEvent',
-    'FriendMessage',
-    'FriendSyncMessage',
-    'FriendNickChangedEvent',
-    'FriendRecallEvent',
-    'GroupAllowAnonymousChatEvent',
-    'GroupAllowConfessTalkEvent',
-    'GroupAllowMemberInviteEvent',
-    'GroupEntranceAnnouncementChangeEvent',
-    'GroupEvent',
-    'GroupMessage',
-    'GroupSyncMessage',
-    'GroupMuteAllEvent',
-    'GroupNameChangeEvent',
-    'GroupRecallEvent',
-    'MemberCardChangeEvent',
-    'MemberHonorChangeEvent',
-    'MemberJoinEvent',
-    'MemberJoinRequestEvent',
-    'MemberLeaveEventKick',
-    'MemberLeaveEventQuit',
-    'MemberMuteEvent',
-    'MemberPermissionChangeEvent',
-    'MemberSpecialTitleChangeEvent',
-    'MemberUnmuteEvent',
-    'MessageEvent',
-    'NewFriendRequestEvent',
-    'NudgeEvent',
-    'OtherClientMessage',
-    'RequestEvent',
-    'StrangerMessage',
-    'StrangerSyncMessage',
-    'TempMessage',
-    'TempSyncMessage',
+    'BotEvent', 'BotGroupPermissionChangeEvent',
+    'BotInvitedJoinGroupRequestEvent', 'BotJoinGroupEvent',
+    'BotLeaveEventActive', 'BotLeaveEventKick', 'BotMuteEvent',
+    'BotOfflineEventActive', 'BotOfflineEventDropped', 'BotOfflineEventForce',
+    'BotOnlineEvent', 'BotReloginEvent', 'BotUnmuteEvent', 'CommandEvent',
+    'CommandExecutedEvent', 'ClientKind', 'Event', 'FriendEvent',
+    'FriendInputStatusChangedEvent', 'FriendMessage', 'FriendNickChangedEvent',
+    'FriendRecallEvent', 'GroupAllowAnonymousChatEvent',
+    'GroupAllowConfessTalkEvent', 'GroupAllowMemberInviteEvent',
+    'GroupEntranceAnnouncementChangeEvent', 'GroupEvent', 'GroupMessage',
+    'GroupMuteAllEvent', 'GroupNameChangeEvent', 'GroupRecallEvent',
+    'MemberCardChangeEvent', 'MemberHonorChangeEvent', 'MemberJoinEvent',
+    'MemberJoinRequestEvent', 'MemberLeaveEventKick', 'MemberLeaveEventQuit',
+    'MemberMuteEvent', 'MemberPermissionChangeEvent',
+    'MemberSpecialTitleChangeEvent', 'MemberUnmuteEvent', 'MessageEvent',
+    'NewFriendRequestEvent', 'NudgeEvent', 'OtherClientMessage',
+    'RequestEvent', 'StrangerMessage', 'TempMessage'
 ]

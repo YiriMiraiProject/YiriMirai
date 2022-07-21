@@ -11,7 +11,7 @@ def indent(text, n):
     return textwrap.indent(text, ' ' * n * 4)
 
 
-module = pdoc.Module(mirai.models.api)
+module = pdoc.Module(mirai.models.api_impl)
 s = ""
 for api in sorted(
     set(mirai.models.api.ApiModel.__indexes__.values()),
@@ -44,13 +44,13 @@ for api in sorted(
 '''
 
     try:
-        response_type = api.Info.response_type
+        response_type = api.Response.__fields__['data'].type_
         response_type_name = response_type.__qualname__
     except AttributeError:
         response_type_name = 'None'
 
     try:
-        response_post_type = api.Info.response_type_post
+        response_post_type = api.PostResponse.__fields__['data'].type_
         response_post_type_name = response_post_type.__name__
     except AttributeError:
         response_post_type_name = 'None'
@@ -61,14 +61,18 @@ for api in sorted(
     class __{api.__name__}Proxy():
         async def get(self, {params}) -> {response_type_name}:
             """{c.docstring}
+
             Args:
 {indent(params_doc, 4)}
             """
+
         async def __call__(self, {params}) -> {response_type_name}:
             """{c.docstring}
+
             Args:
 {indent(params_doc, 4)}
             """
+
 '''
     elif issubclass(api, mirai.models.api.ApiPost):
         s += f'''
@@ -76,14 +80,18 @@ for api in sorted(
     class __{api.__name__}Proxy():
         async def set(self, {params}) -> {response_type_name}:
             """{c.docstring}
+
             Args:
 {indent(params_doc, 4)}
             """
+
         async def __call__(self, {params}) -> {response_type_name}:
             """{c.docstring}
+
             Args:
 {indent(params_doc, 4)}
             """
+
 '''
     elif issubclass(api, mirai.models.api.ApiRest):
         s += f'''

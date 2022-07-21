@@ -32,22 +32,6 @@ jobs:
           pdoc --version
           pdoc --html -o ./docs mirai
 
-      - name: prepare vercel project
-        run: |
-          mv ./docs/mirai/* ./docs/
-
-      # - uses: actions/setup-node@v1
-      #   with:
-      #     node-version: "14.x"
-
-      # - name: install vercel cli
-      #   run: npm i vercel
-
-      # - name: deploy
-      #   run: |
-      #     vercel link "$PWD/docs/yiri-mirai-api" --confirm --token=${{ secrets.VERCEL_TOKEN }}
-      #     vercel deploy "$PWD/docs/yiri-mirai-api" --prod --token=${{ secrets.VERCEL_TOKEN }}
-
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:

@@ -2,11 +2,14 @@
 """
 此模块提供一些实用的辅助方法。
 """
+
+import asyncio
+import contextlib
 import inspect
 from collections import defaultdict
-from typing import Dict, Generic, List, Set, TypeVar, cast
+from typing import Any, Callable, Dict, Generic, List, Set, TypeVar, cast
 
-from mirai import exceptions
+from mirai.exceptions import print_exception
 
 
 async def async_(obj):
@@ -14,12 +17,14 @@ async def async_(obj):
     return (await obj) if inspect.isawaitable(obj) else obj
 
 
-async def async_with_exception(obj):
+async def async_with_exception(
+    obj, error_handler: Callable[[BaseException], Any] = print_exception
+):
     """异步包装一个对象，同时处理调用中发生的异常。"""
     try:
         return await async_(obj)
     except Exception as e:
-        exceptions.print_exception(e)  # 打印异常信息，但不打断执行流程
+        await async_(error_handler(e))
 
 
 T = TypeVar('T')
@@ -62,48 +67,10 @@ class PriorityDict(Generic[T]):
             yield from cast(List[Set[T]], ())
 
 
-def kmp(string, pattern, count: int = 1) -> List[int]:
-    """KMP算法。
-
-    Args:
-        string: 待匹配字符串。
-        pattern: 模式字符串。
-        count (int): 至多匹配的次数。
-    """
-    if len(string) < len(pattern) or count < 1:
-        return []
-
-    # 生成下一个匹配子串的next数组。
-    next_array = [0] * len(pattern)
-    next_array[0] = 0
-    j = 0
-    for i in range(1, len(pattern)):
-        while j > 0 and pattern[j] != pattern[i]:
-            j = next_array[j - 1]
-        if pattern[j] == pattern[i]:
-            j += 1
-        next_array[i] = j
-
-    # 开始匹配。
-    matches = []
-    j = 0
-    for i, current in enumerate(string):
-        while j > 0 and pattern[j] != current:
-            j = next_array[j - 1]
-        if pattern[j] == current:
-            j += 1
-        if j == len(pattern):
-            matches.append(i - j + 1)
-            j = next_array[j - 1]
-        if len(matches) == count:
-            break
-    return matches
-
-
 class SingletonMetaclass(type):
     """单例类元类。修改了单例类的 `__init__` 方法，使之只会被调用一次。"""
-    def __new__(mcs, name, bases, attrs, **kwargs):
-        new_cls = super().__new__(mcs, name, bases, attrs, **kwargs)
+    def __new__(cls, name, bases, attrs, **kwargs):
+        new_cls = super().__new__(cls, name, bases, attrs, **kwargs)
 
         # noinspection PyTypeChecker
         __init__ = new_cls.__init__
@@ -136,3 +103,48 @@ class Singleton(metaclass=SingletonMetaclass):
         if cls._args == (args, kwargs):
             return cls._instance
         raise RuntimeError(f"只能创建 {cls.__name__} 的一个实例！")
+
+
+class Tasks:
+    """管理多个异步任务的类。"""
+    def __init__(self):
+        self._tasks: Set[asyncio.Task] = set()
+
+    def _done_callback(self, task):
+        # 完成时，移除任务。
+        self._tasks.remove(task)
+
+    def create_task(self, coro) -> asyncio.Task:
+        """创建一个异步任务。
+
+        Args:
+            coro: 异步任务的coroutine。
+
+        Returns:
+            asyncio.Task: 创建的任务。
+        """
+        task = asyncio.create_task(coro)
+        self._tasks.add(task)
+
+        task.add_done_callback(self._done_callback)
+        return task
+
+    def __iter__(self):
+        """迭代可得到的任务。"""
+        yield from self._tasks
+
+    @staticmethod
+    async def cancel(task: asyncio.Task):
+        """取消一个任务。此方法会等待到任务取消成功。
+
+        Args:
+            task: 任务。
+        """
+        task.cancel()
+        with contextlib.suppress(asyncio.CancelledError):
+            await task
+
+    async def cancel_all(self):
+        """取消所有任务。此方法会等待到所有任务取消成功。"""
+        for task in list(self._tasks):
+            await self.cancel(task)

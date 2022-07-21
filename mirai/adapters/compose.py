@@ -3,8 +3,28 @@
 此模块提供组合适配器，可以将两个适配器组合使用。
 """
 
-from mirai.adapters.base import Adapter
-from mirai.api_provider import Method
+from mirai.adapters.base import Adapter, Session
+from mirai.interface import ApiMethod
+
+
+class ComposeSession(Session):
+    """组合适配器的会话。"""
+    api_channel: Session
+    event_channel: Session
+
+    def __init__(self, api_channel: Session, event_channel: Session):
+        super().__init__(api_channel.qq)
+        self.api_channel = api_channel
+        self.event_channel = event_channel
+        self.buses = event_channel.buses
+
+    async def _background(self):
+        await self.event_channel._background()
+
+    async def call_api(
+        self, api: str, method: ApiMethod = ApiMethod.GET, *_, **params
+    ):
+        return await self.api_channel.call_api(api, method, **params)
 
 
 class ComposeAdapter(Adapter):
@@ -29,8 +49,6 @@ class ComposeAdapter(Adapter):
         self.api_channel = api_channel
         self.event_channel = event_channel
 
-        event_channel.buses = self.buses
-
         self.verify_key = api_channel.verify_key
         self.single_mode = api_channel.single_mode
 
@@ -38,19 +56,7 @@ class ComposeAdapter(Adapter):
     def adapter_info(self):
         return self.api_channel.adapter_info
 
-    async def login(self, qq: int):
-        await self.api_channel.login(qq)
-        # 绑定 session
-        self.event_channel.session = self.api_channel.session
-        self.session = self.api_channel.session
-        await self.event_channel.login(qq)
-
-    async def logout(self):
-        await self.event_channel.logout()
-        await self.api_channel.logout()
-
-    async def call_api(self, api: str, method: Method = Method.GET, **params):
-        return await self.api_channel.call_api(api, method, **params)
-
-    async def _background(self):
-        await self.event_channel._background()
+    async def _login(self, qq: int) -> ComposeSession:
+        api = await self.api_channel.login(qq)
+        ev = await self.event_channel.login(qq)
+        return ComposeSession(api, ev)

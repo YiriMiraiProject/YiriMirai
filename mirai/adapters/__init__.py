@@ -6,19 +6,18 @@
 """
 from typing import TYPE_CHECKING
 
-from .base import Adapter
+from mirai.adapters.base import Adapter
 
 if TYPE_CHECKING:
-    from .compose import ComposeAdapter
-    from .http import HTTPAdapter
-    from .webhook import WebHookAdapter
-    from .websocket import WebSocketAdapter
+    from mirai.adapters.compose import ComposeAdapter
+    from mirai.adapters.http import HTTPAdapter
+    from mirai.adapters.webhook import WebHookAdapter
+    from mirai.adapters.websocket import WebSocketAdapter
 
 
-def __getattr__(name):
+def __getattr__(name: str):
     import importlib
     MODULES = {
-        'Adapter': '.base',
         'ComposeAdapter': '.compose',
         'HTTPAdapter': '.http',
         'WebHookAdapter': '.webhook',

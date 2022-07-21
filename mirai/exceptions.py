@@ -44,15 +44,15 @@ class ApiError(RuntimeError):
         )
 
 
-class StopPropagation(Exception):
+class StopPropagation(BaseException):
     """终止事件处理器执行，并停止事件向上传播。"""
 
 
-class StopExecution(Exception):
+class StopExecution(BaseException):
     """终止事件处理器执行，但不阻止事件向上传播。"""
 
 
-class SkipExecution(Exception):
+class SkipExecution(BaseException):
     """跳过同优先度的事件处理器，进入下一优先度。"""
 
 
@@ -65,7 +65,7 @@ class ApiParametersError(TypeError):
         """
         from mirai.models.api import ApiModel
         self._err = err
-        model = cast(Type['ApiModel'], err.model)
+        model = cast(Type[ApiModel], err.model)
         try:
             errors = [f'在调用 `{model.Info.alias}` 时出错。']
             for error in self._err.errors():
@@ -82,7 +82,7 @@ class ApiParametersError(TypeError):
             self.args = (err.json(), )
 
 
-def print_exception(e: Exception):
+def print_exception(e: BaseException):
     """打印异常信息。"""
     traceback.print_exception(type(e), e, e.__traceback__)
 

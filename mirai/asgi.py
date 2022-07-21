@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 """此模块提供公共 ASGI 前端。"""
-import asyncio
 import functools
 import logging
-from inspect import iscoroutinefunction
-from typing import (
-    Awaitable, Callable, Dict, List, Literal, Optional, Tuple, Union, cast
-)
+from typing import Callable, Dict, List, Literal, Optional, Tuple
 
 from starlette.applications import Starlette
 from starlette.requests import Request
@@ -40,9 +36,7 @@ class ASGI(Singleton):
             result = await endpoint(request)
             if result:
                 return result
-        return RedirectResponse(
-            'https://yiri-mirai.vercel.app', status_code=301
-        )
+        return RedirectResponse('https://yiri-mirai.wybxc.cc', status_code=301)
 
     def add_route(
         self,
@@ -90,51 +84,13 @@ class ASGI(Singleton):
         if handler:
             self.app.add_event_handler(event_type, handler)
             return self
-        else:  # 装饰器用法
 
-            def decorator(func):
-                self.app.add_event_handler(event_type, func)
-                return func
+        # 装饰器用法
+        def decorator(func):
+            self.app.add_event_handler(event_type, func)
+            return func
 
-            return decorator
-
-    def add_background_task(
-        self, func: Union[Callable, Awaitable, None] = None
-    ):
-        """注册背景任务，将在 bot 启动后自动运行。
-
-        Args:
-            func(`Union[Callable, Awaitable, None]`): 背景任务，可以是函数或者协程，省略参数以作为装饰器调用。
-        """
-        if func is None:
-
-            def decorator(func_):
-                self.add_background_task(func_)
-                return func_
-
-            return decorator
-
-        if iscoroutinefunction(func):  # 异步调用转化为传入协程
-            func = cast(Callable[..., Awaitable], func)()
-
-        if callable(func):
-            self.app.add_event_handler('startup', func)
-        else:
-            _task: Optional[asyncio.Task] = None
-
-            async def _startup():
-                nonlocal _task
-                _task = asyncio.create_task(func)
-                # 不阻塞
-
-            async def _shutdown():
-                if _task and not _task.done():
-                    _task.cancel()
-
-            self.app.add_event_handler('startup', _startup)
-            self.app.add_event_handler('shutdown', _shutdown)
-
-        return func
+        return decorator
 
     def mount(self, path: str, app: Callable) -> 'ASGI':
         """挂载另一个 ASGI 服务器。通过这个方法，可以同时运行 FastAPI 之类的服务。
@@ -147,7 +103,7 @@ class ASGI(Singleton):
             ASGI: 返回自身。
         """
         if not path.startswith('/'):
-            path = '/' + path
+            path = f'/{path}'
         self.app.mount(path, app)
         logger.debug(f'向 {path} 挂载 {app}。')
         return self
@@ -156,14 +112,13 @@ class ASGI(Singleton):
         await self.app(scope, recv, send)
 
 
-# noinspection PyUnresolvedReferences
 def asgi_serve(
     app,
     host: str = '127.0.0.1',
     port: int = 8000,
     asgi_server: str = 'auto',
     **kwargs
-):
+) -> bool:
     """运行一个 ASGI 服务器。
 
     Args:
@@ -172,32 +127,31 @@ def asgi_serve(
         port: 服务器端口，默认为 8000。
         asgi_server: ASGI 服务器，可选的有 `hypercorn` `uvicorn` 和 `auto`。
             如果设置为 `auto`，自动寻找是否已安装可用的 ASGI 服务（`unicorn` 或 `hypercorn`），并运行。
+
+    Returns:
+        bool: 是否启动了外部 ASGI 服务。
     """
     if asgi_server == 'auto':
         try:
             from uvicorn import run
-            asgi = 'uvicorn'
+            asgi_server = 'uvicorn'
         except ImportError:
             try:
-                import hypercorn.config as config
                 from hypercorn.asyncio import serve
-                asgi = 'hypercorn'
+                asgi_server = 'hypercorn'
             except ImportError:
-                asgi = 'none'
-    else:
-        asgi = asgi_server
-        if asgi_server == 'uvicorn':
-            from uvicorn import run
-        elif asgi_server == 'hypercorn':
-            import hypercorn.config as config
-            from hypercorn.asyncio import serve
+                asgi_server = 'none'
 
-    if asgi == 'uvicorn':
+    if asgi_server == 'uvicorn':
+        from uvicorn import run
         run(app, host=host, port=port, debug=True, **kwargs)
         return True
-    if asgi == 'hypercorn':
+    if asgi_server == 'hypercorn':
         import asyncio
-        config = config.Config().from_mapping(bind=f'{host}:{port}', **kwargs)
+
+        from hypercorn.asyncio import serve
+        from hypercorn.config import Config
+        config = Config.from_mapping(bind=f'{host}:{port}', **kwargs)
         asyncio.run(serve(app, config), debug=True)
         return True
     return False

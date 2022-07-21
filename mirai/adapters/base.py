@@ -7,36 +7,35 @@ import asyncio
 import logging
 from datetime import datetime
 from json import dumps
-from typing import Any, Dict, Optional, Set, cast
+from typing import Any, Dict, NoReturn, Optional, Set, Tuple, Type, Union
 
-from mirai import exceptions
-from mirai.api_provider import ApiProvider, Method
-from mirai.bus import AbstractEventBus
-from mirai.tasks import Tasks
+from mirai.exceptions import NetworkError
+from mirai.interface import ApiInterface, ApiMethod, EventInterface
+from mirai.utils import Tasks
 
 logger = logging.getLogger(__name__)
 
 
-def _json_default(obj):  # 支持 datetime
+def _json_default(obj: Any):  # 支持 datetime
     if isinstance(obj, datetime):
         return int(obj.timestamp())
 
 
-def json_dumps(obj) -> str:
+def json_dumps(obj: Any) -> str:
     """保存为 json。"""
     return dumps(obj, default=_json_default)
 
 
-def error_handler_async(errors):
+def error_handler_async(errors: Tuple[Type[BaseException], ...]):
     """错误处理装饰器。"""
     def wrapper(func):
         async def wrapped(self, *args, **kwargs):
             try:
                 return await func(self, *args, **kwargs)
+            except KeyError as e:
+                raise NetworkError('从 mirai-api-http 返回的数据格式错误。请检查版本是否正确。') from e
             except errors as e:
-                err = exceptions.NetworkError(
-                    '无法连接到 mirai。请检查 mirai-api-http 是否启动，地址与端口是否正确。'
-                )
+                err = NetworkError('无法连接到 mirai。请检查 mirai-api-http 是否启动，地址与端口是否正确。')
                 logger.error(err)
                 raise err from e
             except Exception as e:
@@ -56,14 +55,87 @@ class AdapterInterface(abc.ABC):
         "适配器信息。"
 
     @classmethod
-    def __subclasshook__(cls, C):
-        if cls is AdapterInterface:
-            if any("adapter_info" in B.__dict__ for B in C.__mro__):
-                return True
+    def __subclasshook__(cls, C: type):
+        if cls is AdapterInterface and any("adapter_info" in B.__dict__ for B in C.__mro__):
+            return True
         return NotImplemented
 
 
-class Adapter(ApiProvider, AdapterInterface):
+TEventDict = Dict[str, Any]
+
+
+class Session(ApiInterface, EventInterface[TEventDict]):
+    """会话。表示适配器到 mirai-api-http 的一个连接。"""
+    qq: int
+    """机器人的 QQ 号。"""
+    buses: Set[EventInterface[TEventDict]]
+    """注册的事件总线集合。"""
+    background: Optional[asyncio.Task]
+    """背景事件循环任务。"""
+    def __init__(self, qq: int):
+        self.qq = qq
+        self.buses = set()
+        self.background = None
+
+    def register_event_bus(self, *buses: EventInterface[TEventDict]):
+        """注册事件总线。
+
+        Args:
+            *buses: 一个或多个事件总线。
+        """
+        self.buses |= set(buses)
+
+    def unregister_event_bus(self, *buses: EventInterface[TEventDict]):
+        """解除注册事件总线。
+
+        Args:
+            *buses: 一个或多个事件总线。
+        """
+        self.buses -= set(buses)
+
+    @abc.abstractmethod
+    async def _background(self) -> Union[NoReturn, None]:
+        """背景事件循环，用于接收事件。"""
+
+    async def start(self):
+        """运行背景事件循环。"""
+        if not self.buses:
+            raise RuntimeError('事件总线未指定！')
+
+        self.background = asyncio.create_task(self._background())
+
+    @abc.abstractmethod
+    async def call_api(
+        self,
+        api: str,
+        method: ApiMethod = ApiMethod.GET,
+        *args,
+        **params
+    ) -> Any:
+        """调用 API。
+
+        Args:
+            api: API 名称，需与 mirai-api-http 中的定义一致。
+            method: 调用方法。默认为 GET。
+            **params: 参数。
+        """
+
+    async def shutdown(self):
+        """退出登录，并停止背景事件循环。"""
+        if self.background:
+            await Tasks.cancel(self.background)
+
+    async def emit(self, event: TEventDict):
+        """向事件总线发送一个事件。
+
+        Args:
+            event: 事件。
+        """
+        coros = [bus.emit(event) for bus in self.buses]
+        return sum(await asyncio.gather(*coros), [])
+
+
+class Adapter(AdapterInterface):
     """适配器基类，与 mirai-api-http 沟通的底层实现。
 
     属性 `buses` 为适配器注册的事件总线集合。适配器被绑定到 bot 时，bot 会自动将自身的事件总线注册到适配器。
@@ -72,12 +144,8 @@ class Adapter(ApiProvider, AdapterInterface):
     """mirai-api-http 配置的认证 key，关闭认证时为 None。"""
     single_mode: bool
     """是否开启 single_mode，开启后与 session 将无效。"""
-    session: str
-    """从 mirai-api-http 处获得的 session。"""
-    buses: Set[AbstractEventBus]
-    """注册的事件总线集合。"""
-    background: Optional[asyncio.Task]
-    """背景事件循环任务。"""
+    sessions: Dict[int, Session]
+    """已登录的会话。"""
     def __init__(self, verify_key: Optional[str], single_mode: bool = False):
         """
         Args:
@@ -86,15 +154,12 @@ class Adapter(ApiProvider, AdapterInterface):
         """
         self.verify_key = verify_key
         self.single_mode = single_mode
-        self.session = ''
-        self.buses = set()
-        self.background = None
+        self.sessions = {}
 
     @property
-    def adapter_info(self):
+    def adapter_info(self) -> Dict[str, Any]:
         return {
             'verify_key': self.verify_key,
-            'session': self.session,
             'single_mode': self.single_mode,
         }
 
@@ -116,68 +181,23 @@ class Adapter(ApiProvider, AdapterInterface):
                 for key in ['single_mode'] if info.get(key) is not None
             }
         )
-        adapter.session = cast(str, info.get('session'))
         return adapter
 
-    def register_event_bus(self, *buses: AbstractEventBus):
-        """注册事件总线。
-
-        Args:
-            *buses: 一个或多个事件总线。
-        """
-        self.buses |= set(buses)
-
-    def unregister_event_bus(self, *buses: AbstractEventBus):
-        """解除注册事件总线。
-
-        Args:
-            *buses: 一个或多个事件总线。
-        """
-        self.buses -= set(buses)
-
     @abc.abstractmethod
-    async def login(self, qq: int):
+    async def _login(self, qq: int) -> Session:
         """登录到 mirai-api-http。"""
 
-    @abc.abstractmethod
-    async def logout(self, terminate: bool = True):
+    async def login(self, qq: int) -> Session:
+        """登录到 mirai-api-http。"""
+        session = await self._login(qq)
+        self.sessions[qq] = session
+        return session
+
+    async def logout(self, qq: int):
         """登出。"""
+        session = self.sessions[qq]
+        await session.shutdown()
+        self.sessions.pop(qq)
 
-    @abc.abstractmethod
-    async def call_api(self, api: str, method: Method = Method.GET, **params):
-        """调用 API。
 
-        Args:
-            api: API 名称，需与 mirai-api-http 中的定义一致。
-            method: 调用方法。默认为 GET。
-            **params: 参数。
-        """
-
-    @abc.abstractmethod
-    async def _background(self):
-        """背景事件循环，用于接收事件。"""
-
-    async def start(self):
-        """运行背景事件循环。"""
-        if not self.buses:
-            raise RuntimeError('事件总线未指定！')
-        if not self.session:
-            raise RuntimeError('未登录！')
-
-        self.background = asyncio.create_task(self._background())
-
-    async def shutdown(self):
-        """停止背景事件循环。"""
-        if self.background:
-            await Tasks.cancel(self.background)
-
-    async def emit(self, event: str, *args, **kwargs):
-        """向事件总线发送一个事件。
-
-        Args:
-            event: 事件名称。
-            *args: 事件参数。
-            **kwargs: 事件参数。
-        """
-        coros = [bus.emit(event, *args, **kwargs) for bus in self.buses]
-        return sum(await asyncio.gather(*coros), [])
+__all__ = ['Adapter', 'AdapterInterface', 'Session', 'error_handler_async']

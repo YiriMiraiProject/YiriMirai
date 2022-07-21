@@ -7,5 +7,20 @@
     ],
     "css.lint.unknownAtRules": "ignore",
     "python.formatting.provider": "yapf",
-    "python.linting.mypyEnabled": true,
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportUnboundVariable": "information",
+        "reportUnusedImport": "information",
+        "reportMissingTypeArgument": "none",
+        "reportUnknownParameterType": "none",
+        "reportMissingParameterType": "none",
+        "reportUnknownVariableType": "none",
+        "reportUnknownMemberType": "none",
+        "reportUnknownArgumentType": "none",
+        "reportUnknownLambdaType": "none",
+        "reportInvalidStubStatement": "none",
+        "reportMissingTypeStubs": "none",
+        "reportUnnecessaryIsInstance": "none"
+    },
+    "python.linting.mypyEnabled": false
 }

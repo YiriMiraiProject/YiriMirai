@@ -1,0 +1,10 @@
+ignore:
+  - text*.py
+
+refactor:
+  skip:
+    - class-method-first-arg-name
+    - instance-method-first-arg-name
+    - use-named-expression
+    - avoid-builtin-shadow
+    - inline-immediately-returned-variable
