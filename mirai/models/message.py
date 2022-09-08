@@ -80,6 +80,7 @@ class MessageComponent(MiraiIndexedModel, metaclass=MessageComponentMetaclass):
     """消息组件。"""
     type: str
     """消息组件类型。"""
+
     def __str__(self):
         return ''
 
@@ -208,26 +209,13 @@ class MessageChain(MiraiBaseModel):
     消息链对索引操作进行了增强。以消息组件类型为索引，获取消息链中的全部该类型的消息组件。
     ```py
     plain_list = message_chain[Plain]
-    '[Plain("Hello World!")]'
-    ```
-
-    以 `类型, 数量` 为索引，获取前至多多少个该类型的消息组件。
-    ```py
-    plain_list_first = message_chain[Plain, 1]
-    '[Plain("Hello World!")]'
+    'MessageChain([Plain("Hello World!")])'
     ```
 
     消息链的 `get` 方法和索引操作等价。
     ```py
     plain_list_first = message_chain.get(Plain)
     '[Plain("Hello World!")]'
-    ```
-
-    消息链的 `get` 方法还可指定第二个参数 `count`，这相当于以 `类型, 数量` 为索引。
-    ```py
-    plain_list_first = message_chain.get(Plain, 1)
-    # 这等价于
-    plain_list_first = message_chain[Plain, 1]
     ```
 
     可以用加号连接两个消息链。
@@ -337,10 +325,8 @@ class MessageChain(MiraiBaseModel):
     def get(
         self,
         index: Union[int, slice, Type[TMessageComponent],
-                     Tuple[Type[TMessageComponent], int]],
-        count: Optional[int] = None
-    ) -> Union[MessageComponent, List[MessageComponent],
-               List[TMessageComponent]]:
+                     Iterable[Type[TMessageComponent]]]
+    ) -> Union[MessageComponent, 'MessageChain']:
         """获取消息链中的某个（某些）消息组件，或某类型的消息组件。
 
         Args:
@@ -348,9 +334,7 @@ class MessageChain(MiraiBaseModel):
                 如果为 `int`，则返回该索引处的消息组件。
                 如果为 `slice`，则返回该索引范围处的消息组件。
                 如果为 `Type[TMessageComponent]`，则返回该类型的全部消息组件。
-                如果为 `Tuple[Type[TMessageComponent], int]`，则返回该类型的至多 `index[1]` 个消息组件。
-
-            count: 如果为 `int`，则返回至多 `count` 个消息组件。
+                如果为 `Iterable[Type[TMessageComponent]]`，则返回该类型组的全部消息组件。
 
         Returns:
             MessageComponent: 返回指定索引处的消息组件。
@@ -362,26 +346,17 @@ class MessageChain(MiraiBaseModel):
             return self.__root__[index]
         # 切片索引
         if isinstance(index, slice):
-            return self.__root__[index]
-        # 指定 count
-        if count:
-            if isinstance(index, type):
-                index = (index, count)
-            elif isinstance(index, tuple):
-                index = (index[0], count if count < index[1] else index[1])
+            return self.__class__(self.__root__[index])
         # 索引对象为 MessageComponent 类，返回所有对应 component
         if isinstance(index, type):
-            return [
+            return self.__class__([
                 component for component in self if type(component) is index
-            ]
-        # 索引对象为 MessageComponent 和 int 构成的 tuple， 返回指定数量的 component
-        if isinstance(index, tuple):
-            components = (
-                component for component in self if type(component) is index[0]
-            )
-            return [
-                component for component, _ in zip(components, range(index[1]))
-            ]
+            ])
+        # 索引对象为 MessageComponent 类的Iterable，返回所有对应 component
+        if isinstance(index, Iterable):
+            return self.__class__([
+                component for component in self if type(component) in set(index)
+            ])
         raise TypeError(f"消息链索引需为 int 或 MessageComponent，当前类型：{type(index)}")
 
     def get_first(self,
@@ -413,9 +388,8 @@ class MessageChain(MiraiBaseModel):
 
     def __getitem__(
         self, index: Union[int, slice, Type[TMessageComponent],
-                           Tuple[Type[TMessageComponent], int]]
-    ) -> Union[MessageComponent, List[MessageComponent],
-               List[TMessageComponent]]:
+                           Iterable[Type[TMessageComponent]]]
+    ) -> Union[MessageComponent, TMessageChain]:
         return self.get(index)
 
     def __setitem__(
@@ -687,6 +661,7 @@ class Plain(MessageComponent):
     """消息组件类型。"""
     text: str
     """文字消息。"""
+
     def __str__(self):
         return self.text
 
@@ -724,6 +699,7 @@ class At(MessageComponent):
     """群员 QQ 号。"""
     display: Optional[str] = None
     """At时显示的文字，发送消息时无效，自动使用群名片。"""
+
     def __eq__(self, other):
         return isinstance(other, At) and self.target == other.target
 
@@ -738,6 +714,7 @@ class AtAll(MessageComponent):
     """At全体。"""
     type: str = "AtAll"
     """消息组件类型。"""
+
     def __str__(self):
         return "@全体成员"
 
@@ -753,6 +730,7 @@ class Face(MessageComponent):
     """QQ 表情编号，可选，优先度高于 name。"""
     name: Optional[str] = None
     """QQ表情名称，可选。"""
+
     def __init__(self, *args, **kwargs):
         if len(args) == 1:
             if isinstance(args[0], str):
@@ -797,6 +775,7 @@ class Image(MessageComponent):
     """图片的路径，发送本地图片。"""
     base64: Optional[str] = None
     """图片的 Base64 编码。"""
+
     def __eq__(self, other):
         return isinstance(
             other, Image
@@ -950,6 +929,7 @@ class App(MessageComponent):
     """消息组件类型。"""
     content: str
     """内容。"""
+
     def as_json(self):
         from json import loads as json_loads
         return json_loads(self.content)
@@ -1085,6 +1065,7 @@ class FlashImage(Image):
     """图片的路径，发送本地图片，路径相对于 `plugins/MiraiAPIHTTP/images`。"""
     base64: Optional[str] = None
     """图片的 Base64 编码。"""
+
     def __str__(self):
         return '[闪照]'
 
@@ -1192,6 +1173,7 @@ class Dice(MessageComponent):
     """消息组件类型。"""
     value: int
     """点数。"""
+
     def __str__(self):
         return f'[骰子{self.value}]'
 
@@ -1226,6 +1208,7 @@ class MusicShare(MessageComponent):
     """音源路径。"""
     brief: str = ""
     """在消息列表中显示的内容。"""
+
     def __str__(self):
         return self.brief
 
@@ -1274,6 +1257,7 @@ class Forward(MessageComponent):
     """消息组件类型。"""
     node_list: List[ForwardMessageNode]
     """转发消息节点列表。"""
+
     def __init__(self, *args, **kwargs):
         if len(args) == 1:
             self.node_list = args[0]
@@ -1294,6 +1278,7 @@ class File(MessageComponent):
     """文件名称。"""
     size: int
     """文件大小。"""
+
     def __str__(self):
         return f'[文件]{self.name}'
 
@@ -1304,6 +1289,7 @@ class MiraiCode(MessageComponent):
     """消息组件类型。"""
     code: str
     """Mirai 码。"""
+
     def __str__(self):
         return serialize(self.code)
 
