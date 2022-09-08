@@ -205,29 +205,26 @@ class MessageChain(MiraiBaseModel):
     需注意，此处的子消息链匹配会把 Plain 看成一个整体，而不是匹配其文本的一部分。
     如需对文本进行部分匹配，请采用 mirai 码字符串匹配的方式。
 
-    消息链对索引操作进行了增强。以消息组件类型为索引，获取消息链中的全部该类型的消息组件。
+    消息链对索引操作进行了增强。以一个或多个消息组件类型为索引，获取消息链中的全部该类型的消息组件。
     ```py
-    plain_list = message_chain[Plain]
-    '[Plain("Hello World!")]'
-    ```
-
-    以 `类型, 数量` 为索引，获取前至多多少个该类型的消息组件。
-    ```py
-    plain_list_first = message_chain[Plain, 1]
-    '[Plain("Hello World!")]'
+    new_msg_chain = message_chain[Plain]
+    'MessageChain([Plain("Hello World!")])'
+    new_msg_chain = message_chain[Plain, At]
+    'MessageChain([
+        AtAll(),
+        Plain("Hello World!"),
+    ])'
     ```
 
     消息链的 `get` 方法和索引操作等价。
     ```py
-    plain_list_first = message_chain.get(Plain)
-    '[Plain("Hello World!")]'
-    ```
-
-    消息链的 `get` 方法还可指定第二个参数 `count`，这相当于以 `类型, 数量` 为索引。
-    ```py
-    plain_list_first = message_chain.get(Plain, 1)
-    # 这等价于
-    plain_list_first = message_chain[Plain, 1]
+    new_msg_chain = message_chain.get(Plain)
+    'MessageChain([Plain("Hello World!")])'
+    new_msg_chain = message_chain.get([Plain, At])
+    'MessageChain([
+        AtAll(),
+        Plain("Hello World!"),
+    ])'
     ```
 
     可以用加号连接两个消息链。
@@ -321,67 +318,53 @@ class MessageChain(MiraiBaseModel):
         ...
 
     @overload
-    def get(self, index: slice) -> List[MessageComponent]:
+    def get(self, index: slice) -> 'MessageChain':
         ...
 
     @overload
-    def get(self, index: Type[TMessageComponent]) -> List[TMessageComponent]:
+    def get(self, index: Type[TMessageComponent]) -> 'MessageChain':
         ...
 
     @overload
     def get(
-        self, index: Tuple[Type[TMessageComponent], int]
-    ) -> List[TMessageComponent]:
+        self, index: Iterable[Type[TMessageComponent]]
+    ) -> 'MessageChain':
         ...
 
     def get(
         self,
         index: Union[int, slice, Type[TMessageComponent],
-                     Tuple[Type[TMessageComponent], int]],
-        count: Optional[int] = None
-    ) -> Union[MessageComponent, List[MessageComponent],
-               List[TMessageComponent]]:
+                     Iterable[Type[TMessageComponent]]]
+    ) -> Union[MessageComponent, 'MessageChain']:
         """获取消息链中的某个（某些）消息组件，或某类型的消息组件。
 
         Args:
-            index (`Union[int, slice, Type[TMessageComponent], Tuple[Type[TMessageComponent], int]]`):
+            index (`Union[int, slice, Type[TMessageComponent], Iterable[Type[TMessageComponent]]]`):
                 如果为 `int`，则返回该索引处的消息组件。
-                如果为 `slice`，则返回该索引范围处的消息组件。
-                如果为 `Type[TMessageComponent]`，则返回该类型的全部消息组件。
-                如果为 `Tuple[Type[TMessageComponent], int]`，则返回该类型的至多 `index[1]` 个消息组件。
-
-            count: 如果为 `int`，则返回至多 `count` 个消息组件。
+                如果为 `slice`，则返回该索引范围处的消息组件构成的消息链。
+                如果为 `Type[TMessageComponent]`，则返回该类型的全部消息组件构成的消息链。
+                如果为 `Iterable[Type[TMessageComponent]]`，则返回该类型组的全部消息组件构成的消息链。
 
         Returns:
             MessageComponent: 返回指定索引处的消息组件。
-            List[MessageComponent]: 返回指定索引范围的消息组件。
-            List[TMessageComponent]: 返回指定类型的消息组件构成的列表。
+            MessageChain: 返回指定索引范围或指定类型的消息组件构成的消息链。
         """
         # 正常索引
         if isinstance(index, int):
             return self.__root__[index]
         # 切片索引
         if isinstance(index, slice):
-            return self.__root__[index]
-        # 指定 count
-        if count:
-            if isinstance(index, type):
-                index = (index, count)
-            elif isinstance(index, tuple):
-                index = (index[0], count if count < index[1] else index[1])
-        # 索引对象为 MessageComponent 类，返回所有对应 component
+            return self.__class__(self.__root__[index])
+        # 索引对象为 MessageComponent 类，返回所有对应 component构成的plain
         if isinstance(index, type):
-            return [
-                component for component in self if type(component) is index
-            ]
-        # 索引对象为 MessageComponent 和 int 构成的 tuple， 返回指定数量的 component
-        if isinstance(index, tuple):
-            components = (
-                component for component in self if type(component) is index[0]
+            return self.__class__(
+                [component for component in self if type(component) is index]
             )
-            return [
-                component for component, _ in zip(components, range(index[1]))
-            ]
+        # 索引对象为 MessageComponent 类构成的Iterable， 返回所有对应 component构成的plain
+        if isinstance(index, Iterable):
+            return self.__class__(
+                [component for component in self if type(component) in set(index)]
+            )
         raise TypeError(f"消息链索引需为 int 或 MessageComponent，当前类型：{type(index)}")
 
     def get_first(self,
@@ -397,25 +380,24 @@ class MessageChain(MiraiBaseModel):
         ...
 
     @overload
-    def __getitem__(self, index: slice) -> List[MessageComponent]:
+    def __getitem__(self, index: slice) -> 'MessageChain':
         ...
 
     @overload
     def __getitem__(self,
-                    index: Type[TMessageComponent]) -> List[TMessageComponent]:
+                    index: Type[TMessageComponent]) -> 'MessageChain':
         ...
 
     @overload
     def __getitem__(
-        self, index: Tuple[Type[TMessageComponent], int]
-    ) -> List[TMessageComponent]:
+        self, index: Iterable[Type[TMessageComponent]]
+    ) -> 'MessageChain':
         ...
 
     def __getitem__(
         self, index: Union[int, slice, Type[TMessageComponent],
-                           Tuple[Type[TMessageComponent], int]]
-    ) -> Union[MessageComponent, List[MessageComponent],
-               List[TMessageComponent]]:
+                           Iterable[Type[TMessageComponent]]]
+    ) -> Union[MessageComponent, 'MessageChain']:
         return self.get(index)
 
     def __setitem__(
