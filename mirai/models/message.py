@@ -1230,6 +1230,15 @@ class MusicShare(MessageComponent):
         return self.brief
 
 
+class ForwardMessageDiaplay(MiraiBaseModel):
+    """合并转发组件的显示信息。"""
+    title: str = "群聊的聊天记录"
+    brief: str = "[聊天记录]"
+    source: str = "聊天记录"
+    preview: List[str] = []
+    summary: str = "查看x条转发消息"
+
+
 class ForwardMessageNode(MiraiBaseModel):
     """合并转发中的一条消息。"""
     sender_id: Optional[int] = None
@@ -1272,6 +1281,8 @@ class Forward(MessageComponent):
     """合并转发。"""
     type: str = "Forward"
     """消息组件类型。"""
+    display: ForwardMessageDiaplay
+    """转发组件的显示信息。"""
     node_list: List[ForwardMessageNode]
     """转发消息节点列表。"""
     def __init__(self, *args, **kwargs):
