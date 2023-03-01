@@ -131,6 +131,7 @@ dmypy.json
 
 # test cases
 /test*.py
+/tests/
 
 # pdoc documents
 /docs
