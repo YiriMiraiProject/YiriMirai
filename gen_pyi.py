@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 # type: ignore
 
-import mirai
 import pdoc
 import textwrap
 import re
 
+import mirai
 
 def indent(text, n):
     return textwrap.indent(text, ' ' * n * 4)
