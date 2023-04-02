@@ -16,7 +16,7 @@ else:
 
 from mirai.models.base import MiraiIndexedModel
 from mirai.models.entities import (
-    Client, Entity, Friend, Group, GroupMember, Permission, Subject
+    Client, Friend, Group, GroupMember, Permission, Subject
 )
 from mirai.models.message import MessageChain
 

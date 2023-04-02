@@ -37,7 +37,6 @@ from mirai.models.events import (
 from mirai.models.message import (
     Image, MessageChain, MessageComponent, TMessage, Voice
 )
-from mirai.utils import async_
 
 logger = logging.getLogger(__name__)
 
