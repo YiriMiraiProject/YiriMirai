@@ -2,7 +2,9 @@
 
 ## 公告：本项目原开发者已放弃对 YiriMirai 的维护，最后一个完全支持的 mirai-api-http 版本为 2.5。如果有人愿意继续维护此项目，请与原开发者联系。
 
-## 在新的维护者到来前，建议换用 [Graia Ariadne](https://github.com/GraiaProject/Ariadne) 等活跃维护的项目，也请关注原开发者的下一代 QQ 无头客户端支持库 [awr](https://github.com/Wybxc/awr)。
+## ~~在新的维护者到来前~~，建议换用 [Graia Ariadne](https://github.com/GraiaProject/Ariadne) 等活跃维护的项目，也请关注原开发者的下一代 QQ 无头客户端支持库 [awr](https://github.com/Wybxc/awr)。
+
+本项目现由 [XYCode-Kerman](https://github.com/XYCode-Kerman) 进行维护，新版本将于不久后发布
 
 <br>
 
@@ -61,6 +63,8 @@ QQ 群：766952599（[链接](https://jq.qq.com/?_wv=1027&k=PXBOuBCI)）
 Github Discussion（[链接](https://github.com/YiriMiraiProject/YiriMirai/discussions)）
 
 Discord（[链接](https://discord.gg/RaXsHFC3PH)）
+
+![Star History Chart](https://api.star-history.com/svg?repos=YiriMiraiProject/YiriMirai&type=Date)
 
 ## 开源协议
 
