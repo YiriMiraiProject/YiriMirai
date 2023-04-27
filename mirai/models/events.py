@@ -1046,56 +1046,39 @@ class OtherClientMessage(MessageEvent):
     """消息内容。"""
 
 
+class BotLeaveEventDisband(GroupEvent):
+    """Bot 因为群解散而离群
+
+    Args:
+        group: 群对象
+        operator: 操作人
+    """
+    type: str = 'BotLeaveEventDisband'
+    """事件名。"""
+    group: Group
+    """被解散的群聊"""
+    operator: Optional[GroupMember]
+    """操作者"""
+
+
 __all__ = [
-    'BotEvent',
-    'BotGroupPermissionChangeEvent',
-    'BotInvitedJoinGroupRequestEvent',
-    'BotJoinGroupEvent',
-    'BotLeaveEventActive',
-    'BotLeaveEventKick',
-    'BotMuteEvent',
-    'BotOfflineEventActive',
-    'BotOfflineEventDropped',
-    'BotOfflineEventForce',
-    'BotOnlineEvent',
-    'BotReloginEvent',
-    'BotUnmuteEvent',
-    'CommandEvent',
-    'CommandExecutedEvent',
-    'Event',
-    'FriendEvent',
-    'FriendInputStatusChangedEvent',
-    'FriendMessage',
-    'FriendSyncMessage',
-    'FriendNickChangedEvent',
-    'FriendRecallEvent',
-    'GroupAllowAnonymousChatEvent',
-    'GroupAllowConfessTalkEvent',
-    'GroupAllowMemberInviteEvent',
-    'GroupEntranceAnnouncementChangeEvent',
-    'GroupEvent',
-    'GroupMessage',
-    'GroupSyncMessage',
-    'GroupMuteAllEvent',
-    'GroupNameChangeEvent',
-    'GroupRecallEvent',
-    'MemberCardChangeEvent',
-    'MemberHonorChangeEvent',
-    'MemberJoinEvent',
-    'MemberJoinRequestEvent',
-    'MemberLeaveEventKick',
-    'MemberLeaveEventQuit',
-    'MemberMuteEvent',
-    'MemberPermissionChangeEvent',
-    'MemberSpecialTitleChangeEvent',
-    'MemberUnmuteEvent',
-    'MessageEvent',
-    'NewFriendRequestEvent',
-    'NudgeEvent',
-    'OtherClientMessage',
-    'RequestEvent',
-    'StrangerMessage',
-    'StrangerSyncMessage',
-    'TempMessage',
-    'TempSyncMessage',
+    'BotEvent', 'BotGroupPermissionChangeEvent',
+    'BotInvitedJoinGroupRequestEvent', 'BotJoinGroupEvent',
+    'BotLeaveEventActive', 'BotLeaveEventKick', 'BotMuteEvent',
+    'BotOfflineEventActive', 'BotOfflineEventDropped', 'BotOfflineEventForce',
+    'BotOnlineEvent', 'BotReloginEvent', 'BotUnmuteEvent', 'CommandEvent',
+    'CommandExecutedEvent', 'Event', 'FriendEvent',
+    'FriendInputStatusChangedEvent', 'FriendMessage', 'FriendSyncMessage',
+    'FriendNickChangedEvent', 'FriendRecallEvent',
+    'GroupAllowAnonymousChatEvent', 'GroupAllowConfessTalkEvent',
+    'GroupAllowMemberInviteEvent', 'GroupEntranceAnnouncementChangeEvent',
+    'GroupEvent', 'GroupMessage', 'GroupSyncMessage', 'GroupMuteAllEvent',
+    'GroupNameChangeEvent', 'GroupRecallEvent', 'MemberCardChangeEvent',
+    'MemberHonorChangeEvent', 'MemberJoinEvent', 'MemberJoinRequestEvent',
+    'MemberLeaveEventKick', 'MemberLeaveEventQuit', 'MemberMuteEvent',
+    'MemberPermissionChangeEvent', 'MemberSpecialTitleChangeEvent',
+    'MemberUnmuteEvent', 'MessageEvent', 'NewFriendRequestEvent', 'NudgeEvent',
+    'OtherClientMessage', 'RequestEvent', 'StrangerMessage',
+    'StrangerSyncMessage', 'TempMessage', 'TempSyncMessage',
+    'BotLeaveEventDisband'
 ]
