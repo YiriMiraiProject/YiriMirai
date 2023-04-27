@@ -270,7 +270,7 @@ class Adapter(ApiProvider, AdapterInterface):
 <dl>
 <dt id="mirai.adapters.base.Adapter"><code class="flex name class">
 <span>class <span class="ident">Adapter</span></span>
-<span>(</span><span>verify_key: Union[str, NoneType], single_mode: bool = False)</span>
+<span>(</span><span>verify_key: Optional[str], single_mode: bool = False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>适配器基类，与 mirai-api-http 沟通的底层实现。</p>
@@ -421,7 +421,7 @@ class Adapter(ApiProvider, AdapterInterface):
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.adapters.base.Adapter.background"><code class="name">var <span class="ident">background</span> : Union[_asyncio.Task, NoneType]</code></dt>
+<dt id="mirai.adapters.base.Adapter.background"><code class="name">var <span class="ident">background</span> : Optional[_asyncio.Task]</code></dt>
 <dd>
 <div class="desc"><p>背景事件循环任务。</p></div>
 </dd>
@@ -437,7 +437,7 @@ class Adapter(ApiProvider, AdapterInterface):
 <dd>
 <div class="desc"><p>是否开启 single_mode，开启后与 session 将无效。</p></div>
 </dd>
-<dt id="mirai.adapters.base.Adapter.verify_key"><code class="name">var <span class="ident">verify_key</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.adapters.base.Adapter.verify_key"><code class="name">var <span class="ident">verify_key</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>mirai-api-http 配置的认证 key，关闭认证时为 None。</p></div>
 </dd>

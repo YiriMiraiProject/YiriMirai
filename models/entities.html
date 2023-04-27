@@ -365,11 +365,11 @@ def get_name(self) -&gt; str:
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.entities.Friend.nickname"><code class="name">var <span class="ident">nickname</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.entities.Friend.nickname"><code class="name">var <span class="ident">nickname</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>昵称。</p></div>
 </dd>
-<dt id="mirai.models.entities.Friend.remark"><code class="name">var <span class="ident">remark</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.entities.Friend.remark"><code class="name">var <span class="ident">remark</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>备注。</p></div>
 </dd>
@@ -755,7 +755,7 @@ def get_name(self) -&gt; str:
 <dd>
 <div class="desc"><p>QQ 号或群号。</p></div>
 </dd>
-<dt id="mirai.models.entities.Subject.kind"><code class="name">var <span class="ident">kind</span> : typing_extensions.Literal['<a title="mirai.models.entities.Friend" href="#mirai.models.entities.Friend">Friend</a>', '<a title="mirai.models.entities.Group" href="#mirai.models.entities.Group">Group</a>', 'Stranger']</code></dt>
+<dt id="mirai.models.entities.Subject.kind"><code class="name">var <span class="ident">kind</span> : Literal['<a title="mirai.models.entities.Friend" href="#mirai.models.entities.Friend">Friend</a>', '<a title="mirai.models.entities.Group" href="#mirai.models.entities.Group">Group</a>', 'Stranger']</code></dt>
 <dd>
 <div class="desc"><p>类型。</p></div>
 </dd>

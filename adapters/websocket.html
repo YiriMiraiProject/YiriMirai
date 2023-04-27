@@ -298,7 +298,7 @@ class WebSocketAdapter(Adapter):
 <dl>
 <dt id="mirai.adapters.websocket.WebSocketAdapter"><code class="flex name class">
 <span>class <span class="ident">WebSocketAdapter</span></span>
-<span>(</span><span>verify_key: Union[str, NoneType], host: str, port: int, sync_id: str = '-1', single_mode: bool = False, heartbeat_interval: float = 60.0)</span>
+<span>(</span><span>verify_key: Optional[str], host: str, port: int, sync_id: str = '-1', single_mode: bool = False, heartbeat_interval: float = 60.0)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>WebSocket 适配器。作为 WebSocket 客户端与 mirai-api-http 沟通。</p>
@@ -556,7 +556,7 @@ class WebSocketAdapter(Adapter):
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.adapters.websocket.WebSocketAdapter.connection"><code class="name">var <span class="ident">connection</span> : Union[websockets.legacy.client.WebSocketClientProtocol, NoneType]</code></dt>
+<dt id="mirai.adapters.websocket.WebSocketAdapter.connection"><code class="name">var <span class="ident">connection</span> : Optional[websockets.legacy.client.WebSocketClientProtocol]</code></dt>
 <dd>
 <div class="desc"><p>WebSocket 客户端连接。</p></div>
 </dd>

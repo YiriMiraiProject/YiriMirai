@@ -190,7 +190,7 @@ class WebHookAdapter(Adapter):
 <dl>
 <dt id="mirai.adapters.webhook.WebHookAdapter"><code class="flex name class">
 <span>class <span class="ident">WebHookAdapter</span></span>
-<span>(</span><span>verify_key: Union[str, NoneType], route: str = '/', extra_headers: Union[Mapping[str, str], NoneType] = None, enable_quick_response: bool = True, single_mode: bool = False)</span>
+<span>(</span><span>verify_key: Optional[str], route: str = '/', extra_headers: Optional[Mapping[str, str]] = None, enable_quick_response: bool = True, single_mode: bool = False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>WebHook 适配器。作为 HTTP 服务器与 mirai-api-http 沟通。</p>

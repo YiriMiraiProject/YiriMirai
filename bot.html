@@ -1121,7 +1121,7 @@ def bus(self) -&gt; ModelEventBus:
 </details>
 </dd>
 <dt id="mirai.bot.Mirai.get_entity"><code class="name flex">
-<span>async def <span class="ident">get_entity</span></span>(<span>self, subject: <a title="mirai.models.entities.Subject" href="models/entities.html#mirai.models.entities.Subject">Subject</a>) ‑> Union[<a title="mirai.models.entities.Entity" href="models/entities.html#mirai.models.entities.Entity">Entity</a>, NoneType]</span>
+<span>async def <span class="ident">get_entity</span></span>(<span>self, subject: <a title="mirai.models.entities.Subject" href="models/entities.html#mirai.models.entities.Subject">Subject</a>) ‑> Optional[<a title="mirai.models.entities.Entity" href="models/entities.html#mirai.models.entities.Entity">Entity</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>获取实体对象。</p>
@@ -1159,7 +1159,7 @@ def bus(self) -&gt; ModelEventBus:
 </details>
 </dd>
 <dt id="mirai.bot.Mirai.get_friend"><code class="name flex">
-<span>async def <span class="ident">get_friend</span></span>(<span>self, id_: int) ‑> Union[<a title="mirai.models.entities.Friend" href="models/entities.html#mirai.models.entities.Friend">Friend</a>, NoneType]</span>
+<span>async def <span class="ident">get_friend</span></span>(<span>self, id_: int) ‑> Optional[<a title="mirai.models.entities.Friend" href="models/entities.html#mirai.models.entities.Friend">Friend</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>获取好友对象。</p>
@@ -1199,7 +1199,7 @@ def bus(self) -&gt; ModelEventBus:
 </details>
 </dd>
 <dt id="mirai.bot.Mirai.get_group"><code class="name flex">
-<span>async def <span class="ident">get_group</span></span>(<span>self, id_: int) ‑> Union[<a title="mirai.models.entities.Group" href="models/entities.html#mirai.models.entities.Group">Group</a>, NoneType]</span>
+<span>async def <span class="ident">get_group</span></span>(<span>self, id_: int) ‑> Optional[<a title="mirai.models.entities.Group" href="models/entities.html#mirai.models.entities.Group">Group</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>获取群组对象。</p>
@@ -1239,7 +1239,7 @@ def bus(self) -&gt; ModelEventBus:
 </details>
 </dd>
 <dt id="mirai.bot.Mirai.get_group_member"><code class="name flex">
-<span>async def <span class="ident">get_group_member</span></span>(<span>self, group: Union[<a title="mirai.models.entities.Group" href="models/entities.html#mirai.models.entities.Group">Group</a>, int], id_: int) ‑> Union[<a title="mirai.models.entities.GroupMember" href="models/entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</span>
+<span>async def <span class="ident">get_group_member</span></span>(<span>self, group: Union[<a title="mirai.models.entities.Group" href="models/entities.html#mirai.models.entities.Group">Group</a>, int], id_: int) ‑> Optional[<a title="mirai.models.entities.GroupMember" href="models/entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>获取群成员对象。</p>

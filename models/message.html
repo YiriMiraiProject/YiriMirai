@@ -826,6 +826,10 @@ class Image(MessageComponent):
     &#34;&#34;&#34;图片的路径，发送本地图片。&#34;&#34;&#34;
     base64: Optional[str] = None
     &#34;&#34;&#34;图片的 Base64 编码。&#34;&#34;&#34;
+    width: int
+    &#34;&#34;&#34;图片的宽度&#34;&#34;&#34;
+    height: int
+    &#34;&#34;&#34;图片的高度&#34;&#34;&#34;
     def __eq__(self, other):
         return isinstance(
             other, Image
@@ -1114,6 +1118,10 @@ class FlashImage(Image):
     &#34;&#34;&#34;图片的路径，发送本地图片，路径相对于 `plugins/MiraiAPIHTTP/images`。&#34;&#34;&#34;
     base64: Optional[str] = None
     &#34;&#34;&#34;图片的 Base64 编码。&#34;&#34;&#34;
+    width: int
+    &#34;&#34;&#34;图片的宽度&#34;&#34;&#34;
+    height: int
+    &#34;&#34;&#34;图片的高度&#34;&#34;&#34;
     def __str__(self):
         return &#39;[闪照]&#39;
 
@@ -1297,16 +1305,38 @@ class ForwardMessageNode(MiraiBaseModel):
         )
 
 
+class ForwardMessageDiaplay(MiraiBaseModel):
+    &#34;&#34;&#34;合并转发组件的显示信息。&#34;&#34;&#34;
+    title: str = &#34;群聊的聊天记录&#34;
+    brief: str = &#34;[聊天记录]&#34;
+    source: str = &#34;聊天记录&#34;
+    preview: List[str] = []
+    summary: str = &#34;查看x条转发消息&#34;
+    @classmethod
+    def create(
+        cls, nodes: List[ForwardMessageNode]
+    ):
+        &#34;&#34;&#34;从转发消息节点列表生成显示信息。&#34;&#34;&#34;
+        return ForwardMessageDiaplay(
+            preview=[nodes[0].sender_name+&#34;: &#34;+str(nodes[0].message_chain)],
+            summary=f&#34;查看{len(nodes)}条转发消息&#34;
+        )
+
+
 class Forward(MessageComponent):
     &#34;&#34;&#34;合并转发。&#34;&#34;&#34;
     type: str = &#34;Forward&#34;
     &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    display: Optional[ForwardMessageDiaplay]
+    &#34;&#34;&#34;转发组件的显示信息。&#34;&#34;&#34;
     node_list: List[ForwardMessageNode]
     &#34;&#34;&#34;转发消息节点列表。&#34;&#34;&#34;
     def __init__(self, *args, **kwargs):
         if len(args) == 1:
-            self.node_list = args[0]
-            super().__init__(**kwargs)
+            kwargs[&#39;node_list&#39;] = args[0]
+            args=()
+        if &#39;display&#39; not in kwargs:
+            kwargs[&#39;display&#39;] = ForwardMessageDiaplay.create(kwargs[&#39;node_list&#39;])
         super().__init__(*args, **kwargs)
 
     def __str__(self):
@@ -1567,7 +1597,7 @@ __all__ = [
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.message.At.display"><code class="name">var <span class="ident">display</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.message.At.display"><code class="name">var <span class="ident">display</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>At时显示的文字，发送消息时无效，自动使用群名片。</p></div>
 </dd>
@@ -1726,11 +1756,11 @@ __all__ = [
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.message.Face.face_id"><code class="name">var <span class="ident">face_id</span> : Union[int, NoneType]</code></dt>
+<dt id="mirai.models.message.Face.face_id"><code class="name">var <span class="ident">face_id</span> : Optional[int]</code></dt>
 <dd>
 <div class="desc"><p>QQ 表情编号，可选，优先度高于 name。</p></div>
 </dd>
-<dt id="mirai.models.message.Face.name"><code class="name">var <span class="ident">name</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.message.Face.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>QQ表情名称，可选。</p></div>
 </dd>
@@ -1827,6 +1857,10 @@ __all__ = [
     &#34;&#34;&#34;图片的路径，发送本地图片，路径相对于 `plugins/MiraiAPIHTTP/images`。&#34;&#34;&#34;
     base64: Optional[str] = None
     &#34;&#34;&#34;图片的 Base64 编码。&#34;&#34;&#34;
+    width: int
+    &#34;&#34;&#34;图片的宽度&#34;&#34;&#34;
+    height: int
+    &#34;&#34;&#34;图片的高度&#34;&#34;&#34;
     def __str__(self):
         return &#39;[闪照]&#39;
 
@@ -1871,12 +1905,14 @@ __all__ = [
 <li><code><a title="mirai.models.message.Image.from_local" href="#mirai.models.message.Image.from_local">from_local</a></code></li>
 <li><code><a title="mirai.models.message.Image.from_unsafe_path" href="#mirai.models.message.Image.from_unsafe_path">from_unsafe_path</a></code></li>
 <li><code><a title="mirai.models.message.Image.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.message.Image.height" href="#mirai.models.message.Image.height">height</a></code></li>
 <li><code><a title="mirai.models.message.Image.image_id" href="#mirai.models.message.Image.image_id">image_id</a></code></li>
 <li><code><a title="mirai.models.message.Image.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.message.Image.path" href="#mirai.models.message.Image.path">path</a></code></li>
 <li><code><a title="mirai.models.message.Image.type" href="#mirai.models.message.MessageComponent.type">type</a></code></li>
 <li><code><a title="mirai.models.message.Image.url" href="#mirai.models.message.Image.url">url</a></code></li>
 <li><code><a title="mirai.models.message.Image.validate_path" href="#mirai.models.message.Image.validate_path">validate_path</a></code></li>
+<li><code><a title="mirai.models.message.Image.width" href="#mirai.models.message.Image.width">width</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1895,12 +1931,16 @@ __all__ = [
     &#34;&#34;&#34;合并转发。&#34;&#34;&#34;
     type: str = &#34;Forward&#34;
     &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    display: Optional[ForwardMessageDiaplay]
+    &#34;&#34;&#34;转发组件的显示信息。&#34;&#34;&#34;
     node_list: List[ForwardMessageNode]
     &#34;&#34;&#34;转发消息节点列表。&#34;&#34;&#34;
     def __init__(self, *args, **kwargs):
         if len(args) == 1:
-            self.node_list = args[0]
-            super().__init__(**kwargs)
+            kwargs[&#39;node_list&#39;] = args[0]
+            args=()
+        if &#39;display&#39; not in kwargs:
+            kwargs[&#39;display&#39;] = ForwardMessageDiaplay.create(kwargs[&#39;node_list&#39;])
         super().__init__(*args, **kwargs)
 
     def __str__(self):
@@ -1916,6 +1956,10 @@ __all__ = [
 </ul>
 <h3>Class variables</h3>
 <dl>
+<dt id="mirai.models.message.Forward.display"><code class="name">var <span class="ident">display</span> : Optional[mirai.models.message.ForwardMessageDiaplay]</code></dt>
+<dd>
+<div class="desc"><p>转发组件的显示信息。</p></div>
+</dd>
 <dt id="mirai.models.message.Forward.node_list"><code class="name">var <span class="ident">node_list</span> : List[<a title="mirai.models.message.ForwardMessageNode" href="#mirai.models.message.ForwardMessageNode">ForwardMessageNode</a>]</code></dt>
 <dd>
 <div class="desc"><p>转发消息节点列表。</p></div>
@@ -1988,23 +2032,23 @@ __all__ = [
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.message.ForwardMessageNode.message_chain"><code class="name">var <span class="ident">message_chain</span> : Union[<a title="mirai.models.message.MessageChain" href="#mirai.models.message.MessageChain">MessageChain</a>, NoneType]</code></dt>
+<dt id="mirai.models.message.ForwardMessageNode.message_chain"><code class="name">var <span class="ident">message_chain</span> : Optional[<a title="mirai.models.message.MessageChain" href="#mirai.models.message.MessageChain">MessageChain</a>]</code></dt>
 <dd>
 <div class="desc"><p>消息内容。</p></div>
 </dd>
-<dt id="mirai.models.message.ForwardMessageNode.message_id"><code class="name">var <span class="ident">message_id</span> : Union[int, NoneType]</code></dt>
+<dt id="mirai.models.message.ForwardMessageNode.message_id"><code class="name">var <span class="ident">message_id</span> : Optional[int]</code></dt>
 <dd>
 <div class="desc"><p>消息的 message_id，可以只使用此属性，从缓存中读取消息内容。</p></div>
 </dd>
-<dt id="mirai.models.message.ForwardMessageNode.sender_id"><code class="name">var <span class="ident">sender_id</span> : Union[int, NoneType]</code></dt>
+<dt id="mirai.models.message.ForwardMessageNode.sender_id"><code class="name">var <span class="ident">sender_id</span> : Optional[int]</code></dt>
 <dd>
 <div class="desc"><p>发送人QQ号。</p></div>
 </dd>
-<dt id="mirai.models.message.ForwardMessageNode.sender_name"><code class="name">var <span class="ident">sender_name</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.message.ForwardMessageNode.sender_name"><code class="name">var <span class="ident">sender_name</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>显示名称。</p></div>
 </dd>
-<dt id="mirai.models.message.ForwardMessageNode.time"><code class="name">var <span class="ident">time</span> : Union[datetime.datetime, NoneType]</code></dt>
+<dt id="mirai.models.message.ForwardMessageNode.time"><code class="name">var <span class="ident">time</span> : Optional[datetime.datetime]</code></dt>
 <dd>
 <div class="desc"><p>发送时间。</p></div>
 </dd>
@@ -2076,6 +2120,10 @@ def create(
     &#34;&#34;&#34;图片的路径，发送本地图片。&#34;&#34;&#34;
     base64: Optional[str] = None
     &#34;&#34;&#34;图片的 Base64 编码。&#34;&#34;&#34;
+    width: int
+    &#34;&#34;&#34;图片的宽度&#34;&#34;&#34;
+    height: int
+    &#34;&#34;&#34;图片的高度&#34;&#34;&#34;
     def __eq__(self, other):
         return isinstance(
             other, Image
@@ -2220,11 +2268,15 @@ def create(
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.message.Image.base64"><code class="name">var <span class="ident">base64</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.message.Image.base64"><code class="name">var <span class="ident">base64</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>图片的 Base64 编码。</p></div>
 </dd>
-<dt id="mirai.models.message.Image.image_id"><code class="name">var <span class="ident">image_id</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.message.Image.height"><code class="name">var <span class="ident">height</span> : int</code></dt>
+<dd>
+<div class="desc"><p>图片的高度</p></div>
+</dd>
+<dt id="mirai.models.message.Image.image_id"><code class="name">var <span class="ident">image_id</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>图片的 image_id，群图片与好友图片格式不同。不为空时将忽略 url 属性。</p></div>
 </dd>
@@ -2232,15 +2284,19 @@ def create(
 <dd>
 <div class="desc"><p>图片的路径，发送本地图片。</p></div>
 </dd>
-<dt id="mirai.models.message.Image.url"><code class="name">var <span class="ident">url</span> : Union[pydantic.networks.HttpUrl, NoneType]</code></dt>
+<dt id="mirai.models.message.Image.url"><code class="name">var <span class="ident">url</span> : Optional[pydantic.networks.HttpUrl]</code></dt>
 <dd>
 <div class="desc"><p>图片的 URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载。</p></div>
+</dd>
+<dt id="mirai.models.message.Image.width"><code class="name">var <span class="ident">width</span> : int</code></dt>
+<dd>
+<div class="desc"><p>图片的宽度</p></div>
 </dd>
 </dl>
 <h3>Static methods</h3>
 <dl>
 <dt id="mirai.models.message.Image.from_local"><code class="name flex">
-<span>async def <span class="ident">from_local</span></span>(<span>filename: Union[str, pathlib.Path, NoneType] = None, content: Union[bytes, NoneType] = None) ‑> <a title="mirai.models.message.Image" href="#mirai.models.message.Image">Image</a></span>
+<span>async def <span class="ident">from_local</span></span>(<span>filename: Union[str, pathlib.Path, NoneType] = None, content: Optional[bytes] = None) ‑> <a title="mirai.models.message.Image" href="#mirai.models.message.Image">Image</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>从本地文件路径加载图片，以 base64 的形式传递。</p>
@@ -3313,7 +3369,7 @@ def message_id(self) -&gt; int:
     return source.id if source else -1</code></pre>
 </details>
 </dd>
-<dt id="mirai.models.message.MessageChain.source"><code class="name">var <span class="ident">source</span> : Union[<a title="mirai.models.message.Source" href="#mirai.models.message.Source">Source</a>, NoneType]</code></dt>
+<dt id="mirai.models.message.MessageChain.source"><code class="name">var <span class="ident">source</span> : Optional[<a title="mirai.models.message.Source" href="#mirai.models.message.Source">Source</a>]</code></dt>
 <dd>
 <div class="desc"><p>获取消息链中的 <code><a title="mirai.models.message.Source" href="#mirai.models.message.Source">Source</a></code> 对象。</p></div>
 <details class="source">
@@ -3482,7 +3538,7 @@ def source(self) -&gt; Optional[&#39;Source&#39;]:
 </details>
 </dd>
 <dt id="mirai.models.message.MessageChain.get"><code class="name flex">
-<span>def <span class="ident">get</span></span>(<span>self, index: Union[int, slice, Type[~TMessageComponent], Tuple[Type[~TMessageComponent], int]], count: Union[int, NoneType] = None) ‑> Union[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>, List[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>], List[~TMessageComponent]]</span>
+<span>def <span class="ident">get</span></span>(<span>self, index: Union[int, slice, Type[~TMessageComponent], Tuple[Type[~TMessageComponent], int]], count: Optional[int] = None) ‑> Union[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>, List[<a title="mirai.models.message.MessageComponent" href="#mirai.models.message.MessageComponent">MessageComponent</a>], List[~TMessageComponent]]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>获取消息链中的某个（某些）消息组件，或某类型的消息组件。</p>
@@ -3561,7 +3617,7 @@ def source(self) -&gt; Optional[&#39;Source&#39;]:
 </details>
 </dd>
 <dt id="mirai.models.message.MessageChain.get_first"><code class="name flex">
-<span>def <span class="ident">get_first</span></span>(<span>self, t: Type[~TMessageComponent]) ‑> Union[~TMessageComponent, NoneType]</span>
+<span>def <span class="ident">get_first</span></span>(<span>self, t: Type[~TMessageComponent]) ‑> Optional[~TMessageComponent]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>获取消息链中第一个符合类型的消息组件。</p></div>
@@ -4338,11 +4394,11 @@ def poke_type(self):
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.message.Quote.group_id"><code class="name">var <span class="ident">group_id</span> : Union[int, NoneType]</code></dt>
+<dt id="mirai.models.message.Quote.group_id"><code class="name">var <span class="ident">group_id</span> : Optional[int]</code></dt>
 <dd>
 <div class="desc"><p>被引用回复的原消息所接收的群号，当为好友消息时为0。</p></div>
 </dd>
-<dt id="mirai.models.message.Quote.id"><code class="name">var <span class="ident">id</span> : Union[int, NoneType]</code></dt>
+<dt id="mirai.models.message.Quote.id"><code class="name">var <span class="ident">id</span> : Optional[int]</code></dt>
 <dd>
 <div class="desc"><p>被引用回复的原消息的 message_id。</p></div>
 </dd>
@@ -4350,11 +4406,11 @@ def poke_type(self):
 <dd>
 <div class="desc"><p>被引用回复的原消息的消息链对象。</p></div>
 </dd>
-<dt id="mirai.models.message.Quote.sender_id"><code class="name">var <span class="ident">sender_id</span> : Union[int, NoneType]</code></dt>
+<dt id="mirai.models.message.Quote.sender_id"><code class="name">var <span class="ident">sender_id</span> : Optional[int]</code></dt>
 <dd>
 <div class="desc"><p>被引用回复的原消息的发送者的QQ号。</p></div>
 </dd>
-<dt id="mirai.models.message.Quote.target_id"><code class="name">var <span class="ident">target_id</span> : Union[int, NoneType]</code></dt>
+<dt id="mirai.models.message.Quote.target_id"><code class="name">var <span class="ident">target_id</span> : Optional[int]</code></dt>
 <dd>
 <div class="desc"><p>被引用回复的原消息的接收者者的QQ号（或群号）。</p></div>
 </dd>
@@ -4592,23 +4648,23 @@ def origin_formater(cls, v):
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.message.Voice.base64"><code class="name">var <span class="ident">base64</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.message.Voice.base64"><code class="name">var <span class="ident">base64</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>语音的 Base64 编码。</p></div>
 </dd>
-<dt id="mirai.models.message.Voice.length"><code class="name">var <span class="ident">length</span> : Union[int, NoneType]</code></dt>
+<dt id="mirai.models.message.Voice.length"><code class="name">var <span class="ident">length</span> : Optional[int]</code></dt>
 <dd>
 <div class="desc"><p>语音的长度，单位为秒。</p></div>
 </dd>
-<dt id="mirai.models.message.Voice.path"><code class="name">var <span class="ident">path</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.message.Voice.path"><code class="name">var <span class="ident">path</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>语音的路径，发送本地语音。</p></div>
 </dd>
-<dt id="mirai.models.message.Voice.url"><code class="name">var <span class="ident">url</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.message.Voice.url"><code class="name">var <span class="ident">url</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>语音的 URL，发送时可作网络语音的链接；接收时为腾讯语音服务器的链接，可用于语音下载。</p></div>
 </dd>
-<dt id="mirai.models.message.Voice.voice_id"><code class="name">var <span class="ident">voice_id</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.message.Voice.voice_id"><code class="name">var <span class="ident">voice_id</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>语音的 voice_id，不为空时将忽略 url 属性。</p></div>
 </dd>
@@ -4616,7 +4672,7 @@ def origin_formater(cls, v):
 <h3>Static methods</h3>
 <dl>
 <dt id="mirai.models.message.Voice.from_local"><code class="name flex">
-<span>async def <span class="ident">from_local</span></span>(<span>filename: Union[str, pathlib.Path, NoneType] = None, content: Union[bytes, NoneType] = None) ‑> <a title="mirai.models.message.Voice" href="#mirai.models.message.Voice">Voice</a></span>
+<span>async def <span class="ident">from_local</span></span>(<span>filename: Union[str, pathlib.Path, NoneType] = None, content: Optional[bytes] = None) ‑> <a title="mirai.models.message.Voice" href="#mirai.models.message.Voice">Voice</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>从本地文件路径加载语音，以 base64 的形式传递。</p>
@@ -4658,7 +4714,7 @@ async def from_local(
 </details>
 </dd>
 <dt id="mirai.models.message.Voice.validate_path"><code class="name flex">
-<span>def <span class="ident">validate_path</span></span>(<span>path: Union[str, NoneType])</span>
+<span>def <span class="ident">validate_path</span></span>(<span>path: Optional[str])</span>
 </code></dt>
 <dd>
 <div class="desc"><p>修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。</p></div>
@@ -4867,6 +4923,7 @@ def validate_path(cls, path: Optional[str]):
 <li>
 <h4><code><a title="mirai.models.message.Forward" href="#mirai.models.message.Forward">Forward</a></code></h4>
 <ul class="">
+<li><code><a title="mirai.models.message.Forward.display" href="#mirai.models.message.Forward.display">display</a></code></li>
 <li><code><a title="mirai.models.message.Forward.node_list" href="#mirai.models.message.Forward.node_list">node_list</a></code></li>
 </ul>
 </li>
@@ -4891,11 +4948,13 @@ def validate_path(cls, path: Optional[str]):
 <li><code><a title="mirai.models.message.Image.download" href="#mirai.models.message.Image.download">download</a></code></li>
 <li><code><a title="mirai.models.message.Image.from_local" href="#mirai.models.message.Image.from_local">from_local</a></code></li>
 <li><code><a title="mirai.models.message.Image.from_unsafe_path" href="#mirai.models.message.Image.from_unsafe_path">from_unsafe_path</a></code></li>
+<li><code><a title="mirai.models.message.Image.height" href="#mirai.models.message.Image.height">height</a></code></li>
 <li><code><a title="mirai.models.message.Image.image_id" href="#mirai.models.message.Image.image_id">image_id</a></code></li>
 <li><code><a title="mirai.models.message.Image.path" href="#mirai.models.message.Image.path">path</a></code></li>
 <li><code><a title="mirai.models.message.Image.url" href="#mirai.models.message.Image.url">url</a></code></li>
 <li><code><a title="mirai.models.message.Image.uuid" href="#mirai.models.message.Image.uuid">uuid</a></code></li>
 <li><code><a title="mirai.models.message.Image.validate_path" href="#mirai.models.message.Image.validate_path">validate_path</a></code></li>
+<li><code><a title="mirai.models.message.Image.width" href="#mirai.models.message.Image.width">width</a></code></li>
 </ul>
 </li>
 <li>

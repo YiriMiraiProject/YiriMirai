@@ -60,7 +60,8 @@ from mirai.models.events import (
     MemberSpecialTitleChangeEvent, MemberUnmuteEvent, MessageEvent,
     NewFriendRequestEvent, NudgeEvent, OtherClientEvent, OtherClientMessage,
     OtherClientOfflineEvent, OtherClientOnlineEvent, RequestEvent,
-    StrangerMessage, StrangerSyncMessage, TempMessage, TempSyncMessage
+    StrangerMessage, StrangerSyncMessage, TempMessage, TempSyncMessage,
+    BotLeaveEventDisband
 )
 from mirai.models.message import (
     App, At, AtAll, Dice, Face, File, FlashImage, Forward, ForwardMessageNode,
@@ -159,6 +160,7 @@ __all__ = [
     &#39;serialize&#39;,
     &#39;deserialize&#39;,
     &#39;ModelEventBus&#39;,
+    &#39;BotLeaveEventDisband&#39;
 ]</code></pre>
 </details>
 </section>
@@ -378,7 +380,7 @@ __all__ = [
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.At.display"><code class="name">var <span class="ident">display</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.At.display"><code class="name">var <span class="ident">display</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>At时显示的文字，发送消息时无效，自动使用群名片。</p></div>
 </dd>
@@ -714,7 +716,7 @@ __all__ = [
 <dd>
 <div class="desc"><p>Bot 加入的群。</p></div>
 </dd>
-<dt id="mirai.models.BotJoinGroupEvent.invitor"><code class="name">var <span class="ident">invitor</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.BotJoinGroupEvent.invitor"><code class="name">var <span class="ident">invitor</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>邀请者。</p></div>
 </dd>
@@ -786,6 +788,68 @@ __all__ = [
 </li>
 </ul>
 </dd>
+<dt id="mirai.models.BotLeaveEventDisband"><code class="flex name class">
+<span>class <span class="ident">BotLeaveEventDisband</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 因为群解散而离群</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>group</code></strong></dt>
+<dd>群对象</dd>
+<dt><strong><code>operator</code></strong></dt>
+<dd>操作人</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotLeaveEventDisband(GroupEvent):
+    &#34;&#34;&#34;Bot 因为群解散而离群
+
+    Args:
+        group: 群对象
+        operator: 操作人
+    &#34;&#34;&#34;
+    type: str = &#39;BotLeaveEventDisband&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;被解散的群聊&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;操作者&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="events.html#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="events.html#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.BotLeaveEventDisband.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"><p>被解散的群聊</p></div>
+</dd>
+<dt id="mirai.models.BotLeaveEventDisband.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
+<dd>
+<div class="desc"><p>操作者</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="events.html#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="events.html#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="mirai.models.BotLeaveEventKick"><code class="flex name class">
 <span>class <span class="ident">BotLeaveEventKick</span></span>
 <span>(</span><span>*args, **kwargs)</span>
@@ -832,7 +896,7 @@ __all__ = [
 <dd>
 <div class="desc"><p>Bot 被踢出的群。</p></div>
 </dd>
-<dt id="mirai.models.BotLeaveEventKick.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.BotLeaveEventKick.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>踢出 Bot 的管理员。</p></div>
 </dd>
@@ -897,7 +961,7 @@ __all__ = [
 <dd>
 <div class="desc"><p>禁言时间，单位秒。</p></div>
 </dd>
-<dt id="mirai.models.BotMuteEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.BotMuteEvent.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>禁言的操作者。</p></div>
 </dd>
@@ -1203,7 +1267,7 @@ __all__ = [
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.BotUnmuteEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.BotUnmuteEvent.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>取消禁言的操作者。</p></div>
 </dd>
@@ -1519,11 +1583,11 @@ __all__ = [
 <dd>
 <div class="desc"><p>命令执行时的参数。</p></div>
 </dd>
-<dt id="mirai.models.CommandExecutedEvent.friend"><code class="name">var <span class="ident">friend</span> : Union[<a title="mirai.models.entities.Friend" href="entities.html#mirai.models.entities.Friend">Friend</a>, NoneType]</code></dt>
+<dt id="mirai.models.CommandExecutedEvent.friend"><code class="name">var <span class="ident">friend</span> : Optional[<a title="mirai.models.entities.Friend" href="entities.html#mirai.models.entities.Friend">Friend</a>]</code></dt>
 <dd>
 <div class="desc"><p>发送命令的好友, 从控制台发送为 None。</p></div>
 </dd>
-<dt id="mirai.models.CommandExecutedEvent.member"><code class="name">var <span class="ident">member</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.CommandExecutedEvent.member"><code class="name">var <span class="ident">member</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>发送命令的群成员, 从控制台发送为 None。</p></div>
 </dd>
@@ -1797,11 +1861,11 @@ def get_name(self) -&gt; str:
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.Face.face_id"><code class="name">var <span class="ident">face_id</span> : Union[int, NoneType]</code></dt>
+<dt id="mirai.models.Face.face_id"><code class="name">var <span class="ident">face_id</span> : Optional[int]</code></dt>
 <dd>
 <div class="desc"><p>QQ 表情编号，可选，优先度高于 name。</p></div>
 </dd>
-<dt id="mirai.models.Face.name"><code class="name">var <span class="ident">name</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.Face.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>QQ表情名称，可选。</p></div>
 </dd>
@@ -1898,6 +1962,10 @@ def get_name(self) -&gt; str:
     &#34;&#34;&#34;图片的路径，发送本地图片，路径相对于 `plugins/MiraiAPIHTTP/images`。&#34;&#34;&#34;
     base64: Optional[str] = None
     &#34;&#34;&#34;图片的 Base64 编码。&#34;&#34;&#34;
+    width: int
+    &#34;&#34;&#34;图片的宽度&#34;&#34;&#34;
+    height: int
+    &#34;&#34;&#34;图片的高度&#34;&#34;&#34;
     def __str__(self):
         return &#39;[闪照]&#39;
 
@@ -1942,12 +2010,14 @@ def get_name(self) -&gt; str:
 <li><code><a title="mirai.models.message.Image.from_local" href="message.html#mirai.models.message.Image.from_local">from_local</a></code></li>
 <li><code><a title="mirai.models.message.Image.from_unsafe_path" href="message.html#mirai.models.message.Image.from_unsafe_path">from_unsafe_path</a></code></li>
 <li><code><a title="mirai.models.message.Image.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.message.Image.height" href="message.html#mirai.models.message.Image.height">height</a></code></li>
 <li><code><a title="mirai.models.message.Image.image_id" href="message.html#mirai.models.message.Image.image_id">image_id</a></code></li>
 <li><code><a title="mirai.models.message.Image.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
 <li><code><a title="mirai.models.message.Image.path" href="message.html#mirai.models.message.Image.path">path</a></code></li>
 <li><code><a title="mirai.models.message.Image.type" href="message.html#mirai.models.message.MessageComponent.type">type</a></code></li>
 <li><code><a title="mirai.models.message.Image.url" href="message.html#mirai.models.message.Image.url">url</a></code></li>
 <li><code><a title="mirai.models.message.Image.validate_path" href="message.html#mirai.models.message.Image.validate_path">validate_path</a></code></li>
+<li><code><a title="mirai.models.message.Image.width" href="message.html#mirai.models.message.Image.width">width</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1966,12 +2036,16 @@ def get_name(self) -&gt; str:
     &#34;&#34;&#34;合并转发。&#34;&#34;&#34;
     type: str = &#34;Forward&#34;
     &#34;&#34;&#34;消息组件类型。&#34;&#34;&#34;
+    display: Optional[ForwardMessageDiaplay]
+    &#34;&#34;&#34;转发组件的显示信息。&#34;&#34;&#34;
     node_list: List[ForwardMessageNode]
     &#34;&#34;&#34;转发消息节点列表。&#34;&#34;&#34;
     def __init__(self, *args, **kwargs):
         if len(args) == 1:
-            self.node_list = args[0]
-            super().__init__(**kwargs)
+            kwargs[&#39;node_list&#39;] = args[0]
+            args=()
+        if &#39;display&#39; not in kwargs:
+            kwargs[&#39;display&#39;] = ForwardMessageDiaplay.create(kwargs[&#39;node_list&#39;])
         super().__init__(*args, **kwargs)
 
     def __str__(self):
@@ -1987,6 +2061,10 @@ def get_name(self) -&gt; str:
 </ul>
 <h3>Class variables</h3>
 <dl>
+<dt id="mirai.models.Forward.display"><code class="name">var <span class="ident">display</span> : Optional[mirai.models.message.ForwardMessageDiaplay]</code></dt>
+<dd>
+<div class="desc"><p>转发组件的显示信息。</p></div>
+</dd>
 <dt id="mirai.models.Forward.node_list"><code class="name">var <span class="ident">node_list</span> : List[<a title="mirai.models.message.ForwardMessageNode" href="message.html#mirai.models.message.ForwardMessageNode">ForwardMessageNode</a>]</code></dt>
 <dd>
 <div class="desc"><p>转发消息节点列表。</p></div>
@@ -2059,23 +2137,23 @@ def get_name(self) -&gt; str:
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.ForwardMessageNode.message_chain"><code class="name">var <span class="ident">message_chain</span> : Union[<a title="mirai.models.message.MessageChain" href="message.html#mirai.models.message.MessageChain">MessageChain</a>, NoneType]</code></dt>
+<dt id="mirai.models.ForwardMessageNode.message_chain"><code class="name">var <span class="ident">message_chain</span> : Optional[<a title="mirai.models.message.MessageChain" href="message.html#mirai.models.message.MessageChain">MessageChain</a>]</code></dt>
 <dd>
 <div class="desc"><p>消息内容。</p></div>
 </dd>
-<dt id="mirai.models.ForwardMessageNode.message_id"><code class="name">var <span class="ident">message_id</span> : Union[int, NoneType]</code></dt>
+<dt id="mirai.models.ForwardMessageNode.message_id"><code class="name">var <span class="ident">message_id</span> : Optional[int]</code></dt>
 <dd>
 <div class="desc"><p>消息的 message_id，可以只使用此属性，从缓存中读取消息内容。</p></div>
 </dd>
-<dt id="mirai.models.ForwardMessageNode.sender_id"><code class="name">var <span class="ident">sender_id</span> : Union[int, NoneType]</code></dt>
+<dt id="mirai.models.ForwardMessageNode.sender_id"><code class="name">var <span class="ident">sender_id</span> : Optional[int]</code></dt>
 <dd>
 <div class="desc"><p>发送人QQ号。</p></div>
 </dd>
-<dt id="mirai.models.ForwardMessageNode.sender_name"><code class="name">var <span class="ident">sender_name</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.ForwardMessageNode.sender_name"><code class="name">var <span class="ident">sender_name</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>显示名称。</p></div>
 </dd>
-<dt id="mirai.models.ForwardMessageNode.time"><code class="name">var <span class="ident">time</span> : Union[datetime.datetime, NoneType]</code></dt>
+<dt id="mirai.models.ForwardMessageNode.time"><code class="name">var <span class="ident">time</span> : Optional[datetime.datetime]</code></dt>
 <dd>
 <div class="desc"><p>发送时间。</p></div>
 </dd>
@@ -2158,11 +2236,11 @@ def create(
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.Friend.nickname"><code class="name">var <span class="ident">nickname</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.Friend.nickname"><code class="name">var <span class="ident">nickname</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>昵称。</p></div>
 </dd>
-<dt id="mirai.models.Friend.remark"><code class="name">var <span class="ident">remark</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.Friend.remark"><code class="name">var <span class="ident">remark</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>备注。</p></div>
 </dd>
@@ -2695,7 +2773,7 @@ def create(
 <dd>
 <div class="desc"><p>匿名聊天状态改变的群。</p></div>
 </dd>
-<dt id="mirai.models.GroupAllowAnonymousChatEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.GroupAllowAnonymousChatEvent.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>操作者，为 None 表示 Bot 操作。</p></div>
 </dd>
@@ -2861,7 +2939,7 @@ def create(
 <dd>
 <div class="desc"><p>允许群员邀请好友加群状态改变的群。</p></div>
 </dd>
-<dt id="mirai.models.GroupAllowMemberInviteEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.GroupAllowMemberInviteEvent.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>操作者，为 None 表示 Bot 操作。</p></div>
 </dd>
@@ -2944,7 +3022,7 @@ def create(
 <dd>
 <div class="desc"><p>群公告改变的群。</p></div>
 </dd>
-<dt id="mirai.models.GroupEntranceAnnouncementChangeEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.GroupEntranceAnnouncementChangeEvent.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>操作者，为 None 表示 Bot 操作。</p></div>
 </dd>
@@ -3014,6 +3092,7 @@ def create(
 <li><a title="mirai.models.events.BotGroupPermissionChangeEvent" href="events.html#mirai.models.events.BotGroupPermissionChangeEvent">BotGroupPermissionChangeEvent</a></li>
 <li><a title="mirai.models.events.BotJoinGroupEvent" href="events.html#mirai.models.events.BotJoinGroupEvent">BotJoinGroupEvent</a></li>
 <li><a title="mirai.models.events.BotLeaveEventActive" href="events.html#mirai.models.events.BotLeaveEventActive">BotLeaveEventActive</a></li>
+<li><a title="mirai.models.events.BotLeaveEventDisband" href="events.html#mirai.models.events.BotLeaveEventDisband">BotLeaveEventDisband</a></li>
 <li><a title="mirai.models.events.BotLeaveEventKick" href="events.html#mirai.models.events.BotLeaveEventKick">BotLeaveEventKick</a></li>
 <li><a title="mirai.models.events.BotMuteEvent" href="events.html#mirai.models.events.BotMuteEvent">BotMuteEvent</a></li>
 <li><a title="mirai.models.events.BotUnmuteEvent" href="events.html#mirai.models.events.BotUnmuteEvent">BotUnmuteEvent</a></li>
@@ -3275,7 +3354,7 @@ def group(self) -&gt; Group:
 <dd>
 <div class="desc"><p>全员禁言的群。</p></div>
 </dd>
-<dt id="mirai.models.GroupMuteAllEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.GroupMuteAllEvent.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>操作者，为 None 表示 Bot 操作。</p></div>
 </dd>
@@ -3358,7 +3437,7 @@ def group(self) -&gt; Group:
 <dd>
 <div class="desc"><p>群名改名的群。</p></div>
 </dd>
-<dt id="mirai.models.GroupNameChangeEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.GroupNameChangeEvent.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>操作者，为 None 表示 Bot 操作。</p></div>
 </dd>
@@ -3450,7 +3529,7 @@ def group(self) -&gt; Group:
 <dd>
 <div class="desc"><p>原消息 message_id。</p></div>
 </dd>
-<dt id="mirai.models.GroupRecallEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.GroupRecallEvent.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>消息撤回的操作者，为 None 表示 Bot 操作。</p></div>
 </dd>
@@ -3572,6 +3651,10 @@ def group(self) -&gt; Group:
     &#34;&#34;&#34;图片的路径，发送本地图片。&#34;&#34;&#34;
     base64: Optional[str] = None
     &#34;&#34;&#34;图片的 Base64 编码。&#34;&#34;&#34;
+    width: int
+    &#34;&#34;&#34;图片的宽度&#34;&#34;&#34;
+    height: int
+    &#34;&#34;&#34;图片的高度&#34;&#34;&#34;
     def __eq__(self, other):
         return isinstance(
             other, Image
@@ -3716,11 +3799,15 @@ def group(self) -&gt; Group:
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.Image.base64"><code class="name">var <span class="ident">base64</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.Image.base64"><code class="name">var <span class="ident">base64</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>图片的 Base64 编码。</p></div>
 </dd>
-<dt id="mirai.models.Image.image_id"><code class="name">var <span class="ident">image_id</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.Image.height"><code class="name">var <span class="ident">height</span> : int</code></dt>
+<dd>
+<div class="desc"><p>图片的高度</p></div>
+</dd>
+<dt id="mirai.models.Image.image_id"><code class="name">var <span class="ident">image_id</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>图片的 image_id，群图片与好友图片格式不同。不为空时将忽略 url 属性。</p></div>
 </dd>
@@ -3728,15 +3815,19 @@ def group(self) -&gt; Group:
 <dd>
 <div class="desc"><p>图片的路径，发送本地图片。</p></div>
 </dd>
-<dt id="mirai.models.Image.url"><code class="name">var <span class="ident">url</span> : Union[pydantic.networks.HttpUrl, NoneType]</code></dt>
+<dt id="mirai.models.Image.url"><code class="name">var <span class="ident">url</span> : Optional[pydantic.networks.HttpUrl]</code></dt>
 <dd>
 <div class="desc"><p>图片的 URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载。</p></div>
+</dd>
+<dt id="mirai.models.Image.width"><code class="name">var <span class="ident">width</span> : int</code></dt>
+<dd>
+<div class="desc"><p>图片的宽度</p></div>
 </dd>
 </dl>
 <h3>Static methods</h3>
 <dl>
 <dt id="mirai.models.Image.from_local"><code class="name flex">
-<span>async def <span class="ident">from_local</span></span>(<span>filename: Union[str, pathlib.Path, NoneType] = None, content: Union[bytes, NoneType] = None) ‑> <a title="mirai.models.message.Image" href="message.html#mirai.models.message.Image">Image</a></span>
+<span>async def <span class="ident">from_local</span></span>(<span>filename: Union[str, pathlib.Path, NoneType] = None, content: Optional[bytes] = None) ‑> <a title="mirai.models.message.Image" href="message.html#mirai.models.message.Image">Image</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>从本地文件路径加载图片，以 base64 的形式传递。</p>
@@ -4206,7 +4297,7 @@ def uuid(self):
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.MemberHonorChangeEvent.action"><code class="name">var <span class="ident">action</span> : typing_extensions.Literal['achieve', 'lose']</code></dt>
+<dt id="mirai.models.MemberHonorChangeEvent.action"><code class="name">var <span class="ident">action</span> : Literal['achieve', 'lose']</code></dt>
 <dd>
 <div class="desc"><p>称号变化行为：achieve 获得称号，lose 失去称号。</p></div>
 </dd>
@@ -4275,7 +4366,7 @@ def uuid(self):
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.MemberJoinEvent.invitor"><code class="name">var <span class="ident">invitor</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.MemberJoinEvent.invitor"><code class="name">var <span class="ident">invitor</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>邀请者。</p></div>
 </dd>
@@ -4439,7 +4530,7 @@ def uuid(self):
 <dd>
 <div class="desc"><p>被踢出的群成员。</p></div>
 </dd>
-<dt id="mirai.models.MemberLeaveEventKick.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.MemberLeaveEventKick.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>被踢出的群的管理员。</p></div>
 </dd>
@@ -4773,7 +4864,7 @@ def uuid(self):
 <dd>
 <div class="desc"><p>被取消禁言的群成员。</p></div>
 </dd>
-<dt id="mirai.models.MemberUnmuteEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.MemberUnmuteEvent.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>被取消禁言的群管理员。</p></div>
 </dd>
@@ -5522,7 +5613,7 @@ def message_id(self) -&gt; int:
     return source.id if source else -1</code></pre>
 </details>
 </dd>
-<dt id="mirai.models.MessageChain.source"><code class="name">var <span class="ident">source</span> : Union[<a title="mirai.models.message.Source" href="message.html#mirai.models.message.Source">Source</a>, NoneType]</code></dt>
+<dt id="mirai.models.MessageChain.source"><code class="name">var <span class="ident">source</span> : Optional[<a title="mirai.models.message.Source" href="message.html#mirai.models.message.Source">Source</a>]</code></dt>
 <dd>
 <div class="desc"><p>获取消息链中的 <code><a title="mirai.models.Source" href="#mirai.models.Source">Source</a></code> 对象。</p></div>
 <details class="source">
@@ -5691,7 +5782,7 @@ def source(self) -&gt; Optional[&#39;Source&#39;]:
 </details>
 </dd>
 <dt id="mirai.models.MessageChain.get"><code class="name flex">
-<span>def <span class="ident">get</span></span>(<span>self, index: Union[int, slice, Type[~TMessageComponent], Tuple[Type[~TMessageComponent], int]], count: Union[int, NoneType] = None) ‑> Union[<a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a>, List[<a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a>], List[~TMessageComponent]]</span>
+<span>def <span class="ident">get</span></span>(<span>self, index: Union[int, slice, Type[~TMessageComponent], Tuple[Type[~TMessageComponent], int]], count: Optional[int] = None) ‑> Union[<a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a>, List[<a title="mirai.models.message.MessageComponent" href="message.html#mirai.models.message.MessageComponent">MessageComponent</a>], List[~TMessageComponent]]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>获取消息链中的某个（某些）消息组件，或某类型的消息组件。</p>
@@ -5770,7 +5861,7 @@ def source(self) -&gt; Optional[&#39;Source&#39;]:
 </details>
 </dd>
 <dt id="mirai.models.MessageChain.get_first"><code class="name flex">
-<span>def <span class="ident">get_first</span></span>(<span>self, t: Type[~TMessageComponent]) ‑> Union[~TMessageComponent, NoneType]</span>
+<span>def <span class="ident">get_first</span></span>(<span>self, t: Type[~TMessageComponent]) ‑> Optional[~TMessageComponent]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>获取消息链中第一个符合类型的消息组件。</p></div>
@@ -7053,7 +7144,7 @@ def my_event_handler(event: FriendMessage):
 <dd>
 <div class="desc"><p>其他设备。</p></div>
 </dd>
-<dt id="mirai.models.OtherClientOnlineEvent.kind"><code class="name">var <span class="ident">kind</span> : Union[mirai.models.events.ClientKind, NoneType]</code></dt>
+<dt id="mirai.models.OtherClientOnlineEvent.kind"><code class="name">var <span class="ident">kind</span> : Optional[mirai.models.events.ClientKind]</code></dt>
 <dd>
 <div class="desc"><p>详细设备类型。</p></div>
 </dd>
@@ -7406,11 +7497,11 @@ def poke_type(self):
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.Quote.group_id"><code class="name">var <span class="ident">group_id</span> : Union[int, NoneType]</code></dt>
+<dt id="mirai.models.Quote.group_id"><code class="name">var <span class="ident">group_id</span> : Optional[int]</code></dt>
 <dd>
 <div class="desc"><p>被引用回复的原消息所接收的群号，当为好友消息时为0。</p></div>
 </dd>
-<dt id="mirai.models.Quote.id"><code class="name">var <span class="ident">id</span> : Union[int, NoneType]</code></dt>
+<dt id="mirai.models.Quote.id"><code class="name">var <span class="ident">id</span> : Optional[int]</code></dt>
 <dd>
 <div class="desc"><p>被引用回复的原消息的 message_id。</p></div>
 </dd>
@@ -7418,11 +7509,11 @@ def poke_type(self):
 <dd>
 <div class="desc"><p>被引用回复的原消息的消息链对象。</p></div>
 </dd>
-<dt id="mirai.models.Quote.sender_id"><code class="name">var <span class="ident">sender_id</span> : Union[int, NoneType]</code></dt>
+<dt id="mirai.models.Quote.sender_id"><code class="name">var <span class="ident">sender_id</span> : Optional[int]</code></dt>
 <dd>
 <div class="desc"><p>被引用回复的原消息的发送者的QQ号。</p></div>
 </dd>
-<dt id="mirai.models.Quote.target_id"><code class="name">var <span class="ident">target_id</span> : Union[int, NoneType]</code></dt>
+<dt id="mirai.models.Quote.target_id"><code class="name">var <span class="ident">target_id</span> : Optional[int]</code></dt>
 <dd>
 <div class="desc"><p>被引用回复的原消息的接收者者的QQ号（或群号）。</p></div>
 </dd>
@@ -8017,23 +8108,23 @@ def group(self) -&gt; Group:
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.Voice.base64"><code class="name">var <span class="ident">base64</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.Voice.base64"><code class="name">var <span class="ident">base64</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>语音的 Base64 编码。</p></div>
 </dd>
-<dt id="mirai.models.Voice.length"><code class="name">var <span class="ident">length</span> : Union[int, NoneType]</code></dt>
+<dt id="mirai.models.Voice.length"><code class="name">var <span class="ident">length</span> : Optional[int]</code></dt>
 <dd>
 <div class="desc"><p>语音的长度，单位为秒。</p></div>
 </dd>
-<dt id="mirai.models.Voice.path"><code class="name">var <span class="ident">path</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.Voice.path"><code class="name">var <span class="ident">path</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>语音的路径，发送本地语音。</p></div>
 </dd>
-<dt id="mirai.models.Voice.url"><code class="name">var <span class="ident">url</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.Voice.url"><code class="name">var <span class="ident">url</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>语音的 URL，发送时可作网络语音的链接；接收时为腾讯语音服务器的链接，可用于语音下载。</p></div>
 </dd>
-<dt id="mirai.models.Voice.voice_id"><code class="name">var <span class="ident">voice_id</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.models.Voice.voice_id"><code class="name">var <span class="ident">voice_id</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>语音的 voice_id，不为空时将忽略 url 属性。</p></div>
 </dd>
@@ -8041,7 +8132,7 @@ def group(self) -&gt; Group:
 <h3>Static methods</h3>
 <dl>
 <dt id="mirai.models.Voice.from_local"><code class="name flex">
-<span>async def <span class="ident">from_local</span></span>(<span>filename: Union[str, pathlib.Path, NoneType] = None, content: Union[bytes, NoneType] = None) ‑> <a title="mirai.models.message.Voice" href="message.html#mirai.models.message.Voice">Voice</a></span>
+<span>async def <span class="ident">from_local</span></span>(<span>filename: Union[str, pathlib.Path, NoneType] = None, content: Optional[bytes] = None) ‑> <a title="mirai.models.message.Voice" href="message.html#mirai.models.message.Voice">Voice</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>从本地文件路径加载语音，以 base64 的形式传递。</p>
@@ -8083,7 +8174,7 @@ async def from_local(
 </details>
 </dd>
 <dt id="mirai.models.Voice.validate_path"><code class="name flex">
-<span>def <span class="ident">validate_path</span></span>(<span>path: Union[str, NoneType])</span>
+<span>def <span class="ident">validate_path</span></span>(<span>path: Optional[str])</span>
 </code></dt>
 <dd>
 <div class="desc"><p>修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。</p></div>
@@ -8303,6 +8394,13 @@ def validate_path(cls, path: Optional[str]):
 </ul>
 </li>
 <li>
+<h4><code><a title="mirai.models.BotLeaveEventDisband" href="#mirai.models.BotLeaveEventDisband">BotLeaveEventDisband</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.BotLeaveEventDisband.group" href="#mirai.models.BotLeaveEventDisband.group">group</a></code></li>
+<li><code><a title="mirai.models.BotLeaveEventDisband.operator" href="#mirai.models.BotLeaveEventDisband.operator">operator</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="mirai.models.BotLeaveEventKick" href="#mirai.models.BotLeaveEventKick">BotLeaveEventKick</a></code></h4>
 <ul class="">
 <li><code><a title="mirai.models.BotLeaveEventKick.group" href="#mirai.models.BotLeaveEventKick.group">group</a></code></li>
@@ -8429,6 +8527,7 @@ def validate_path(cls, path: Optional[str]):
 <li>
 <h4><code><a title="mirai.models.Forward" href="#mirai.models.Forward">Forward</a></code></h4>
 <ul class="">
+<li><code><a title="mirai.models.Forward.display" href="#mirai.models.Forward.display">display</a></code></li>
 <li><code><a title="mirai.models.Forward.node_list" href="#mirai.models.Forward.node_list">node_list</a></code></li>
 </ul>
 </li>
@@ -8600,11 +8699,13 @@ def validate_path(cls, path: Optional[str]):
 <li><code><a title="mirai.models.Image.download" href="#mirai.models.Image.download">download</a></code></li>
 <li><code><a title="mirai.models.Image.from_local" href="#mirai.models.Image.from_local">from_local</a></code></li>
 <li><code><a title="mirai.models.Image.from_unsafe_path" href="#mirai.models.Image.from_unsafe_path">from_unsafe_path</a></code></li>
+<li><code><a title="mirai.models.Image.height" href="#mirai.models.Image.height">height</a></code></li>
 <li><code><a title="mirai.models.Image.image_id" href="#mirai.models.Image.image_id">image_id</a></code></li>
 <li><code><a title="mirai.models.Image.path" href="#mirai.models.Image.path">path</a></code></li>
 <li><code><a title="mirai.models.Image.url" href="#mirai.models.Image.url">url</a></code></li>
 <li><code><a title="mirai.models.Image.uuid" href="#mirai.models.Image.uuid">uuid</a></code></li>
 <li><code><a title="mirai.models.Image.validate_path" href="#mirai.models.Image.validate_path">validate_path</a></code></li>
+<li><code><a title="mirai.models.Image.width" href="#mirai.models.Image.width">width</a></code></li>
 </ul>
 </li>
 <li>

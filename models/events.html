@@ -45,7 +45,7 @@ else:
 
 from mirai.models.base import MiraiIndexedModel
 from mirai.models.entities import (
-    Client, Entity, Friend, Group, GroupMember, Permission, Subject
+    Client, Friend, Group, GroupMember, Permission, Subject
 )
 from mirai.models.message import MessageChain
 
@@ -1075,58 +1075,41 @@ class OtherClientMessage(MessageEvent):
     &#34;&#34;&#34;消息内容。&#34;&#34;&#34;
 
 
+class BotLeaveEventDisband(GroupEvent):
+    &#34;&#34;&#34;Bot 因为群解散而离群
+
+    Args:
+        group: 群对象
+        operator: 操作人
+    &#34;&#34;&#34;
+    type: str = &#39;BotLeaveEventDisband&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;被解散的群聊&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;操作者&#34;&#34;&#34;
+
+
 __all__ = [
-    &#39;BotEvent&#39;,
-    &#39;BotGroupPermissionChangeEvent&#39;,
-    &#39;BotInvitedJoinGroupRequestEvent&#39;,
-    &#39;BotJoinGroupEvent&#39;,
-    &#39;BotLeaveEventActive&#39;,
-    &#39;BotLeaveEventKick&#39;,
-    &#39;BotMuteEvent&#39;,
-    &#39;BotOfflineEventActive&#39;,
-    &#39;BotOfflineEventDropped&#39;,
-    &#39;BotOfflineEventForce&#39;,
-    &#39;BotOnlineEvent&#39;,
-    &#39;BotReloginEvent&#39;,
-    &#39;BotUnmuteEvent&#39;,
-    &#39;CommandEvent&#39;,
-    &#39;CommandExecutedEvent&#39;,
-    &#39;Event&#39;,
-    &#39;FriendEvent&#39;,
-    &#39;FriendInputStatusChangedEvent&#39;,
-    &#39;FriendMessage&#39;,
-    &#39;FriendSyncMessage&#39;,
-    &#39;FriendNickChangedEvent&#39;,
-    &#39;FriendRecallEvent&#39;,
-    &#39;GroupAllowAnonymousChatEvent&#39;,
-    &#39;GroupAllowConfessTalkEvent&#39;,
-    &#39;GroupAllowMemberInviteEvent&#39;,
-    &#39;GroupEntranceAnnouncementChangeEvent&#39;,
-    &#39;GroupEvent&#39;,
-    &#39;GroupMessage&#39;,
-    &#39;GroupSyncMessage&#39;,
-    &#39;GroupMuteAllEvent&#39;,
-    &#39;GroupNameChangeEvent&#39;,
-    &#39;GroupRecallEvent&#39;,
-    &#39;MemberCardChangeEvent&#39;,
-    &#39;MemberHonorChangeEvent&#39;,
-    &#39;MemberJoinEvent&#39;,
-    &#39;MemberJoinRequestEvent&#39;,
-    &#39;MemberLeaveEventKick&#39;,
-    &#39;MemberLeaveEventQuit&#39;,
-    &#39;MemberMuteEvent&#39;,
-    &#39;MemberPermissionChangeEvent&#39;,
-    &#39;MemberSpecialTitleChangeEvent&#39;,
-    &#39;MemberUnmuteEvent&#39;,
-    &#39;MessageEvent&#39;,
-    &#39;NewFriendRequestEvent&#39;,
-    &#39;NudgeEvent&#39;,
-    &#39;OtherClientMessage&#39;,
-    &#39;RequestEvent&#39;,
-    &#39;StrangerMessage&#39;,
-    &#39;StrangerSyncMessage&#39;,
-    &#39;TempMessage&#39;,
-    &#39;TempSyncMessage&#39;,
+    &#39;BotEvent&#39;, &#39;BotGroupPermissionChangeEvent&#39;,
+    &#39;BotInvitedJoinGroupRequestEvent&#39;, &#39;BotJoinGroupEvent&#39;,
+    &#39;BotLeaveEventActive&#39;, &#39;BotLeaveEventKick&#39;, &#39;BotMuteEvent&#39;,
+    &#39;BotOfflineEventActive&#39;, &#39;BotOfflineEventDropped&#39;, &#39;BotOfflineEventForce&#39;,
+    &#39;BotOnlineEvent&#39;, &#39;BotReloginEvent&#39;, &#39;BotUnmuteEvent&#39;, &#39;CommandEvent&#39;,
+    &#39;CommandExecutedEvent&#39;, &#39;Event&#39;, &#39;FriendEvent&#39;,
+    &#39;FriendInputStatusChangedEvent&#39;, &#39;FriendMessage&#39;, &#39;FriendSyncMessage&#39;,
+    &#39;FriendNickChangedEvent&#39;, &#39;FriendRecallEvent&#39;,
+    &#39;GroupAllowAnonymousChatEvent&#39;, &#39;GroupAllowConfessTalkEvent&#39;,
+    &#39;GroupAllowMemberInviteEvent&#39;, &#39;GroupEntranceAnnouncementChangeEvent&#39;,
+    &#39;GroupEvent&#39;, &#39;GroupMessage&#39;, &#39;GroupSyncMessage&#39;, &#39;GroupMuteAllEvent&#39;,
+    &#39;GroupNameChangeEvent&#39;, &#39;GroupRecallEvent&#39;, &#39;MemberCardChangeEvent&#39;,
+    &#39;MemberHonorChangeEvent&#39;, &#39;MemberJoinEvent&#39;, &#39;MemberJoinRequestEvent&#39;,
+    &#39;MemberLeaveEventKick&#39;, &#39;MemberLeaveEventQuit&#39;, &#39;MemberMuteEvent&#39;,
+    &#39;MemberPermissionChangeEvent&#39;, &#39;MemberSpecialTitleChangeEvent&#39;,
+    &#39;MemberUnmuteEvent&#39;, &#39;MessageEvent&#39;, &#39;NewFriendRequestEvent&#39;, &#39;NudgeEvent&#39;,
+    &#39;OtherClientMessage&#39;, &#39;RequestEvent&#39;, &#39;StrangerMessage&#39;,
+    &#39;StrangerSyncMessage&#39;, &#39;TempMessage&#39;, &#39;TempSyncMessage&#39;,
+    &#39;BotLeaveEventDisband&#39;
 ]</code></pre>
 </details>
 </section>
@@ -1414,7 +1397,7 @@ __all__ = [
 <dd>
 <div class="desc"><p>Bot 加入的群。</p></div>
 </dd>
-<dt id="mirai.models.events.BotJoinGroupEvent.invitor"><code class="name">var <span class="ident">invitor</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.events.BotJoinGroupEvent.invitor"><code class="name">var <span class="ident">invitor</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>邀请者。</p></div>
 </dd>
@@ -1486,6 +1469,68 @@ __all__ = [
 </li>
 </ul>
 </dd>
+<dt id="mirai.models.events.BotLeaveEventDisband"><code class="flex name class">
+<span>class <span class="ident">BotLeaveEventDisband</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bot 因为群解散而离群</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>group</code></strong></dt>
+<dd>群对象</dd>
+<dt><strong><code>operator</code></strong></dt>
+<dd>操作人</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BotLeaveEventDisband(GroupEvent):
+    &#34;&#34;&#34;Bot 因为群解散而离群
+
+    Args:
+        group: 群对象
+        operator: 操作人
+    &#34;&#34;&#34;
+    type: str = &#39;BotLeaveEventDisband&#39;
+    &#34;&#34;&#34;事件名。&#34;&#34;&#34;
+    group: Group
+    &#34;&#34;&#34;被解散的群聊&#34;&#34;&#34;
+    operator: Optional[GroupMember]
+    &#34;&#34;&#34;操作者&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></li>
+<li><a title="mirai.models.events.Event" href="#mirai.models.events.Event">Event</a></li>
+<li><a title="mirai.models.base.MiraiIndexedModel" href="base.html#mirai.models.base.MiraiIndexedModel">MiraiIndexedModel</a></li>
+<li><a title="mirai.models.base.MiraiBaseModel" href="base.html#mirai.models.base.MiraiBaseModel">MiraiBaseModel</a></li>
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="mirai.models.events.BotLeaveEventDisband.group"><code class="name">var <span class="ident">group</span> : <a title="mirai.models.entities.Group" href="entities.html#mirai.models.entities.Group">Group</a></code></dt>
+<dd>
+<div class="desc"><p>被解散的群聊</p></div>
+</dd>
+<dt id="mirai.models.events.BotLeaveEventDisband.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
+<dd>
+<div class="desc"><p>操作者</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="mirai.models.events.GroupEvent" href="#mirai.models.events.GroupEvent">GroupEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="mirai.models.events.GroupEvent.get_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.get_subtype">get_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.parse_subtype" href="base.html#mirai.models.base.MiraiIndexedModel.parse_subtype">parse_subtype</a></code></li>
+<li><code><a title="mirai.models.events.GroupEvent.type" href="#mirai.models.events.Event.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="mirai.models.events.BotLeaveEventKick"><code class="flex name class">
 <span>class <span class="ident">BotLeaveEventKick</span></span>
 <span>(</span><span>*args, **kwargs)</span>
@@ -1532,7 +1577,7 @@ __all__ = [
 <dd>
 <div class="desc"><p>Bot 被踢出的群。</p></div>
 </dd>
-<dt id="mirai.models.events.BotLeaveEventKick.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.events.BotLeaveEventKick.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>踢出 Bot 的管理员。</p></div>
 </dd>
@@ -1597,7 +1642,7 @@ __all__ = [
 <dd>
 <div class="desc"><p>禁言时间，单位秒。</p></div>
 </dd>
-<dt id="mirai.models.events.BotMuteEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.events.BotMuteEvent.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>禁言的操作者。</p></div>
 </dd>
@@ -1903,7 +1948,7 @@ __all__ = [
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.events.BotUnmuteEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.events.BotUnmuteEvent.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>取消禁言的操作者。</p></div>
 </dd>
@@ -2025,11 +2070,11 @@ __all__ = [
 <dd>
 <div class="desc"><p>命令执行时的参数。</p></div>
 </dd>
-<dt id="mirai.models.events.CommandExecutedEvent.friend"><code class="name">var <span class="ident">friend</span> : Union[<a title="mirai.models.entities.Friend" href="entities.html#mirai.models.entities.Friend">Friend</a>, NoneType]</code></dt>
+<dt id="mirai.models.events.CommandExecutedEvent.friend"><code class="name">var <span class="ident">friend</span> : Optional[<a title="mirai.models.entities.Friend" href="entities.html#mirai.models.entities.Friend">Friend</a>]</code></dt>
 <dd>
 <div class="desc"><p>发送命令的好友, 从控制台发送为 None。</p></div>
 </dd>
-<dt id="mirai.models.events.CommandExecutedEvent.member"><code class="name">var <span class="ident">member</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.events.CommandExecutedEvent.member"><code class="name">var <span class="ident">member</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>发送命令的群成员, 从控制台发送为 None。</p></div>
 </dd>
@@ -2595,7 +2640,7 @@ __all__ = [
 <dd>
 <div class="desc"><p>匿名聊天状态改变的群。</p></div>
 </dd>
-<dt id="mirai.models.events.GroupAllowAnonymousChatEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.events.GroupAllowAnonymousChatEvent.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>操作者，为 None 表示 Bot 操作。</p></div>
 </dd>
@@ -2761,7 +2806,7 @@ __all__ = [
 <dd>
 <div class="desc"><p>允许群员邀请好友加群状态改变的群。</p></div>
 </dd>
-<dt id="mirai.models.events.GroupAllowMemberInviteEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.events.GroupAllowMemberInviteEvent.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>操作者，为 None 表示 Bot 操作。</p></div>
 </dd>
@@ -2844,7 +2889,7 @@ __all__ = [
 <dd>
 <div class="desc"><p>群公告改变的群。</p></div>
 </dd>
-<dt id="mirai.models.events.GroupEntranceAnnouncementChangeEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.events.GroupEntranceAnnouncementChangeEvent.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>操作者，为 None 表示 Bot 操作。</p></div>
 </dd>
@@ -2914,6 +2959,7 @@ __all__ = [
 <li><a title="mirai.models.events.BotGroupPermissionChangeEvent" href="#mirai.models.events.BotGroupPermissionChangeEvent">BotGroupPermissionChangeEvent</a></li>
 <li><a title="mirai.models.events.BotJoinGroupEvent" href="#mirai.models.events.BotJoinGroupEvent">BotJoinGroupEvent</a></li>
 <li><a title="mirai.models.events.BotLeaveEventActive" href="#mirai.models.events.BotLeaveEventActive">BotLeaveEventActive</a></li>
+<li><a title="mirai.models.events.BotLeaveEventDisband" href="#mirai.models.events.BotLeaveEventDisband">BotLeaveEventDisband</a></li>
 <li><a title="mirai.models.events.BotLeaveEventKick" href="#mirai.models.events.BotLeaveEventKick">BotLeaveEventKick</a></li>
 <li><a title="mirai.models.events.BotMuteEvent" href="#mirai.models.events.BotMuteEvent">BotMuteEvent</a></li>
 <li><a title="mirai.models.events.BotUnmuteEvent" href="#mirai.models.events.BotUnmuteEvent">BotUnmuteEvent</a></li>
@@ -3088,7 +3134,7 @@ def group(self) -&gt; Group:
 <dd>
 <div class="desc"><p>全员禁言的群。</p></div>
 </dd>
-<dt id="mirai.models.events.GroupMuteAllEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.events.GroupMuteAllEvent.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>操作者，为 None 表示 Bot 操作。</p></div>
 </dd>
@@ -3171,7 +3217,7 @@ def group(self) -&gt; Group:
 <dd>
 <div class="desc"><p>群名改名的群。</p></div>
 </dd>
-<dt id="mirai.models.events.GroupNameChangeEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.events.GroupNameChangeEvent.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>操作者，为 None 表示 Bot 操作。</p></div>
 </dd>
@@ -3263,7 +3309,7 @@ def group(self) -&gt; Group:
 <dd>
 <div class="desc"><p>原消息 message_id。</p></div>
 </dd>
-<dt id="mirai.models.events.GroupRecallEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.events.GroupRecallEvent.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>消息撤回的操作者，为 None 表示 Bot 操作。</p></div>
 </dd>
@@ -3493,7 +3539,7 @@ def group(self) -&gt; Group:
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.events.MemberHonorChangeEvent.action"><code class="name">var <span class="ident">action</span> : typing_extensions.Literal['achieve', 'lose']</code></dt>
+<dt id="mirai.models.events.MemberHonorChangeEvent.action"><code class="name">var <span class="ident">action</span> : Literal['achieve', 'lose']</code></dt>
 <dd>
 <div class="desc"><p>称号变化行为：achieve 获得称号，lose 失去称号。</p></div>
 </dd>
@@ -3562,7 +3608,7 @@ def group(self) -&gt; Group:
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.models.events.MemberJoinEvent.invitor"><code class="name">var <span class="ident">invitor</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.events.MemberJoinEvent.invitor"><code class="name">var <span class="ident">invitor</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>邀请者。</p></div>
 </dd>
@@ -3726,7 +3772,7 @@ def group(self) -&gt; Group:
 <dd>
 <div class="desc"><p>被踢出的群成员。</p></div>
 </dd>
-<dt id="mirai.models.events.MemberLeaveEventKick.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.events.MemberLeaveEventKick.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>被踢出的群的管理员。</p></div>
 </dd>
@@ -4060,7 +4106,7 @@ def group(self) -&gt; Group:
 <dd>
 <div class="desc"><p>被取消禁言的群成员。</p></div>
 </dd>
-<dt id="mirai.models.events.MemberUnmuteEvent.operator"><code class="name">var <span class="ident">operator</span> : Union[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</code></dt>
+<dt id="mirai.models.events.MemberUnmuteEvent.operator"><code class="name">var <span class="ident">operator</span> : Optional[<a title="mirai.models.entities.GroupMember" href="entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</code></dt>
 <dd>
 <div class="desc"><p>被取消禁言的群管理员。</p></div>
 </dd>
@@ -4785,6 +4831,13 @@ def group(self) -&gt; Group:
 <h4><code><a title="mirai.models.events.BotLeaveEventActive" href="#mirai.models.events.BotLeaveEventActive">BotLeaveEventActive</a></code></h4>
 <ul class="">
 <li><code><a title="mirai.models.events.BotLeaveEventActive.group" href="#mirai.models.events.BotLeaveEventActive.group">group</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="mirai.models.events.BotLeaveEventDisband" href="#mirai.models.events.BotLeaveEventDisband">BotLeaveEventDisband</a></code></h4>
+<ul class="">
+<li><code><a title="mirai.models.events.BotLeaveEventDisband.group" href="#mirai.models.events.BotLeaveEventDisband.group">group</a></code></li>
+<li><code><a title="mirai.models.events.BotLeaveEventDisband.operator" href="#mirai.models.events.BotLeaveEventDisband.operator">operator</a></code></li>
 </ul>
 </li>
 <li>

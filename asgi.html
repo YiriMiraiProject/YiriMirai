@@ -542,7 +542,7 @@ def asgi_serve(
 </details>
 </dd>
 <dt id="mirai.asgi.ASGI.add_event_handler"><code class="name flex">
-<span>def <span class="ident">add_event_handler</span></span>(<span>self, event_type: typing_extensions.Literal['startup', 'shutdown'], handler: Union[Callable, NoneType] = None)</span>
+<span>def <span class="ident">add_event_handler</span></span>(<span>self, event_type: Literal['startup', 'shutdown'], handler: Optional[Callable] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>注册生命周期事件处理函数。</p>
@@ -577,7 +577,7 @@ handler(<code>Optional[Callable]</code>): 事件处理函数，省略此参数�
 </details>
 </dd>
 <dt id="mirai.asgi.ASGI.add_route"><code class="name flex">
-<span>def <span class="ident">add_route</span></span>(<span>self, path: str, endpoint: Callable, methods: Union[List[str], NoneType] = None) ‑> <a title="mirai.asgi.ASGI" href="#mirai.asgi.ASGI">ASGI</a></span>
+<span>def <span class="ident">add_route</span></span>(<span>self, path: str, endpoint: Callable, methods: Optional[List[str]] = None) ‑> <a title="mirai.asgi.ASGI" href="#mirai.asgi.ASGI">ASGI</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>添加路由。</p>

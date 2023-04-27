@@ -258,7 +258,7 @@ def __getattr__(name):
 <dl>
 <dt id="mirai.Adapter"><code class="flex name class">
 <span>class <span class="ident">Adapter</span></span>
-<span>(</span><span>verify_key: Union[str, NoneType], single_mode: bool = False)</span>
+<span>(</span><span>verify_key: Optional[str], single_mode: bool = False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>适配器基类，与 mirai-api-http 沟通的底层实现。</p>
@@ -409,7 +409,7 @@ def __getattr__(name):
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.Adapter.background"><code class="name">var <span class="ident">background</span> : Union[_asyncio.Task, NoneType]</code></dt>
+<dt id="mirai.Adapter.background"><code class="name">var <span class="ident">background</span> : Optional[_asyncio.Task]</code></dt>
 <dd>
 <div class="desc"><p>背景事件循环任务。</p></div>
 </dd>
@@ -425,7 +425,7 @@ def __getattr__(name):
 <dd>
 <div class="desc"><p>是否开启 single_mode，开启后与 session 将无效。</p></div>
 </dd>
-<dt id="mirai.Adapter.verify_key"><code class="name">var <span class="ident">verify_key</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.Adapter.verify_key"><code class="name">var <span class="ident">verify_key</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>mirai-api-http 配置的认证 key，关闭认证时为 None。</p></div>
 </dd>
@@ -723,7 +723,7 @@ async def logout(self, terminate: bool = True):
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.At.display"><code class="name">var <span class="ident">display</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.At.display"><code class="name">var <span class="ident">display</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>At时显示的文字，发送消息时无效，自动使用群名片。</p></div>
 </dd>
@@ -1221,11 +1221,11 @@ async def logout(self, terminate: bool = True):
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.Face.face_id"><code class="name">var <span class="ident">face_id</span> : Union[int, NoneType]</code></dt>
+<dt id="mirai.Face.face_id"><code class="name">var <span class="ident">face_id</span> : Optional[int]</code></dt>
 <dd>
 <div class="desc"><p>QQ 表情编号，可选，优先度高于 name。</p></div>
 </dd>
-<dt id="mirai.Face.name"><code class="name">var <span class="ident">name</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.Face.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>QQ表情名称，可选。</p></div>
 </dd>
@@ -1386,7 +1386,7 @@ def group(self) -&gt; Group:
 </dd>
 <dt id="mirai.HTTPAdapter"><code class="flex name class">
 <span>class <span class="ident">HTTPAdapter</span></span>
-<span>(</span><span>verify_key: Union[str, NoneType], host: str, port: int, poll_interval: float = 1.0, single_mode: bool = False)</span>
+<span>(</span><span>verify_key: Optional[str], host: str, port: int, poll_interval: float = 1.0, single_mode: bool = False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>HTTP 轮询适配器。使用 HTTP 轮询的方式与 mirai-api-http 沟通。</p>
@@ -1719,6 +1719,10 @@ def group(self) -&gt; Group:
     &#34;&#34;&#34;图片的路径，发送本地图片。&#34;&#34;&#34;
     base64: Optional[str] = None
     &#34;&#34;&#34;图片的 Base64 编码。&#34;&#34;&#34;
+    width: int
+    &#34;&#34;&#34;图片的宽度&#34;&#34;&#34;
+    height: int
+    &#34;&#34;&#34;图片的高度&#34;&#34;&#34;
     def __eq__(self, other):
         return isinstance(
             other, Image
@@ -1863,11 +1867,15 @@ def group(self) -&gt; Group:
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.Image.base64"><code class="name">var <span class="ident">base64</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.Image.base64"><code class="name">var <span class="ident">base64</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>图片的 Base64 编码。</p></div>
 </dd>
-<dt id="mirai.Image.image_id"><code class="name">var <span class="ident">image_id</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.Image.height"><code class="name">var <span class="ident">height</span> : int</code></dt>
+<dd>
+<div class="desc"><p>图片的高度</p></div>
+</dd>
+<dt id="mirai.Image.image_id"><code class="name">var <span class="ident">image_id</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>图片的 image_id，群图片与好友图片格式不同。不为空时将忽略 url 属性。</p></div>
 </dd>
@@ -1875,15 +1883,19 @@ def group(self) -&gt; Group:
 <dd>
 <div class="desc"><p>图片的路径，发送本地图片。</p></div>
 </dd>
-<dt id="mirai.Image.url"><code class="name">var <span class="ident">url</span> : Union[pydantic.networks.HttpUrl, NoneType]</code></dt>
+<dt id="mirai.Image.url"><code class="name">var <span class="ident">url</span> : Optional[pydantic.networks.HttpUrl]</code></dt>
 <dd>
 <div class="desc"><p>图片的 URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载。</p></div>
+</dd>
+<dt id="mirai.Image.width"><code class="name">var <span class="ident">width</span> : int</code></dt>
+<dd>
+<div class="desc"><p>图片的宽度</p></div>
 </dd>
 </dl>
 <h3>Static methods</h3>
 <dl>
 <dt id="mirai.Image.from_local"><code class="name flex">
-<span>async def <span class="ident">from_local</span></span>(<span>filename: Union[str, pathlib.Path, NoneType] = None, content: Union[bytes, NoneType] = None) ‑> <a title="mirai.models.message.Image" href="models/message.html#mirai.models.message.Image">Image</a></span>
+<span>async def <span class="ident">from_local</span></span>(<span>filename: Union[str, pathlib.Path, NoneType] = None, content: Optional[bytes] = None) ‑> <a title="mirai.models.message.Image" href="models/message.html#mirai.models.message.Image">Image</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>从本地文件路径加载图片，以 base64 的形式传递。</p>
@@ -2901,7 +2913,7 @@ def message_id(self) -&gt; int:
     return source.id if source else -1</code></pre>
 </details>
 </dd>
-<dt id="mirai.MessageChain.source"><code class="name">var <span class="ident">source</span> : Union[<a title="mirai.models.message.Source" href="models/message.html#mirai.models.message.Source">Source</a>, NoneType]</code></dt>
+<dt id="mirai.MessageChain.source"><code class="name">var <span class="ident">source</span> : Optional[<a title="mirai.models.message.Source" href="models/message.html#mirai.models.message.Source">Source</a>]</code></dt>
 <dd>
 <div class="desc"><p>获取消息链中的 <code>Source</code> 对象。</p></div>
 <details class="source">
@@ -3070,7 +3082,7 @@ def source(self) -&gt; Optional[&#39;Source&#39;]:
 </details>
 </dd>
 <dt id="mirai.MessageChain.get"><code class="name flex">
-<span>def <span class="ident">get</span></span>(<span>self, index: Union[int, slice, Type[~TMessageComponent], Tuple[Type[~TMessageComponent], int]], count: Union[int, NoneType] = None) ‑> Union[<a title="mirai.models.message.MessageComponent" href="models/message.html#mirai.models.message.MessageComponent">MessageComponent</a>, List[<a title="mirai.models.message.MessageComponent" href="models/message.html#mirai.models.message.MessageComponent">MessageComponent</a>], List[~TMessageComponent]]</span>
+<span>def <span class="ident">get</span></span>(<span>self, index: Union[int, slice, Type[~TMessageComponent], Tuple[Type[~TMessageComponent], int]], count: Optional[int] = None) ‑> Union[<a title="mirai.models.message.MessageComponent" href="models/message.html#mirai.models.message.MessageComponent">MessageComponent</a>, List[<a title="mirai.models.message.MessageComponent" href="models/message.html#mirai.models.message.MessageComponent">MessageComponent</a>], List[~TMessageComponent]]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>获取消息链中的某个（某些）消息组件，或某类型的消息组件。</p>
@@ -3149,7 +3161,7 @@ def source(self) -&gt; Optional[&#39;Source&#39;]:
 </details>
 </dd>
 <dt id="mirai.MessageChain.get_first"><code class="name flex">
-<span>def <span class="ident">get_first</span></span>(<span>self, t: Type[~TMessageComponent]) ‑> Union[~TMessageComponent, NoneType]</span>
+<span>def <span class="ident">get_first</span></span>(<span>self, t: Type[~TMessageComponent]) ‑> Optional[~TMessageComponent]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>获取消息链中第一个符合类型的消息组件。</p></div>
@@ -3987,7 +3999,7 @@ def bus(self) -&gt; ModelEventBus:
 </details>
 </dd>
 <dt id="mirai.Mirai.get_entity"><code class="name flex">
-<span>async def <span class="ident">get_entity</span></span>(<span>self, subject: <a title="mirai.models.entities.Subject" href="models/entities.html#mirai.models.entities.Subject">Subject</a>) ‑> Union[<a title="mirai.models.entities.Entity" href="models/entities.html#mirai.models.entities.Entity">Entity</a>, NoneType]</span>
+<span>async def <span class="ident">get_entity</span></span>(<span>self, subject: <a title="mirai.models.entities.Subject" href="models/entities.html#mirai.models.entities.Subject">Subject</a>) ‑> Optional[<a title="mirai.models.entities.Entity" href="models/entities.html#mirai.models.entities.Entity">Entity</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>获取实体对象。</p>
@@ -4025,7 +4037,7 @@ def bus(self) -&gt; ModelEventBus:
 </details>
 </dd>
 <dt id="mirai.Mirai.get_friend"><code class="name flex">
-<span>async def <span class="ident">get_friend</span></span>(<span>self, id_: int) ‑> Union[<a title="mirai.models.entities.Friend" href="models/entities.html#mirai.models.entities.Friend">Friend</a>, NoneType]</span>
+<span>async def <span class="ident">get_friend</span></span>(<span>self, id_: int) ‑> Optional[<a title="mirai.models.entities.Friend" href="models/entities.html#mirai.models.entities.Friend">Friend</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>获取好友对象。</p>
@@ -4065,7 +4077,7 @@ def bus(self) -&gt; ModelEventBus:
 </details>
 </dd>
 <dt id="mirai.Mirai.get_group"><code class="name flex">
-<span>async def <span class="ident">get_group</span></span>(<span>self, id_: int) ‑> Union[<a title="mirai.models.entities.Group" href="models/entities.html#mirai.models.entities.Group">Group</a>, NoneType]</span>
+<span>async def <span class="ident">get_group</span></span>(<span>self, id_: int) ‑> Optional[<a title="mirai.models.entities.Group" href="models/entities.html#mirai.models.entities.Group">Group</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>获取群组对象。</p>
@@ -4105,7 +4117,7 @@ def bus(self) -&gt; ModelEventBus:
 </details>
 </dd>
 <dt id="mirai.Mirai.get_group_member"><code class="name flex">
-<span>async def <span class="ident">get_group_member</span></span>(<span>self, group: Union[<a title="mirai.models.entities.Group" href="models/entities.html#mirai.models.entities.Group">Group</a>, int], id_: int) ‑> Union[<a title="mirai.models.entities.GroupMember" href="models/entities.html#mirai.models.entities.GroupMember">GroupMember</a>, NoneType]</span>
+<span>async def <span class="ident">get_group_member</span></span>(<span>self, group: Union[<a title="mirai.models.entities.Group" href="models/entities.html#mirai.models.entities.Group">Group</a>, int], id_: int) ‑> Optional[<a title="mirai.models.entities.GroupMember" href="models/entities.html#mirai.models.entities.GroupMember">GroupMember</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>获取群成员对象。</p>
@@ -5716,23 +5728,23 @@ def group(self) -&gt; Group:
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.Voice.base64"><code class="name">var <span class="ident">base64</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.Voice.base64"><code class="name">var <span class="ident">base64</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>语音的 Base64 编码。</p></div>
 </dd>
-<dt id="mirai.Voice.length"><code class="name">var <span class="ident">length</span> : Union[int, NoneType]</code></dt>
+<dt id="mirai.Voice.length"><code class="name">var <span class="ident">length</span> : Optional[int]</code></dt>
 <dd>
 <div class="desc"><p>语音的长度，单位为秒。</p></div>
 </dd>
-<dt id="mirai.Voice.path"><code class="name">var <span class="ident">path</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.Voice.path"><code class="name">var <span class="ident">path</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>语音的路径，发送本地语音。</p></div>
 </dd>
-<dt id="mirai.Voice.url"><code class="name">var <span class="ident">url</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.Voice.url"><code class="name">var <span class="ident">url</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>语音的 URL，发送时可作网络语音的链接；接收时为腾讯语音服务器的链接，可用于语音下载。</p></div>
 </dd>
-<dt id="mirai.Voice.voice_id"><code class="name">var <span class="ident">voice_id</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.Voice.voice_id"><code class="name">var <span class="ident">voice_id</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>语音的 voice_id，不为空时将忽略 url 属性。</p></div>
 </dd>
@@ -5740,7 +5752,7 @@ def group(self) -&gt; Group:
 <h3>Static methods</h3>
 <dl>
 <dt id="mirai.Voice.from_local"><code class="name flex">
-<span>async def <span class="ident">from_local</span></span>(<span>filename: Union[str, pathlib.Path, NoneType] = None, content: Union[bytes, NoneType] = None) ‑> <a title="mirai.models.message.Voice" href="models/message.html#mirai.models.message.Voice">Voice</a></span>
+<span>async def <span class="ident">from_local</span></span>(<span>filename: Union[str, pathlib.Path, NoneType] = None, content: Optional[bytes] = None) ‑> <a title="mirai.models.message.Voice" href="models/message.html#mirai.models.message.Voice">Voice</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>从本地文件路径加载语音，以 base64 的形式传递。</p>
@@ -5782,7 +5794,7 @@ async def from_local(
 </details>
 </dd>
 <dt id="mirai.Voice.validate_path"><code class="name flex">
-<span>def <span class="ident">validate_path</span></span>(<span>path: Union[str, NoneType])</span>
+<span>def <span class="ident">validate_path</span></span>(<span>path: Optional[str])</span>
 </code></dt>
 <dd>
 <div class="desc"><p>修复 path 参数的行为，使之相对于 YiriMirai 的启动路径。</p></div>
@@ -5875,7 +5887,7 @@ def validate_path(cls, path: Optional[str]):
 </dd>
 <dt id="mirai.WebHookAdapter"><code class="flex name class">
 <span>class <span class="ident">WebHookAdapter</span></span>
-<span>(</span><span>verify_key: Union[str, NoneType], route: str = '/', extra_headers: Union[Mapping[str, str], NoneType] = None, enable_quick_response: bool = True, single_mode: bool = False)</span>
+<span>(</span><span>verify_key: Optional[str], route: str = '/', extra_headers: Optional[Mapping[str, str]] = None, enable_quick_response: bool = True, single_mode: bool = False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>WebHook 适配器。作为 HTTP 服务器与 mirai-api-http 沟通。</p>
@@ -6150,7 +6162,7 @@ def validate_path(cls, path: Optional[str]):
 </dd>
 <dt id="mirai.WebSocketAdapter"><code class="flex name class">
 <span>class <span class="ident">WebSocketAdapter</span></span>
-<span>(</span><span>verify_key: Union[str, NoneType], host: str, port: int, sync_id: str = '-1', single_mode: bool = False, heartbeat_interval: float = 60.0)</span>
+<span>(</span><span>verify_key: Optional[str], host: str, port: int, sync_id: str = '-1', single_mode: bool = False, heartbeat_interval: float = 60.0)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>WebSocket 适配器。作为 WebSocket 客户端与 mirai-api-http 沟通。</p>
@@ -6408,7 +6420,7 @@ def validate_path(cls, path: Optional[str]):
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.WebSocketAdapter.connection"><code class="name">var <span class="ident">connection</span> : Union[websockets.legacy.client.WebSocketClientProtocol, NoneType]</code></dt>
+<dt id="mirai.WebSocketAdapter.connection"><code class="name">var <span class="ident">connection</span> : Optional[websockets.legacy.client.WebSocketClientProtocol]</code></dt>
 <dd>
 <div class="desc"><p>WebSocket 客户端连接。</p></div>
 </dd>
@@ -6599,11 +6611,13 @@ def validate_path(cls, path: Optional[str]):
 <li><code><a title="mirai.Image.download" href="#mirai.Image.download">download</a></code></li>
 <li><code><a title="mirai.Image.from_local" href="#mirai.Image.from_local">from_local</a></code></li>
 <li><code><a title="mirai.Image.from_unsafe_path" href="#mirai.Image.from_unsafe_path">from_unsafe_path</a></code></li>
+<li><code><a title="mirai.Image.height" href="#mirai.Image.height">height</a></code></li>
 <li><code><a title="mirai.Image.image_id" href="#mirai.Image.image_id">image_id</a></code></li>
 <li><code><a title="mirai.Image.path" href="#mirai.Image.path">path</a></code></li>
 <li><code><a title="mirai.Image.url" href="#mirai.Image.url">url</a></code></li>
 <li><code><a title="mirai.Image.uuid" href="#mirai.Image.uuid">uuid</a></code></li>
 <li><code><a title="mirai.Image.validate_path" href="#mirai.Image.validate_path">validate_path</a></code></li>
+<li><code><a title="mirai.Image.width" href="#mirai.Image.width">width</a></code></li>
 </ul>
 </li>
 <li>

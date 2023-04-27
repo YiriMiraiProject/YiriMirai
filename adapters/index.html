@@ -108,7 +108,7 @@ __all__ = [
 <dl>
 <dt id="mirai.adapters.Adapter"><code class="flex name class">
 <span>class <span class="ident">Adapter</span></span>
-<span>(</span><span>verify_key: Union[str, NoneType], single_mode: bool = False)</span>
+<span>(</span><span>verify_key: Optional[str], single_mode: bool = False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>适配器基类，与 mirai-api-http 沟通的底层实现。</p>
@@ -259,7 +259,7 @@ __all__ = [
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.adapters.Adapter.background"><code class="name">var <span class="ident">background</span> : Union[_asyncio.Task, NoneType]</code></dt>
+<dt id="mirai.adapters.Adapter.background"><code class="name">var <span class="ident">background</span> : Optional[_asyncio.Task]</code></dt>
 <dd>
 <div class="desc"><p>背景事件循环任务。</p></div>
 </dd>
@@ -275,7 +275,7 @@ __all__ = [
 <dd>
 <div class="desc"><p>是否开启 single_mode，开启后与 session 将无效。</p></div>
 </dd>
-<dt id="mirai.adapters.Adapter.verify_key"><code class="name">var <span class="ident">verify_key</span> : Union[str, NoneType]</code></dt>
+<dt id="mirai.adapters.Adapter.verify_key"><code class="name">var <span class="ident">verify_key</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>mirai-api-http 配置的认证 key，关闭认证时为 None。</p></div>
 </dd>
@@ -611,7 +611,7 @@ async def logout(self, terminate: bool = True):
 </dd>
 <dt id="mirai.adapters.HTTPAdapter"><code class="flex name class">
 <span>class <span class="ident">HTTPAdapter</span></span>
-<span>(</span><span>verify_key: Union[str, NoneType], host: str, port: int, poll_interval: float = 1.0, single_mode: bool = False)</span>
+<span>(</span><span>verify_key: Optional[str], host: str, port: int, poll_interval: float = 1.0, single_mode: bool = False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>HTTP 轮询适配器。使用 HTTP 轮询的方式与 mirai-api-http 沟通。</p>
@@ -924,7 +924,7 @@ async def logout(self, terminate: bool = True):
 </dd>
 <dt id="mirai.adapters.WebHookAdapter"><code class="flex name class">
 <span>class <span class="ident">WebHookAdapter</span></span>
-<span>(</span><span>verify_key: Union[str, NoneType], route: str = '/', extra_headers: Union[Mapping[str, str], NoneType] = None, enable_quick_response: bool = True, single_mode: bool = False)</span>
+<span>(</span><span>verify_key: Optional[str], route: str = '/', extra_headers: Optional[Mapping[str, str]] = None, enable_quick_response: bool = True, single_mode: bool = False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>WebHook 适配器。作为 HTTP 服务器与 mirai-api-http 沟通。</p>
@@ -1199,7 +1199,7 @@ async def logout(self, terminate: bool = True):
 </dd>
 <dt id="mirai.adapters.WebSocketAdapter"><code class="flex name class">
 <span>class <span class="ident">WebSocketAdapter</span></span>
-<span>(</span><span>verify_key: Union[str, NoneType], host: str, port: int, sync_id: str = '-1', single_mode: bool = False, heartbeat_interval: float = 60.0)</span>
+<span>(</span><span>verify_key: Optional[str], host: str, port: int, sync_id: str = '-1', single_mode: bool = False, heartbeat_interval: float = 60.0)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>WebSocket 适配器。作为 WebSocket 客户端与 mirai-api-http 沟通。</p>
@@ -1457,7 +1457,7 @@ async def logout(self, terminate: bool = True):
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="mirai.adapters.WebSocketAdapter.connection"><code class="name">var <span class="ident">connection</span> : Union[websockets.legacy.client.WebSocketClientProtocol, NoneType]</code></dt>
+<dt id="mirai.adapters.WebSocketAdapter.connection"><code class="name">var <span class="ident">connection</span> : Optional[websockets.legacy.client.WebSocketClientProtocol]</code></dt>
 <dd>
 <div class="desc"><p>WebSocket 客户端连接。</p></div>
 </dd>
