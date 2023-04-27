@@ -1,5 +1,7 @@
 # deploy on pages
 name: pdoc
+permissions:
+  contents: write
 
 on:
   push:
