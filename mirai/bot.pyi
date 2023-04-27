@@ -17,7 +17,7 @@ from mirai.models.api import (AboutResponse, ApiModel, FileInfoResponse,
                               GroupListResponse, MemberListResponse,
                               MessageFromIdResponse, MessageResponse,
                               ProfileResponse, Response, RespOperate,
-                              SessionInfoResponse)
+                              SessionInfoResponse, GetBotListResponse)
 from mirai.models.base import MiraiBaseModel
 from mirai.models.entities import (Entity, Friend, Group, GroupConfigModel,
                                    GroupMember, MemberInfoModel, Subject)
@@ -559,6 +559,19 @@ class Mirai(SimpleMirai):
         Args:
             target (`int`): 好友 QQ 号。
         """
+
+    # GetBotList
+
+    @type_check_only
+    class __GetBotListProxy():
+        async def get(self) -> GetBotListResponse:
+            """获取可用的 QQ 号列表。"""
+        async def __call__(self) -> GetBotListResponse:
+            """获取可用的 QQ 号列表。"""
+
+    @property
+    def get_bot_list(self) -> __GetBotListProxy:
+       """获取可用的 QQ 号列表。"""
 
     # GroupConfig
 

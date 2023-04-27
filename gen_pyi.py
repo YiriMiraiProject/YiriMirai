@@ -4,8 +4,8 @@
 import pdoc
 import textwrap
 import re
-
 import mirai
+# from objprint import op
 
 def indent(text, n):
     return textwrap.indent(text, ' ' * n * 4)
@@ -20,6 +20,7 @@ for api in sorted(
     c = module.find_class(api)
     print('正在处理：', api.__name__)
     anno = api.__annotations__
+    # op(c)
     params = ', '.join(
         '{}: {}'.format(
             k, c.doc[k].type_annotation().replace("\xa0", "") + (
@@ -54,6 +55,8 @@ for api in sorted(
         response_post_type_name = response_post_type.__name__
     except AttributeError:
         response_post_type_name = 'None'
+
+    print(response_type_name)
 
     if issubclass(api, mirai.models.api.ApiGet):
         s += f'''

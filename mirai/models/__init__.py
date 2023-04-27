@@ -28,7 +28,8 @@ from mirai.models.events import (
     MemberSpecialTitleChangeEvent, MemberUnmuteEvent, MessageEvent,
     NewFriendRequestEvent, NudgeEvent, OtherClientEvent, OtherClientMessage,
     OtherClientOfflineEvent, OtherClientOnlineEvent, RequestEvent,
-    StrangerMessage, StrangerSyncMessage, TempMessage, TempSyncMessage
+    StrangerMessage, StrangerSyncMessage, TempMessage, TempSyncMessage,
+    BotLeaveEventDisband
 )
 from mirai.models.message import (
     App, At, AtAll, Dice, Face, File, FlashImage, Forward, ForwardMessageNode,
@@ -127,4 +128,5 @@ __all__ = [
     'serialize',
     'deserialize',
     'ModelEventBus',
+    'BotLeaveEventDisband'
 ]
