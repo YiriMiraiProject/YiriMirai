@@ -797,6 +797,10 @@ class Image(MessageComponent):
     """图片的路径，发送本地图片。"""
     base64: Optional[str] = None
     """图片的 Base64 编码。"""
+    width: int
+    """图片的宽度"""
+    height: int
+    """图片的高度"""
     def __eq__(self, other):
         return isinstance(
             other, Image
@@ -1085,6 +1089,10 @@ class FlashImage(Image):
     """图片的路径，发送本地图片，路径相对于 `plugins/MiraiAPIHTTP/images`。"""
     base64: Optional[str] = None
     """图片的 Base64 编码。"""
+    width: int
+    """图片的宽度"""
+    height: int
+    """图片的高度"""
     def __str__(self):
         return '[闪照]'
 
