@@ -931,6 +931,8 @@ class Kick(ApiPost):
     """指定群成员的 QQ 号。"""
     msg: str = ""
     """可选。信息。"""
+    block: bool = False
+    """可选。是否拉黑"""
     class Info(ApiPost.Info):
         name = "kick"
         alias = "kick"

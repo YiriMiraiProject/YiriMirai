@@ -650,19 +650,21 @@ class Mirai(SimpleMirai):
 
     @type_check_only
     class __KickProxy():
-        async def set(self, target: int, member_id: int, msg: str = '') -> Response:
+        async def set(self, target: int, member_id: int, msg: str = '', block: bool = False) -> Response:
             """移出群成员。
             Args:
                 target (`int`): 指定群的群号。
                 member_id (`int`): 指定群成员的 QQ 号。
                 msg (`str`): 可选。信息，默认值 ''。
+                block (`bool`): 可选。是否拉黑，默认值 False。
             """
-        async def __call__(self, target: int, member_id: int, msg: str = '') -> Response:
+        async def __call__(self, target: int, member_id: int, msg: str = '', block: bool = False) -> Response:
             """移出群成员。
             Args:
                 target (`int`): 指定群的群号。
                 member_id (`int`): 指定群成员的 QQ 号。
                 msg (`str`): 可选。信息，默认值 ''。
+                block (`bool`): 可选。是否拉黑，默认值 False。
             """
 
     @property
@@ -672,6 +674,7 @@ class Mirai(SimpleMirai):
             target (`int`): 指定群的群号。
             member_id (`int`): 指定群成员的 QQ 号。
             msg (`str`): 可选。信息，默认值 ''。
+            block (`bool`): 可选。是否拉黑，默认值 False。
         """
 
     # MemberAdmin
