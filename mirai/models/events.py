@@ -694,6 +694,7 @@ class MemberJoinRequestEvent(RequestEvent):
         group_name: 申请人申请入群的群名称。
         nick: 申请人的昵称或群名片。
         message: 申请消息。
+        invitorId: 邀请输入者的 QQ 号。
     """
     type: str = 'MemberJoinRequestEvent'
     """事件名。"""
@@ -709,6 +710,8 @@ class MemberJoinRequestEvent(RequestEvent):
     """申请人的昵称或群名片。"""
     message: str
     """申请消息。"""
+    invitorId: Optional[int]
+    """邀请入群者的 QQ 号。"""
 
 
 class BotInvitedJoinGroupRequestEvent(RequestEvent):

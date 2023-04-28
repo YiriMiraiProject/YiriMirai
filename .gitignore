@@ -162,3 +162,6 @@ yarn-error.log*
 
 # TabNine
 .tabnine.model
+
+# Other
+*.cap

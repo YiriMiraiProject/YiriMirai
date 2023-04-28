@@ -145,6 +145,8 @@ class GroupConfigModel(Config):
     """是否开启匿名聊天。"""
     announcement: str = ''
     """群公告。"""
+    muteAll: bool
+    """全体禁言"""
 
 
 class MemberInfoModel(Config, GroupMember):
