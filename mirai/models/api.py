@@ -124,6 +124,13 @@ class GetBotListResponse(Response):
     def __iter__(self):
         yield from self.data
 
+class GetRoamingMessagesResponse(Response):
+    """获取可用漫游消息列表。"""
+    data: List[MessageChain]
+    """漫游到的消息。"""
+    def __iter__(self):
+        # return super().__iter__()
+        yield from self.data
 
 class Sex(str, Enum):
     """性别。"""
@@ -595,6 +602,22 @@ class GetBotList(ApiGet):
         alias = 'get_bot_list'
         response_type = GetBotListResponse
 
+class GetRoamingMessages(ApiPost):
+    """获取漫游消息。"""
+    timeStart: datetime
+    """datetime.datetime 对象，开始时间。"""
+    timeEnd: datetime
+    """datetime.datetime 对象，结束时间。"""
+    target: int
+    """漫游消息对象的QQ号。"""
+
+    class Info(ApiPost.Info):
+        name = 'roamingMessages'
+        alias = 'get_roaming_messages'
+        response_type = GetRoamingMessagesResponse
+
+    async def _call(self, api_provider: ApiProvider, method: Method = Method.GET):
+        return await api_provider.call_api(self.Info.name, method, timeStart=int(self.timeStart.timestamp()), timeEnd=int(self.timeEnd.timestamp()), target=self.target)
 
 class SendMessage(ApiBaseModel):
     """发送消息的 API 的方法复用，不作为 API 使用。"""
@@ -1243,4 +1266,6 @@ __all__ = [
     'UploadVoice',
     'UserProfile',
     'GetBotList',
+    'GetRoamingMessages',
+    'GetRoamingMessagesResponse'
 ]

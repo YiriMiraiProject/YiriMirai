@@ -2,6 +2,7 @@
 """
 `mirai.bot` 模块的存根文件，用于补全代码提示。
 """
+from datetime import datetime
 from pathlib import Path
 from typing import (Any, Awaitable, Callable, Dict, Iterable, List, Optional,
                     Type, Union, overload, type_check_only)
@@ -17,7 +18,7 @@ from mirai.models.api import (AboutResponse, ApiModel, FileInfoResponse,
                               GroupListResponse, MemberListResponse,
                               MessageFromIdResponse, MessageResponse,
                               ProfileResponse, Response, RespOperate,
-                              SessionInfoResponse, GetBotListResponse)
+                              SessionInfoResponse, GetBotListResponse, GetRoamingMessagesResponse)
 from mirai.models.base import MiraiBaseModel
 from mirai.models.entities import (Entity, Friend, Group, GroupConfigModel,
                                    GroupMember, MemberInfoModel, Subject)
@@ -572,6 +573,34 @@ class Mirai(SimpleMirai):
     @property
     def get_bot_list(self) -> __GetBotListProxy:
        """获取可用的 QQ 号列表。"""
+
+    # GetRoamingMessages
+
+    @type_check_only
+    class __GetRoamingMessagesProxy():
+        async def set(self, timeStart: datetime.datetime, timeEnd: datetime.datetime, target: int) -> GetRoamingMessagesResponse:
+            """获取漫游消息。
+            Args:
+                timeStart (`datetime.datetime`): datetime.datetime 对象，开始时间。
+                timeEnd (`datetime.datetime`): datetime.datetime 对象，结束时间。
+                target (`int`): 漫游消息对象的QQ号。
+            """
+        async def __call__(self, timeStart: datetime.datetime, timeEnd: datetime.datetime, target: int) -> GetRoamingMessagesResponse:
+            """获取漫游消息。
+            Args:
+                timeStart (`datetime.datetime`): datetime.datetime 对象，开始时间。
+                timeEnd (`datetime.datetime`): datetime.datetime 对象，结束时间。
+                target (`int`): 漫游消息对象的QQ号。
+            """
+
+    @property
+    def get_roaming_messages(self) -> __GetRoamingMessagesProxy:
+       """获取漫游消息。
+        Args:
+            timeStart (`datetime.datetime`): datetime.datetime 对象，开始时间。
+            timeEnd (`datetime.datetime`): datetime.datetime 对象，结束时间。
+            target (`int`): 漫游消息对象的QQ号。
+        """
 
     # GroupConfig
 
