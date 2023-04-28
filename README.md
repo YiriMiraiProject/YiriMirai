@@ -4,7 +4,7 @@
 
 ## ~~在新的维护者到来前，建议换用 [Graia Ariadne](https://github.com/GraiaProject/Ariadne) 等活跃维护的项目，也请关注原开发者的下一代 QQ 无头客户端支持库 [awr](https://github.com/Wybxc/awr)。~~
 
-## 本项目现由 [XYCode-Kerman](https://github.com/XYCode-Kerman) 进行维护，目前最高兼容到 mirai-api-http 2.7
+## 本项目现由 [XYCode-Kerman](https://github.com/XYCode-Kerman) 进行维护，目前最高兼容到 mirai-api-http 2.9
 
 <br>
 
