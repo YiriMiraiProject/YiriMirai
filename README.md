@@ -1,10 +1,16 @@
 # YiriMirai
 
-## 公告：本项目原开发者已放弃对 YiriMirai 的维护，最后一个完全支持的 mirai-api-http 版本为 2.5。如果有人愿意继续维护此项目，请与原开发者联系。
-
 ## ~~在新的维护者到来前~~，建议换用 [Graia Ariadne](https://github.com/GraiaProject/Ariadne) 等活跃维护的项目，也请关注原开发者的下一代 QQ 无头客户端支持库 [awr](https://github.com/Wybxc/awr)。
 
-本项目现由 [XYCode-Kerman](https://github.com/XYCode-Kerman) 进行维护，新版本将于不久后发布
+~~本项目现由 [XYCode-Kerman](https://github.com/XYCode-Kerman) 进行维护，新版本将于不久后发布~~
+
+> [!caution]
+>
+> 由于**某公司**一直以来都在加强**某聊天软件**的登录风控，导致现 Mirai 的用户群体大不如前，而 YiriMirai 是与 `mirai-api-http` 项目耦合的库，因此我们决定停止维护该库。
+>
+> 同时，我们建议换用 [YiriMiraiOneBot](https://github.com/YiriMiraiProject/YiriMiraiOneBot)，该库提供和 YiriMirai 风格相似的API，兼容 OneBot 11/12 标准。有关该库`0.0.1`版本的开发工作，将会在 2024/7/15 左右完成。
+>
+> 需要注意，YiriMiraiOneBot 只是延续了 YiriMirai 的项目名称和API风格，**但其并不与 Mirai 项目或其的生态绑定**，API 名称也与 YiriMirai 不同。
 
 <br>
 
